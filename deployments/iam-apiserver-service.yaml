@@ -1,0 +1,32 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: iam-apiserver
+  name: iam-apiserver
+  namespace: tyk
+spec:
+  ports:
+  - name: https
+    nodePort: 8443 
+    port: 8443 
+    protocol: TCP
+    targetPort: 8443 
+  - name: http
+    nodePort: 8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: grpc
+    nodePort: 8081
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: iam-apiserver
+  sessionAffinity: None
+  type: NodePort

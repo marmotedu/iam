@@ -1,0 +1,3 @@
+# `openapi`
+
+OpenAPI specs.

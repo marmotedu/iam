@@ -1,0 +1,21 @@
+apiVersion: v1
+user:
+  #token: # JWT Token
+  username: ${CONFIG_USER_USERNAME} # iam 用户名
+  password: ${CONFIG_USER_PASSWORD} # iam 密码
+  #secret-id: # 密钥 ID
+  #secret-key: # 密钥 Key
+  client-certificate: ${CONFIG_USER_CLIENT_CERTIFICATE} # 用于 TLS 的客户端证书文件路径
+  client-key: ${CONFIG_USER_CLIENT_KEY} # 用于 TLS 的客户端 key 文件路径
+  #client-certificate-data: 
+  #client-key-data:
+
+server:
+  address: ${CONFIG_SERVER_ADDRESS} # iam api-server 地址
+  timeout: 10s # 请求 api-server 超时时间
+  #max-retries: # 最大重试次数，默认为 0
+  #retry-interval: # 重试间隔，默认为 1s
+  #tls-server-name: # TLS 服务器名称
+  #insecure-skip-tls-verify: # 设置为 true 表示跳过 TLS 安全验证模式，将使得 HTTPS 连接不安全
+  certificate-authority: ${CONFIG_SERVER_CERTIFICATE_AUTHORITY} # 用于 CA 授权的 cert 文件路径
+  #certificate-authority-data:

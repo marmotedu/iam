@@ -1,0 +1,62 @@
+name: user
+synopsis: Manage users on iam platform
+description: "User management commands.\n  \n Administrator can use all subcommands,
+    non-administrator only allow to use create/get/upate. When call get/update non-administrator
+    only allow to operate their own resources, if permission not allowed, will return
+    an 'Permission denied' error."
+inherited_options:
+  - name: iamconfig
+    usage: Path to the iamconfig file to use for CLI requests
+  - name: match-server-version
+    default_value: "false"
+    usage: Require server version to match client version
+  - name: profile
+    default_value: none
+    usage: |
+        Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)
+  - name: profile-output
+    default_value: profile.pprof
+    usage: Name of the file to write the profile to
+  - name: server.address
+    shorthand: s
+    usage: The address and port of the IAM API server
+  - name: server.certificate-authority
+    usage: Path to a cert file for the certificate authority
+  - name: server.insecure-skip-tls-verify
+    default_value: "false"
+    usage: |
+        If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+  - name: server.max-retries
+    default_value: "0"
+    usage: Maximum number of retries.
+  - name: server.retry-interval
+    default_value: 1s
+    usage: The interval time between each attempt.
+  - name: server.timeout
+    default_value: 30s
+    usage: |
+        The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+  - name: server.tls-server-name
+    usage: |
+        Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+  - name: user.client-certificate
+    usage: Path to a client certificate file for TLS
+  - name: user.client-key
+    usage: Path to a client key file for TLS
+  - name: user.password
+    usage: Password for basic authentication to the API server
+  - name: user.secret-id
+    usage: SecretID for JWT authentication to the API server
+  - name: user.secret-key
+    usage: SecretKey for jwt authentication to the API server
+  - name: user.token
+    usage: Bearer token for authentication to the API server
+  - name: user.username
+    usage: Username for basic authentication to the API server
+see_also:
+  - iamctl
+  - create
+  - delete
+  - get
+  - list
+  - update

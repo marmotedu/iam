@@ -1,0 +1,3 @@
+# `swagger`
+
+Swagger specs.
