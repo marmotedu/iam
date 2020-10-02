@@ -18,12 +18,12 @@ gen.errcode: gen.errcode.code gen.errcode.doc
 .PHONY: gen.errcode.code
 gen.errcode.code:
 	@echo "===========> Generating iam error code go source files" 
-	@$(GO) run ${ROOT_DIR}/tools/codegen/codegen.go -type=int ${ROOT_DIR}/internal/pkg/code
+	@$(GO) run ${ROOT_DIR}/tools/codegen/main.go -type=int ${ROOT_DIR}/internal/pkg/code
 
 .PHONY: gen.errcode.doc
 gen.errcode.doc:
 	@echo "===========> Generating error code markdown documentation" 
-	@$(GO) run ${ROOT_DIR}/tools/codegen/codegen.go -type=int -doc \
+	@$(GO) run ${ROOT_DIR}/tools/codegen/main.go -type=int -doc \
 		-output ${ROOT_DIR}/docs/guide/zh-CN/api/error_code.md ${ROOT_DIR}/internal/pkg/code
 
 .PHONY: gen.ca.%

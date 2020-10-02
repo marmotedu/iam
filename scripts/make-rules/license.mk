@@ -9,8 +9,8 @@
 .PHONY: license.verify
 license.verify: 
 	@echo "===========> Verifying the boilerplate headers for all files"
-	@$(GO) run $(ROOT_DIR)/tools/addlicense/addlicense.go --check -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,_output
+	@$(GO) run $(ROOT_DIR)/tools/addlicense/main.go --check -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,_output
 
 .PHONY: license.add
 license.add:
-	@$(GO) run $(ROOT_DIR)/tools/addlicense/addlicense.go -v -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,_output
+	@$(GO) run $(ROOT_DIR)/tools/addlicense/main.go -v -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,_output
