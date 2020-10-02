@@ -85,7 +85,8 @@ Find more ladon information at:
 
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())
 		},
-		PostRun: func(cmd *cobra.Command, args []string) {
+		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
 		},
 		Args: func(cmd *cobra.Command, args []string) error {
 			for _, arg := range args {

@@ -60,7 +60,8 @@ Find more iam-apiserver information at:
 
 		// stop printing usage when the command errors
 		SilenceUsage: true,
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			verflag.PrintAndExitIfRequested(appName)
@@ -86,7 +87,8 @@ Find more iam-apiserver information at:
 
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())
 		},
-		PostRun: func(cmd *cobra.Command, args []string) {
+		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
 		},
 		Args: func(cmd *cobra.Command, args []string) error {
 			for _, arg := range args {
@@ -196,14 +198,14 @@ func (c completedConfig) New() (*APIServer, error) {
 		return nil, err
 	}
 
+	initRouter(genericServer.Engine)
+
 	grpcServer := c.ExtraConfig.New()
 
 	s := &APIServer{
 		GenericAPIServer: genericServer,
 		GrpcAPIServer:    grpcServer,
 	}
-
-	initRouter(s.GenericAPIServer.Engine)
 
 	return s, nil
 }
