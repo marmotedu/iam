@@ -100,10 +100,10 @@ Find more iam-apiserver information at:
 		},
 	}
 
-	fs := cmd.Flags()
 	namedFlagSets := s.Flags()
 	verflag.AddFlags(namedFlagSets.FlagSet("global"))
 	globalflag.AddGlobalFlags(namedFlagSets.FlagSet("global"), cmd.Name())
+	fs := cmd.Flags()
 	for _, f := range namedFlagSets.FlagSets {
 		fs.AddFlagSet(f)
 	}
