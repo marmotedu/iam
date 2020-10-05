@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	gindump "github.com/tpkeeper/gin-dump"
 )
 
 // Middlewares store registered middlewares.
@@ -61,6 +60,6 @@ func defaultMiddlewares() map[string]gin.HandlerFunc {
 		"nocache":   NoCache,
 		"cors":      Cors(),
 		"requestid": RequestID(),
-		"dump":      gindump.Dump(),
+		//"dump":      gindump.Dump(),
 	}
 }
