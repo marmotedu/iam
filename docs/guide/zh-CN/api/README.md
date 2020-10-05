@@ -15,7 +15,7 @@ IAM API 接口文档，相关参考文档如下：
 
 | 接口名称                                                      | 接口功能     |
 | ------------------------------------------------------------- | ------------ |
-| [POST /v1/users](./user.md#)                                  | 创建用户     |
+| [POST /v1/users](./user.md#创建用户)                          | 创建用户     |
 | [DELETE /v1/users](./user.md#批量删除用户)                    | 批量删除用户 |
 | [DELETE /v1/users/:name](./user.md#删除用户)                  | 删除用户     |
 | [PUT /v1/users/:name/change_password](./user.md#修改用户密码) | 修改用户密码 |
