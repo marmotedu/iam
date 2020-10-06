@@ -31,6 +31,7 @@ require (
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/hekike/unchain v0.0.0-20181224101630-264f57a6bc35 // indirect
+	github.com/hexdigest/gounit v0.0.0-20180817093830-f1874d3307cb // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/inconshreveable/log15 v0.0.0-20200109203555-b30bc20e4fd1 // indirect
@@ -64,6 +65,7 @@ require (
 	github.com/russross/blackfriday v1.5.2
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
 	github.com/segmentio/kafka-go v0.4.2
+	github.com/shibukawa/configdir v0.0.0-20170330084843-e180dbdc8da0 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/spf13/afero v1.4.0 // indirect
 	github.com/spf13/cobra v1.0.0
@@ -82,7 +84,7 @@ require (
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/sys v0.0.0-20200928205150-006507a75852 // indirect
-	golang.org/x/tools v0.0.0-20200918232735-d647fc253266
+	golang.org/x/tools v0.0.0-20201002184944-ecd9fd270d5d
 	google.golang.org/grpc v1.31.1
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8 // indirect
 	gopkg.in/ini.v1 v1.61.0 // indirect
