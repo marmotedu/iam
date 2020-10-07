@@ -85,5 +85,5 @@ endif
 .PHONY: go.test
 go.test: go.test.verify
 	@echo "===========> Run unit test"
-	@$(GO) test -race -cover -count=1 -coverprofile=$(OUTPUT_DIR)/coverage.out -timeout=10m -short -v `go list ./...|grep -v github.com/marmotedu/iam/test` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
+	@$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out -timeout=10m -short -v `go list ./...|grep -v github.com/marmotedu/iam/test` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
