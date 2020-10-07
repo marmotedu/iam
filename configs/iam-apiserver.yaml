@@ -76,4 +76,4 @@ log:
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics
-  profiling: true # 开启 性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
+  profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
