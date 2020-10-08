@@ -108,7 +108,7 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 		log.Infof("install middleware: %s", m)
 		s.Use(mw)
 	}
-	s.Use(gin.Logger())
+	//s.Use(gin.Logger())
 	//s.Use(limits.RequestSizeLimiter(10))
 	//s.GET("/debug/vars", expvar.Handler())
 }

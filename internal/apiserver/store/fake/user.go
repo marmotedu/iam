@@ -109,8 +109,8 @@ func (u *users) DeleteCollection(usernames []string, opts metav1.DeleteOptions) 
 
 // Get return an user by the user identifier.
 func (u *users) Get(username string, opts metav1.GetOptions) (*v1.User, error) {
-	u.ds.Lock()
-	defer u.ds.Unlock()
+	u.ds.RLock()
+	defer u.ds.RUnlock()
 
 	for _, u := range u.ds.users {
 		if u.Name == username {
@@ -123,8 +123,8 @@ func (u *users) Get(username string, opts metav1.GetOptions) (*v1.User, error) {
 
 // List return all users.
 func (u *users) List(opts metav1.ListOptions) (*v1.UserList, error) {
-	u.ds.Lock()
-	defer u.ds.Unlock()
+	u.ds.RLock()
+	defer u.ds.RUnlock()
 
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 	selector, _ := fields.ParseSelector(opts.FieldSelector)

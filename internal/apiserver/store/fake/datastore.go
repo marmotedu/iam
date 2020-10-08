@@ -19,10 +19,10 @@ import (
 )
 
 // ResourceCount defines the number of fake resources.
-const ResourceCount = 3
+const ResourceCount = 1000
 
 type datastore struct {
-	sync.Mutex
+	sync.RWMutex
 	users    []*v1.User
 	secrets  []*v1.Secret
 	policies []*v1.Policy

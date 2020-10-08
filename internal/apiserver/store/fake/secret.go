@@ -98,8 +98,8 @@ func (s *secrets) DeleteCollection(username string, names []string, opts metav1.
 
 // Get return an secret by the secret identifier.
 func (s *secrets) Get(username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
-	s.ds.Lock()
-	defer s.ds.Unlock()
+	s.ds.RLock()
+	defer s.ds.RUnlock()
 
 	for _, sec := range s.ds.secrets {
 		if sec.Username == username && sec.Name == name {
@@ -112,8 +112,8 @@ func (s *secrets) Get(username, name string, opts metav1.GetOptions) (*v1.Secret
 
 // List return all secrets.
 func (s *secrets) List(username string, opts metav1.ListOptions) (*v1.SecretList, error) {
-	s.ds.Lock()
-	defer s.ds.Unlock()
+	s.ds.RLock()
+	defer s.ds.RUnlock()
 
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 	selector, _ := fields.ParseSelector(opts.FieldSelector)

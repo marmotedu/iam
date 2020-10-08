@@ -6,6 +6,7 @@ package fake
 
 import (
 	"strings"
+	"time"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
@@ -134,8 +135,8 @@ func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.Delete
 
 // Get return policy by the policy identifier.
 func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
-	p.ds.Lock()
-	defer p.ds.Unlock()
+	p.ds.RLock()
+	defer p.ds.RUnlock()
 
 	for _, pol := range p.ds.policies {
 		if pol.Username == username && pol.Name == name {
@@ -148,8 +149,8 @@ func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Polic
 
 // List return all policies.
 func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
-	p.ds.Lock()
-	defer p.ds.Unlock()
+	p.ds.RLock()
+	defer p.ds.RUnlock()
 
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
@@ -173,6 +174,9 @@ func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyLis
 		policies = append(policies, pol)
 		i++
 	}
+
+	// Simulate database query latency, sleep 2 millisecond
+	time.Sleep(2 * time.Millisecond)
 
 	return &v1.PolicyList{
 		ListMeta: metav1.ListMeta{

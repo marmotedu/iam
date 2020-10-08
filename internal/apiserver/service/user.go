@@ -14,7 +14,7 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
-// ListUser returns user list in the storage.
+// ListUser returns user list in the storage. This function has a good performance.
 func ListUser(opts metav1.ListOptions) (*v1.UserListV2, error) {
 	users, err := store.Client().Users().List(opts)
 	if err != nil {
@@ -68,11 +68,45 @@ func ListUser(opts metav1.ListOptions) (*v1.UserListV2, error) {
 		return nil, err
 	}
 
-	infos := make([]*v1.UserV2, 0)
-
+	//infos := make([]*v1.UserV2, 0)
+	infos := make([]*v1.UserV2, 0, len(users.Items))
 	for _, user := range users.Items {
 		info, _ := m.Load(user.ID)
 		infos = append(infos, info.(*v1.UserV2))
+	}
+
+	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
+}
+
+// ListUserBadPerformance returns user list in the storage. This function has a bad performance.
+func ListUserBadPerformance(opts metav1.ListOptions) (*v1.UserListV2, error) {
+	users, err := store.Client().Users().List(opts)
+	if err != nil {
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	infos := make([]*v1.UserV2, 0)
+	for _, u := range users.Items {
+		policies, err := store.Client().Policies().List(u.Name, metav1.ListOptions{})
+		if err != nil {
+			return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		}
+
+		infos = append(infos, &v1.UserV2{
+			User: &v1.User{
+				ObjectMeta: metav1.ObjectMeta{
+					ID:        u.ID,
+					Name:      u.Name,
+					CreatedAt: u.CreatedAt,
+					UpdatedAt: u.UpdatedAt,
+				},
+				Nickname: u.Nickname,
+				Email:    u.Email,
+				Phone:    u.Phone,
+			},
+			TotalPolicy: policies.TotalCount,
+		})
+
 	}
 
 	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
