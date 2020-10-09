@@ -188,7 +188,7 @@ set autoscale y2
 #设置图像的大小 为标准大小的2倍
 #set size 2.3,2
 
-set output "${wrkdir}/${t1}_${t2}.qps.diff.png"  #指定数据文件名称
+set output "${wrkdir}/${t1}_${t2}.qps.ttlb.diff.png"  #指定数据文件名称
 set title "QPS & TTLB\nRunning: ${duration}\nThreads: ${threads}"
 plot "/tmp/plot_diff.dat" using 2:xticlabels(1) w lp pt 7 ps 1 lc rgbcolor "#EE0000" axis x1y1 t "${t1} QPS","/tmp/plot_diff.dat" using 5:xticlabels(1) w lp pt 7 ps 1 lc rgbcolor "#EE82EE" axis x1y1 t "${t2} QPS","/tmp/plot_diff.dat" using 3:xticlabels(1) w lp pt 5 ps 1 lc rgbcolor "#0000CD" axis x2y2 t "${t1} Avg Latency (ms)", "/tmp/plot_diff.dat" using 6:xticlabels(1) w lp pt 5 ps 1 lc rgbcolor "#6495ED" axis x2y2 t "${t2} Avg Latency (ms)"
 
