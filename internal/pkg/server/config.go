@@ -82,7 +82,7 @@ func NewConfig() *Config {
 	return &Config{
 		Healthz:         true,
 		Mode:            gin.ReleaseMode,
-		Middlewares:     []string{"recovery", "secure", "options", "nocache", "cors", "requestid"},
+		Middlewares:     []string{},
 		EnableProfiling: true,
 		EnableMetrics:   true,
 		MaxPingCount:    3,

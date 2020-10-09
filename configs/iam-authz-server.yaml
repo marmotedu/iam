@@ -14,7 +14,7 @@ client-ca-file: ${IAM_AUTHZ_SERVER_CLIENT_CA_FILE} # TLS 客户端证书，如�
 server:
     mode: debug # server mode: release, debug, test，默认release
     healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
-    middlewares: recovery,logger,secure,options,nocache,cors,requestid,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
+    middlewares: recovery,logger,secure,nocache,cors,requestid,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
     max-ping-count: 3 # http 服务启动后，自检尝试次数，默认3
 
 # HTTP 配置

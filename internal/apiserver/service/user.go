@@ -106,7 +106,6 @@ func ListUserBadPerformance(opts metav1.ListOptions) (*v1.UserListV2, error) {
 			},
 			TotalPolicy: policies.TotalCount,
 		})
-
 	}
 
 	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
