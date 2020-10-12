@@ -190,7 +190,7 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 
 // pingGenericAPIServer pings the http server to make sure the router is working.
 func (s *GenericAPIServer) pingGenericAPIServer(stopCh <-chan struct{}) error {
-	url := s.InsecureServingInfo.Address
+	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Address)
 	if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
 		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Address, ":")[1])
 	}
