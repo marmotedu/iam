@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"text/template"
 
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
@@ -22,6 +23,9 @@ var (
 	hostType   = pflag.StringP("type", "t", "app", "Server type, suhc as: app, db")
 	all        = pflag.BoolP("all", "a", false, "Generate the full iptables script")
 	logTraffic = pflag.BoolP("log", "", false, "Log the traffic that matches each rule")
+	cidr       = pflag.StringP("cidr", "", "10.0.4.0/24", "Only allow to login other internal host from the specified CIDR")
+	jumpServer = pflag.StringP("jump-server", "", "", "Jump server used to login other internal host")
+	sshPort    = pflag.IntP("ssh-port", "", 30022, "Target ssh port")
 	output     = pflag.StringP("output", "o", "", "output file name; default srcdir/<type>_string.go")
 	help       = pflag.BoolP("help", "h", false, "Print this help message")
 )
@@ -52,8 +56,8 @@ iptables -A INPUT -i lo -j ACCEPT
 #############################
 
 # Allow SSH (alternate port)
-iptables -A INPUT -p tcp --dport 30022 -j LOG --log-level 7 --log-prefix "Accept 30022 alt-ssh"
-iptables -A INPUT -p tcp --dport 30022 -j ACCEPT 
+iptables -A INPUT -p tcp -s {{.Server}} --dport {{.Port}} -j LOG --log-level 7 --log-prefix "Accept {{.Port}} alt-ssh"
+iptables -A INPUT -p tcp -s {{.Server}} --dport {{.Port}} -j ACCEPT 
 
 #############################    
 #  ACCESS RULES    
@@ -93,6 +97,15 @@ type Generator struct {
 	log    bool
 }
 
+// Jump defines jump information.
+type Jump struct {
+	// Jump Server IP address
+	Server string
+
+	// SSH Port allowed to access
+	Port int
+}
+
 func main() {
 	pflag.CommandLine.SortFlags = false
 	pflag.Usage = func() {
@@ -124,8 +137,22 @@ func main() {
 		g.filter = os.Args[1:]
 	}
 	if *all {
-		g.Printf(head)
+		loginServer := *cidr
+		if *jumpServer != "" {
+			loginServer = *jumpServer
+		}
+
+		jump := Jump{
+			Server: loginServer,
+			Port:   *sshPort,
+		}
+
+		tmpl, _ := template.New("jump").Parse(head)
+		var buf bytes.Buffer
+		_ = tmpl.Execute(&buf, jump)
+		g.Printf(buf.String())
 	}
+
 	switch *hostType {
 	case "app":
 		g.ports = g.access.Ports
@@ -138,7 +165,7 @@ func main() {
 	}
 
 	if *output != "" {
-		if err := ioutil.WriteFile(*output, g.buf.Bytes(), 0600); err != nil {
+		if err := ioutil.WriteFile(*output, g.buf.Bytes(), 0755); err != nil {
 			log.Fatalf("writing output: %s", err)
 		}
 
