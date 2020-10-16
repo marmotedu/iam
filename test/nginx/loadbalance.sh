@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-for domain in iam.api.marmotedu.com iam.authz.marmotedu.com
+for n in $(seq 1 1 10)
 do
-  for n in $(seq 1 1 10)
-  do
-    echo $domain
-    nohup curl http://${domain}/healthz &>/dev/null &
-  done
+  nohup curl http://iam.api.marmotedu.com/healthz &>/dev/null &
 done
