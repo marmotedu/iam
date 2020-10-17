@@ -23,9 +23,9 @@ var (
 	hostType   = pflag.StringP("type", "t", "app", "Server type, suhc as: app, db")
 	all        = pflag.BoolP("all", "a", false, "Generate the full iptables script")
 	logTraffic = pflag.BoolP("log", "", false, "Log the traffic that matches each rule")
-	cidr       = pflag.StringP("cidr", "", "10.0.4.0/24", "Only allow to login other internal host from the specified CIDR")
-	jumpServer = pflag.StringP("jump-server", "", "", "Jump server used to login other internal host")
-	sshPort    = pflag.IntP("ssh-port", "", 30022, "Target ssh port")
+	deleteRule = pflag.BoolP("delete", "", false, "Delete access for a specified host")
+	sshPort    = pflag.IntP("ssh-port", "", 22, "Target ssh port")
+	cidr       = pflag.StringP("cidr", "", "", "Assumed intranet security")
 	output     = pflag.StringP("output", "o", "", "output file name; default srcdir/<type>_string.go")
 	help       = pflag.BoolP("help", "h", false, "Print this help message")
 )
@@ -51,17 +51,23 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 # Allow localhost traffic
 iptables -A INPUT -i lo -j ACCEPT
 
+# Allow keepalived vrrp protocol 
+iptables -A INPUT -p vrrp -j ACCEPT
+
 #############################
 #  MANAGEMENT RULES
 #############################
 
 # Allow SSH (alternate port)
-iptables -A INPUT -p tcp -s {{.Server}} --dport {{.Port}} -j LOG --log-level 7 --log-prefix "Accept {{.Port}} alt-ssh"
-iptables -A INPUT -p tcp -s {{.Server}} --dport {{.Port}} -j ACCEPT 
+iptables -A INPUT -p tcp -s {{.SSHSource}} --dport {{.Port}} -j LOG --log-level 7 --log-prefix "Accept {{.Port}} alt-ssh"
+iptables -A INPUT -p tcp -s {{.SSHSource}} --dport {{.Port}} -j ACCEPT 
 
 #############################    
 #  ACCESS RULES    
 #############################    
+
+# Allow nginx server access
+iptables -A INPUT -p tcp -m multiport --dport 80,443 -j ACCEPT 
     
 # Allow iam services
 `
@@ -77,30 +83,39 @@ iptables -A INPUT -p icmp --icmp-type 11/0 -j ACCEPT
 #  DEFAULT DENY
 #############################
 
-iptables -A INPUT -d -j LOG --log-level 7 --log-prefix "Default Deny"
+iptables -A INPUT -j LOG --log-level 7 --log-prefix "Default Deny"
 iptables -A INPUT -j DROP 
+`
+
+var refreshDeny string = `iptables -D INPUT -j LOG --log-level 7 --log-prefix "Default Deny" &>/dev/null
+iptables -D INPUT -j DROP &>/dev/null
+iptables -A INPUT -j LOG --log-level 7 --log-prefix "Default Deny"
+iptables -A INPUT -j DROP
 `
 
 // Access defines hosts and ports need to accept by iptables.
 type Access struct {
-	Hosts   []string `yaml:"hosts"`
-	Ports   []string `yaml:"ports"`
-	DBPorts []string `yaml:"dbports"`
+	SSHSource string   `yaml:"ssh-source"`
+	Hosts     []string `yaml:"hosts"`
+	Ports     []string `yaml:"ports"`
+	DBPorts   []string `yaml:"dbports"`
 }
 
 // Generator generate a shell script contains iptables rules.
 type Generator struct {
 	access Access
+	hosts  []string
 	ports  []string
 	filter []string
 	buf    bytes.Buffer
+	action string
 	log    bool
 }
 
 // Jump defines jump information.
 type Jump struct {
-	// Jump Server IP address
-	Server string
+	// source ips can access sshd service
+	SSHSource string
 
 	// SSH Port allowed to access
 	Port int
@@ -131,26 +146,35 @@ func main() {
 
 	g := &Generator{
 		access: access,
+		action: "A",
 		log:    *logTraffic,
 	}
 	if pflag.NArg() >= 1 {
+		// if use cidr, tool will not allow generate rules for a specified host
+		if *cidr != "" {
+			pflag.Usage()
+			return
+		}
 		g.filter = os.Args[1:]
 	}
 	if *all {
-		loginServer := *cidr
-		if *jumpServer != "" {
-			loginServer = *jumpServer
-		}
-
 		jump := Jump{
-			Server: loginServer,
-			Port:   *sshPort,
+			SSHSource: access.SSHSource,
+			Port:      *sshPort,
 		}
 
 		tmpl, _ := template.New("jump").Parse(head)
 		var buf bytes.Buffer
 		_ = tmpl.Execute(&buf, jump)
 		g.Printf(buf.String())
+	}
+	if *cidr != "" {
+		g.hosts = []string{*cidr}
+	} else {
+		g.hosts = g.access.Hosts
+	}
+	if *deleteRule {
+		g.action = "D"
 	}
 
 	switch *hostType {
@@ -162,6 +186,8 @@ func main() {
 	g.generate()
 	if *all {
 		g.Printf(tail)
+	} else {
+		g.Printf(refreshDeny)
 	}
 
 	if *output != "" {
@@ -176,15 +202,16 @@ func main() {
 }
 
 func (g *Generator) generate() {
-	for _, h := range g.access.Hosts {
+	for _, h := range g.hosts {
 		if len(g.filter) > 0 && !stringutil.StringIn(h, g.filter) {
 			continue
 		}
 		for _, p := range g.ports {
 			if g.log {
-				g.Printf("iptables -A INPUT -p tcp -s %s --dport %s -j LOG --log-level 7 --log-prefix \"Accept %s access\"\n", h, p, p)
+				g.Printf("iptables -%s INPUT -p tcp -s %s --dport %s -j LOG --log-level 7 --log-prefix \"Accept %s access\"\n",
+					g.action, h, p, p)
 			}
-			g.Printf("iptables -A INPUT -p tcp -s %s --dport %s -j ACCEPT\n", h, p)
+			g.Printf("iptables -%s INPUT -p tcp -s %s --dport %s -j ACCEPT\n", g.action, h, p)
 		}
 	}
 }
