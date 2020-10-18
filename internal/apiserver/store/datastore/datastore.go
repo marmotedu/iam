@@ -6,12 +6,17 @@ package datastore
 
 import (
 	"fmt"
+	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	gormlogger "gorm.io/gorm/logger"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/iam/internal/apiserver/store"
+	"github.com/marmotedu/iam/internal/pkg/logger"
 	"github.com/marmotedu/iam/internal/pkg/options"
+	"github.com/marmotedu/log"
 
 	// MySQL driver.
 	_ "github.com/go-sql-driver/mysql"
@@ -37,9 +42,23 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
+func newLogger() gormlogger.Interface {
+	colorful := false
+	if log.GetOptions().EnableColor {
+		colorful = true
+	}
+
+	return logger.New(
+		logger.Config{
+			SlowThreshold: time.Second,
+			Colorful:      colorful,
+		},
+	)
+}
+
 // NewMySQLStore create mysql store with the given config.
 func NewMySQLStore(o *options.MySQLOptions) (store.Store, error) {
-	config := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		o.Username,
 		o.Password,
 		o.Host,
@@ -47,34 +66,44 @@ func NewMySQLStore(o *options.MySQLOptions) (store.Store, error) {
 		true,
 		"Local")
 
-	db, err := gorm.Open("mysql", config)
+	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
+		Logger: newLogger(),
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	setupDatabase(db, o)
+	if err := setupDatabase(db, o); err != nil {
+		return nil, err
+	}
 
 	return &datastore{db}, nil
 }
 
 // setupDatabase initialize the database tables.
-func setupDatabase(db *gorm.DB, o *options.MySQLOptions) {
+func setupDatabase(db *gorm.DB, o *options.MySQLOptions) error {
 	// uncomment the following line if you need auto migration the given models
 	// not suggested in production environment.
 	// migrateDatabase(db)
 
-	db.LogMode(o.LogMode)
-	db.DB().SetMaxOpenConns(o.MaxOpenConnections)
-	db.DB().SetConnMaxLifetime(o.MaxConnectionLifeTime)
-	db.DB().SetMaxIdleConns(o.MaxIdleConnections)
+	//db.LogMode(o.LogMode)
+	sqlDB, err := db.DB()
+	if err != nil {
+		return err
+	}
+
+	sqlDB.SetMaxOpenConns(o.MaxOpenConnections)
+	sqlDB.SetConnMaxLifetime(o.MaxConnectionLifeTime)
+	sqlDB.SetMaxIdleConns(o.MaxIdleConnections)
+	return nil
 }
 
 // cleanDatabase tear downs the database tables.
 // nolint:unused // may be reused in the feature, or just show a migrate usage.
 func cleanDatabase(db *gorm.DB) {
-	db.DropTable(&v1.User{})
-	db.DropTable(&v1.Policy{})
-	db.DropTable(&v1.Secret{})
+	db.Migrator().DropTable(&v1.User{})
+	db.Migrator().DropTable(&v1.Policy{})
+	db.Migrator().DropTable(&v1.Secret{})
 }
 
 // migrateDatabase run auto migration for given models, will only add missing fields,

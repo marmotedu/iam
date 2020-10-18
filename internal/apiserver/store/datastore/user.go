@@ -5,7 +5,7 @@
 package datastore
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"

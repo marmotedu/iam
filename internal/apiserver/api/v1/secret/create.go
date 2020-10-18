@@ -39,8 +39,8 @@ func Create(c *gin.Context) {
 	username := c.GetHeader("username")
 
 	sec, err := store.Client().Secrets().List(username, metav1.ListOptions{
-		Offset: pointer.ToInt64(0),
-		Limit:  pointer.ToInt64(-1),
+		Offset: pointer.ToInt(0),
+		Limit:  pointer.ToInt(-1),
 	})
 
 	if err != nil {

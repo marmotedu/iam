@@ -10,14 +10,14 @@ const DefaultLimit = 1000
 
 // LimitAndOffset contains offset and limit fields.
 type LimitAndOffset struct {
-	Offset int64
-	Limit  int64
+	Offset int
+	Limit  int
 }
 
 // Unpointer fill LimitAndOffset with default values if offset/limit is nil
 // or it will be filled with the passed value.
-func Unpointer(offset *int64, limit *int64) *LimitAndOffset {
-	var o, l int64 = 0, DefaultLimit
+func Unpointer(offset *int, limit *int) *LimitAndOffset {
+	var o, l int = 0, DefaultLimit
 
 	if offset != nil {
 		o = *offset
