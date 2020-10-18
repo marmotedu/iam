@@ -41,7 +41,7 @@ mysql:
   max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
   max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
-  log-mode: true # 是否开启 gorm debug 模式，默认 false
+  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 # Redis 配置
 redis:
@@ -69,10 +69,10 @@ jwt:
 log:
     level: info # debug, info, warn, error, dpanic, panic, fatal
     format: console # console, json
-    disable-color: false # 是否开启颜色输出，true:是，false:否
+    enable-color: false # 是否开启颜色输出，true:是，false:否
     enable-caller: true # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
     output-paths: ${IAM_LOG_DIR}/iam-apiserver.log,stdout # 多个输出，逗号分开。stdout：标准输出，
-    #error-output-paths: # 错误日志输出路径，多个输出，逗号分开
+    error-output-paths: ${IAM_LOG_DIR}/iam-apiserver.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
 
 feature:
   enable-metrics: true # 开启 metrics, router:  /metrics

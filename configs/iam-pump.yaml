@@ -35,7 +35,7 @@ pumps:
 log:
     level: info # debug, info, warn, error, dpanic, panic, fatal
     format: console # console, json
-    disable-color: false # 是否开启颜色输出，true:是，false:否
+    enable-color: false # 是否开启颜色输出，true:是，false:否
     enable-caller: true # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
     output-paths: ${IAM_LOG_DIR}/iam-pump.log,stdout # 多个输出，逗号分开。stdout：标准输出，
-    #error-output-paths: # 错误日志输出路径，多个输出，逗号分开
+    error-output-paths: ${IAM_LOG_DIR}/iam-pump.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
