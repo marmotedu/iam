@@ -136,7 +136,7 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 		log.Infof("Start to listening the incoming requests on http address: %s", s.InsecureServingInfo.Address)
 
 		if err := insecureServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Error(err.Error())
+			log.Fatal(err.Error())
 		}
 
 		log.Infof("Server on %s stopped", s.InsecureServingInfo.Address)
@@ -153,7 +153,7 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 		log.Infof("Start to listening the incoming requests on https address: %s", s.SecureServingInfo.Address())
 
 		if err := secureServer.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
-			log.Error(err.Error())
+			log.Fatal(err.Error())
 		}
 
 		log.Infof("Server on %s stopped", s.SecureServingInfo.Address())
@@ -213,7 +213,7 @@ func (s *GenericAPIServer) pingGenericAPIServer(stopCh <-chan struct{}) error {
 
 		select {
 		case <-stopCh:
-			log.Error("Ping server stoped.")
+			log.Warn("Ping server stoped.")
 			return nil
 		default:
 		}
