@@ -52,6 +52,7 @@ require (
 	github.com/marmotedu/log v1.0.0
 	github.com/marmotedu/marmotedu-sdk-go v1.0.0
 	github.com/mattn/go-colorable v0.1.7 // indirect
+	github.com/mattn/go-isatty v0.0.12
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0
 	github.com/mitchellh/mapstructure v1.3.3
