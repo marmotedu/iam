@@ -23,8 +23,8 @@ const (
 
 // ListOptions is an options struct to support list subcommands.
 type ListOptions struct {
-	Offset int64
-	Limit  int64
+	Offset int
+	Limit  int
 
 	clientSet marmotedu.Interface
 	genericclioptions.IOStreams
@@ -68,8 +68,8 @@ func NewCmdList(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 		SuggestFor: []string{},
 	}
 
-	cmd.Flags().Int64VarP(&o.Offset, "offset", "o", o.Offset, "Specify the offset of the first row to be returned.")
-	cmd.Flags().Int64VarP(&o.Limit, "limit", "l", o.Limit, "Specify the amount records to be returned.")
+	cmd.Flags().IntVarP(&o.Offset, "offset", "o", o.Offset, "Specify the offset of the first row to be returned.")
+	cmd.Flags().IntVarP(&o.Limit, "limit", "l", o.Limit, "Specify the amount records to be returned.")
 
 	return cmd
 }

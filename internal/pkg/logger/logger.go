@@ -1,3 +1,8 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+// Package logger defines gorm logger
 package logger
 
 import (
@@ -14,7 +19,7 @@ import (
 	"github.com/marmotedu/log"
 )
 
-// Colors
+// Define colors.
 const (
 	Reset       = "\033[0m"
 	Red         = "\033[31m"
@@ -30,6 +35,7 @@ const (
 	YellowBold  = "\033[33;1m"
 )
 
+// Define gorm log levels.
 const (
 	Silent gormlogger.LogLevel = iota + 1
 	Error
@@ -37,17 +43,19 @@ const (
 	Info
 )
 
-// Writer log writer interface
+// Writer log writer interface.
 type Writer interface {
 	Printf(string, ...interface{})
 }
 
+// Config defines a gorm logger configuration.
 type Config struct {
 	SlowThreshold time.Duration
 	Colorful      bool
 	LogLevel      gormlogger.LogLevel
 }
 
+// New create a gorm logger instance.
 func New(level int) gormlogger.Interface {
 	var (
 		infoStr      = "%s[info] "
@@ -92,81 +100,65 @@ type logger struct {
 	traceStr, traceErrStr, traceWarnStr string
 }
 
-// LogMode log mode
+// LogMode log mode.
 func (l *logger) LogMode(level gormlogger.LogLevel) gormlogger.Interface {
 	newlogger := *l
 	newlogger.LogLevel = level
 	return &newlogger
 }
 
-// Info print info
+// Info print info.
 func (l logger) Info(ctx context.Context, msg string, data ...interface{}) {
 	if l.LogLevel >= Info {
 		l.Printf(l.infoStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
 	}
 }
 
-// Warn print warn messages
+// Warn print warn messages.
 func (l logger) Warn(ctx context.Context, msg string, data ...interface{}) {
 	if l.LogLevel >= Warn {
 		l.Printf(l.warnStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
 	}
 }
 
-// Error print error messages
+// Error print error messages.
 func (l logger) Error(ctx context.Context, msg string, data ...interface{}) {
 	if l.LogLevel >= Error {
 		l.Printf(l.errStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
 	}
 }
 
-// Trace print sql message
+// Trace print sql message.
 func (l logger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
-	if l.LogLevel > 0 {
-		elapsed := time.Since(begin)
-		switch {
-		case err != nil && l.LogLevel >= Error:
-			sql, rows := fc()
-			if rows == -1 {
-				l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
-			} else {
-				l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
-		case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= Warn:
-			sql, rows := fc()
-			slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
-			if rows == -1 {
-				l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
-			} else {
-				l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
-		case l.LogLevel >= Info:
-			sql, rows := fc()
-			if rows == -1 {
-				l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
-			} else {
-				l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
+	if l.LogLevel <= 0 {
+		return
+	}
+
+	elapsed := time.Since(begin)
+	switch {
+	case err != nil && l.LogLevel >= Error:
+		sql, rows := fc()
+		if rows == -1 {
+			l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+		} else {
+			l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+		}
+	case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= Warn:
+		sql, rows := fc()
+		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
+		if rows == -1 {
+			l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+		} else {
+			l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+		}
+	case l.LogLevel >= Info:
+		sql, rows := fc()
+		if rows == -1 {
+			l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
+		} else {
+			l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	}
-}
-
-type traceRecorder struct {
-	gormlogger.Interface
-	BeginAt      time.Time
-	SQL          string
-	RowsAffected int64
-	Err          error
-}
-
-func (l traceRecorder) New() *traceRecorder {
-	return &traceRecorder{Interface: l.Interface}
-}
-
-func (l *traceRecorder) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
-	l.BeginAt = begin
-	l.SQL, l.RowsAffected = fc()
-	l.Err = err
 }
 
 func fileWithLineNum() string {

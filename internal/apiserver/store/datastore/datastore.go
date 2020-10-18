@@ -80,25 +80,49 @@ func setupDatabase(db *gorm.DB, o *options.MySQLOptions) error {
 
 // cleanDatabase tear downs the database tables.
 // nolint:unused // may be reused in the feature, or just show a migrate usage.
-func cleanDatabase(db *gorm.DB) {
-	db.Migrator().DropTable(&v1.User{})
-	db.Migrator().DropTable(&v1.Policy{})
-	db.Migrator().DropTable(&v1.Secret{})
+func cleanDatabase(db *gorm.DB) error {
+	if err := db.Migrator().DropTable(&v1.User{}); err != nil {
+		return err
+	}
+	if err := db.Migrator().DropTable(&v1.Policy{}); err != nil {
+		return err
+	}
+	if err := db.Migrator().DropTable(&v1.Secret{}); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // migrateDatabase run auto migration for given models, will only add missing fields,
 // won't delete/change current data.
 // nolint:unused // may be reused in the feature, or just show a migrate usage.
-func migrateDatabase(db *gorm.DB) {
-	db.AutoMigrate(&v1.User{})
-	db.AutoMigrate(&v1.Policy{})
-	db.AutoMigrate(&v1.Secret{})
+func migrateDatabase(db *gorm.DB) error {
+	if err := db.AutoMigrate(&v1.User{}); err != nil {
+		return err
+	}
+	if err := db.AutoMigrate(&v1.Policy{}); err != nil {
+		return err
+	}
+	if err := db.AutoMigrate(&v1.Secret{}); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // resetDatabase resets the database tables.
 // nolint:unused,deadcode // may be reused in the feature, or just show a migrate usage.
-func resetDatabase(db *gorm.DB, o *options.MySQLOptions) {
-	cleanDatabase(db)
-	migrateDatabase(db)
-	setupDatabase(db, o)
+func resetDatabase(db *gorm.DB, o *options.MySQLOptions) error {
+	if err := cleanDatabase(db); err != nil {
+		return err
+	}
+	if err := migrateDatabase(db); err != nil {
+		return err
+	}
+	if err := setupDatabase(db, o); err != nil {
+		return err
+	}
+
+	return nil
 }

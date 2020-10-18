@@ -1,3 +1,7 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package middleware
 
 import (
@@ -47,10 +51,10 @@ type LoggerConfig struct {
 	SkipPaths []string
 }
 
-// LogFormatter gives the signature of the formatter function passed to LoggerWithFormatter
+// LogFormatter gives the signature of the formatter function passed to LoggerWithFormatter.
 type LogFormatter func(params LogFormatterParams) string
 
-// LogFormatterParams is the structure any formatter will be handed when time to log comes
+// LogFormatterParams is the structure any formatter will be handed when time to log comes.
 type LogFormatterParams struct {
 	Request *http.Request
 

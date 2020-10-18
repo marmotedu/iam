@@ -131,7 +131,7 @@ func (u *users) List(opts metav1.ListOptions) (*v1.UserList, error) {
 	username, _ := selector.RequiresExactMatch("name")
 
 	users := make([]*v1.User, 0)
-	var i int64 = 0
+	var i int = 0
 	for _, user := range u.ds.users {
 		if i == ol.Limit {
 			break
@@ -145,7 +145,7 @@ func (u *users) List(opts metav1.ListOptions) (*v1.UserList, error) {
 
 	return &v1.UserList{
 		ListMeta: metav1.ListMeta{
-			TotalCount: uint64(len(u.ds.users)),
+			TotalCount: int64(len(u.ds.users)),
 		},
 		Items: users,
 	}, nil

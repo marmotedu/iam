@@ -191,7 +191,7 @@ func main() {
 	}
 
 	if *output != "" {
-		if err := ioutil.WriteFile(*output, g.buf.Bytes(), 0755); err != nil {
+		if err := ioutil.WriteFile(*output, g.buf.Bytes(), 0600); err != nil {
 			log.Fatalf("writing output: %s", err)
 		}
 

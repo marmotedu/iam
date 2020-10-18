@@ -173,6 +173,8 @@ linters-settings:
   gomodguard:
     allowed:
       modules:                                                        # List of allowed modules
+        - gorm.io/gorm
+        - gorm.io/driver/mysql
         # - gopkg.in/yaml.v2
       domains:                                                        # List of allowed module domains
         - google.golang.org

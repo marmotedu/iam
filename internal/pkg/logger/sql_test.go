@@ -1,3 +1,8 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+// nolint: lll
 package logger_test
 
 import (
@@ -30,6 +35,7 @@ func (s ExampleStruct) Value() (driver.Value, error) {
 	return json.Marshal(s)
 }
 
+// nolint: unparam
 func format(v []byte, escaper string) string {
 	return escaper + strings.Replace(string(v), escaper, "\\"+escaper, -1) + escaper
 }

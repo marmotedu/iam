@@ -21,10 +21,10 @@ func TestMain(m *testing.M) {
 }
 
 func TestListUser(t *testing.T) {
-	var limit int64 = 3
+	var limit int = 3
 	opts := metav1.ListOptions{
-		Offset: pointer.ToInt64(0),
-		Limit:  pointer.ToInt64(limit),
+		Offset: pointer.ToInt(0),
+		Limit:  pointer.ToInt(limit),
 	}
 
 	got, err := ListUser(opts)
@@ -36,7 +36,7 @@ func TestListUser(t *testing.T) {
 		t.Errorf("ListUser() TotalCount = %v, want %v", got.TotalCount, fake.ResourceCount)
 	}
 
-	if len(got.Items) != int(limit) {
+	if len(got.Items) != limit {
 		t.Errorf("len(UserListV2.Items)= %v, want %v", len(got.Items), limit)
 	}
 
@@ -55,8 +55,8 @@ func TestListUser(t *testing.T) {
 
 func BenchmarkListUser(b *testing.B) {
 	opts := metav1.ListOptions{
-		Offset: pointer.ToInt64(0),
-		Limit:  pointer.ToInt64(50),
+		Offset: pointer.ToInt(0),
+		Limit:  pointer.ToInt(50),
 	}
 
 	for i := 0; i < b.N; i++ {

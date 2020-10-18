@@ -120,7 +120,7 @@ func (s *secrets) List(username string, opts metav1.ListOptions) (*v1.SecretList
 	name, _ := selector.RequiresExactMatch("name")
 
 	secrets := make([]*v1.Secret, 0)
-	var i int64 = 0
+	var i int = 0
 	for _, sec := range s.ds.secrets {
 		if i == ol.Limit {
 			break
@@ -140,7 +140,7 @@ func (s *secrets) List(username string, opts metav1.ListOptions) (*v1.SecretList
 
 	return &v1.SecretList{
 		ListMeta: metav1.ListMeta{
-			TotalCount: uint64(len(s.ds.secrets)),
+			TotalCount: int64(len(s.ds.secrets)),
 		},
 		Items: secrets,
 	}, nil

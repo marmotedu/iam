@@ -157,7 +157,7 @@ func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyLis
 	name, _ := selector.RequiresExactMatch("name")
 
 	policies := make([]*v1.Policy, 0)
-	var i int64 = 0
+	var i int = 0
 	for _, pol := range p.ds.policies {
 		if i == ol.Limit {
 			break
@@ -180,7 +180,7 @@ func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyLis
 
 	return &v1.PolicyList{
 		ListMeta: metav1.ListMeta{
-			TotalCount: uint64(len(p.ds.policies)),
+			TotalCount: int64(len(p.ds.policies)),
 		},
 		Items: policies,
 	}, nil

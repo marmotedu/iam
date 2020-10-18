@@ -1,3 +1,7 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package logger
 
 import (
@@ -22,8 +26,13 @@ func isPrintable(s []byte) bool {
 	return true
 }
 
+// NULL defines a NULL string.
+const NULL = "NULL"
+
 var convertableTypes = []reflect.Type{reflect.TypeOf(time.Time{}), reflect.TypeOf(false), reflect.TypeOf([]byte{})}
 
+// ExplainSQL explain a SQL.
+// nolint: gocognit,gocyclo
 func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, avars ...interface{}) string {
 	var convertParams func(interface{}, int)
 	var vars = make([]string, len(avars))
@@ -46,7 +55,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 					vars[idx] = escaper + v.Format("2006-01-02 15:04:05.999") + escaper
 				}
 			} else {
-				vars[idx] = "NULL"
+				vars[idx] = NULL
 			}
 		case fmt.Stringer:
 			vars[idx] = escaper + strings.Replace(fmt.Sprintf("%v", v), escaper, "\\"+escaper, -1) + escaper
@@ -56,7 +65,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 				r, _ := v.Value()
 				convertParams(r, idx)
 			} else {
-				vars[idx] = "NULL"
+				vars[idx] = NULL
 			}
 		case []byte:
 			if isPrintable(v) {
@@ -73,7 +82,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 		default:
 			rv := reflect.ValueOf(v)
 			if v == nil || !rv.IsValid() || rv.Kind() == reflect.Ptr && rv.IsNil() {
-				vars[idx] = "NULL"
+				vars[idx] = NULL
 			} else if valuer, ok := v.(driver.Valuer); ok {
 				v, _ = valuer.Value()
 				convertParams(v, idx)
