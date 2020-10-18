@@ -6,20 +6,14 @@ package datastore
 
 import (
 	"fmt"
-	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	gormlogger "gorm.io/gorm/logger"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/logger"
 	"github.com/marmotedu/iam/internal/pkg/options"
-	"github.com/marmotedu/log"
-
-	// MySQL driver.
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type datastore struct {
@@ -42,20 +36,6 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
-func newLogger() gormlogger.Interface {
-	colorful := false
-	if log.GetOptions().EnableColor {
-		colorful = true
-	}
-
-	return logger.New(
-		logger.Config{
-			SlowThreshold: time.Second,
-			Colorful:      colorful,
-		},
-	)
-}
-
 // NewMySQLStore create mysql store with the given config.
 func NewMySQLStore(o *options.MySQLOptions) (store.Store, error) {
 	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
@@ -67,7 +47,7 @@ func NewMySQLStore(o *options.MySQLOptions) (store.Store, error) {
 		"Local")
 
 	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
-		Logger: newLogger(),
+		Logger: logger.New(o.LogLevel),
 	})
 	if err != nil {
 		return nil, err

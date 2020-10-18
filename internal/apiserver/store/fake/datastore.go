@@ -13,9 +13,6 @@ import (
 	"github.com/marmotedu/component-base/pkg/util/idutil"
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/ory/ladon"
-
-	// MySQL driver.
-	_ "github.com/go-sql-driver/mysql"
 )
 
 // ResourceCount defines the number of fake resources.

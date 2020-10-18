@@ -3,10 +3,13 @@ package logger
 import (
 	"context"
 	"fmt"
+	"path/filepath"
+	"runtime"
+	"strconv"
+	"strings"
 	"time"
 
 	gormlogger "gorm.io/gorm/logger"
-	"gorm.io/gorm/utils"
 
 	"github.com/marmotedu/log"
 )
@@ -27,40 +30,51 @@ const (
 	YellowBold  = "\033[33;1m"
 )
 
+const (
+	Silent gormlogger.LogLevel = iota + 1
+	Error
+	Warn
+	Info
+)
+
+// Writer log writer interface
+type Writer interface {
+	Printf(string, ...interface{})
+}
+
 type Config struct {
 	SlowThreshold time.Duration
 	Colorful      bool
+	LogLevel      gormlogger.LogLevel
 }
 
-var (
-	Discard = New(Config{})
-	Default = New(Config{
-		SlowThreshold: 200 * time.Millisecond,
-		Colorful:      true,
-	})
-	Recorder = traceRecorder{Interface: Default}
-)
-
-func New(config Config) gormlogger.Interface {
+func New(level int) gormlogger.Interface {
 	var (
-		infoStr      = "%s\n[info] "
-		warnStr      = "%s\n[warn] "
-		errStr       = "%s\n[error] "
-		traceStr     = "%s\n[%.3fms] [rows:%v] %s"
-		traceWarnStr = "%s %s\n[%.3fms] [rows:%v] %s"
-		traceErrStr  = "%s %s\n[%.3fms] [rows:%v] %s"
+		infoStr      = "%s[info] "
+		warnStr      = "%s[warn] "
+		errStr       = "%s[error] "
+		traceStr     = "[%s][%.3fms] [rows:%v] %s"
+		traceWarnStr = "%s %s[%.3fms] [rows:%v] %s"
+		traceErrStr  = "%s %s[%.3fms] [rows:%v] %s"
 	)
 
+	config := Config{
+		SlowThreshold: 200 * time.Millisecond,
+		Colorful:      log.GetOptions().EnableColor,
+		LogLevel:      gormlogger.LogLevel(level),
+	}
+
 	if config.Colorful {
-		infoStr = Green + "%s\n" + Reset + Green + "[info] " + Reset
-		warnStr = BlueBold + "%s\n" + Reset + Magenta + "[warn] " + Reset
-		errStr = Magenta + "%s\n" + Reset + Red + "[error] " + Reset
-		traceStr = Green + "%s\n" + Reset + Yellow + "[%.3fms] " + BlueBold + "[rows:%v]" + Reset + " %s"
-		traceWarnStr = Green + "%s " + Yellow + "%s\n" + Reset + RedBold + "[%.3fms] " + Yellow + "[rows:%v]" + Magenta + " %s" + Reset
-		traceErrStr = RedBold + "%s " + MagentaBold + "%s\n" + Reset + Yellow + "[%.3fms] " + BlueBold + "[rows:%v]" + Reset + " %s"
+		infoStr = Green + "%s " + Reset + Green + "[info] " + Reset
+		warnStr = BlueBold + "%s " + Reset + Magenta + "[warn] " + Reset
+		errStr = Magenta + "%s " + Reset + Red + "[error] " + Reset
+		traceStr = Green + "%s " + Reset + Yellow + "[%.3fms] " + BlueBold + "[rows:%v]" + Reset + " %s"
+		traceWarnStr = Green + "%s " + Yellow + "%s " + Reset + RedBold + "[%.3fms] " + Yellow + "[rows:%v]" + Magenta + " %s" + Reset
+		traceErrStr = RedBold + "%s " + MagentaBold + "%s " + Reset + Yellow + "[%.3fms] " + BlueBold + "[rows:%v]" + Reset + " %s"
 	}
 
 	return &logger{
+		Writer:       log.StdInfoLogger(),
 		Config:       config,
 		infoStr:      infoStr,
 		warnStr:      warnStr,
@@ -72,6 +86,7 @@ func New(config Config) gormlogger.Interface {
 }
 
 type logger struct {
+	Writer
 	Config
 	infoStr, warnStr, errStr            string
 	traceStr, traceErrStr, traceWarnStr string
@@ -80,49 +95,58 @@ type logger struct {
 // LogMode log mode
 func (l *logger) LogMode(level gormlogger.LogLevel) gormlogger.Interface {
 	newlogger := *l
+	newlogger.LogLevel = level
 	return &newlogger
 }
 
 // Info print info
 func (l logger) Info(ctx context.Context, msg string, data ...interface{}) {
-	log.Debugf(l.infoStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
+	if l.LogLevel >= Info {
+		l.Printf(l.infoStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
+	}
 }
 
 // Warn print warn messages
 func (l logger) Warn(ctx context.Context, msg string, data ...interface{}) {
-	log.Warnf(l.warnStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
+	if l.LogLevel >= Warn {
+		l.Printf(l.warnStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
+	}
 }
 
 // Error print error messages
 func (l logger) Error(ctx context.Context, msg string, data ...interface{}) {
-	log.Errorf(l.errStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
+	if l.LogLevel >= Error {
+		l.Printf(l.errStr+msg, append([]interface{}{fileWithLineNum()}, data...)...)
+	}
 }
 
 // Trace print sql message
 func (l logger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
-	elapsed := time.Since(begin)
-	switch {
-	case err != nil:
-		sql, rows := fc()
-		if rows == -1 {
-			log.Errorf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
-		} else {
-			log.Errorf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-		}
-	case elapsed > l.SlowThreshold && l.SlowThreshold != 0:
-		sql, rows := fc()
-		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
-		if rows == -1 {
-			log.Warnf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
-		} else {
-			log.Warnf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-		}
-	default:
-		sql, rows := fc()
-		if rows == -1 {
-			log.Debugf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
-		} else {
-			log.Debugf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
+	if l.LogLevel > 0 {
+		elapsed := time.Since(begin)
+		switch {
+		case err != nil && l.LogLevel >= Error:
+			sql, rows := fc()
+			if rows == -1 {
+				l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			} else {
+				l.Printf(l.traceErrStr, fileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			}
+		case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= Warn:
+			sql, rows := fc()
+			slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
+			if rows == -1 {
+				l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			} else {
+				l.Printf(l.traceWarnStr, fileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			}
+		case l.LogLevel >= Info:
+			sql, rows := fc()
+			if rows == -1 {
+				l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			} else {
+				l.Printf(l.traceStr, fileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			}
 		}
 	}
 }
@@ -143,4 +167,18 @@ func (l *traceRecorder) Trace(ctx context.Context, begin time.Time, fc func() (s
 	l.BeginAt = begin
 	l.SQL, l.RowsAffected = fc()
 	l.Err = err
+}
+
+func fileWithLineNum() string {
+	for i := 4; i < 15; i++ {
+		_, file, line, ok := runtime.Caller(i)
+
+		//if ok && (!strings.HasPrefix(file, gormSourceDir) || strings.HasSuffix(file, "_test.go")) {
+		if ok && !strings.HasSuffix(file, "_test.go") {
+			dir, f := filepath.Split(file)
+			return filepath.Join(filepath.Base(dir), f) + ":" + strconv.FormatInt(int64(line), 10)
+		}
+	}
+
+	return ""
 }
