@@ -24,12 +24,17 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/git-chglog/git-chglog v0.0.0-20200414013904-db796966b373 // indirect
 	github.com/github-release/github-release v0.8.1 // indirect
+	github.com/go-openapi/runtime v0.19.22 // indirect
 	github.com/go-openapi/spec v0.19.9 // indirect
+	github.com/go-openapi/strfmt v0.19.6 // indirect
 	github.com/go-openapi/swag v0.19.9 // indirect
+	github.com/go-openapi/validate v0.19.11 // indirect
 	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-redis/redis/v7 v7.4.0
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/go-swagger/go-swagger v0.25.0 // indirect
 	github.com/google/uuid v1.1.2 // indirect
+	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/hekike/unchain v0.0.0-20181224101630-264f57a6bc35 // indirect
 	github.com/hexdigest/gounit v0.0.0-20180817093830-f1874d3307cb // indirect
@@ -42,7 +47,7 @@ require (
 	github.com/json-iterator/go v1.1.10
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/kevinburke/rest v0.0.0-20200429221318-0d2892b400f8 // indirect
-	github.com/kr/pretty v0.2.0 // indirect
+	github.com/kr/pretty v0.2.1 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/marmotedu/api v1.0.0
@@ -63,6 +68,7 @@ require (
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/ory/ladon v1.2.0
 	github.com/parnurzeal/gorequest v0.2.16
+	github.com/pdrum/swagger-automation v0.0.0-20190629163613-c8c7c80ba858
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/prometheus/client_golang v1.7.1
 	github.com/russross/blackfriday v1.5.2
@@ -70,7 +76,7 @@ require (
 	github.com/segmentio/kafka-go v0.4.2
 	github.com/shibukawa/configdir v0.0.0-20170330084843-e180dbdc8da0 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
-	github.com/spf13/afero v1.4.0 // indirect
+	github.com/spf13/afero v1.4.1 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
@@ -84,18 +90,19 @@ require (
 	github.com/vbatts/git-validation v1.1.0 // indirect
 	github.com/voxelbrain/goptions v0.0.0-20180630082107-58cddc247ea2 // indirect
 	github.com/zsais/go-gin-prometheus v0.1.0
-	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect
+	go.mongodb.org/mongo-driver v1.4.2 // indirect
+	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0 // indirect
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
-	golang.org/x/sys v0.0.0-20200928205150-006507a75852 // indirect
-	golang.org/x/tools v0.0.0-20201002184944-ecd9fd270d5d
+	golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13 // indirect
+	golang.org/x/tools v0.0.0-20201017001424-6003fad69a88
 	google.golang.org/grpc v1.31.1
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8 // indirect
-	gopkg.in/ini.v1 v1.61.0 // indirect
+	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/kyokomi/emoji.v1 v1.5.1 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/vmihailenco/msgpack.v2 v2.9.1
 	gopkg.in/yaml.v2 v2.3.0
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	gorm.io/driver/mysql v1.0.2
 	gorm.io/gorm v1.20.2
 )

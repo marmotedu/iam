@@ -28,6 +28,7 @@ include scripts/make-rules/license.mk
 include scripts/make-rules/gen.mk
 include scripts/make-rules/ca.mk
 include scripts/make-rules/release.mk
+include scripts/make-rules/swagger.mk
 
 # ==============================================================================
 # Usage
@@ -142,6 +143,16 @@ ca:
 .PHONY: install
 install:
 	@$(MAKE) install.install
+
+## swagger: Generate swagger document.
+.PHONY: swagger
+swagger:
+	@$(MAKE) swagger.run
+
+## serve-swagger: Serve swagger spec and docs.
+.PHONY: swagger.serve
+serve-swagger:
+	@$(MAKE) swagger.serve
 
 ## help: Show this help info.
 .PHONY: help

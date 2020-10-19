@@ -18,7 +18,12 @@ import (
 
 // ChangePasswordRequest defines the ChangePasswordRequest data format.
 type ChangePasswordRequest struct {
+	// Old password.
+	// Required: true
 	OldPassword string `json:"oldPassword" binding:"omitempty"`
+
+	// New password.
+	// Required: true
 	NewPassword string `json:"newPassword" binding:"password"`
 }
 

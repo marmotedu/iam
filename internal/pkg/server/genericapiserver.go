@@ -16,13 +16,9 @@ import (
 	"time"
 
 	//limits "github.com/gin-contrib/size".
-	_ "github.com/marmotedu/iam/api/swagger"
 
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
-	swaggerfiles "github.com/swaggo/files"
-	ginswagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 
 	"github.com/marmotedu/component-base/pkg/core"
@@ -54,11 +50,6 @@ type GenericAPIServer struct {
 	// wrapper for gin.Engine
 }
 
-// AddSwagger add swagger doc.
-func (s *GenericAPIServer) AddSwagger(path string) {
-	s.GET(path, ginswagger.WrapHandler(swaggerfiles.Handler))
-}
-
 // InstallAPIs install generic apis.
 func (s *GenericAPIServer) InstallAPIs() {
 	// install healthz handler
@@ -82,9 +73,6 @@ func (s *GenericAPIServer) InstallAPIs() {
 	s.GET("/version", func(c *gin.Context) {
 		core.WriteResponse(c, nil, version.Get())
 	})
-
-	//s.GET("/swagger/*any", ginswagger.WrapHandler(swaggerfiles.Handler))
-	s.GET("/swagger/*any", ginswagger.DisablingWrapHandler(swaggerFiles.Handler, "NAME_OF_ENV_VARIABLE"))
 }
 
 // Setup do some setup work for gin engine.
