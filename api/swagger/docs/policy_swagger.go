@@ -83,35 +83,35 @@ import (
 
 // List users request.
 // swagger:parameters listPolicyRequest
-type listPolicyRequest struct {
+type listPolicyRequestParamsWrapper struct {
 	// in:query
 	metav1.ListOptions
 }
 
 // List policies response.
 // swagger:response listPolicyResponse
-type listPolicyResponse struct {
+type listPolicyResponseWrapper struct {
 	// in:body
 	Body v1.PolicyList
 }
 
 // Policy response.
 // swagger:response createPolicyResponse
-type createPolicyResponse struct {
+type createPolicyResponseWrapper struct {
 	// in:body
 	Body v1.Policy
 }
 
 // Policy response.
 // swagger:response updatePolicyResponse
-type updatePolicyResponse struct {
+type updatePolicyResponseWrapper struct {
 	// in:body
 	Body v1.Policy
 }
 
 // Policy response.
 // swagger:response getPolicyResponse
-type getPolicyResponse struct {
+type getPolicyResponseWrapper struct {
 	// in:body
 	Body v1.Policy
 }

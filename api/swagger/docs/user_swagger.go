@@ -94,35 +94,35 @@ import (
 
 // List users request.
 // swagger:parameters listUserRequest
-type listUserRequest struct {
+type listUserRequestParamsWrapper struct {
 	// in:query
 	metav1.ListOptions
 }
 
 // List users response.
 // swagger:response listUserResponse
-type listUserResponse struct {
+type listUserResponseWrapper struct {
 	// in:body
 	Body v1.UserListV2
 }
 
 // User response.
 // swagger:response createUserResponse
-type createUserResponse struct {
+type createUserResponseWrapper struct {
 	// in:body
 	Body v1.User
 }
 
 // User response.
 // swagger:response updateUserResponse
-type updateUserResponse struct {
+type updateUserResponseWrapper struct {
 	// in:body
 	Body v1.User
 }
 
 // User response.
 // swagger:response getUserResponse
-type getUserResponse struct {
+type getUserResponseWrapper struct {
 	// in:body
 	Body v1.User
 }
@@ -143,14 +143,14 @@ type userNameParamsWrapper struct {
 
 // Batch delete users.
 // swagger:parameters deleteUserCollectionRequest deletePolicyCollectionRequest
-type deleteCollectionRequest struct {
+type deleteCollectionRequestParamsWrapper struct {
 	// in:query
 	Names []string `json:"name"`
 }
 
 // Change user password.
 // swagger:parameters changePasswordRequest
-type changePasswordRequest struct {
+type changePasswordRequestParamsWrapper struct {
 	// The name of user.
 	// in:path
 	Name string `json:"name"`

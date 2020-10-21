@@ -71,35 +71,35 @@ import (
 
 // List users request.
 // swagger:parameters listSecretRequest
-type listSecretRequest struct {
+type listSecretRequestParamsWrapper struct {
 	// in:query
 	metav1.ListOptions
 }
 
 // List secrets response.
 // swagger:response listSecretResponse
-type listSecretResponse struct {
+type listSecretResponseWrapper struct {
 	// in:body
 	Body v1.SecretList
 }
 
 // Secret response.
 // swagger:response createSecretResponse
-type createSecretResponse struct {
+type createSecretResponseWrapper struct {
 	// in:body
 	Body v1.Secret
 }
 
 // Secret response.
 // swagger:response updateSecretResponse
-type updateSecretResponse struct {
+type updateSecretResponseWrapper struct {
 	// in:body
 	Body v1.Secret
 }
 
 // Secret response.
 // swagger:response getSecretResponse
-type getSecretResponse struct {
+type getSecretResponseWrapper struct {
 	// in:body
 	Body v1.Secret
 }
@@ -120,12 +120,12 @@ type secretNameParamsWrapper struct {
 
 // ErrResponse defines the return messages when an error occurred.
 // swagger:response errResponse
-type errResponse struct {
+type errResponseWrapper struct {
 	// in:body
 	Body core.ErrResponse
 }
 
 // Return nil json object.
 // swagger:response okResponse
-type okResponse struct {
+type okResponseWrapper struct {
 }

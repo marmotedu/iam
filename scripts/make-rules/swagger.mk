@@ -16,8 +16,8 @@ endif
 .PHONY: swagger.run
 swagger.run: swagger.verify
 	@echo "===========> Generating swagger API docs"
-	@swagger generate spec -w $(ROOT_DIR)/cmd/genswaggertypedocs -o $(ROOT_DIR)/api/swagger/swagger.yaml --scan-models
+	@swagger generate spec --scan-models -w $(ROOT_DIR)/cmd/genswaggertypedocs -o $(ROOT_DIR)/api/swagger/swagger.yaml
 
 .PHONY: swagger.serve
 swagger.serve: swagger.verify
-	@swagger serve -F=swagger $(ROOT_DIR)/api/swagger/swagger.yaml --no-open --port 36666
+	@swagger serve -F=redoc --no-open --port 36666 $(ROOT_DIR)/api/swagger/swagger.yaml
