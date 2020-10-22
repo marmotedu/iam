@@ -1,4 +1,8 @@
-package ginlimit
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+package middleware
 
 import (
 	"errors"
@@ -8,10 +12,11 @@ import (
 )
 
 var (
+	// ErrorLimitExceeded defines Limit exceeded error.
 	ErrorLimitExceeded = errors.New("Limit exceeded")
 )
 
-// Drops (HTTP status 429) the request if the limit is reached.
+// Limit drops (HTTP status 429) the request if the limit is reached.
 func Limit(maxEventsPerSec float64, maxBurstSize int) gin.HandlerFunc {
 	limiter := rate.NewLimiter(rate.Limit(maxEventsPerSec), maxBurstSize)
 
@@ -22,7 +27,7 @@ func Limit(maxEventsPerSec float64, maxBurstSize int) gin.HandlerFunc {
 		}
 
 		// Limit reached
-		c.Error(ErrorLimitExceeded)
+		_ = c.Error(ErrorLimitExceeded)
 		c.AbortWithStatus(429)
 	}
 }

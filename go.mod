@@ -94,6 +94,7 @@ require (
 	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0 // indirect
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13 // indirect
+	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
 	golang.org/x/tools v0.0.0-20201017001424-6003fad69a88
 	google.golang.org/grpc v1.31.1
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8 // indirect
