@@ -9,8 +9,6 @@ import (
 	"fmt"
 	"net/http"
 
-	// import pprof http handlers
-	//_ "net/http/pprof".
 	"strings"
 	"sync"
 	"time"

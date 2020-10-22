@@ -56,6 +56,10 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 
 - Lingfei Kong <colin404@foxmail.com>
 
+1. 关注公众号
+2. 扫码入群
+3. 访问土拨鼠教育官网
+
 ## License
 
 IAM is licensed under the MIT. See [LICENSE](LICENSE) for the full license text.
