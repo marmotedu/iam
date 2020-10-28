@@ -5,6 +5,7 @@
 package service
 
 import (
+	"context"
 	"sync"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -15,7 +16,7 @@ import (
 )
 
 // ListUser returns user list in the storage. This function has a good performance.
-func ListUser(opts metav1.ListOptions) (*v1.UserListV2, error) {
+func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error) {
 	users, err := store.Client().Users().List(opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())

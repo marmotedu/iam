@@ -27,7 +27,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	users, err := service.ListUser(r)
+	users, err := service.ListUser(c, r)
 	if err != nil {
 		core.WriteResponse(c, errors.WithStack(err), nil)
 		return

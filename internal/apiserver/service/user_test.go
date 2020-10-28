@@ -5,6 +5,7 @@
 package service
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -27,7 +28,7 @@ func TestListUser(t *testing.T) {
 		Limit:  pointer.ToInt(limit),
 	}
 
-	got, err := ListUser(opts)
+	got, err := ListUser(context.TODO(), opts)
 	if err != nil {
 		t.Errorf("ListUser() error = %v, wantErr %v", err, nil)
 	}
@@ -61,6 +62,6 @@ func BenchmarkListUser(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		//_, _ = ListUserBadPerformance(opts)
-		_, _ = ListUser(opts)
+		_, _ = ListUser(context.TODO(), opts)
 	}
 }
