@@ -62,7 +62,7 @@ func (k *KafkaPump) GetName() string {
 
 // Init initialize the kafka pump instance.
 func (k *KafkaPump) Init(config interface{}) error {
-	//Read configuration file
+	// Read configuration file
 	k.kafkaConf = &KafkaConf{}
 	err := mapstructure.Decode(config, &k.kafkaConf)
 
@@ -117,7 +117,7 @@ func (k *KafkaPump) Init(config interface{}) error {
 		log.Warn("IAM pump doesn't support this SASL mechanism.", log.String("SASL-Mechanism", k.kafkaConf.SASLMechanism))
 	}
 
-	//Kafka writer connection config
+	// Kafka writer connection config
 	dialer := &kafka.Dialer{
 		Timeout:       k.kafkaConf.Timeout * time.Second,
 		ClientID:      k.kafkaConf.ClientID,
@@ -145,7 +145,7 @@ func (k *KafkaPump) WriteData(ctx context.Context, data []interface{}) error {
 	log.Infof("Writing %d records ...", len(data))
 	kafkaMessages := make([]kafka.Message, len(data))
 	for i, v := range data {
-		//Build message format
+		// Build message format
 		decoded := v.(analytics.AnalyticsRecord)
 		message := Message{
 			"timestamp":  decoded.TimeStamp,
@@ -157,24 +157,24 @@ func (k *KafkaPump) WriteData(ctx context.Context, data []interface{}) error {
 			"deciders":   decoded.Deciders,
 			"expireAt":   decoded.ExpireAt,
 		}
-		//Add static metadata to json
+		// Add static metadata to json
 		for key, value := range k.kafkaConf.MetaData {
 			message[key] = value
 		}
 
-		//Transform object to json string
+		// Transform object to json string
 		json, jsonError := json.Marshal(message)
 		if jsonError != nil {
 			log.Error("unable to marshal message", log.String("error", jsonError.Error()))
 		}
 
-		//Kafka message structure
+		// Kafka message structure
 		kafkaMessages[i] = kafka.Message{
 			Time:  time.Now(),
 			Value: json,
 		}
 	}
-	//Send kafka message
+	// Send kafka message
 	kafkaError := k.write(ctx, kafkaMessages)
 	if kafkaError != nil {
 		log.Error("unable to write message", log.String("error", kafkaError.Error()))

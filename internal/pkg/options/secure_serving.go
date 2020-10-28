@@ -22,7 +22,7 @@ type SecureServingOptions struct {
 	Required bool
 	// ServerCert is the TLS cert info for serving secure traffic
 	ServerCert GeneratableKeyCert `json:"tls" mapstructure:"tls"`
-	//AdvertiseAddress net.IP
+	// AdvertiseAddress net.IP
 }
 
 // CertKey contains configuration items related to certificate.

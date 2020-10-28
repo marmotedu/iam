@@ -61,7 +61,7 @@ func BenchmarkListUser(b *testing.B) {
 	}
 
 	for i := 0; i < b.N; i++ {
-		//_, _ = ListUserBadPerformance(opts)
+		// _, _ = ListUserBadPerformance(opts)
 		_, _ = ListUser(context.TODO(), opts)
 	}
 }

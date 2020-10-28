@@ -29,7 +29,7 @@ var defaultLogFormatter = func(param gin.LogFormatterParams) string {
 		param.Latency = param.Latency - param.Latency%time.Second
 	}
 	return fmt.Sprintf("%s%3d%s - [%s] \"%v %s%s%s %s\" %s",
-		//param.TimeStamp.Format("2006/01/02 - 15:04:05"),
+		// param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 		statusColor, param.StatusCode, resetColor,
 		param.ClientIP,
 		param.Latency,

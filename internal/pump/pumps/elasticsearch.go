@@ -66,7 +66,7 @@ type APIKeyTransport struct {
 	APIKeyID string
 }
 
-//RoundTrip for APIKeyTransport auth.
+// RoundTrip for APIKeyTransport auth.
 func (t *APIKeyTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 	auth := t.APIKeyID + ":" + t.APIKey
 	key := base64.StdEncoding.EncodeToString([]byte(auth))
@@ -193,7 +193,7 @@ func getIndexName(esConf *ElasticsearchConf) string {
 
 	if esConf.RollingIndex {
 		currentTime := time.Now()
-		//This formats the date to be YYYY.MM.DD but Golang makes you use a specific date for its date formatting
+		// This formats the date to be YYYY.MM.DD but Golang makes you use a specific date for its date formatting
 		indexName += "-" + currentTime.Format("2006.01.02")
 	}
 	return indexName

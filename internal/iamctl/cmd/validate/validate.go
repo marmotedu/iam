@@ -93,7 +93,7 @@ func (o *ValidateOptions) Run(args []string) error {
 		return err
 	}
 	_, err = net.Dial("tcp", target.Host)
-	//defer client.Close()
+	// defer client.Close()
 	if err != nil {
 		validateInfo.Status = FAIL
 		validateInfo.Message = fmt.Sprintf("%v", err)

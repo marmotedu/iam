@@ -31,7 +31,7 @@ func NewCmdSet(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.
 	}
 
 	// add subcommands
-	//cmd.AddCommand(NewCmdDB(f, ioStreams))
+	// cmd.AddCommand(NewCmdDB(f, ioStreams))
 
 	return cmd
 }

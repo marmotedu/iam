@@ -11,7 +11,7 @@ func TestShouldFilter(t *testing.T) {
 		Username: "colin",
 	}
 
-	//test skip_usernames
+	// test skip_usernames
 	filter := AnalyticsFilters{
 		SkippedUsernames: []string{"colin"},
 	}
@@ -20,7 +20,7 @@ func TestShouldFilter(t *testing.T) {
 		t.Fatal("filter should be filtering the record")
 	}
 
-	//test different usernames
+	// test different usernames
 	filter = AnalyticsFilters{
 		Usernames: []string{"james"},
 	}
@@ -29,7 +29,7 @@ func TestShouldFilter(t *testing.T) {
 		t.Fatal("filter should be filtering the record")
 	}
 
-	//test no filter
+	// test no filter
 	filter = AnalyticsFilters{}
 	shouldFilter = filter.ShouldFilter(record)
 	if shouldFilter == true {

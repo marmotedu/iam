@@ -53,8 +53,8 @@ type AuthInterface interface {
 // CacheAuthInterface authentication interface for authzserver.
 type CacheAuthInterface interface {
 	GetSecret(secretID string) (*pb.SecretInfo, error)
-	//GetKeyExpires(secretID string) (int64, error)
-	//GetUsername(secretID string) (string, error)
+	// GetKeyExpires(secretID string) (int64, error)
+	// GetUsername(secretID string) (string, error)
 }
 
 // AuthMiddleware defines authentication middleware struct.
@@ -77,14 +77,14 @@ func NewAuthMiddleware(auth AuthInterface, cacheClient CacheAuthInterface) (*Aut
 			Key:              auth.JWTAuth().Key(),
 			Timeout:          auth.JWTAuth().Timeout(),
 			MaxRefresh:       auth.JWTAuth().MaxRefresh(),
-			//IdentityKey:      o.IdentityKey,
+			// IdentityKey:      o.IdentityKey,
 			Authenticator:   auth.JWTAuth().Authenticator(),   // 登陆1: 登陆认证
 			LoginResponse:   auth.JWTAuth().LoginResponse(),   // 登陆3：返回
 			LogoutResponse:  auth.JWTAuth().LogoutResponse(),  // 登出1
 			PayloadFunc:     auth.JWTAuth().PayloadFunc(),     // 登陆2：增加payload信息
 			IdentityHandler: auth.JWTAuth().IdentityHandler(), // 解析claims
 			Authorizator:    auth.JWTAuth().Authorizator(),    // 登陆成功处理，header中增加username
-			Unauthorized:    auth.JWTAuth().Unauthorized(),    //授权失败
+			Unauthorized:    auth.JWTAuth().Unauthorized(),    // 授权失败
 			TokenLookup:     "header: Authorization, query: token, cookie: jwt",
 			TokenHeadName:   "Bearer",
 			SendCookie:      true,

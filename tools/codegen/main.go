@@ -279,7 +279,7 @@ func (g *Generator) generateDocs(typeName string) {
 	g.Printf(buf.String())
 	for _, v := range values {
 		code, description := v.ParseComment()
-		//g.Printf("\tregister(%s, %s, \"%s\")\n", v.originalName, code, description)
+		// g.Printf("\tregister(%s, %s, \"%s\")\n", v.originalName, code, description)
 		g.Printf("| %s | %d | %s | %s |\n", v.originalName, v.value, code, description)
 	}
 	g.Printf("\n")

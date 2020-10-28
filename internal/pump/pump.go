@@ -280,11 +280,11 @@ func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, pu
 	log.Debugf("Writing to: %s", pmp.GetName())
 
 	ch := make(chan error, 1)
-	//Load pump timeout
+	// Load pump timeout
 	timeout := pmp.GetTimeout()
 	var ctx context.Context
 	var cancel context.CancelFunc
-	//Initialize context depending if the pump has a configured timeout
+	// Initialize context depending if the pump has a configured timeout
 	if timeout > 0 {
 		ctx, cancel = context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	} else {

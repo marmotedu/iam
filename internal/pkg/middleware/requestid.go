@@ -1,3 +1,7 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package middleware
 
 import (
@@ -10,10 +14,11 @@ import (
 )
 
 const (
+	// XRequestIDKey defines X-Request-ID key string.
 	XRequestIDKey = "X-Request-ID"
 )
 
-//RequestID is a middleware that injects a 'X-Request-ID' into the context and request/response header of each request.
+// RequestID is a middleware that injects a 'X-Request-ID' into the context and request/response header of each request.
 func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Check for incoming header, use it if exists
@@ -45,7 +50,7 @@ func GetLoggerConfig(formatter gin.LogFormatter, output io.Writer, skipPaths []s
 	}
 }
 
-//GetDefaultLogFormatterWithRequestID returns gin.LogFormatter with 'RequestID'
+// GetDefaultLogFormatterWithRequestID returns gin.LogFormatter with 'RequestID'.
 func GetDefaultLogFormatterWithRequestID() gin.LogFormatter {
 	return func(param gin.LogFormatterParams) string {
 		var statusColor, methodColor, resetColor string
@@ -57,10 +62,10 @@ func GetDefaultLogFormatterWithRequestID() gin.LogFormatter {
 
 		if param.Latency > time.Minute {
 			// Truncate in a golang < 1.8 safe way
-			param.Latency = param.Latency - param.Latency%time.Second
+			param.Latency -= param.Latency % time.Second
 		}
 		return fmt.Sprintf("%s%3d%s [%s] - [%s] \"%v %s%s%s %s\" %s",
-			//param.TimeStamp.Format("2006/01/02 - 15:04:05"),
+			// param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 			statusColor, param.StatusCode, resetColor,
 			param.Request.Header.Get(XRequestIDKey),
 			param.ClientIP,

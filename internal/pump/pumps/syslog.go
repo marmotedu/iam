@@ -49,7 +49,7 @@ func (s *SyslogPump) GetName() string {
 
 // Init initialize the syslog pump instance.
 func (s *SyslogPump) Init(config interface{}) error {
-	//Read configuration file
+	// Read configuration file
 	s.syslogConf = &SyslogConf{}
 	err := mapstructure.Decode(config, &s.syslogConf)
 
@@ -110,7 +110,7 @@ func initConfigs(pump *SyslogPump) {
 
 // WriteData write analyzed data to syslog persistent back-end storage.
 func (s *SyslogPump) WriteData(ctx context.Context, data []interface{}) error {
-	//Data is all the analytics being written
+	// Data is all the analytics being written
 	for _, v := range data {
 		select {
 		case <-ctx.Done():

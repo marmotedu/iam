@@ -58,7 +58,7 @@ func installAPI(g *gin.Engine) *gin.Engine {
 			userv1.POST("", user.Create)
 
 			userv1.Use(authMiddleware.AuthMiddlewareFunc(), middleware.Validation())
-			//v1.PUT("/find_password", user.FindPassword)
+			// v1.PUT("/find_password", user.FindPassword)
 			userv1.DELETE("", user.DeleteCollection) // admin api
 			userv1.DELETE(":name", user.Delete)      // admin api
 			userv1.PUT(":name/change_password", user.ChangePassword)

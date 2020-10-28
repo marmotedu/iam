@@ -94,12 +94,12 @@ func NewCmdDB(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.C
 
 // Complete completes all the required options.
 func (o *DBOptions) Complete() error {
-	//o.host = viper.GetString("host")
-	//o.username = viper.GetString("username")
-	//o.password = viper.GetString("password")
-	//o.Database = viper.GetString("database")
-	//o.drop = viper.GetBool("drop")
-	//o.admin = viper.GetBool("admin")
+	// o.host = viper.GetString("host")
+	// o.username = viper.GetString("username")
+	// o.password = viper.GetString("password")
+	// o.Database = viper.GetString("database")
+	// o.drop = viper.GetBool("drop")
+	// o.admin = viper.GetBool("admin")
 
 	return nil
 }

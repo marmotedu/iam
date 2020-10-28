@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	//limits "github.com/gin-contrib/size".
+	// limits "github.com/gin-contrib/size".
 
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
@@ -94,9 +94,9 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 		log.Infof("install middleware: %s", m)
 		s.Use(mw)
 	}
-	//s.Use(gin.Logger())
-	//s.Use(limits.RequestSizeLimiter(10))
-	//s.GET("/debug/vars", expvar.Handler())
+	// s.Use(gin.Logger())
+	// s.Use(limits.RequestSizeLimiter(10))
+	// s.GET("/debug/vars", expvar.Handler())
 }
 
 // Run spawns the http server. It only returns if stopCh is closed
@@ -169,7 +169,7 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 	}
 
 	wg.Wait()
-	//log.Info("All servers stopped. Exiting.")
+	// log.Info("All servers stopped. Exiting.")
 
 	return nil
 }

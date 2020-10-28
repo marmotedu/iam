@@ -124,7 +124,7 @@ func (c CompletedConfig) New() (*GenericAPIServer, error) {
 	}
 
 	// do some setup
-	//s.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// s.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	s.Setup()
 	s.InstallMiddlewares()

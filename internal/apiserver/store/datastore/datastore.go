@@ -66,7 +66,7 @@ func setupDatabase(db *gorm.DB, o *options.MySQLOptions) error {
 	// not suggested in production environment.
 	// migrateDatabase(db)
 
-	//db.LogMode(o.LogMode)
+	// db.LogMode(o.LogMode)
 	sqlDB, err := db.DB()
 	if err != nil {
 		return err

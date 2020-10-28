@@ -76,7 +76,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 
 	switch notif.Command {
 	case NoticePolicyChanged, NoticeSecretChanged:
-		//pubSubLog.Info("Reloading endpoints")
+		// pubSubLog.Info("Reloading endpoints")
 		reloadURLStructure(reloaded)
 	default:
 		log.Warnf("Unknown notification command: %q", notif.Command)

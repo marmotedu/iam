@@ -702,7 +702,7 @@ func (r *RedisCluster) GetKeysAndValues() map[string]string {
 // DeleteKey will remove a key from the database.
 func (r *RedisCluster) DeleteKey(keyName string) bool {
 	if err := r.up(); err != nil {
-		//log.Debug(err)
+		// log.Debug(err)
 		return false
 	}
 	log.Debugf("DEL Key was: %s", keyName)

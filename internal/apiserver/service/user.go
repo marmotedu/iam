@@ -69,7 +69,7 @@ func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, err
 		return nil, err
 	}
 
-	//infos := make([]*v1.UserV2, 0)
+	// infos := make([]*v1.UserV2, 0)
 	infos := make([]*v1.UserV2, 0, len(users.Items))
 	for _, user := range users.Items {
 		info, _ := m.Load(user.ID)
