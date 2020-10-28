@@ -154,6 +154,10 @@ swagger:
 serve-swagger:
 	@$(MAKE) swagger.serve
 
+## dependencies: Install necessary dependencies.
+.PHONY: dependencies
+dependencies: release.gsemver.verify
+
 ## help: Show this help info.
 .PHONY: help
 help: Makefile
