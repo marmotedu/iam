@@ -147,20 +147,20 @@ func DoReload() {
 	reloadMu.Lock()
 	defer reloadMu.Unlock()
 
-	client := &GrpcClient{}
-	if !client.Connect() {
+	grpcClient := &GrpcClient{}
+	if !grpcClient.Connect() {
 		log.Error("Failed connecting to grpc server")
 		return
 	}
 
 	var err error
-	secrets, err = client.GetSecrets()
+	secrets, err = grpcClient.GetSecrets()
 	if err != nil {
 		log.Errorf("Error during syncing secrets: %s", err.Error())
 		return
 	}
 
-	policies, err = client.GetPolicies()
+	policies, err = grpcClient.GetPolicies()
 	if err != nil {
 		log.Errorf("Error during syncing policies: %s", err.Error())
 		return

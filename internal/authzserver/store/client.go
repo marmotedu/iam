@@ -44,7 +44,7 @@ func getClient() pb.CacheClient {
 
 // Connect will establish a connection to the RPC.
 func (c *GrpcClient) Connect() bool {
-	log.Info("connecting to grpc server in block mode")
+	log.Debug("connecting to grpc server in block mode")
 	rpcConnectMu.Lock()
 	defer rpcConnectMu.Unlock()
 
