@@ -29,6 +29,7 @@ include scripts/make-rules/gen.mk
 include scripts/make-rules/ca.mk
 include scripts/make-rules/release.mk
 include scripts/make-rules/swagger.mk
+include scripts/make-rules/dependencies.mk
 
 # ==============================================================================
 # Usage
@@ -156,7 +157,8 @@ serve-swagger:
 
 ## dependencies: Install necessary dependencies.
 .PHONY: dependencies
-dependencies: release.gsemver.verify
+dependencies:
+	@$(MAKE) dependencies.run
 
 ## help: Show this help info.
 .PHONY: help
