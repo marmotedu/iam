@@ -79,7 +79,7 @@ EOF
   fi
 
   echo "Generate "${prefix}" certificates..."
-  echo '{"CN":"'"${prefix}"'","hosts":["*"],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"BeiJing","L":"BeiJing","O":"iam","OU":"marmotedu"}]}' \
+  echo '{"CN":"'"${prefix}"'","hosts":["127.0.0.1", "*"],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"BeiJing","L":"BeiJing","O":"iam","OU":"marmotedu"}]}' \
    | ${CFSSL_BIN} gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=iam - \
    | ${CFSSLJSON_BIN} -bare "${prefix}"
 
