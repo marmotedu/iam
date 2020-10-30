@@ -124,8 +124,8 @@ Find more ladon information at:
 // Run runs the specified AuthzServer. This should never exit.
 func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) error {
 	// To help debugging, immediately log config and version
-	log.Infof("config: `%s`", completedOptions.String())
-	log.Infof("version: %+v", version.Get().ToJSON())
+	log.Debugf("config: `%s`", completedOptions.String())
+	log.Debugf("version: %+v", version.Get().ToJSON())
 
 	// start cacheService
 	cacheService := store.New(buildStorageConfig(completedOptions), completedOptions.RPCServer, completedOptions.ClientCA)

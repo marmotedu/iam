@@ -126,8 +126,8 @@ Find more iam-apiserver information at:
 // Run runs the specified APIServer. This should never exit.
 func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) error {
 	// To help debugging, immediately log config and version
-	log.Infof("config: `%s`", completedOptions.String())
-	log.Infof("version: %+v", version.Get().ToJSON())
+	log.Debugf("config: `%s`", completedOptions.String())
+	log.Debugf("version: %+v", version.Get().ToJSON())
 
 	if err := completedOptions.InitDataStore(); err != nil {
 		return err

@@ -113,10 +113,10 @@ func (c *GrpcClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 		return nil, err
 	}
 
-	log.Infof("Policies found (%d total)[username - name]:", len(resp.Items))
+	log.Infof("Policies found (%d total)[username:name]:", len(resp.Items))
 
 	for _, v := range resp.Items {
-		log.Infof("%s - %s", v.Username, v.Name)
+		log.Infof(" - %s:%s", v.Username, v.Name)
 
 		var policy ladon.DefaultPolicy
 
