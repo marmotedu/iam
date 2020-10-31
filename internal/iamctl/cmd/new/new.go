@@ -117,6 +117,21 @@ func NewCmd{{.CommandFunctionName}}(f cmdutil.Factory, ioStreams genericclioptio
 			cmdutil.CheckErr(o.Run(args))
 		},
 		SuggestFor: []string{},
+		Args: func(cmd *cobra.Command, args []string) error {
+			// nolint: gomnd // no need
+			if len(args) < 2 {
+				return cmdutil.UsageErrorf(cmd, {{.CommandName}}UsageErrStr)
+			}
+
+			// if need args equal to zero, uncomment the following code
+			/*
+				if len(args) != 0 {
+					return cmdutil.UsageErrorf(cmd, "Unexpected args: %v", args)
+				}
+			*/
+
+			return nil
+		},
 	}
 
 	// mark flag as deprecated
@@ -131,18 +146,6 @@ func NewCmd{{.CommandFunctionName}}(f cmdutil.Factory, ioStreams genericclioptio
 
 // Complete completes all the required options.
 func (o *{{.CommandFunctionName}}Options) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string) error {
-	// nolint: gomnd // no need
-	if len(args) < 2 {
-		return cmdutil.UsageErrorf(cmd, {{.CommandName}}UsageErrStr)
-	}
-
-	// if need args equal to zero, uncomment the following code
-	/*
-		if len(args) != 0 {
-			return cmdutil.UsageErrorf(cmd, "Unexpected args: %v", args)
-		}
-	*/
-
 	if o.StringOption != "" {
 		o.StringOption += "(complete)"
 	}
@@ -309,6 +312,14 @@ func NewCmdSubCmd1(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *co
 			cmdutil.CheckErr(o.Run(args))
 		},
 		SuggestFor: []string{},
+		Args: func(cmd *cobra.Command, args []string) error {
+			// nolint: gomnd // no need
+			if len(args) < 2 {
+				return cmdutil.UsageErrorf(cmd, subcmd1UsageErrStr)
+			}
+
+			return nil
+		},
 	}
 
 	// mark flag as deprecated
@@ -323,11 +334,6 @@ func NewCmdSubCmd1(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *co
 
 // Complete completes all the required options.
 func (o *SubCmd1Options) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string) error {
-	// nolint: gomnd // no need
-	if len(args) < 2 {
-		return cmdutil.UsageErrorf(cmd, subcmd1UsageErrStr)
-	}
-
 	if o.StringOption != "" {
 		o.StringOption += "(complete)"
 	}
