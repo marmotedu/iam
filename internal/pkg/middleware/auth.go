@@ -173,15 +173,7 @@ func (a *AuthMiddleware) AuthCacheMiddlewareFunc() gin.HandlerFunc {
 
 			return []byte(secret.SecretKey), nil
 		})
-		if err != nil {
-			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, err.Error()), nil)
-			c.Abort()
-			return
-		}
-
-		// check if the token is valid for "exp, iat, nbf, aud, issuer"
-		validator := jwt.NewValidationHelper(jwt.WithAudience(AuthzAudience))
-		if err := parsedT.Claims.Valid(validator); err != nil {
+		if err != nil || !parsedT.Valid {
 			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, err.Error()), nil)
 			c.Abort()
 			return
