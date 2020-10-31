@@ -207,7 +207,7 @@ func NewCmd{{.CommandFunctionName}}(f cmdutil.Factory, ioStreams genericclioptio
 	cmd := &cobra.Command{
 		Use:                   "{{.CommandName}} SUBCOMMAND",
 		DisableFlagsInUseLine: true,
-		Short:                 "Show a demo command",
+		Short:                 "{{.CommandDescription}}",
 		Long:                  {{.CommandName}}Long,
 		Run:                   cmdutil.DefaultSubCommandRun(ioStreams.ErrOut),
 	}

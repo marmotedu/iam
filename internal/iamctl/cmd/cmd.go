@@ -17,12 +17,12 @@ import (
 	"github.com/marmotedu/iam/internal/iamctl/cmd/color"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/completion"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/info"
+	"github.com/marmotedu/iam/internal/iamctl/cmd/jwt"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/new"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/options"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/policy"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/secret"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/set"
-	"github.com/marmotedu/iam/internal/iamctl/cmd/sign"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/user"
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/validate"
@@ -93,7 +93,7 @@ func NewIAMCtlCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				info.NewCmdInfo(f, ioStreams),
 				color.NewCmdColor(f, ioStreams),
 				new.NewCmdNew(f, ioStreams),
-				sign.NewCmdSign(f, ioStreams),
+				jwt.NewCmdJWT(f, ioStreams),
 			},
 		},
 		{
