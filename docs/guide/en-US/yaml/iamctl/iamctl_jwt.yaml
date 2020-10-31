@@ -2,9 +2,12 @@
 # Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
-name: options
-synopsis: Print the list of flags inherited by all commands
-description: Print the list of flags inherited by all commands
+name: jwt
+synopsis: JWT command-line tool
+description: |-
+  JWT command.
+
+   This commands is used to sigin/show/verify jwt token.
 inherited_options:
 - name: iamconfig
   usage: Path to the iamconfig file to use for CLI requests
@@ -54,8 +57,8 @@ inherited_options:
   usage: Bearer token for authentication to the API server
 - name: user.username
   usage: Username for basic authentication to the API server
-example: |2-
-    # Print flags inherited by all commands
-    iamctl options
 see_also:
 - iamctl
+- show
+- sign
+- verify

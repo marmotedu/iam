@@ -74,12 +74,12 @@ Find more iam\-apiserver information at:
 	JWT token timeout.
 
 .PP
-\fB\-\-log.disable\-color\fP=false
-	Disable output ansi colors in plain format logs.
-
-.PP
 \fB\-\-log.enable\-caller\fP=false
 	Enable output of caller information in the log.
+
+.PP
+\fB\-\-log.enable\-color\fP=false
+	Enable output ansi colors in plain format logs.
 
 .PP
 \fB\-\-log.error\-output\-paths\fP=[stderr]
@@ -106,8 +106,8 @@ Find more iam\-apiserver information at:
 	MySQL service host address. If left blank, the following related mysql options will be ignored.
 
 .PP
-\fB\-\-mysql.log\-mode\fP=false
-	Enable gorm debug mode.
+\fB\-\-mysql.log\-mode\fP=1
+	Specify gorm log level.
 
 .PP
 \fB\-\-mysql.max\-connection\-life\-time\fP=10s
@@ -214,7 +214,7 @@ Find more iam\-apiserver information at:
 	The max number of ping attempts when server failed to startup.
 
 .PP
-\fB\-\-server.middlewares\fP=[recovery,secure,options,nocache,cors,requestid]
+\fB\-\-server.middlewares\fP=[]
 	List of allowed middlewares for server, comma separated. If this list is empty default middlewares will be used.
 
 .PP
