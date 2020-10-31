@@ -23,6 +23,11 @@ import (
 	"github.com/marmotedu/log"
 )
 
+const (
+	APIServerAudience = "iam.api.marmotedu.com"
+	APIServerIssuer   = "iam-apiserver"
+)
+
 type auth struct {
 	realm      string
 	key        []byte
@@ -153,11 +158,12 @@ func (auth *jwtAuth) LogoutResponse() func(c *gin.Context, code int) {
 func (auth *jwtAuth) PayloadFunc() func(data interface{}) jwt.MapClaims {
 	return func(data interface{}) jwt.MapClaims {
 		claims := jwt.MapClaims{
-			"iss": "iam-apiserver",
-			"sub": "user of iam-apiserver",
+			"iss": APIServerIssuer,
+			"aud": APIServerAudience,
 		}
 		if u, ok := data.(*v1.User); ok {
 			claims[jwt.IdentityKey] = u.Name
+			claims["sub"] = u.Name
 		}
 
 		return claims

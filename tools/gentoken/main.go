@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/spf13/pflag"
 )
 
@@ -49,7 +49,7 @@ func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey
 	expire := time.Now().Add(timeout)
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod(algorithm), jwt.MapClaims{
-		"jti": secretID,
+		"kid": secretID,
 		"exp": expire.Unix(),
 		"iat": time.Now().Unix(),
 	})

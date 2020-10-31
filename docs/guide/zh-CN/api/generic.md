@@ -130,7 +130,7 @@ func createJWTToken(algorithm string, timeout time.Duration, secretID, secretKey
 	expire := time.Now().Add(timeout)
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwt.MapClaims{
-		"jti": secretID,
+		"kid": secretID,
 		"exp": expire.Unix(),
 		"iat": time.Now().Unix(),
 	})

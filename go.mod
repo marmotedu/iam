@@ -29,7 +29,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.4 // indirect
-	github.com/marmotedu/api v1.2.0
+	github.com/marmotedu/api v1.0.0
 	github.com/marmotedu/component-base v1.0.1
 	github.com/marmotedu/errors v1.0.0
 	github.com/marmotedu/log v1.0.1
@@ -69,4 +69,9 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.5
+)
+
+replace (
+  github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
+  github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
 )
