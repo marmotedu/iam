@@ -70,8 +70,8 @@ func NewCmdSign(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 		Use:                   signUsageStr,
 		DisableFlagsInUseLine: true,
 		Aliases:               []string{},
-		Short:                 "Sign a jwt token with given secretId and secretKey",
-		Long:                  "Sign a jwt token with given secretId and secretKey",
+		Short:                 "Sign a jwt token with given secretID and secretKey",
+		Long:                  "Sign a jwt token with given secretID and secretKey",
 		TraverseChildren:      true,
 		Example:               signExample,
 		Run: func(cmd *cobra.Command, args []string) {

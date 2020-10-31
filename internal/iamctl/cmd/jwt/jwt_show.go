@@ -114,12 +114,12 @@ func (o *ShowOptions) Run(args []string) error {
 	return nil
 }
 
-// printJSON print a json object in accordance with the prophecy (or the command line options)
+// printJSON print a json object in accordance with the prophecy (or the command line options).
 func printJSON(compact bool, j interface{}) error {
 	var out []byte
 	var err error
 
-	if compact == false {
+	if !compact {
 		out, err = json.MarshalIndent(j, "", "    ")
 	} else {
 		out, err = json.Marshal(j)

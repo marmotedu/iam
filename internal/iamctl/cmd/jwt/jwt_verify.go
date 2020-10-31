@@ -105,13 +105,13 @@ func (o *VerifyOptions) Run(args []string) error {
 	// Print some debug data
 	if o.Debug && token != nil {
 		fmt.Println("Header:")
-		if err := printJSON(o.Compact, token.Header); err != nil {
-			return fmt.Errorf("failed to output header: %v", err)
+		if pErr := printJSON(o.Compact, token.Header); pErr != nil {
+			return fmt.Errorf("failed to output header: %v", pErr)
 		}
 
 		fmt.Println("Claims:")
-		if err := printJSON(o.Compact, token.Claims); err != nil {
-			return fmt.Errorf("failed to output claims: %v", err)
+		if pErr := printJSON(o.Compact, token.Claims); pErr != nil {
+			return fmt.Errorf("failed to output claims: %v", pErr)
 		}
 	}
 

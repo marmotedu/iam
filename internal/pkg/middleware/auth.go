@@ -21,7 +21,9 @@ import (
 
 const (
 	authHeaderCount = 2
-	AuthzAudience   = "iam.authz.marmotedu.com"
+
+	// AuthzAudience defines the value of jwt audience field.
+	AuthzAudience = "iam.authz.marmotedu.com"
 )
 
 // Defined errors.

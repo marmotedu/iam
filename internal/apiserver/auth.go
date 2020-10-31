@@ -24,8 +24,11 @@ import (
 )
 
 const (
+	// APIServerAudience defines the value of jwt audience field.
 	APIServerAudience = "iam.api.marmotedu.com"
-	APIServerIssuer   = "iam-apiserver"
+
+	// APIServerIssuer defines the value of jwt issuer field.
+	APIServerIssuer = "iam-apiserver"
 )
 
 type auth struct {
