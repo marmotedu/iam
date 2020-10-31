@@ -28,6 +28,7 @@ var ErrSigningMethod = errors.New("invalid signing method")
 // SignOptions is an options struct to support sign subcommands.
 type SignOptions struct {
 	Timeout   time.Duration
+	NotBefore time.Duration
 	Algorithm string
 	Audience  string
 	Issuer    string
@@ -91,6 +92,7 @@ func NewCmdSign(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 
 	// mark flag as deprecated
 	cmd.Flags().DurationVar(&o.Timeout, "timeout", o.Timeout, "JWT token expires time.")
+	cmd.Flags().DurationVar(&o.NotBefore, "not-before", o.NotBefore, "Identifies the time before which the JWT MUST NOT be accepted for processing.")
 	cmd.Flags().StringVar(&o.Algorithm, "algorithm", o.Algorithm, "Signing algorithm - possible values are HS256, HS384, HS512.")
 	cmd.Flags().StringVar(&o.Audience, "audience", o.Audience, "Identifies the recipients that the JWT is intended for.")
 	cmd.Flags().StringVar(&o.Issuer, "issuer", o.Issuer, "Identifies the principal that issued the JWT.")
@@ -122,6 +124,7 @@ func (o *SignOptions) Run(args []string) error {
 		"kid": args[0],
 		"exp": time.Now().Add(o.Timeout).Unix(),
 		"iat": time.Now().Unix(),
+		"nbf": time.Now().Add(o.NotBefore).Unix(),
 		"aud": o.Audience,
 		"iss": o.Issuer,
 	}
