@@ -11,7 +11,6 @@ import (
 	"time"
 
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
-	"github.com/marmotedu/iam/pkg/storage"
 	"github.com/marmotedu/log"
 	"github.com/ory/ladon"
 )
@@ -26,7 +25,7 @@ var reloadMu sync.Mutex
 
 // CacheService defines a cache service which can load secrets and policies timing.
 type CacheService struct {
-	config   *storage.Config
+	ctx      context.Context
 	addr     string
 	clientCA string
 }
@@ -42,9 +41,9 @@ func GetSecret(secretID string) (*pb.SecretInfo, error) {
 }
 
 // New create a new cache service instance by the given configuration.
-func New(config *storage.Config, addr, clientCA string) *CacheService {
+func New(ctx context.Context, addr, clientCA string) *CacheService {
 	return &CacheService{
-		config:   config,
+		ctx:      ctx,
 		addr:     addr,
 		clientCA: clientCA,
 	}
@@ -52,9 +51,6 @@ func New(config *storage.Config, addr, clientCA string) *CacheService {
 
 // Start start a cache service.
 func (s *CacheService) Start() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
 	grpcClient := GrpcClient{
 		Addr:     s.addr,
 		ClientCA: s.clientCA,
@@ -64,11 +60,8 @@ func (s *CacheService) Start() {
 	go startPubSubLoop()
 	// 1s is the minimum amount of time between hot reloads. The
 	// interval counts from the start of one reload to the next.
-	ticker := time.NewTicker(time.Second)
-	go reloadLoop(ticker.C)
-	go reloadQueueLoop()
-	go storage.ConnectToRedis(ctx, s.config)
-
+	go reloadLoop(s.ctx, time.Tick(time.Second))
+	go reloadQueueLoop(s.ctx)
 	DoReload()
 }
 
@@ -81,16 +74,48 @@ func (s *CacheService) Start() {
 var startReloadChan = make(chan struct{}, 1)
 var reloadDoneChan = make(chan struct{}, 1)
 
-func reloadLoop(tick <-chan time.Time) {
-	<-tick
+// shouldReload returns true if we should perform any reload. Reloads happens if
+// we have reload callback queued.
+func shouldReload() ([]func(), bool) {
+	requeueLock.Lock()
+	defer requeueLock.Unlock()
+	if len(requeue) == 0 {
+		return nil, false
+	}
+	n := requeue
+	requeue = []func(){}
+	return n, true
+}
 
-	for range startReloadChan {
-		log.Info("reload: initiating")
-		DoReload()
-		log.Info("reload: complete")
-		reloadDoneChan <- struct{}{}
-
-		<-tick
+func reloadLoop(ctx context.Context, tick <-chan time.Time, complete ...func()) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		// We don't check for reload right away as the gateway peroms this on the
+		// startup sequence. We expect to start checking on the first tick after the
+		// gateway is up and running.
+		case <-tick:
+			cb, ok := shouldReload()
+			if !ok {
+				continue
+			}
+			start := time.Now()
+			log.Info("reload: initiating")
+			DoReload()
+			log.Info("reload: complete")
+			for _, c := range cb {
+				// most of the callbacks are nil, we don't want to execute nil functions to
+				// avoid panics.
+				if c != nil {
+					c()
+				}
+			}
+			if len(complete) != 0 {
+				complete[0]()
+			}
+			log.Infof("reload: cycle completed in %v", time.Since(start))
+		}
 	}
 }
 
@@ -98,43 +123,29 @@ func reloadLoop(tick <-chan time.Time) {
 // buffered, as reloadQueueLoop should pick these up immediately.
 var reloadQueue = make(chan func())
 
-func reloadQueueLoop() {
-	reloading := false
+var requeueLock sync.Mutex
 
-	var fns []func()
+// This is a list of callbacks to execute on the next reload. It is protected by
+// requeueLock for concurrent use.
+var requeue []func()
 
+func reloadQueueLoop(ctx context.Context, cb ...func()) {
 	for {
 		select {
-		case <-reloadDoneChan:
-			for _, fn := range fns {
-				fn()
-			}
-
-			fns = fns[:0]
-			reloading = false
+		case <-ctx.Done():
+			return
 		case fn := <-reloadQueue:
-			if fn != nil {
-				fns = append(fns, fn)
-			}
-
-			if !reloading {
-				log.Info("Reload queued")
-				startReloadChan <- struct{}{}
-
-				reloading = true
-			} else {
-				log.Info("Reload already queued")
+			requeueLock.Lock()
+			requeue = append(requeue, fn)
+			requeueLock.Unlock()
+			log.Info("Reload queued")
+			if len(cb) != 0 {
+				cb[0]()
 			}
 		}
 	}
 }
 
-// reloadURLStructure will queue an API reload. The reload will
-// eventually create a new muxer, reload all the app configs for an
-// instance and then replace the DefaultServeMux with the new one. This
-// enables a reconfiguration to take place without stopping any requests
-// from being handled.
-//
 // done will be called when the reload is finished. Note that if a
 // reload is already queued, another won't be queued, but done will
 // still be called when said queued reload is finished.

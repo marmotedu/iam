@@ -48,7 +48,6 @@ func startPubSubLoop() {
 	// On message, synchronize
 	for {
 		err := cacheStore.StartPubSubHandler(RedisPubSubChannel, func(v interface{}) {
-			log.Info("Reload secrets and policies")
 			handleRedisEvent(v, nil, nil)
 		})
 		if err != nil {
@@ -76,7 +75,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 
 	switch notif.Command {
 	case NoticePolicyChanged, NoticeSecretChanged:
-		// pubSubLog.Info("Reloading endpoints")
+		log.Info("Reloading secrets and policies")
 		reloadURLStructure(reloaded)
 	default:
 		log.Warnf("Unknown notification command: %q", notif.Command)

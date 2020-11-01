@@ -6,6 +6,7 @@
 package authzserver
 
 import (
+	"context"
 	"fmt"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
@@ -127,12 +128,16 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 	log.Debugf("config: `%s`", completedOptions.String())
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
+	// keep redis connected
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
+
 	// start cacheService
-	cacheService := store.New(buildStorageConfig(completedOptions), completedOptions.RPCServer, completedOptions.ClientCA)
+	cacheService := store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA)
 	cacheService.Start()
 
 	// start analytics service
-	// ey := fmt.Sprintf("%s:%d", audit.Request.Context["username"].(string), time.Now().Unix())]"
 	if completedOptions.AnalyticsOptions.Enable {
 		analyticsStore := storage.RedisCluster{KeyPrefix: RedisKeyPrefix}
 		analytics.NewAnalytics(completedOptions.AnalyticsOptions, &analyticsStore).Start(stopCh)
