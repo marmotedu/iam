@@ -172,7 +172,7 @@ func (a *AuthMiddleware) AuthCacheMiddlewareFunc() gin.HandlerFunc {
 			}
 
 			return []byte(secret.SecretKey), nil
-		})
+		}, jwt.WithAudience(AuthzAudience))
 		if err != nil || !parsedT.Valid {
 			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, err.Error()), nil)
 			c.Abort()

@@ -121,7 +121,6 @@ func (o *SignOptions) Validate(cmd *cobra.Command, args []string) error {
 // Run executes a sign subcommand using the specified options.
 func (o *SignOptions) Run(args []string) error {
 	claims := jwt.MapClaims{
-		"kid": args[0],
 		"exp": time.Now().Add(o.Timeout).Unix(),
 		"iat": time.Now().Unix(),
 		"nbf": time.Now().Add(o.NotBefore).Unix(),
@@ -145,6 +144,7 @@ func (o *SignOptions) Run(args []string) error {
 			token.Header[k] = v
 		}
 	}
+	token.Header["kid"] = args[0]
 
 	tokenString, err := token.SignedString([]byte(args[1]))
 	if err != nil {
