@@ -128,7 +128,7 @@ func Run(completedOptions completedPumpOptions, stopCh <-chan struct{}) error {
 	log.Infof("config: `%s`", completedOptions.String())
 	log.Infof("version: %+v", version.Get().ToJSON())
 
-	go server.ServeHealthCheck(completedOptions.HealthCheckEndpointName, completedOptions.HealthCheckEndpointPort)
+	go server.ServeHealthCheck(completedOptions.HealthCheckPath, completedOptions.HealthCheckAddress)
 
 	// Create the store
 	if err := setupAnalyticsStore(completedOptions); err != nil {

@@ -25,14 +25,14 @@ type PumpConfig struct {
 
 // PumpOptions runs a pumpserver.
 type PumpOptions struct {
-	PumpConfig              string                       `json:"pumpconfig" mapstructure:"-"`
-	PurgeDelay              int                          `json:"purge-delay" mapstructure:"purge-delay"`
-	Pumps                   map[string]PumpConfig        `json:"pumps" mapstructure:"pumps"`
-	HealthCheckEndpointName string                       `json:"health-check-endpoint-name" mapstructure:"health-check-endpoint-name"`
-	HealthCheckEndpointPort int                          `json:"health-check-endpoint-port" mapstructure:"health-check-endpoint-port"`
-	OmitDetailedRecording   bool                         `json:"omit-detailed-recording" mapstructure:"omit-detailed-recording"`
-	RedisOptions            *genericoptions.RedisOptions `json:"redis" mapstructure:"redis"`
-	Log                     *log.Options                 `json:"log" mapstructure:"log"`
+	PumpConfig            string                       `json:"pumpconfig" mapstructure:"-"`
+	PurgeDelay            int                          `json:"purge-delay" mapstructure:"purge-delay"`
+	Pumps                 map[string]PumpConfig        `json:"pumps" mapstructure:"pumps"`
+	HealthCheckPath       string                       `json:"health-check-path" mapstructure:"health-check-path"`
+	HealthCheckAddress    string                       `json:"health-check-address" mapstructure:"health-check-address"`
+	OmitDetailedRecording bool                         `json:"omit-detailed-recording" mapstructure:"omit-detailed-recording"`
+	RedisOptions          *genericoptions.RedisOptions `json:"redis" mapstructure:"redis"`
+	Log                   *log.Options                 `json:"log" mapstructure:"log"`
 }
 
 // NewPumpOptions creates a new PumpOptions object with default parameters.
@@ -47,10 +47,10 @@ func NewPumpOptions() *PumpOptions {
 				},
 			},
 		},
-		HealthCheckEndpointName: "healthz",
-		HealthCheckEndpointPort: 7070,
-		RedisOptions:            genericoptions.NewRedisOptions(),
-		Log:                     log.NewOptions(),
+		HealthCheckPath:    "healthz",
+		HealthCheckAddress: "0.0.0.0:7070",
+		RedisOptions:       genericoptions.NewRedisOptions(),
+		Log:                log.NewOptions(),
 	}
 
 	return &s
@@ -67,10 +67,10 @@ func (s *PumpOptions) Flags() (fss cliflag.NamedFlagSets) {
 	fs.StringVar(&s.PumpConfig, "pumpconfig", s.PumpConfig, "IAM pump config file.")
 	fs.IntVar(&s.PurgeDelay, "purge-delay", s.PurgeDelay, ""+
 		"This setting the purge delay (in seconds) when purge the data from Redis to MongoDB or other data stores.")
-	fs.StringVar(&s.HealthCheckEndpointName, "health-check-endpoint-name", s.HealthCheckEndpointName, ""+
-		"Specifies liveness health check endpoint name.")
-	fs.IntVar(&s.HealthCheckEndpointPort, "health-check-endpoint-port", s.HealthCheckEndpointPort, ""+
-		"Specifies liveness health check endpoint port.")
+	fs.StringVar(&s.HealthCheckPath, "health-check-path", s.HealthCheckPath, ""+
+		"Specifies liveness health check request path.")
+	fs.StringVar(&s.HealthCheckAddress, "health-check-address", s.HealthCheckAddress, ""+
+		"Specifies liveness health check bind address.")
 	fs.BoolVar(&s.OmitDetailedRecording, "omit-detailed-recording", s.OmitDetailedRecording, ""+
 		"Setting this to true will avoid writing policy fields for each authorization request in pumps.")
 
