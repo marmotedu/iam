@@ -60,19 +60,10 @@ func (s *CacheService) Start() {
 	go startPubSubLoop()
 	// 1s is the minimum amount of time between hot reloads. The
 	// interval counts from the start of one reload to the next.
-	go reloadLoop(s.ctx, time.Tick(time.Second))
+	go reloadLoop(s.ctx)
 	go reloadQueueLoop(s.ctx)
 	DoReload()
 }
-
-// startReloadChan and reloadDoneChan are used by the two reload loops
-// running in separate goroutines to talk. reloadQueueLoop will use
-// startReloadChan to signal to reloadLoop to start a reload, and
-// reloadLoop will use reloadDoneChan to signal back that it's done with
-// the reload. Buffered simply to not make the goroutines block each
-// other.
-var startReloadChan = make(chan struct{}, 1)
-var reloadDoneChan = make(chan struct{}, 1)
 
 // shouldReload returns true if we should perform any reload. Reloads happens if
 // we have reload callback queued.
@@ -87,7 +78,8 @@ func shouldReload() ([]func(), bool) {
 	return n, true
 }
 
-func reloadLoop(ctx context.Context, tick <-chan time.Time, complete ...func()) {
+func reloadLoop(ctx context.Context, complete ...func()) {
+	ticker := time.NewTicker(1 * time.Second)
 	for {
 		select {
 		case <-ctx.Done():
@@ -95,7 +87,7 @@ func reloadLoop(ctx context.Context, tick <-chan time.Time, complete ...func()) 
 		// We don't check for reload right away as the gateway peroms this on the
 		// startup sequence. We expect to start checking on the first tick after the
 		// gateway is up and running.
-		case <-tick:
+		case <-ticker.C:
 			cb, ok := shouldReload()
 			if !ok {
 				continue

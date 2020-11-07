@@ -28,6 +28,7 @@ import (
 	"github.com/marmotedu/iam/internal/pump/pumps"
 	"github.com/marmotedu/iam/internal/pump/server"
 	"github.com/marmotedu/iam/internal/pump/storage"
+	"github.com/marmotedu/iam/internal/pump/storage/redis"
 )
 
 const (
@@ -166,7 +167,7 @@ func Complete(s *options.PumpOptions) (completedPumpOptions, error) {
 }
 
 func setupAnalyticsStore(completedOptions completedPumpOptions) error {
-	analyticsStore = &storage.RedisClusterStorageManager{}
+	analyticsStore = &redis.RedisClusterStorageManager{}
 	return analyticsStore.Init(completedOptions.RedisOptions)
 }
 
@@ -269,9 +270,9 @@ func filterData(pump pumps.Pump, keys []interface{}) []interface{} {
 func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, purgeDelay int) {
 	timer := time.AfterFunc(time.Duration(purgeDelay)*time.Second, func() {
 		if pmp.GetTimeout() == 0 {
-			log.Warnf("Pump  %s is taking more time than the value configured of purge_delay. You should try to set a timeout for this pump.", pmp.GetName())
+			log.Warnf("Pump %s is taking more time than the value configured of purge_delay. You should try to set a timeout for this pump.", pmp.GetName())
 		} else if pmp.GetTimeout() > purgeDelay {
-			log.Warnf("Pump is taking more time than the value configured of purge_delay. You should try lowering the timeout configured for this pump.", pmp.GetName())
+			log.Warnf("Pump %s is taking more time than the value configured of purge_delay. You should try lowering the timeout configured for this pump.", pmp.GetName())
 		}
 	})
 	defer timer.Stop()
@@ -307,7 +308,7 @@ func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, pu
 	case <-ctx.Done():
 		switch ctx.Err() {
 		case context.Canceled:
-			log.Warnf("The writing to have got canceled.", pmp.GetName())
+			log.Warnf("The writing to %s have got canceled.", pmp.GetName())
 		case context.DeadlineExceeded:
 			log.Warnf("Timeout Writing to: %s", pmp.GetName())
 		}
