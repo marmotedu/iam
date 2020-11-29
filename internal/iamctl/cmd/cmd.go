@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/viper"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
+
 	"github.com/marmotedu/iam/internal/iamctl/cmd/color"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/completion"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/info"

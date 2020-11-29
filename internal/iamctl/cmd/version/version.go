@@ -15,10 +15,11 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/marmotedu/component-base/pkg/version"
+	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
+
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
-	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 )
 
 // Version is a struct for version information.

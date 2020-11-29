@@ -21,8 +21,9 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/component-base/pkg/version"
-	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 )
 
 // GenericAPIServer contains state for a iam api server.

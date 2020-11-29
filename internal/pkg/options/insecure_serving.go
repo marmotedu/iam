@@ -9,8 +9,9 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/spf13/pflag"
+
+	"github.com/marmotedu/iam/internal/pkg/server"
 )
 
 // InsecureServingOptions are for creating an unauthenticated, unauthorized, insecure port.

@@ -5,8 +5,9 @@
 package options
 
 import (
-	"github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/spf13/pflag"
+
+	"github.com/marmotedu/iam/internal/pkg/server"
 )
 
 // FeatureOptions contains configuration items related to API server features.

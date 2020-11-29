@@ -14,10 +14,11 @@ import (
 	"github.com/marmotedu/component-base/pkg/runtime"
 	"github.com/marmotedu/component-base/pkg/scheme"
 	"github.com/marmotedu/component-base/pkg/version"
-	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 	"github.com/marmotedu/marmotedu-sdk-go/rest"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 	"github.com/marmotedu/marmotedu-sdk-go/tools/clientcmd"
+
+	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
 const (

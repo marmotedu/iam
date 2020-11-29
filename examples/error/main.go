@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/marmotedu/errors"
+
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 

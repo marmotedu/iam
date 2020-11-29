@@ -11,9 +11,10 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
+	"github.com/marmotedu/log"
+
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
-	"github.com/marmotedu/log"
 )
 
 // Get get an policy by the secret identifier.

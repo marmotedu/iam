@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/marmotedu/component-base/pkg/util/stringutil"
+
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"

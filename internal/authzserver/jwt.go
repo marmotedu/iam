@@ -6,6 +6,7 @@ package authzserver
 
 import (
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 )

@@ -7,10 +7,11 @@
 package util
 
 import (
-	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 	"github.com/marmotedu/marmotedu-sdk-go/tools/clientcmd"
+
+	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
 type factoryImpl struct {

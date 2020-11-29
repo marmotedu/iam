@@ -9,8 +9,9 @@ import (
 	"net"
 	"path"
 
-	"github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/spf13/pflag"
+
+	"github.com/marmotedu/iam/internal/pkg/server"
 )
 
 // SecureServingOptions contains configuration items related to HTTPS server startup.

@@ -9,9 +9,10 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/marmotedu/iam/internal/pump/analytics"
 	"github.com/marmotedu/log"
 	"github.com/ory/ladon"
+
+	"github.com/marmotedu/iam/internal/pump/analytics"
 
 	"github.com/mitchellh/mapstructure"
 	"github.com/prometheus/client_golang/prometheus"

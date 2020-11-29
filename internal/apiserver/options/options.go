@@ -9,9 +9,10 @@ import (
 	"encoding/json"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
+	"github.com/marmotedu/log"
+
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/internal/pkg/server"
-	"github.com/marmotedu/log"
 )
 
 // ServerRunOptions runs a iam api server.

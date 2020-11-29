@@ -9,9 +9,10 @@ import (
 	"encoding/json"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
+	"github.com/marmotedu/log"
+
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/internal/pump/analytics"
-	"github.com/marmotedu/log"
 )
 
 // PumpConfig defines options for pump back-end.

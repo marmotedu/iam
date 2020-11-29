@@ -5,9 +5,10 @@
 package util
 
 import (
-	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
+
+	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
 // Factory provides abstractions that allow the IAM command to be extended across multiple types

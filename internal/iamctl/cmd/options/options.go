@@ -8,8 +8,9 @@ package options
 import (
 	"io"
 
-	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 	"github.com/spf13/cobra"
+
+	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 )
 
 var (

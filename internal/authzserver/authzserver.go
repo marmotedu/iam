@@ -18,12 +18,13 @@ import (
 	"github.com/marmotedu/component-base/pkg/version"
 	"github.com/marmotedu/component-base/pkg/version/verflag"
 	"github.com/marmotedu/errors"
+	"github.com/marmotedu/log"
+
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/options"
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/storage"
-	"github.com/marmotedu/log"
 )
 
 const (

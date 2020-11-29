@@ -9,6 +9,7 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
+
 	"github.com/marmotedu/iam/internal/authzserver/api/v1/authorize"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"

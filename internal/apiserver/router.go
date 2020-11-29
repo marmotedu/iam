@@ -6,10 +6,10 @@ package apiserver
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
+	"github.com/spf13/viper"
+
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/policy"
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/secret"
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/user"

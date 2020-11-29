@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
+	"github.com/marmotedu/log"
 
 	"github.com/marmotedu/iam/pkg/storage"
-	"github.com/marmotedu/log"
 )
 
 // NotificationCommand defines a new notification type.

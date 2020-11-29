@@ -11,8 +11,9 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/idutil"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/ory/ladon"
+
+	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
 // ResourceCount defines the number of fake resources.

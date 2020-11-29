@@ -11,6 +11,7 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
+
 	"github.com/marmotedu/iam/internal/authzserver/authorization"
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"

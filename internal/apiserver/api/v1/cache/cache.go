@@ -13,6 +13,7 @@ import (
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
+
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
@@ -22,7 +23,7 @@ type Cache struct {
 }
 
 // ListSecrets returns all secrets.
-func (c Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.ListSecretsResponse, error) {
+func (c *Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.ListSecretsResponse, error) {
 	opts := metav1.ListOptions{
 		Offset: pointer.ToInt(0),
 		Limit:  pointer.ToInt(-1),
@@ -53,7 +54,7 @@ func (c Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.L
 }
 
 // ListPolicies returns all policies.
-func (c Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*pb.ListPoliciesResponse, error) {
+func (c *Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*pb.ListPoliciesResponse, error) {
 	opts := metav1.ListOptions{
 		Offset: pointer.ToInt(0),
 		Limit:  pointer.ToInt(-1),

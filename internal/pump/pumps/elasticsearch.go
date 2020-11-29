@@ -235,7 +235,7 @@ func (e Elasticsearch7Operator) processData(ctx context.Context, data []interfac
 			r := elastic.NewBulkIndexRequest().Index(getIndexName(esConf)).Type(esConf.DocumentType).Id(id).Doc(mapping)
 			e.bulkProcessor.Add(r)
 		} else {
-			// nolint: staticcheck
+			//nolint: staticcheck
 			_, err := index.BodyJson(mapping).Type(esConf.DocumentType).Id(id).Do(ctx)
 			if err != nil {
 				log.Errorf("Error while writing %s %s", data[dataIndex], err.Error())
