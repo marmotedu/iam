@@ -130,7 +130,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
 	if err := completedOptions.InitDataStore(); err != nil {
-		return err
+		log.Warnf("init datastore: %s", err)
 	}
 
 	serverConfig, err := createAPIServerConfig(completedOptions.ServerRunOptions)

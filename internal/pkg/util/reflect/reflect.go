@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func ToGormDBMap(obj interface{}, fields []string) (map[string]interface{}, error) {

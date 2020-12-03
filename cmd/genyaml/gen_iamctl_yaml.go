@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/marmotedu/iam/internal/iamctl/cmd"
 	"github.com/marmotedu/iam/pkg/util/genutil"
