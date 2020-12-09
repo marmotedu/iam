@@ -9,6 +9,7 @@ require (
 	github.com/arnaud-deprez/gsemver v0.5.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/buger/jsonparser v1.0.0
+	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/cpuguy83/go-md2man/v2 v2.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
@@ -76,4 +77,5 @@ require (
 replace (
 	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
 	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
+  google.golang.org/grpc => google.golang.org/grpc v1.29.1
 )

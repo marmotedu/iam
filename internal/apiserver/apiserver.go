@@ -28,7 +28,7 @@ import (
 	cachev1 "github.com/marmotedu/iam/internal/apiserver/api/v1/cache"
 	"github.com/marmotedu/iam/internal/apiserver/options"
 	"github.com/marmotedu/iam/internal/apiserver/store"
-	"github.com/marmotedu/iam/internal/apiserver/store/datastore"
+	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/storage"
@@ -321,10 +321,18 @@ func (completedOptions completedServerRunOptions) InitDataStore() error {
 }
 
 func (completedOptions completedServerRunOptions) InitMySQLStore() error {
-	mysqlStore, err := datastore.NewMySQLStore(completedOptions.MySQLOptions)
+	mysqlStore, err := mysql.NewMySQLStore(completedOptions.MySQLOptions)
 	if err != nil {
 		return err
 	}
+
+	// uncomment the following lines if you want to switch to etcd storage.
+	/*
+		etcdStore, err := etcd.NewEtcdStore(completedOptions.MySQLOptions, nil)
+		if err != nil {
+			return err
+		}
+	*/
 
 	store.SetClient(mysqlStore)
 

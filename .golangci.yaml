@@ -362,7 +362,7 @@ linters:
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
-    - path: (cmd/[a-z]*/.*|datastore/.*|fake/.*)\.go
+    - path: (cmd/[a-z]*/.*|store/.*)\.go
       linters:
         - dupl
     - linters:
