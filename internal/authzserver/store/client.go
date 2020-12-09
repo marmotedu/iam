@@ -34,7 +34,7 @@ type GrpcClient struct {
 	ClientCA string
 }
 
-func getClient() pb.CacheClient {
+func (c *GrpcClient) Client() pb.CacheClient {
 	v := client.Load()
 	if v != nil {
 		return v.(pb.CacheClient)
@@ -78,12 +78,12 @@ func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 
 	log.Info("Loading secrets")
 
-	body := &pb.ListSecretsRequest{
+	req := &pb.ListSecretsRequest{
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := getClient().ListSecrets(context.Background(), body)
+	resp, err := c.Client().ListSecrets(context.Background(), req)
 	if err != nil {
 		return nil, err
 	}
@@ -104,12 +104,12 @@ func (c *GrpcClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 
 	log.Info("Loading policies")
 
-	body := &pb.ListPoliciesRequest{
+	req := &pb.ListPoliciesRequest{
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := getClient().ListPolicies(context.Background(), body)
+	resp, err := c.Client().ListPolicies(context.Background(), req)
 	if err != nil {
 		return nil, err
 	}
