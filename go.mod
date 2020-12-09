@@ -32,7 +32,6 @@ require (
 	github.com/marmotedu/api v1.0.0
 	github.com/marmotedu/component-base v1.0.1
 	github.com/marmotedu/errors v1.0.0
-	github.com/marmotedu/log v1.0.1
 	github.com/marmotedu/marmotedu-sdk-go v1.0.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -48,13 +47,15 @@ require (
 	github.com/russross/blackfriday v1.5.2
 	github.com/satori/go.uuid v1.2.0
 	github.com/segmentio/kafka-go v0.4.8
-	github.com/sirupsen/logrus v1.7.0 // indirect
+	github.com/sirupsen/logrus v1.7.0
 	github.com/spf13/afero v1.4.1 // indirect
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
+	github.com/stretchr/testify v1.6.1
 	github.com/tpkeeper/gin-dump v1.0.0
 	github.com/zsais/go-gin-prometheus v0.1.0
+	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	golang.org/x/sys v0.0.0-20201027140754-0fcbb8f4928c // indirect
@@ -69,9 +70,10 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.5
+	k8s.io/klog v1.0.0
 )
 
 replace (
-  github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
-  github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
+	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
+	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
 )

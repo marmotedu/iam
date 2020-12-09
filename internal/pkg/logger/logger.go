@@ -16,7 +16,7 @@ import (
 
 	gormlogger "gorm.io/gorm/logger"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Define colors.
@@ -68,7 +68,7 @@ func New(level int) gormlogger.Interface {
 
 	config := Config{
 		SlowThreshold: 200 * time.Millisecond,
-		Colorful:      log.GetOptions().EnableColor,
+		Colorful:      false,
 		LogLevel:      gormlogger.LogLevel(level),
 	}
 

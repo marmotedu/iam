@@ -14,12 +14,14 @@ import (
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ListUser returns user list in the storage. This function has a good performance.
 func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error) {
 	users, err := store.Client().Users().List(opts)
 	if err != nil {
+		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
@@ -77,6 +79,7 @@ func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, err
 		infos = append(infos, info.(*v1.UserV2))
 	}
 
+	log.L(ctx).Infof("get %d users from backend storate.", len(infos))
 	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
 }
 

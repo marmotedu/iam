@@ -16,7 +16,8 @@ import (
 	"google.golang.org/grpc/credentials"
 
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary

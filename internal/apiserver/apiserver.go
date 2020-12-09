@@ -17,12 +17,13 @@ import (
 	"github.com/marmotedu/component-base/pkg/version"
 	"github.com/marmotedu/component-base/pkg/version/verflag"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	cachev1 "github.com/marmotedu/iam/internal/apiserver/api/v1/cache"
 	"github.com/marmotedu/iam/internal/apiserver/options"
@@ -82,7 +83,7 @@ Find more iam-apiserver information at:
 				return errors.NewAggregate(errs)
 			}
 
-			log.Init(completedOptions.Log)
+			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())

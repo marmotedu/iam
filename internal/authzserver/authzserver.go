@@ -18,7 +18,8 @@ import (
 	"github.com/marmotedu/component-base/pkg/version"
 	"github.com/marmotedu/component-base/pkg/version/verflag"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/options"
@@ -82,7 +83,7 @@ Find more ladon information at:
 			}
 
 			// setup logger
-			log.Init(completedOptions.Log)
+			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())

@@ -5,16 +5,15 @@
 package user
 
 import (
-	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ChangePasswordRequest defines the ChangePasswordRequest data format.
@@ -30,7 +29,7 @@ type ChangePasswordRequest struct {
 
 // ChangePassword change the user's password by the user identifier.
 func ChangePassword(c *gin.Context) {
-	log.Info("change password function called.", log.String("X-Request-Id", requestid.Get(c)))
+	log.L(c).Info("change password function called.")
 
 	var r ChangePasswordRequest
 

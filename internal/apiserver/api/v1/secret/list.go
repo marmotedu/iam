@@ -13,10 +13,12 @@ import (
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // List list all the secrets.
 func List(c *gin.Context) {
+	log.L(c).Info("list secret function called.")
 	var r metav1.ListOptions
 	if err := c.ShouldBindQuery(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)

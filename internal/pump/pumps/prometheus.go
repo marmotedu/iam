@@ -9,8 +9,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/marmotedu/log"
 	"github.com/ory/ladon"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 

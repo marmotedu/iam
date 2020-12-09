@@ -9,8 +9,9 @@ import (
 	"fmt"
 	"log/syslog"
 
-	"github.com/marmotedu/log"
 	"github.com/mitchellh/mapstructure"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 )

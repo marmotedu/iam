@@ -5,22 +5,21 @@
 package user
 
 import (
-	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // DeleteCollection batch delete users by multiple usernames.
 // Only administrator can call this function.
 func DeleteCollection(c *gin.Context) {
-	log.Info("batch delete user function called.", log.String("X-Request-Id", requestid.Get(c)))
+	log.L(c).Info("batch delete user function called.")
 
 	usernames := c.QueryArray("name")
 

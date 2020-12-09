@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/spf13/pflag"
 )

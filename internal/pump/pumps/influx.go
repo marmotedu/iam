@@ -13,7 +13,7 @@ import (
 	"github.com/influxdata/influxdb/client/v2"
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 )

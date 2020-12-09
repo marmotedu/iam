@@ -6,24 +6,23 @@ package secret
 
 import (
 	"github.com/AlekSi/pointer"
-	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 const maxSecretCount = 10
 
 // Create add new secret key pairs to the storage.
 func Create(c *gin.Context) {
-	log.Info("create secret function called.", log.String("X-Request-Id", requestid.Get(c)))
+	log.L(c).Info("create secret function called.")
 
 	var r v1.Secret
 
@@ -40,8 +39,8 @@ func Create(c *gin.Context) {
 	username := c.GetHeader("username")
 
 	sec, err := store.Client().Secrets().List(username, metav1.ListOptions{
-		Offset: pointer.ToInt(0),
-		Limit:  pointer.ToInt(-1),
+		Offset: pointer.ToInt64(0),
+		Limit:  pointer.ToInt64(-1),
 	})
 
 	if err != nil {

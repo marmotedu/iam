@@ -10,12 +10,13 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/marmotedu/log"
 	"github.com/mitchellh/mapstructure"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl"
 	"github.com/segmentio/kafka-go/sasl/plain"
 	"github.com/segmentio/kafka-go/sasl/scram"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 

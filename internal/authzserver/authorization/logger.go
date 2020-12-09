@@ -7,7 +7,7 @@ package authorization
 import (
 	"github.com/ory/ladon"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // AuditLogger outputs and cache information about granting or rejecting policies.

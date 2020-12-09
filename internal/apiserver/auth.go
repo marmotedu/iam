@@ -16,7 +16,8 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
@@ -29,6 +30,9 @@ const (
 
 	// APIServerIssuer defines the value of jwt issuer field.
 	APIServerIssuer = "iam-apiserver"
+
+	// CtxUsername defines username context key.
+	CtxUsername = "username"
 )
 
 type auth struct {
@@ -79,7 +83,8 @@ func (a *auth) BasicAuth() gin.HandlerFunc {
 			return
 		}
 
-		c.Request.Header.Add("username", pair[0])
+		// c.Request.Header.Add("username", pair[0])
+		c.Set(CtxUsername, pair[0])
 
 		c.Next()
 	}
@@ -184,7 +189,8 @@ func (auth *jwtAuth) Authorizator() func(data interface{}, c *gin.Context) bool 
 	return func(data interface{}, c *gin.Context) bool {
 		// add username to header
 		if v, ok := data.(string); ok {
-			c.Request.Header.Add("username", v)
+			// c.Request.Header.Add(log.KeyUsername, v)
+			c.Set(CtxUsername, v)
 			return true
 		}
 

@@ -9,7 +9,8 @@ import (
 	"encoding/json"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/internal/pump/analytics"

@@ -11,8 +11,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/marmotedu/log"
 	"github.com/mattn/go-isatty"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // defaultLogFormatter is the default log format function Logger middleware uses.
@@ -129,7 +130,7 @@ func LoggerWithConfig(conf gin.LoggerConfig) gin.HandlerFunc {
 
 			param.Path = path
 
-			log.StdInfoLogger().Printf(formatter(param))
+			log.L(c).Info(formatter(param))
 		}
 	}
 }

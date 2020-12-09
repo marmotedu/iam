@@ -5,21 +5,20 @@
 package user
 
 import (
-	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Get get an user by the user identifier.
 func Get(c *gin.Context) {
-	log.Info("get user function called.", log.String("X-Request-Id", requestid.Get(c)))
+	log.L(c).Info("get user function called.")
 
 	user, err := store.Client().Users().Get(c.Param("name"), metav1.GetOptions{})
 	if err != nil {

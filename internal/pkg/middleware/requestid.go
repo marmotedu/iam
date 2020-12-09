@@ -64,10 +64,9 @@ func GetDefaultLogFormatterWithRequestID() gin.LogFormatter {
 			// Truncate in a golang < 1.8 safe way
 			param.Latency -= param.Latency % time.Second
 		}
-		return fmt.Sprintf("%s%3d%s [%s] - [%s] \"%v %s%s%s %s\" %s",
+		return fmt.Sprintf("%s%3d%s - [%s] \"%v %s%s%s %s\" %s",
 			// param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 			statusColor, param.StatusCode, resetColor,
-			param.Request.Header.Get(XRequestIDKey),
 			param.ClientIP,
 			param.Latency,
 			methodColor, param.Method, resetColor,

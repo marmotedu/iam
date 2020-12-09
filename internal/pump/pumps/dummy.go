@@ -7,7 +7,7 @@ package pumps
 import (
 	"context"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // DummyPump  defines a dummy pump with dummy specific options and common options.

@@ -8,7 +8,8 @@ import (
 	"github.com/ory/ladon"
 
 	authzv1 "github.com/marmotedu/api/authz/v1"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Authorizer implement the authorize interface that use local repository to

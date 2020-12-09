@@ -11,8 +11,9 @@ import (
 	"time"
 
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
-	"github.com/marmotedu/log"
 	"github.com/ory/ladon"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ErrSecretNotFound defines secret not found error.

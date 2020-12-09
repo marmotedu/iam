@@ -21,9 +21,10 @@ import (
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
-	"github.com/marmotedu/log"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/mgo.v2"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 )

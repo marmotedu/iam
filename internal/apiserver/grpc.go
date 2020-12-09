@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 type grpcAPIServer struct {

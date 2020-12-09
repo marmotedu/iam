@@ -8,14 +8,13 @@ package cache
 import (
 	"context"
 
-	"github.com/AlekSi/pointer"
-
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Cache defines a cache service used to list all secrets and policies.
@@ -24,9 +23,10 @@ type Cache struct {
 
 // ListSecrets returns all secrets.
 func (c *Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.ListSecretsResponse, error) {
+	log.L(ctx).Info("list secrets function called.")
 	opts := metav1.ListOptions{
-		Offset: pointer.ToInt(0),
-		Limit:  pointer.ToInt(-1),
+		Offset: r.Offset,
+		Limit:  r.Limit,
 	}
 
 	secrets, err := store.Client().Secrets().List("", opts)
@@ -55,9 +55,10 @@ func (c *Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.
 
 // ListPolicies returns all policies.
 func (c *Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*pb.ListPoliciesResponse, error) {
+	log.L(ctx).Info("list policies function called.")
 	opts := metav1.ListOptions{
-		Offset: pointer.ToInt(0),
-		Limit:  pointer.ToInt(-1),
+		Offset: r.Offset,
+		Limit:  r.Limit,
 	}
 
 	policies, err := store.Client().Policies().List("", opts)

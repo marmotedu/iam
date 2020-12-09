@@ -16,15 +16,15 @@ type LimitAndOffset struct {
 
 // Unpointer fill LimitAndOffset with default values if offset/limit is nil
 // or it will be filled with the passed value.
-func Unpointer(offset *int, limit *int) *LimitAndOffset {
+func Unpointer(offset *int64, limit *int64) *LimitAndOffset {
 	var o, l int = 0, DefaultLimit
 
 	if offset != nil {
-		o = *offset
+		o = int(*offset)
 	}
 
 	if limit != nil {
-		l = *limit
+		l = int(*limit)
 	}
 
 	return &LimitAndOffset{

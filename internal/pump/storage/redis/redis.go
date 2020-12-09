@@ -11,8 +11,9 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/marmotedu/log"
 	"github.com/mitchellh/mapstructure"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 )

@@ -20,9 +20,10 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 const (

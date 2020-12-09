@@ -18,7 +18,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 
-	"github.com/marmotedu/log"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Config defines options for redis cluster.

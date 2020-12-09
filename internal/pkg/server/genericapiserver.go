@@ -21,7 +21,8 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/component-base/pkg/version"
-	"github.com/marmotedu/log"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 )
@@ -84,6 +85,9 @@ func (s *GenericAPIServer) Setup() {
 
 // InstallMiddlewares install generic middlewares.
 func (s *GenericAPIServer) InstallMiddlewares() {
+	// necessary middlewares
+	s.Use(middleware.RequestID())
+
 	// install custom middlewares
 	for _, m := range s.middlewares {
 		mw, ok := middleware.Middlewares[m]
@@ -95,6 +99,8 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 		log.Infof("install middleware: %s", m)
 		s.Use(mw)
 	}
+
+	s.Use(middleware.Context())
 	// s.Use(gin.Logger())
 	// s.Use(limits.RequestSizeLimiter(10))
 	// s.GET("/debug/vars", expvar.Handler())

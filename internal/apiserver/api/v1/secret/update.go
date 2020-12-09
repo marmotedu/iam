@@ -14,12 +14,14 @@ import (
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Update update a key by the secret key identifier.
 func Update(c *gin.Context) {
-	var r v1.Secret
+	log.L(c).Info("update secret function called.")
 
+	var r v1.Secret
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 		return

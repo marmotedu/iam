@@ -13,15 +13,13 @@ import (
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Delete delete a secret by the secret identifier.
 func Delete(c *gin.Context) {
-	if err := store.Client().Secrets().Delete(
-		c.GetHeader("username"),
-		c.Param("name"),
-		metav1.DeleteOptions{Unscoped: true},
-	); err != nil {
+	log.L(c).Info("delete secret function called.")
+	if err := store.Client().Secrets().Delete(c.GetHeader("username"), c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

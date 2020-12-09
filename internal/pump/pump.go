@@ -17,10 +17,11 @@ import (
 	"github.com/marmotedu/component-base/pkg/version"
 	"github.com/marmotedu/component-base/pkg/version/verflag"
 	"github.com/marmotedu/errors"
-	"github.com/marmotedu/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	msgpack "gopkg.in/vmihailenco/msgpack.v2"
+
+	"github.com/marmotedu/iam/pkg/log"
 
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/internal/pump/analytics"
@@ -82,7 +83,7 @@ Find more iam-pump information at:
 			}
 
 			// setup logger
-			log.Init(completedOptions.Log)
+			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
 			return Run(completedOptions, genericapiserver.SetupSignalHandler())

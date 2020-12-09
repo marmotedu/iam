@@ -14,8 +14,8 @@ import (
 
 func TestUnpointer(t *testing.T) {
 	type args struct {
-		offset *int
-		limit  *int
+		offset *int64
+		limit  *int64
 	}
 	tests := []struct {
 		name string
@@ -25,8 +25,8 @@ func TestUnpointer(t *testing.T) {
 		{
 			name: "both offset and limit are not zero",
 			args: args{
-				offset: pointer.ToInt(0),
-				limit:  pointer.ToInt(10),
+				offset: pointer.ToInt64(0),
+				limit:  pointer.ToInt64(10),
 			},
 			want: &LimitAndOffset{
 				Offset: 0,
@@ -43,7 +43,7 @@ func TestUnpointer(t *testing.T) {
 		{
 			name: "offset not zero and limit zero",
 			args: args{
-				offset: pointer.ToInt(2),
+				offset: pointer.ToInt64(2),
 			},
 			want: &LimitAndOffset{
 				Offset: 2,
@@ -53,7 +53,7 @@ func TestUnpointer(t *testing.T) {
 		{
 			name: "offset zero and limit not zero",
 			args: args{
-				limit: pointer.ToInt(10),
+				limit: pointer.ToInt64(10),
 			},
 			want: &LimitAndOffset{
 				Offset: 0,
