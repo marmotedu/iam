@@ -34,6 +34,7 @@ type GrpcClient struct {
 	ClientCA string
 }
 
+// Client returns grpc client.
 func (c *GrpcClient) Client() pb.CacheClient {
 	v := client.Load()
 	if v != nil {

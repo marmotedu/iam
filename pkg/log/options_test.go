@@ -32,7 +32,7 @@ func Test_Options_Validate(t *testing.T) {
 		Level:            "test",
 		Format:           "test",
 		EnableColor:      true,
-		EnableCaller:     false,
+		DisableCaller:    false,
 		OutputPaths:      []string{"stdout"},
 		ErrorOutputPaths: []string{"stderr"},
 	}
