@@ -258,7 +258,7 @@ func New(opts *Options) *zapLogger {
 		panic(err)
 	}
 	logger := &zapLogger{
-		zapLogger: l,
+		zapLogger: l.Named(opts.Name),
 		infoLogger: infoLogger{
 			log:   l,
 			level: zap.InfoLevel,

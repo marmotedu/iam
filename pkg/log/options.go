@@ -37,6 +37,7 @@ const (
 	flagOutputPaths       = "log.output-paths"
 	flagErrorOutputPaths  = "log.error-output-paths"
 	flagDevelopment       = "log.development"
+	flagName              = "log.name"
 
 	consoleFormat = "console"
 	jsonFormat    = "json"
@@ -52,6 +53,7 @@ type Options struct {
 	DisableStacktrace bool     `json:"disable-stacktrace" mapstructure:"disable-stacktrace"`
 	EnableColor       bool     `json:"enable-color" mapstructure:"enable-color"`
 	Development       bool     `json:"development" mapstructure:"development"`
+	Name              string   `json:"name" mapstructure:"name"`
 }
 
 // NewOptions creates a Options object with default parameters.
@@ -97,6 +99,7 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringSliceVar(&o.ErrorOutputPaths, flagErrorOutputPaths, o.ErrorOutputPaths, "Error output paths of log.")
 	fs.BoolVar(&o.Development, flagDevelopment, o.Development, "Development puts the logger in development mode, which changes "+
 		"the behavior of DPanicLevel and takes stacktraces more liberally.")
+	fs.StringVar(&o.Name, flagName, o.Name, "The name of the logger.")
 }
 
 func (o *Options) String() string {
@@ -146,7 +149,7 @@ func (o *Options) Build() error {
 	if err != nil {
 		return err
 	}
-	zap.RedirectStdLog(logger)
+	zap.RedirectStdLog(logger.Named(o.Name))
 	zap.ReplaceGlobals(logger)
 	return nil
 }
