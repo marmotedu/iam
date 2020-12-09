@@ -29,6 +29,7 @@ type EtcdOptions struct {
 	Key                  string   `json:"key" mapstructure:"key"`
 	HealthBeatPathPrefix string   `json:"health_beat_path_prefix" mapstructure:"health_beat_path_prefix"`
 	HealthBeatIFaceName  string   `json:"health_beat_iface_name" mapstructure:"health_beat_iface_name"`
+	Namespace            string   `json:"namespace" mapstructure:"namespace"`
 }
 
 // NewEtcdOptions create a `zero` value instance.
@@ -69,6 +70,7 @@ func (o *EtcdOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Key, "etcd.key", o.Key, "Path to key file for connecting to etcd cluster.")
 	fs.StringVar(&o.HealthBeatPathPrefix, "etcd.health-beat-path-pre", o.HealthBeatPathPrefix, "health beat path prefix.")
 	fs.StringVar(&o.HealthBeatIFaceName, "etcd.health-beat-iface-name", o.HealthBeatIFaceName, "health beat registry iface name, such as eth0.")
+	fs.StringVar(&o.Namespace, "etcd.namespace", o.Namespace, "Etcd storage namespace.")
 }
 
 // GetEtcdTLSConfig returns etcd tls config.

@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/coreos/etcd/clientv3"
+
+	"github.com/coreos/etcd/mvcc/mvccpb"
 	"google.golang.org/grpc"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
@@ -17,9 +19,23 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-type datastore struct {
-	cli *clientv3.Client
+// EtcdCreateEventFunc defines etcd create event functon handler.
+type EtcdCreateEventFunc func(ctx context.Context, key, value []byte)
 
+// EtcdModifyEventFunc defines etcd update event functon handler.
+type EtcdModifyEventFunc func(ctx context.Context, key, oldvalue, value []byte)
+
+// EtcdDeleteEventFunc defines etcd delete event functon handler.
+type EtcdDeleteEventFunc func(ctx context.Context, key []byte)
+
+// EtcdWatcher defines a etcd watcher.
+type EtcdWatcher struct {
+	watcher clientv3.Watcher
+	cancel  context.CancelFunc
+}
+
+type datastore struct {
+	cli             *clientv3.Client
 	requestTimeout  time.Duration
 	leaseTTLTimeout int
 
@@ -27,8 +43,8 @@ type datastore struct {
 	onKeepaliveFailure func()
 	leaseLiving        bool
 
-	// watchers map[string]*SEtcdWatcher
-	// namespace string
+	watchers  map[string]*EtcdWatcher
+	namespace string
 }
 
 func (ds *datastore) Users() store.UserStore {
@@ -82,7 +98,8 @@ func NewEtcdStore(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()) (s
 	etcdClient.cli = cli
 	etcdClient.requestTimeout = time.Duration(opt.RequestTimeout) * time.Second
 	etcdClient.leaseTTLTimeout = opt.LeaseExpire
-	// etcdClient.watchers = make(map[string]*SEtcdWatcher)
+	etcdClient.watchers = make(map[string]*EtcdWatcher)
+	etcdClient.namespace = opt.Namespace
 
 	if err := etcdClient.startSession(); err != nil {
 		if e := etcdClient.Close(); e != nil {
@@ -136,4 +153,197 @@ func (ds *datastore) Close() error {
 	}
 
 	return nil
+}
+
+func (ds *datastore) Client() *clientv3.Client {
+	return ds.cli
+}
+
+func (ds *datastore) SessionLiving() bool {
+	return ds.leaseLiving
+}
+
+func (ds *datastore) RestartSession() error {
+	if ds.leaseLiving {
+		return fmt.Errorf("session is living, can't restart")
+	}
+	return ds.startSession()
+}
+
+func (ds *datastore) getKey(key string) string {
+	if len(ds.namespace) > 0 {
+		return fmt.Sprintf("%s%s", ds.namespace, key)
+	}
+
+	return key
+}
+
+func (ds *datastore) Put(ctx context.Context, key string, val string) error {
+	return ds.put(ctx, key, val, false)
+}
+
+func (ds *datastore) PutSession(ctx context.Context, key string, val string) error {
+	return ds.put(ctx, key, val, true)
+}
+
+func (ds *datastore) grantLease(ctx context.Context, ttlSeconds int64) (*clientv3.LeaseGrantResponse, error) {
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+	resp, err := ds.cli.Grant(nctx, ttlSeconds)
+	if err != nil {
+		return nil, fmt.Errorf("grant lease: %s", err.Error())
+	}
+	return resp, err
+}
+
+func (ds *datastore) PutWithLease(ctx context.Context, key string, val string, ttlSeconds int64) error {
+	resp, err := ds.grantLease(ctx, ttlSeconds)
+	if err != nil {
+		return fmt.Errorf("put with grant lease: %s", err.Error())
+	}
+
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+
+	key = ds.getKey(key)
+	leaseID := resp.ID
+	opts := []clientv3.OpOption{
+		clientv3.WithLease(leaseID),
+	}
+	_, err = ds.cli.Put(nctx, key, val, opts...)
+	return err
+}
+
+func (ds *datastore) put(ctx context.Context, key string, val string, session bool) error {
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+
+	key = ds.getKey(key)
+	if session {
+		_, err := ds.cli.Put(nctx, key, val, clientv3.WithLease(ds.leaseID))
+		return err
+	}
+
+	_, err := ds.cli.Put(nctx, key, val)
+	return err
+}
+
+func (ds *datastore) Get(ctx context.Context, key string) ([]byte, error) {
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+
+	key = ds.getKey(key)
+
+	resp, err := ds.cli.Get(nctx, key)
+	if err != nil {
+		return nil, err
+	}
+	if len(resp.Kvs) == 0 {
+		return nil, fmt.Errorf("no such key")
+	}
+
+	return resp.Kvs[0].Value, nil
+}
+
+// EtcdKeyValue defines etcd returned key-value pairs.
+type EtcdKeyValue struct {
+	Key   string
+	Value []byte
+}
+
+func (ds *datastore) List(ctx context.Context, prefix string) ([]EtcdKeyValue, error) {
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+
+	prefix = ds.getKey(prefix)
+
+	resp, err := ds.cli.Get(nctx, prefix, clientv3.WithPrefix(),
+		clientv3.WithSort(clientv3.SortByKey, clientv3.SortDescend))
+	if err != nil {
+		return nil, err
+	}
+	ret := make([]EtcdKeyValue, len(resp.Kvs))
+	for i := 0; i < len(resp.Kvs); i += 1 {
+		ret[i] = EtcdKeyValue{
+			Key:   string(resp.Kvs[i].Key[len(ds.namespace):]),
+			Value: resp.Kvs[i].Value,
+		}
+	}
+	return ret, nil
+}
+
+// Cancel cancel etcd client.
+func (w *EtcdWatcher) Cancel() {
+	w.watcher.Close()
+	w.cancel()
+}
+
+// Watch watch etcd.
+func (ds *datastore) Watch(ctx context.Context, prefix string, onCreate EtcdCreateEventFunc, onModify EtcdModifyEventFunc, onDelete EtcdDeleteEventFunc) error {
+	_, ok := ds.watchers[prefix]
+	if ok {
+		return fmt.Errorf("watch prefix %s already registered", prefix)
+	}
+
+	watcher := clientv3.NewWatcher(ds.cli)
+	nctx, cancel := context.WithCancel(ctx)
+
+	ds.watchers[prefix] = &EtcdWatcher{
+		watcher: watcher,
+		cancel:  cancel,
+	}
+
+	prefix = ds.getKey(prefix)
+
+	rch := watcher.Watch(nctx, prefix, clientv3.WithPrefix(), clientv3.WithPrevKV())
+	go func() {
+		for wresp := range rch {
+			for _, ev := range wresp.Events {
+				key := ev.Kv.Key[len(ds.namespace):]
+				if ev.PrevKv == nil {
+					onCreate(nctx, key, ev.Kv.Value)
+				} else {
+					switch ev.Type {
+					case mvccpb.PUT:
+						onModify(nctx, key, ev.PrevKv.Value, ev.Kv.Value)
+					case mvccpb.DELETE:
+						if onDelete != nil {
+							onDelete(nctx, key)
+						}
+					}
+				}
+			}
+		}
+		log.Infof("stop watching %s", prefix)
+	}()
+	return nil
+}
+
+func (ds *datastore) Unwatch(prefix string) {
+	watcher, ok := ds.watchers[prefix]
+	if ok {
+		log.Debugf("unwatch %s", prefix)
+		watcher.Cancel()
+		delete(ds.watchers, prefix)
+	} else {
+		log.Debugf("prefix %s not watched!!", prefix)
+	}
+}
+
+func (ds *datastore) Delete(ctx context.Context, key string) ([]byte, error) {
+	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
+	defer cancel()
+
+	key = ds.getKey(key)
+
+	dresp, err := ds.cli.Delete(nctx, key, clientv3.WithPrevKV())
+	if err != nil {
+		return nil, err
+	}
+
+	if dresp.Deleted == 1 {
+		return dresp.PrevKvs[0].Value, nil
+	}
+
+	return nil, nil
 }

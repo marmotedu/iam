@@ -5,21 +5,19 @@
 package etcd
 
 import (
-	"time"
+	"context"
+	"encoding/json"
 
-	"github.com/coreos/etcd/clientv3"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 )
 
 type users struct {
-	cli             *clientv3.Client
-	requestTimeout  time.Duration
-	leaseTTLTimeout int
+	ds *datastore
 }
 
 func newUsers(ds *datastore) *users {
-	return &users{cli: ds.cli, requestTimeout: ds.requestTimeout, leaseTTLTimeout: ds.leaseTTLTimeout}
+	return &users{ds: ds}
 }
 
 // Create creates a new user account.
@@ -44,20 +42,16 @@ func (u *users) DeleteCollection(usernames []string, opts metav1.DeleteOptions) 
 
 // Get return an user by the user identifier.
 func (u *users) Get(username string, opts metav1.GetOptions) (*v1.User, error) {
-	/*
-		ctx, cancel := context.WithTimeout(context.Background(), u.requestTimeout)
-		defer cancel()
-		key := fmt.Sprintf("v2/%s", user.Name)
-		rsp, err := f.cli.Get(ctx, key, clientv3.WithPrefix())
-		if err != nil {
-			return nil, fmt.Errorf("failed get function [key:%v] from etcd:%v ", key, err)
-		}
-		if len(resp.Kvs) == 0 {
-			return nil, fmt.Errorf("failed to get valid function value[key:%v] from etcd:%v", key, err)
-		}
-		return resp.Kvs[0].Value, nil
-	*/
-	return nil, nil
+	resp, err := u.ds.Get(context.TODO(), username)
+	if err != nil {
+		return nil, err
+	}
+
+	var user v1.User
+	if err := json.Unmarshal(resp, &user); err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 // List return all users.

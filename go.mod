@@ -8,6 +8,7 @@ require (
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/arnaud-deprez/gsemver v0.5.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
+	github.com/bdlm/errors v0.2.1
 	github.com/buger/jsonparser v1.0.0
 	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/cpuguy83/go-md2man/v2 v2.0.0
@@ -56,6 +57,7 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/tpkeeper/gin-dump v1.0.0
 	github.com/zsais/go-gin-prometheus v0.1.0
+	go.etcd.io/etcd v0.0.0-20191023171146-3cf2f69b5738
 	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
@@ -77,5 +79,5 @@ require (
 replace (
 	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
 	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
-  google.golang.org/grpc => google.golang.org/grpc v1.29.1
+	google.golang.org/grpc => google.golang.org/grpc v1.29.1
 )

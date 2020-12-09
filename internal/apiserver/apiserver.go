@@ -328,7 +328,7 @@ func (completedOptions completedServerRunOptions) InitMySQLStore() error {
 
 	// uncomment the following lines if you want to switch to etcd storage.
 	/*
-		etcdStore, err := etcd.NewEtcdStore(completedOptions.MySQLOptions, nil)
+		etcdStore, err = etcd.NewEtcdStore(completedOptions.MySQLOptions, nil)
 		if err != nil {
 			return err
 		}

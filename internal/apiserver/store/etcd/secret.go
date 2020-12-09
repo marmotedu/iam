@@ -5,21 +5,16 @@
 package etcd
 
 import (
-	"time"
-
-	"github.com/coreos/etcd/clientv3"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 )
 
 type secrets struct {
-	cli             *clientv3.Client
-	requestTimeout  time.Duration
-	leaseTTLTimeout int
+	ds *datastore
 }
 
 func newSecrets(ds *datastore) *secrets {
-	return &secrets{cli: ds.cli, requestTimeout: ds.requestTimeout, leaseTTLTimeout: ds.leaseTTLTimeout}
+	return &secrets{ds}
 }
 
 // Create creates a new secret account.
