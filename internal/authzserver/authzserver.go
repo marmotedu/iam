@@ -130,7 +130,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 	log.Debugf("config: `%s`", completedOptions.String())
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
-	if err := completedOptions.Init(); err != nil {
+	if err := completedOptions.Init(stopCh); err != nil {
 		return err
 	}
 
@@ -302,15 +302,14 @@ func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	return options, nil
 }
 
-func (completedOptions completedServerRunOptions) Init() error {
+func (completedOptions completedServerRunOptions) Init(stopCh <-chan struct{}) error {
 	// keep redis connected
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
 
 	// start cacheService
-	cacheService := store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA)
-	cacheService.Start()
+	store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA).Start()
 
 	// start analytics service
 	if completedOptions.AnalyticsOptions.Enable {

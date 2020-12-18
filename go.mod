@@ -6,24 +6,21 @@ require (
 	github.com/AlekSi/pointer v1.1.0
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/appleboy/gin-jwt/v2 v2.6.4
-	github.com/arnaud-deprez/gsemver v0.5.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
-	github.com/bdlm/errors v0.2.1
 	github.com/buger/jsonparser v1.0.0
 	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/cpuguy83/go-md2man/v2 v2.0.0
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/fatih/color v1.9.0
+	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/pprof v1.3.0
-	github.com/gin-contrib/requestid v0.0.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/redis/v7 v7.4.0
-	github.com/huandu/xstrings v1.3.2 // indirect
-	github.com/imdario/mergo v0.3.11 // indirect
+	github.com/golang/mock v1.4.1 // indirect
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/influxdata/influxdb v1.8.3
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jinzhu/now v1.1.1
@@ -51,13 +48,14 @@ require (
 	github.com/segmentio/kafka-go v0.4.8
 	github.com/sirupsen/logrus v1.7.0
 	github.com/spf13/afero v1.4.1 // indirect
+	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v1.1.1
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
 	github.com/tpkeeper/gin-dump v1.0.0
 	github.com/zsais/go-gin-prometheus v0.1.0
-	go.etcd.io/etcd v0.0.0-20191023171146-3cf2f69b5738
 	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
@@ -69,7 +67,6 @@ require (
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/vmihailenco/msgpack.v2 v2.9.1
-	gopkg.in/yaml.v2 v2.3.0
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.5
