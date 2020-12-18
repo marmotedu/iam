@@ -64,7 +64,7 @@ Find more ladon information at:
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			verflag.PrintAndExitIfRequested(appName)
+			verflag.PrintAndExitIfRequested()
 			cliflag.PrintFlags(cmd.Flags())
 
 			if err := viper.BindPFlags(cmd.Flags()); err != nil {
@@ -111,14 +111,14 @@ Find more ladon information at:
 
 	usageFmt := "Usage:\n  %s\n"
 	cols, _, _ := term.TerminalSize(cmd.OutOrStdout())
+	cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
+		cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
+	})
 	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
 		return nil
-	})
-	cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
-		cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
 	})
 
 	return cmd
@@ -130,19 +130,8 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 	log.Debugf("config: `%s`", completedOptions.String())
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
-	// keep redis connected
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
-
-	// start cacheService
-	cacheService := store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA)
-	cacheService.Start()
-
-	// start analytics service
-	if completedOptions.AnalyticsOptions.Enable {
-		analyticsStore := storage.RedisCluster{KeyPrefix: RedisKeyPrefix}
-		analytics.NewAnalytics(completedOptions.AnalyticsOptions, &analyticsStore).Start(stopCh)
+	if err := completedOptions.Init(); err != nil {
+		return err
 	}
 
 	// create apiserver config from all options
@@ -311,4 +300,23 @@ func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	options.ServerRunOptions = s
 
 	return options, nil
+}
+
+func (completedOptions completedServerRunOptions) Init() error {
+	// keep redis connected
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
+
+	// start cacheService
+	cacheService := store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA)
+	cacheService.Start()
+
+	// start analytics service
+	if completedOptions.AnalyticsOptions.Enable {
+		analyticsStore := storage.RedisCluster{KeyPrefix: RedisKeyPrefix}
+		analytics.NewAnalytics(completedOptions.AnalyticsOptions, &analyticsStore).Start(stopCh)
+	}
+
+	return nil
 }

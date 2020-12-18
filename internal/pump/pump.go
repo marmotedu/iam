@@ -64,7 +64,7 @@ Find more iam-pump information at:
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			verflag.PrintAndExitIfRequested(appName)
+			verflag.PrintAndExitIfRequested()
 			cliflag.PrintFlags(cmd.Flags())
 
 			if err := viper.BindPFlags(cmd.Flags()); err != nil {
@@ -111,14 +111,14 @@ Find more iam-pump information at:
 
 	usageFmt := "Usage:\n  %s\n"
 	cols, _, _ := term.TerminalSize(cmd.OutOrStdout())
+	cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
+		cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
+	})
 	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
 		return nil
-	})
-	cmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n\n"+usageFmt, cmd.Long, cmd.UseLine())
-		cliflag.PrintSections(cmd.OutOrStdout(), namedFlagSets, cols)
 	})
 
 	return cmd
@@ -130,15 +130,11 @@ func Run(completedOptions completedPumpOptions, stopCh <-chan struct{}) error {
 	log.Infof("config: `%s`", completedOptions.String())
 	log.Infof("version: %+v", version.Get().ToJSON())
 
-	go server.ServeHealthCheck(completedOptions.HealthCheckPath, completedOptions.HealthCheckAddress)
-
-	// Create the store
-	if err := setupAnalyticsStore(completedOptions); err != nil {
+	if err := completedOptions.Init(); err != nil {
 		return err
 	}
 
-	// prime the pumps
-	initialisePumps(completedOptions)
+	go server.ServeHealthCheck(completedOptions.HealthCheckPath, completedOptions.HealthCheckAddress)
 
 	// start the worker loop
 	log.Infof("Starting purge loop @%d%s", completedOptions.PurgeDelay, "(s)")
@@ -170,6 +166,18 @@ func Complete(s *options.PumpOptions) (completedPumpOptions, error) {
 func setupAnalyticsStore(completedOptions completedPumpOptions) error {
 	analyticsStore = &redis.RedisClusterStorageManager{}
 	return analyticsStore.Init(completedOptions.RedisOptions)
+}
+
+func (completedOptions completedPumpOptions) Init() error {
+	// Create the store
+	if err := setupAnalyticsStore(completedOptions); err != nil {
+		return err
+	}
+
+	// prime the pumps
+	initialisePumps(completedOptions)
+
+	return nil
 }
 
 func initialisePumps(completedOptions completedPumpOptions) {
