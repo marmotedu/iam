@@ -201,12 +201,7 @@ func NewConfigFlags(usePersistentConfig bool) *ConfigFlags {
 	return &ConfigFlags{
 		IAMConfig: pointer.ToString(""),
 
-		BearerToken: pointer.ToString(""),
-		SecretID:    pointer.ToString(""),
-		SecretKey:   pointer.ToString(""),
-		Username:    pointer.ToString(""),
-		Password:    pointer.ToString(""),
-
+		BearerToken:   pointer.ToString(""),
 		Insecure:      pointer.ToBool(false),
 		TLSServerName: pointer.ToString(""),
 		CertFile:      pointer.ToString(""),
