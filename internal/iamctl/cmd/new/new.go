@@ -136,7 +136,7 @@ func NewCmd{{.CommandFunctionName}}(f cmdutil.Factory, ioStreams genericclioptio
 
 	// mark flag as deprecated
 	cmd.Flags().MarkDeprecated("deprecated-opt", "This flag is deprecated and will be removed in future.")
-	cmd.Flags().StringVarP(&o.StringOption, "string", "s", o.StringOption, "String option.")
+	cmd.Flags().StringVarP(&o.StringOption, "string", "", o.StringOption, "String option.")
 	cmd.Flags().StringSliceVar(&o.StringSliceOption, "slice", o.StringSliceOption, "String slice option.")
 	cmd.Flags().IntVarP(&o.IntOption, "int", "i", o.IntOption, "Int option.")
 	cmd.Flags().BoolVarP(&o.BoolOption, "bool", "b", o.BoolOption, "Bool option.")
@@ -324,7 +324,7 @@ func NewCmdSubCmd1(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *co
 
 	// mark flag as deprecated
 	cmd.Flags().MarkDeprecated("deprecated-opt", "This flag is deprecated and will be removed in future.")
-	cmd.Flags().StringVarP(&o.StringOption, "string", "s", o.StringOption, "String option.")
+	cmd.Flags().StringVarP(&o.StringOption, "string", "", o.StringOption, "String option.")
 	cmd.Flags().StringSliceVar(&o.StringSliceOption, "slice", o.StringSliceOption, "String slice option.")
 	cmd.Flags().IntVarP(&o.IntOption, "int", "i", o.IntOption, "Int option.")
 	cmd.Flags().BoolVarP(&o.BoolOption, "bool", "b", o.BoolOption, "Bool option.")
@@ -437,7 +437,7 @@ func NewCmdSubCmd2(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *co
 	}
 
 	// mark flag as deprecated
-	cmd.Flags().StringVarP(&o.StringOption, "string", "s", o.StringOption, "String option.")
+	cmd.Flags().StringVarP(&o.StringOption, "string", "", o.StringOption, "String option.")
 	cmd.Flags().StringSliceVar(&o.StringSliceOption, "slice", o.StringSliceOption, "String slice option.")
 	cmd.Flags().IntVarP(&o.IntOption, "int", "i", o.IntOption, "Int option.")
 	cmd.Flags().BoolVarP(&o.BoolOption, "bool", "b", o.BoolOption, "Bool option.")
