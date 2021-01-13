@@ -27,7 +27,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	username := c.GetHeader("username")
+	username := c.GetString("username")
 	name := c.Param("name")
 
 	secret, err := store.Client().Secrets().Get(username, name, metav1.GetOptions{})

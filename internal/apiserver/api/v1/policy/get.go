@@ -20,7 +20,7 @@ import (
 func Get(c *gin.Context) {
 	log.L(c).Info("get policy function called.")
 
-	pol, err := store.Client().Policies().Get(c.GetHeader("username"), c.Param("name"), metav1.GetOptions{})
+	pol, err := store.Client().Policies().Get(c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return

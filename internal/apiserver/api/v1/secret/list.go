@@ -25,7 +25,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	secrets, err := store.Client().Secrets().List(c.GetHeader("username"), r)
+	secrets, err := store.Client().Secrets().List(c.GetString("username"), r)
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return

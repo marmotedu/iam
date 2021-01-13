@@ -30,7 +30,7 @@ func Validation() gin.HandlerFunc {
 					return
 				}
 			case "/v1/users/:name", "/v1/users/:name/change_password":
-				username := c.GetHeader("username")
+				username := c.GetString("username")
 				if c.Request.Method == http.MethodDelete ||
 					(c.Request.Method != http.MethodDelete && username != c.Param("name")) {
 					core.WriteResponse(c, errors.WithCode(code.ErrPermissionDenied, ""), nil)
@@ -49,7 +49,7 @@ func Validation() gin.HandlerFunc {
 // isAdmin make sure the user is administrator.
 // It returns a `github.com/marmotedu/errors.withCode` error.
 func isAdmin(c *gin.Context) error {
-	username := c.GetHeader("username")
+	username := c.GetString("username")
 	user, err := store.Client().Users().Get(username, metav1.GetOptions{})
 	if err != nil {
 		return errors.WithCode(code.ErrDatabase, err.Error())

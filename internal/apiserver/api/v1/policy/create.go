@@ -33,7 +33,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	r.Username = c.GetHeader("username")
+	r.Username = c.GetString("username")
 
 	if err := store.Client().Policies().Create(&r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)

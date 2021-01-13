@@ -5,7 +5,7 @@
 package util
 
 import (
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
@@ -24,8 +24,8 @@ import (
 type Factory interface {
 	genericclioptions.RESTClientGetter
 
-	// IAMClientSet gives you back an external clientset
-	IAMClientSet() (*marmotedu.Clientset, error)
+	// IAMClient gives you back an external iamclient
+	IAMClient() (*iam.IamClient, error)
 
 	// Returns a RESTClient for accessing IAM resources or an error.
 	RESTClient() (*restclient.RESTClient, error)

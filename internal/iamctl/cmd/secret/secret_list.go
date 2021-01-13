@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -28,7 +28,7 @@ type ListOptions struct {
 	Offset int64
 	Limit  int64
 
-	clientSet marmotedu.Interface
+	iamclient iam.IamInterface
 	genericclioptions.IOStreams
 }
 
@@ -79,7 +79,7 @@ func NewCmdList(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 // Complete completes all the required options.
 func (o *ListOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string) error {
 	var err error
-	o.clientSet, err = f.IAMClientSet()
+	o.iamclient, err = f.IAMClient()
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func (o *ListOptions) Validate(cmd *cobra.Command, args []string) error {
 
 // Run executes a list subcommand using the specified options.
 func (o *ListOptions) Run(args []string) error {
-	secrets, err := o.clientSet.IamV1().Secrets().List(context.TODO(), metav1.ListOptions{
+	secrets, err := o.iamclient.APIV1().Secrets().List(context.TODO(), metav1.ListOptions{
 		Offset: &o.Offset,
 		Limit:  &o.Limit,
 	})

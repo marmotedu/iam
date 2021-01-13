@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -26,7 +26,7 @@ const (
 type DeleteOptions struct {
 	Name string
 
-	clientSet marmotedu.Interface
+	iamclient iam.IamInterface
 	genericclioptions.IOStreams
 }
 
@@ -78,7 +78,7 @@ func (o *DeleteOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 
 	o.Name = args[0]
 
-	o.clientSet, err = f.IAMClientSet()
+	o.iamclient, err = f.IAMClient()
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func (o *DeleteOptions) Validate(cmd *cobra.Command, args []string) error {
 
 // Run executes a delete subcommand using the specified options.
 func (o *DeleteOptions) Run() error {
-	if err := o.clientSet.IamV1().Policies().Delete(context.TODO(), o.Name, metav1.DeleteOptions{}); err != nil {
+	if err := o.iamclient.APIV1().Policies().Delete(context.TODO(), o.Name, metav1.DeleteOptions{}); err != nil {
 		return err
 	}
 

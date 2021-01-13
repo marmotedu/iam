@@ -21,7 +21,7 @@ func DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
 	if err := store.Client().Policies().DeleteCollection(
-		c.GetHeader("username"),
+		c.GetString("username"),
 		c.QueryArray("name"),
 		metav1.DeleteOptions{},
 	); err != nil {

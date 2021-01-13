@@ -83,7 +83,6 @@ func (a *auth) BasicAuth() gin.HandlerFunc {
 			return
 		}
 
-		// c.Request.Header.Add("username", pair[0])
 		c.Set(CtxUsername, pair[0])
 
 		c.Next()

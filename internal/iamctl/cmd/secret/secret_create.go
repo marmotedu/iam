@@ -7,12 +7,13 @@ package secret
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	iamv1client "github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam/v1"
+	apiclientv1 "github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam/apiserver/v1"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -21,7 +22,6 @@ import (
 
 const (
 	createUsageStr = "create SECRET_NAME"
-	defaultExpires = 1534308590
 )
 
 // CreateOptions is an options struct to support create subcommands.
@@ -31,7 +31,7 @@ type CreateOptions struct {
 
 	Secret *v1.Secret
 
-	Client iamv1client.IamV1Interface
+	Client apiclientv1.APIV1Interface
 
 	genericclioptions.IOStreams
 }
@@ -46,7 +46,7 @@ This will generate secretID and secretKey which can be used to sign JWT token.`)
 		iamctl secret create foo
 
 		# Create secret with a specified expire time and description
-		iamctl secret create foo --expires=5h --description="secret for iam"`)
+		iamctl secret create foo --expires=1988121600 --description="secret for iam"`)
 
 	createUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRET_NAME is required arguments for the create command", createUsageStr)
 )
@@ -54,7 +54,7 @@ This will generate secretID and secretKey which can be used to sign JWT token.`)
 // NewCreateOptions returns an initialized CreateOptions instance.
 func NewCreateOptions(ioStreams genericclioptions.IOStreams) *CreateOptions {
 	return &CreateOptions{
-		Expires:   defaultExpires,
+		Expires:   time.Now().Add(144 * time.Hour).Unix(),
 		IOStreams: ioStreams,
 	}
 }
@@ -103,7 +103,7 @@ func (o *CreateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 	if err != nil {
 		return err
 	}
-	o.Client, err = iamv1client.NewForConfig(clientConfig)
+	o.Client, err = apiclientv1.NewForConfig(clientConfig)
 	if err != nil {
 		return err
 	}

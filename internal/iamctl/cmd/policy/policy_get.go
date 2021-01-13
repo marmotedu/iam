@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -28,7 +28,7 @@ const (
 type GetOptions struct {
 	Name string
 
-	clientSet marmotedu.Interface
+	iamclient iam.IamInterface
 	genericclioptions.IOStreams
 }
 
@@ -80,7 +80,7 @@ func (o *GetOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []stri
 
 	o.Name = args[0]
 
-	o.clientSet, err = f.IAMClientSet()
+	o.iamclient, err = f.IAMClient()
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (o *GetOptions) Validate(cmd *cobra.Command, args []string) error {
 
 // Run executes a get subcommand using the specified options.
 func (o *GetOptions) Run(args []string) error {
-	policy, err := o.clientSet.IamV1().Policies().Get(context.TODO(), o.Name, metav1.GetOptions{})
+	policy, err := o.iamclient.APIV1().Policies().Get(context.TODO(), o.Name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}

@@ -30,7 +30,7 @@ func Authorize(c *gin.Context) {
 	if r.Context == nil {
 		r.Context = ladon.Context{}
 	}
-	r.Context["username"] = c.GetHeader("username")
+	r.Context["username"] = c.GetString("username")
 	rsp := auth.Authorize(&r)
 
 	core.WriteResponse(c, nil, rsp)

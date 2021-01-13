@@ -20,7 +20,7 @@ import (
 func DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
-	if err := store.Client().Policies().DeleteCollection(c.GetHeader("username"), c.QueryArray("name"), metav1.DeleteOptions{}); err != nil {
+	if err := store.Client().Policies().DeleteCollection(c.GetString("username"), c.QueryArray("name"), metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

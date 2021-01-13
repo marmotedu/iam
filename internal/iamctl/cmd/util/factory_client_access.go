@@ -7,7 +7,7 @@
 package util
 
 import (
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 	"github.com/marmotedu/marmotedu-sdk-go/tools/clientcmd"
 
@@ -38,12 +38,12 @@ func (f *factoryImpl) ToRawIAMConfigLoader() clientcmd.ClientConfig {
 	return f.clientGetter.ToRawIAMConfigLoader()
 }
 
-func (f *factoryImpl) IAMClientSet() (*marmotedu.Clientset, error) {
+func (f *factoryImpl) IAMClient() (*iam.IamClient, error) {
 	clientConfig, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
 	}
-	return marmotedu.NewForConfig(clientConfig)
+	return iam.NewForConfig(clientConfig)
 }
 
 func (f *factoryImpl) RESTClient() (*restclient.RESTClient, error) {

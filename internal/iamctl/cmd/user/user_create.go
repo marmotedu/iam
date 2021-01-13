@@ -12,7 +12,7 @@ import (
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	iamv1client "github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam/v1"
+	apiclientv1 "github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam/apiserver/v1"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -30,7 +30,7 @@ type CreateOptions struct {
 
 	User *v1.User
 
-	Client iamv1client.IamV1Interface
+	Client apiclientv1.APIV1Interface
 	genericclioptions.IOStreams
 }
 
@@ -107,7 +107,7 @@ func (o *CreateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 	if err != nil {
 		return err
 	}
-	o.Client, err = iamv1client.NewForConfig(clientConfig)
+	o.Client, err = apiclientv1.NewForConfig(clientConfig)
 	if err != nil {
 		return err
 	}

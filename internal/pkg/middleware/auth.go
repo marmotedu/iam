@@ -188,7 +188,7 @@ func (a *AuthMiddleware) AuthCacheMiddlewareFunc() gin.HandlerFunc {
 			return
 		}
 
-		c.Request.Header.Add("username", secret.Username)
+		c.Set("username", secret.Username)
 		c.Next()
 	}
 }

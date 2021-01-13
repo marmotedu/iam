@@ -20,7 +20,7 @@ import (
 func Delete(c *gin.Context) {
 	log.L(c).Info("delete policy function called.")
 
-	if err := store.Client().Policies().Delete(c.GetHeader("username"), c.Param("name"), metav1.DeleteOptions{}); err != nil {
+	if err := store.Client().Policies().Delete(c.GetString("username"), c.Param("name"), metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

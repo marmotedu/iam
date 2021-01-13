@@ -14,7 +14,7 @@ import (
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -31,7 +31,7 @@ const (
 type UpdateOptions struct {
 	Policy *v1.Policy
 
-	clientSet marmotedu.Interface
+	iamclient iam.IamInterface
 	genericclioptions.IOStreams
 }
 
@@ -93,7 +93,7 @@ func (o *UpdateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 		Policy: pol,
 	}
 
-	o.clientSet, err = f.IAMClientSet()
+	o.iamclient, err = f.IAMClient()
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (o *UpdateOptions) Validate(cmd *cobra.Command, args []string) error {
 
 // Run executes a update subcommand using the specified options.
 func (o *UpdateOptions) Run(args []string) error {
-	ret, err := o.clientSet.IamV1().Policies().Update(context.TODO(), o.Policy, metav1.UpdateOptions{})
+	ret, err := o.iamclient.APIV1().Policies().Update(context.TODO(), o.Policy, metav1.UpdateOptions{})
 	if err != nil {
 		return err
 	}

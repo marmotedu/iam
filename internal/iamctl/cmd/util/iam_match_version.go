@@ -105,7 +105,7 @@ func NewMatchVersionFlags(delegate genericclioptions.RESTClientGetter) *MatchVer
 
 // setIAMDefaults sets default values on the provided client config for accessing the
 // IAM API or returns an error if any of the defaults are impossible or invalid.
-// TODO this isn't what we want.  Each clientset should be setting defaults as it sees fit.
+// TODO this isn't what we want.  Each iamclient should be setting defaults as it sees fit.
 func setIAMDefaults(config *rest.Config) error {
 	// TODO remove this hack.  This is allowing the GetOptions to be serialized.
 	config.GroupVersion = &scheme.GroupVersion{Group: "", Version: "v1"}
@@ -117,7 +117,7 @@ func setIAMDefaults(config *rest.Config) error {
 		// This codec factory ensures the resources are not converted. Therefore, resources
 		// will not be round-tripped through internal versions. Defaulting does not happen
 		// on the client.
-		config.Negotiator = runtime.NewSimpleIamClientNegotiator()
+		config.Negotiator = runtime.NewSimpleClientNegotiator()
 	}
 	return rest.SetIAMDefaults(config)
 }

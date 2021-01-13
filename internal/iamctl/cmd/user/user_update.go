@@ -10,9 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -25,13 +24,12 @@ const (
 
 // UpdateOptions is an options struct to support update subcommands.
 type UpdateOptions struct {
+	Name     string
 	Nickname string
 	Email    string
 	Phone    string
 
-	User *v1.User
-
-	clientSet marmotedu.Interface
+	iamclient iam.IamInterface
 	genericclioptions.IOStreams
 }
 
@@ -90,16 +88,8 @@ func (o *UpdateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 		return cmdutil.UsageErrorf(cmd, updateUsageErrStr)
 	}
 
-	o.User = &v1.User{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: args[0],
-		},
-		Nickname: o.Nickname,
-		Email:    o.Email,
-		Phone:    o.Phone,
-	}
-
-	o.clientSet, err = f.IAMClientSet()
+	o.Name = args[0]
+	o.iamclient, err = f.IAMClient()
 	if err != nil {
 		return err
 	}
@@ -114,7 +104,22 @@ func (o *UpdateOptions) Validate(cmd *cobra.Command, args []string) error {
 
 // Run executes a update subcommand using the specified options.
 func (o *UpdateOptions) Run(args []string) error {
-	ret, err := o.clientSet.IamV1().Users().Update(context.TODO(), o.User, metav1.UpdateOptions{})
+	user, err := o.iamclient.APIV1().Users().Get(context.TODO(), o.Name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	if o.Nickname != "" {
+		user.Nickname = o.Nickname
+	}
+	if o.Email != "" {
+		user.Email = o.Email
+	}
+	if o.Phone != "" {
+		user.Phone = o.Phone
+	}
+
+	ret, err := o.iamclient.APIV1().Users().Update(context.TODO(), user, metav1.UpdateOptions{})
 	if err != nil {
 		return err
 	}
