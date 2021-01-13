@@ -28,10 +28,10 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.4 // indirect
-	github.com/marmotedu/api v1.0.0
+	github.com/marmotedu/api v1.2.0
 	github.com/marmotedu/component-base v1.0.1
 	github.com/marmotedu/errors v1.0.0
-	github.com/marmotedu/marmotedu-sdk-go v1.0.1
+	github.com/marmotedu/marmotedu-sdk-go v0.0.0-00010101000000-000000000000
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.3.3
@@ -58,8 +58,7 @@ require (
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
-	golang.org/x/sys v0.0.0-20201027140754-0fcbb8f4928c // indirect
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
 	golang.org/x/tools v0.0.0-20201028025901-8cd080b735b3
@@ -76,5 +75,6 @@ require (
 replace (
 	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
 	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
+	github.com/marmotedu/marmotedu-sdk-go => /home/colin/workspace/golang/src/github.com/marmotedu/marmotedu-sdk-go
 	google.golang.org/grpc => google.golang.org/grpc v1.29.1
 )
