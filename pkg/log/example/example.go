@@ -35,7 +35,7 @@ func main() {
 		Level:            "debug",
 		Format:           "console",
 		EnableColor:      true,
-		EnableCaller:     true,
+		DisableCaller:    true,
 		OutputPaths:      []string{"test.log", "stdout"},
 		ErrorOutputPaths: []string{"error.log"},
 	}
