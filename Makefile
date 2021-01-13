@@ -119,7 +119,7 @@ release:
 .PHONY: format 
 format:
 	@find . ! -path "./vendor/*" -name "*.go" | xargs gofmt -s -w
-	@find . ! -path "./vendor/*" -name "*.go" | xargs goimports -w -local github.com/marmotedu/iam
+	@find . ! -path "./vendor/*" -name "*.go" | xargs goimports -w -local $(ROOT_PACKAGE)
 
 ## boilerplate: Verify the boilerplate headers for all files.
 .PHONY: boilerplate 
