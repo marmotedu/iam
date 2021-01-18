@@ -8,9 +8,11 @@ package new
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 
+	"github.com/marmotedu/component-base/pkg/util/fileutil"
 	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
@@ -31,6 +33,9 @@ This can improve your R&D efficiency.`)
 	newExample = templates.Examples(`
 		# Create a default 'test' command file without a description
 		iamctl new test
+
+		# Create a default 'test' command file in /tmp/
+		iamctl new test -d /tmp/
 
 		# Create a default 'test' command file with a description
 		iamctl new test "This is a test command"
@@ -483,7 +488,8 @@ func (o *SubCmd2Options) Run(args []string) error {
 
 // NewOptions is an options struct to support 'new' sub command.
 type NewOptions struct {
-	Group bool
+	Group  bool
+	Outdir string
 
 	// command template options, will render to command template
 	CommandName         string
@@ -498,6 +504,7 @@ type NewOptions struct {
 func NewNewOptions(ioStreams genericclioptions.IOStreams) *NewOptions {
 	return &NewOptions{
 		Group:              false,
+		Outdir:             ".",
 		CommandDescription: "A brief description of your command",
 		Dot:                "`",
 		IOStreams:          ioStreams,
@@ -524,6 +531,7 @@ func NewCmdNew(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.
 	}
 
 	cmd.Flags().BoolVarP(&o.Group, "group", "g", o.Group, "Generate two subcommands.")
+	cmd.Flags().StringVarP(&o.Outdir, "outdir", "d", o.Outdir, "Where to create demo command files.")
 
 	return cmd
 }
@@ -581,12 +589,18 @@ func (o *NewOptions) CreateCommandWithSubCommands() error {
 }
 
 // GenerateGoCode generate go source file.
-func (o *NewOptions) GenerateGoCode(filename, codeTemplate string) error {
+func (o *NewOptions) GenerateGoCode(name, codeTemplate string) error {
 	tmpl, err := template.New("cmd").Parse(codeTemplate)
 	if err != nil {
 		return err
 	}
 
+	err = fileutil.EnsureDirAll(o.Outdir)
+	if err != nil {
+		return err
+	}
+
+	filename := filepath.Join(o.Outdir, name)
 	fd, err := os.Create(filename)
 	if err != nil {
 		return err
