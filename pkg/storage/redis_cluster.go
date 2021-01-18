@@ -181,7 +181,7 @@ func NewRedisClusterPool(isCache bool, config *Config) redis.UniversalClient {
 		poolSize = config.MaxActive
 	}
 
-	timeout := 5 * time.Second // nolint: gomnd
+	timeout := 5 * time.Second
 
 	if config.Timeout > 0 {
 		timeout = time.Duration(config.Timeout) * time.Second

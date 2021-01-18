@@ -54,7 +54,6 @@ func NewRedisClusterPool(forceReconnect bool, config genericoptions.RedisOptions
 		maxActive = config.MaxActive
 	}
 
-	// nolint: gomnd
 	timeout := 5 * time.Second
 
 	if config.Timeout > 0 {

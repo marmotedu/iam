@@ -130,6 +130,7 @@ linters-settings:
     disabled-checks:
       - regexpMust
       - ifElseChain
+      - exitAfterDefer
 
     # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint run` to see all tags and checks.
     # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
@@ -170,7 +171,7 @@ linters-settings:
     settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-        checks: case,operation,return
+        checks: argument,case,condition,operation,return,assign
   gomodguard:
     allowed:
       modules:                                                        # List of allowed modules
@@ -350,10 +351,10 @@ linters:
     - nestif
     - prealloc
     - gomodguard
-    - gomnd
     - exhaustive
   # don't enable:
     #- goerr113
+    #- gomnd
     #- wsl
     #- testpackage
     #- gochecknoglobals

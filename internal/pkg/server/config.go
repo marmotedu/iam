@@ -150,7 +150,6 @@ func LoadConfig(cfg string, defaultName string) {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 
 	// If a config file is found, read it in.
-	// nolint: errcheck // no need to check error, if no config find, get value from default or command line flag.
 	if err := viper.ReadInConfig(); err != nil {
 		fmt.Printf("WARNING: viper failed to discover and load the configuration file: %s", err.Error())
 	}
