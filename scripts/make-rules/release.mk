@@ -7,6 +7,7 @@
 #
 #
 
+.PHONY: release.verify
 release.verify: release.git-chglog.verify release.github-release.verify release.coscmd.verify
 
 .PHONY: release.gsemver.verify                                      
