@@ -4,21 +4,21 @@
 
 package store
 
-var client Store
+var client Factory
 
-// Store defines the iam platform storage interface.
-type Store interface {
+// Factory defines the iam platform storage interface.
+type Factory interface {
 	Users() UserStore
 	Secrets() SecretStore
 	Policies() PolicyStore
 }
 
 // Client return the store client instance.
-func Client() Store {
+func Client() Factory {
 	return client
 }
 
 // SetClient set the iam store client.
-func SetClient(store Store) {
-	client = store
+func SetClient(factory Factory) {
+	client = factory
 }

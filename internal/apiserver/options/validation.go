@@ -9,7 +9,7 @@ func (s *ServerRunOptions) Validate() []error {
 	var errs []error
 
 	errs = append(errs, s.GenericServerRunOptions.Validate()...)
-	errs = append(errs, s.GrpcOptions.Validate()...)
+	errs = append(errs, s.GRPCOptions.Validate()...)
 	errs = append(errs, s.InsecureServing.Validate()...)
 	errs = append(errs, s.SecureServing.Validate()...)
 	errs = append(errs, s.MySQLOptions.Validate()...)

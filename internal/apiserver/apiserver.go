@@ -150,6 +150,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 // ExtraConfig defines extra configuration for the iam-apiserver.
 type ExtraConfig struct {
 	Addr       string
+	MaxMsgSize int
 	ServerCert genericoptions.GeneratableKeyCert
 }
 
@@ -170,7 +171,7 @@ type completedConfig struct {
 
 // APIServer is only responsible for serving the APIs for iam-apiserver.
 type APIServer struct {
-	GrpcAPIServer    *grpcAPIServer
+	GRPCAPIServer    *grpcAPIServer
 	GenericAPIServer *genericapiserver.GenericAPIServer
 }
 
@@ -205,7 +206,7 @@ func (c completedConfig) New() (*APIServer, error) {
 
 	s := &APIServer{
 		GenericAPIServer: genericServer,
-		GrpcAPIServer:    grpcServer,
+		GRPCAPIServer:    grpcServer,
 	}
 
 	return s, nil
@@ -217,10 +218,15 @@ func (c *ExtraConfig) New() *grpcAPIServer {
 	if err != nil {
 		log.Fatalf("Failed to generate credentials %s", err.Error())
 	}
+	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize), grpc.Creds(creds)}
+	grpcServer := grpc.NewServer(opts...)
 
-	grpcServer := grpc.NewServer(grpc.Creds(creds))
+	cacheIns, err := cachev1.GetCacheInsOr(store.Client())
+	if err != nil {
+		log.Fatalf("Failed to get cache instance%s", err.Error())
+	}
 
-	pb.RegisterCacheServer(grpcServer, &cachev1.Cache{})
+	pb.RegisterCacheServer(grpcServer, cacheIns)
 
 	reflection.Register(grpcServer)
 
@@ -230,7 +236,7 @@ func (c *ExtraConfig) New() *grpcAPIServer {
 // Run start the APIServer.
 func (s *APIServer) Run(stopCh <-chan struct{}) error {
 	// run grpc server
-	go s.GrpcAPIServer.Run(stopCh)
+	go s.GRPCAPIServer.Run(stopCh)
 
 	// run generic server
 	return s.GenericAPIServer.Run(stopCh)
@@ -277,7 +283,8 @@ func createAPIServerConfig(s *options.ServerRunOptions) (*apiServerConfig, error
 	config := &apiServerConfig{
 		GenericConfig: genericConfig,
 		ExtraConfig: ExtraConfig{
-			Addr:       fmt.Sprintf("%s:%d", s.GrpcOptions.BindAddress, s.GrpcOptions.BindPort),
+			Addr:       fmt.Sprintf("%s:%d", s.GRPCOptions.BindAddress, s.GRPCOptions.BindPort),
+			MaxMsgSize: s.GRPCOptions.MaxMsgSize,
 			ServerCert: s.SecureServing.ServerCert,
 		},
 	}
@@ -329,15 +336,14 @@ func (completedOptions completedServerRunOptions) InitDataStore() error {
 }
 
 func (completedOptions completedServerRunOptions) InitMySQLStore() error {
-	mysqlStore, err := mysql.NewMySQLStore(completedOptions.MySQLOptions)
+	mysqlStore, err := mysql.GetMySQLFactoryOr(completedOptions.MySQLOptions)
 	if err != nil {
 		return err
 	}
 
 	// uncomment the following lines if you want to switch to etcd storage.
 	/*
-		etcdStore, err = etcd.NewEtcdStore(completedOptions.MySQLOptions, nil)
-		if err != nil {
+		if _, err := etcd.GetEtcdFactoryOr(completedOptions.EtcdOptions, nil); err != nil {
 			return err
 		}
 	*/

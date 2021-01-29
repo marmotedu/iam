@@ -20,7 +20,7 @@ import (
 type ServerRunOptions struct {
 	APIConfig               string                                 `json:"apiconfig" mapstructure:"-"`
 	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
-	GrpcOptions             *genericoptions.GrpcOptions            `json:"grpc" mapstructure:"grpc"`
+	GRPCOptions             *genericoptions.GRPCOptions            `json:"grpc" mapstructure:"grpc"`
 	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	SecureServing           *genericoptions.SecureServingOptions   `json:"secure" mapstructure:"secure"`
 	MySQLOptions            *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
@@ -34,7 +34,7 @@ type ServerRunOptions struct {
 func NewServerRunOptions() *ServerRunOptions {
 	s := ServerRunOptions{
 		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
-		GrpcOptions:             genericoptions.NewGrpcOptions(),
+		GRPCOptions:             genericoptions.NewGRPCOptions(),
 		InsecureServing:         genericoptions.NewInsecureServingOptions(),
 		SecureServing:           genericoptions.NewSecureServingOptions(),
 		MySQLOptions:            genericoptions.NewMySQLOptions(),
@@ -56,7 +56,7 @@ func (s *ServerRunOptions) ApplyTo(c *server.Config) error {
 func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
 	s.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	s.JwtOptions.AddFlags(fss.FlagSet("jwt"))
-	s.GrpcOptions.AddFlags(fss.FlagSet("grpc"))
+	s.GRPCOptions.AddFlags(fss.FlagSet("grpc"))
 	s.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	s.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	s.FeatureOptions.AddFlags(fss.FlagSet("features"))

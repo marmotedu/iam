@@ -7,6 +7,8 @@ package cache
 
 import (
 	"context"
+	"fmt"
+	"sync"
 
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
@@ -19,6 +21,25 @@ import (
 
 // Cache defines a cache service used to list all secrets and policies.
 type Cache struct {
+	store store.Factory
+}
+
+var cacheServer *Cache
+var once sync.Once
+
+// GetCacheInsOr return cache server instance with given factory.
+func GetCacheInsOr(factory store.Factory) (*Cache, error) {
+	if factory != nil {
+		once.Do(func() {
+			cacheServer = &Cache{factory}
+		})
+	}
+
+	if cacheServer == nil {
+		return nil, fmt.Errorf("faild to get cache instance")
+	}
+
+	return cacheServer, nil
 }
 
 // ListSecrets returns all secrets.
@@ -29,7 +50,7 @@ func (c *Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.
 		Limit:  r.Limit,
 	}
 
-	secrets, err := store.Client().Secrets().List("", opts)
+	secrets, err := c.store.Secrets().List("", opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
@@ -61,7 +82,7 @@ func (c *Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*p
 		Limit:  r.Limit,
 	}
 
-	policies, err := store.Client().Policies().List("", opts)
+	policies, err := c.store.Policies().List("", opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}

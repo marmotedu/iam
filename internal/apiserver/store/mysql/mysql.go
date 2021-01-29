@@ -6,6 +6,7 @@ package mysql
 
 import (
 	"fmt"
+	"sync"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -14,7 +15,7 @@ import (
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/logger"
-	"github.com/marmotedu/iam/internal/pkg/options"
+	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 )
 
 type datastore struct {
@@ -37,45 +38,63 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
-// NewMySQLStore create mysql store with the given config.
-func NewMySQLStore(o *options.MySQLOptions) (store.Store, error) {
-	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
-		o.Username,
-		o.Password,
-		o.Host,
-		o.Database,
-		true,
-		"Local")
+var mysqlFactory store.Factory
+var once sync.Once
 
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
-		Logger: logger.New(o.LogLevel),
+// GetMySQLFactoryOr create mysql factory with the given config.
+func GetMySQLFactoryOr(opt *genericoptions.MySQLOptions) (store.Factory, error) {
+	if opt == nil && mysqlFactory == nil {
+		return nil, fmt.Errorf("failed to get mysql store fatory")
+	}
+
+	var err error
+	once.Do(func() {
+		var db *gorm.DB
+		dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+			opt.Username,
+			opt.Password,
+			opt.Host,
+			opt.Database,
+			true,
+			"Local")
+
+		db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
+			Logger: logger.New(opt.LogLevel),
+		})
+		if err != nil {
+			return
+		}
+
+		err = setupDatabase(opt, db)
+		if err != nil {
+			return
+		}
+
+		mysqlFactory = &datastore{db}
 	})
-	if err != nil {
-		return nil, err
+
+	if mysqlFactory == nil || err != nil {
+		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v, error: %v", mysqlFactory, err)
 	}
 
-	if err := setupDatabase(db, o); err != nil {
-		return nil, err
-	}
-
-	return &datastore{db}, nil
+	return mysqlFactory, nil
 }
 
 // setupDatabase initialize the database tables.
-func setupDatabase(db *gorm.DB, o *options.MySQLOptions) error {
+func setupDatabase(opt *genericoptions.MySQLOptions, db *gorm.DB) error {
 	// uncomment the following line if you need auto migration the given models
 	// not suggested in production environment.
 	// migrateDatabase(db)
 
-	// db.LogMode(o.LogMode)
+	// db.LogMode(opt.LogMode)
 	sqlDB, err := db.DB()
 	if err != nil {
 		return err
 	}
 
-	sqlDB.SetMaxOpenConns(o.MaxOpenConnections)
-	sqlDB.SetConnMaxLifetime(o.MaxConnectionLifeTime)
-	sqlDB.SetMaxIdleConns(o.MaxIdleConnections)
+	sqlDB.SetMaxOpenConns(opt.MaxOpenConnections)
+	sqlDB.SetConnMaxLifetime(opt.MaxConnectionLifeTime)
+	sqlDB.SetMaxIdleConns(opt.MaxIdleConnections)
 	return nil
 }
 
@@ -114,14 +133,14 @@ func migrateDatabase(db *gorm.DB) error {
 
 // resetDatabase resets the database tables.
 // nolint:unused,deadcode // may be reused in the feature, or just show a migrate usage.
-func resetDatabase(db *gorm.DB, o *options.MySQLOptions) error {
+func resetDatabase(db *gorm.DB, opt *genericoptions.MySQLOptions) error {
 	if err := cleanDatabase(db); err != nil {
 		return err
 	}
 	if err := migrateDatabase(db); err != nil {
 		return err
 	}
-	if err := setupDatabase(db, o); err != nil {
+	if err := setupDatabase(opt, db); err != nil {
 		return err
 	}
 
