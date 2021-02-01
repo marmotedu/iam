@@ -5,11 +5,11 @@
 package jwt
 
 import (
-	"github.com/marmotedu/component-base/pkg/json"
 	"fmt"
 	"regexp"
 
 	"github.com/dgrijalva/jwt-go/v4"
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"

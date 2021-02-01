@@ -6,16 +6,15 @@ package pumps
 
 import (
 	"context"
-	"github.com/marmotedu/component-base/pkg/json"
 	"strings"
 	"time"
 
 	"github.com/influxdata/influxdb/client/v2"
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // InfluxPump defines a influx pump whth influx specific options and common options.

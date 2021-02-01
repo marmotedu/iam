@@ -7,20 +7,18 @@ package pumps
 import (
 	"context"
 	"crypto/tls"
-	"github.com/marmotedu/component-base/pkg/json"
 	"time"
 
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/mitchellh/mapstructure"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl"
 	"github.com/segmentio/kafka-go/sasl/plain"
 	"github.com/segmentio/kafka-go/sasl/scram"
-
-	"github.com/marmotedu/iam/pkg/log"
+	"github.com/segmentio/kafka-go/snappy"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
-
-	"github.com/segmentio/kafka-go/snappy"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // KafkaPump defines a kafka pump with kafka specific options and common options.

@@ -7,13 +7,13 @@ package logger_test
 
 import (
 	"database/sql/driver"
-	"github.com/marmotedu/component-base/pkg/json"
 	"fmt"
 	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/jinzhu/now"
+	"github.com/marmotedu/component-base/pkg/json"
 	"gorm.io/gorm/logger"
 )
 

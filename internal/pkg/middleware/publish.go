@@ -5,11 +5,11 @@
 package middleware
 
 import (
-	"github.com/marmotedu/component-base/pkg/json"
 	"fmt"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/pkg/storage"
