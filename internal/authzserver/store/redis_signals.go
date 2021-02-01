@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/pkg/storage"
 )
 

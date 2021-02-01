@@ -8,12 +8,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ory/ladon"
-	"github.com/spf13/cobra"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
+	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	apiclientv1 "github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam/apiserver/v1"
+	"github.com/ory/ladon"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"

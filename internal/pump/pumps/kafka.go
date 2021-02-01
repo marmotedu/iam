@@ -7,7 +7,7 @@ package pumps
 import (
 	"context"
 	"crypto/tls"
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 	"time"
 
 	"github.com/mitchellh/mapstructure"

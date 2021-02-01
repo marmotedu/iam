@@ -7,7 +7,7 @@ package version
 
 import (
 	"context"
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 	"errors"
 	"fmt"
 

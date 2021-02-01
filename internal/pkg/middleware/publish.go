@@ -5,7 +5,7 @@
 package middleware
 
 import (
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 	"fmt"
 	"strings"
 

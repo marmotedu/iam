@@ -6,7 +6,7 @@
 package options
 
 import (
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
 

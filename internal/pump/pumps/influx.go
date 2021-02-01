@@ -6,7 +6,7 @@ package pumps
 
 import (
 	"context"
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 	"strings"
 	"time"
 

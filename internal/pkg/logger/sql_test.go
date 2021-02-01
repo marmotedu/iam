@@ -7,7 +7,7 @@ package logger_test
 
 import (
 	"database/sql/driver"
-	"encoding/json"
+	"github.com/marmotedu/component-base/pkg/json"
 	"fmt"
 	"regexp"
 	"strings"

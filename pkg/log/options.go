@@ -19,10 +19,10 @@
 package log
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/spf13/pflag"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

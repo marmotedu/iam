@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/AlekSi/pointer"
-	jsoniter "github.com/json-iterator/go"
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/ory/ladon"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -19,8 +19,6 @@ import (
 
 	"github.com/marmotedu/iam/pkg/log"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 var (
 	rpcConnectMu      sync.Mutex
