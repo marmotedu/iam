@@ -10,12 +10,11 @@ import (
 	"sync/atomic"
 
 	"github.com/AlekSi/pointer"
+	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/ory/ladon"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
-
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 
 	"github.com/marmotedu/iam/pkg/log"
 )
@@ -26,14 +25,14 @@ var (
 	client            atomic.Value
 )
 
-// GrpcClient is a storage manager that uses the redis database.
-type GrpcClient struct {
+// GRPCClient is a storage manager that uses the redis database.
+type GRPCClient struct {
 	Addr     string
 	ClientCA string
 }
 
 // Client returns grpc client.
-func (c *GrpcClient) Client() pb.CacheClient {
+func (c *GRPCClient) Client() pb.CacheClient {
 	v := client.Load()
 	if v != nil {
 		return v.(pb.CacheClient)
@@ -43,7 +42,7 @@ func (c *GrpcClient) Client() pb.CacheClient {
 }
 
 // Connect will establish a connection to the RPC.
-func (c *GrpcClient) Connect() bool {
+func (c *GRPCClient) Connect() bool {
 	log.Debug("connecting to grpc server in block mode")
 	rpcConnectMu.Lock()
 	defer rpcConnectMu.Unlock()
@@ -72,7 +71,7 @@ func (c *GrpcClient) Connect() bool {
 }
 
 // GetSecrets returns all the authorization secrets.
-func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
+func (c *GRPCClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 	secrets := make(map[string]*pb.SecretInfo)
 
 	log.Info("Loading secrets")
@@ -98,7 +97,7 @@ func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 }
 
 // GetPolicies returns all the authorization policies.
-func (c *GrpcClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
+func (c *GRPCClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 	pols := make(map[string][]*ladon.DefaultPolicy)
 
 	log.Info("Loading policies")

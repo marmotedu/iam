@@ -52,11 +52,11 @@ func New(ctx context.Context, addr, clientCA string) *CacheService {
 
 // Start start a cache service.
 func (s *CacheService) Start() {
-	grpcClient := GrpcClient{
+	client := GRPCClient{
 		Addr:     s.addr,
 		ClientCA: s.clientCA,
 	}
-	grpcClient.Connect()
+	client.Connect()
 
 	go startPubSubLoop()
 	// 1s is the minimum amount of time between hot reloads. The
@@ -151,20 +151,20 @@ func DoReload() {
 	reloadMu.Lock()
 	defer reloadMu.Unlock()
 
-	grpcClient := &GrpcClient{}
-	if !grpcClient.Connect() {
+	client := &GRPCClient{}
+	if !client.Connect() {
 		log.Error("Failed connecting to grpc server")
 		return
 	}
 
 	var err error
-	secrets, err = grpcClient.GetSecrets()
+	secrets, err = client.GetSecrets()
 	if err != nil {
 		log.Errorf("Error during syncing secrets: %s", err.Error())
 		return
 	}
 
-	policies, err = grpcClient.GetPolicies()
+	policies, err = client.GetPolicies()
 	if err != nil {
 		log.Errorf("Error during syncing policies: %s", err.Error())
 		return
