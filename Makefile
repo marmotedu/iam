@@ -24,7 +24,7 @@ include scripts/make-rules/common.mk
 include scripts/make-rules/golang.mk
 include scripts/make-rules/image.mk
 include scripts/make-rules/deploy.mk
-include scripts/make-rules/license.mk
+include scripts/make-rules/copyright.mk
 include scripts/make-rules/gen.mk
 include scripts/make-rules/ca.mk
 include scripts/make-rules/release.mk
@@ -110,26 +110,26 @@ test:
 release.build:
 	@$(MAKE) push.multiarch
 
-## release: Release iam 
+## release: Release iam
 .PHONY: release
 release:
 	@$(MAKE) release.run
 
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
-.PHONY: format 
+.PHONY: format
 format:
 	@find . ! -path "./vendor/*" -name "*.go" | xargs gofmt -s -w
 	@find . ! -path "./vendor/*" -name "*.go" | xargs goimports -w -local $(ROOT_PACKAGE)
 
-## boilerplate: Verify the boilerplate headers for all files.
-.PHONY: boilerplate 
-boilerplate:
-	@$(MAKE) license.verify
+## verify-copyright: Verify the boilerplate headers for all files.
+.PHONY: verify-copyright
+verify-copyright:
+	@$(MAKE) copyright.verify
 
-## license: Ensures source code files have copyright license headers.
-.PHONY: license 
-license:
-	@$(MAKE) license.add
+## copyright: Ensures source code files have copyright license headers.
+.PHONY: copyright
+copyright:
+	@$(MAKE) copyright.add
 
 ## gen: Generate all necessary files, such as error code files.
 .PHONY: gen
