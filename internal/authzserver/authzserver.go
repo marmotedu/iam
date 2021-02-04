@@ -54,7 +54,7 @@ func NewAuthzServerCommand() *cobra.Command {
 It is written inspired by AWS IAM policiis.
 
 Find more iam-authz-server information at:
-    https://github.com/marmotedu/iam/blob/master/docs/admin/iam-authz-server.md,
+    https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-authz-server.md,
 
 Find more ladon information at:
     https://github.com/ory/ladon`,

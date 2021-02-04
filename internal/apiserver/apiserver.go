@@ -23,14 +23,13 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	cachev1 "github.com/marmotedu/iam/internal/apiserver/api/v1/cache"
 	"github.com/marmotedu/iam/internal/apiserver/options"
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
+	"github.com/marmotedu/iam/pkg/log"
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -57,7 +56,7 @@ for the api objects which include users, policies, secrets, and
 others. The API Server services REST operations to do the api objects management.
 
 Find more iam-apiserver information at:
-    https://github.com/marmotedu/iam/blob/master/docs/admin/iam-apiserver.md`,
+    https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-apiserver.md`,
 
 		// stop printing usage when the command errors
 		SilenceUsage: true,
@@ -139,7 +138,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 		return err
 	}
 
-	server, err := createAPIServer(serverConfig)
+	server, err := serverConfig.Complete().New()
 	if err != nil {
 		return err
 	}
@@ -199,7 +198,6 @@ func (c completedConfig) New() (*APIServer, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	initRouter(genericServer.Engine)
 
 	grpcServer := c.ExtraConfig.New()
@@ -240,16 +238,6 @@ func (s *APIServer) Run(stopCh <-chan struct{}) error {
 
 	// run generic server
 	return s.GenericAPIServer.Run(stopCh)
-}
-
-// createAPIServer create apiserver according to apiserver config.
-func createAPIServer(apiServerConfig *apiServerConfig) (*APIServer, error) {
-	apiServer, err := apiServerConfig.Complete().New()
-	if err != nil {
-		return nil, err
-	}
-
-	return apiServer, nil
 }
 
 func buildGenericConfig(s *options.ServerRunOptions) (genericConfig *genericapiserver.Config, lastErr error) {
@@ -332,10 +320,6 @@ func (completedOptions completedServerRunOptions) Init() error {
 func (completedOptions completedServerRunOptions) InitDataStore() error {
 	completedOptions.InitRedisStore()
 
-	return completedOptions.InitMySQLStore()
-}
-
-func (completedOptions completedServerRunOptions) InitMySQLStore() error {
 	mysqlStore, err := mysql.GetMySQLFactoryOr(completedOptions.MySQLOptions)
 	if err != nil {
 		return err
@@ -347,9 +331,7 @@ func (completedOptions completedServerRunOptions) InitMySQLStore() error {
 			return err
 		}
 	*/
-
 	store.SetClient(mysqlStore)
-
 	return nil
 }
 

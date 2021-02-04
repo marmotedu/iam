@@ -48,7 +48,7 @@ func NewIAMCtlCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		iamctl controls the iam platform, is the client side tool for iam platform.
 
 		Find more information at:
-			https://github.com/marmotedu/iam/blob/master/docs/user-guide/iamctl/iamctl.md`),
+			https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iamctl/iamctl.md`),
 		Run: runHelp,
 		// Hook before and after Run initialize and write profiles to disk,
 		// respectively.
