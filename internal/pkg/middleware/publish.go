@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/component-base/pkg/json"
 
-	"github.com/marmotedu/iam/internal/authzserver/store"
+	"github.com/marmotedu/iam/internal/authzserver/store/load"
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -31,21 +31,21 @@ func Publish() gin.HandlerFunc {
 
 		switch resource {
 		case "policies":
-			notify(method, store.NoticePolicyChanged)
+			notify(method, load.NoticePolicyChanged)
 		case "secrets":
-			notify(method, store.NoticeSecretChanged)
+			notify(method, load.NoticeSecretChanged)
 		default:
 		}
 	}
 }
 
-func notify(method string, command store.NotificationCommand) {
+func notify(method string, command load.NotificationCommand) {
 	switch method {
 	case "POST", "PUT", "DELETE", "PATH":
 		redisStore := &storage.RedisCluster{}
-		message, _ := json.Marshal(store.Notification{Command: command})
+		message, _ := json.Marshal(load.Notification{Command: command})
 
-		if err := redisStore.Publish(store.RedisPubSubChannel, string(message)); err != nil {
+		if err := redisStore.Publish(load.RedisPubSubChannel, string(message)); err != nil {
 			fmt.Println(err)
 		}
 	default:

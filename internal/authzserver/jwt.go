@@ -21,5 +21,9 @@ func newAuthzServerJwt() middleware.CacheAuthInterface {
 }
 
 func (a *authzAuth) GetSecret(secretID string) (*pb.SecretInfo, error) {
-	return store.GetSecret(secretID)
+	cli, err := store.GetStoreInsOr(nil)
+	if err != nil {
+		return nil, err
+	}
+	return cli.GetSecret(secretID)
 }

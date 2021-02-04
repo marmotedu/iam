@@ -2,33 +2,33 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-package store
+package authorizer
 
 import (
-	"errors"
+	"encoding/json"
 	"fmt"
 	"strings"
-	"sync"
 	"time"
 
-	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/authorization"
 )
 
-// ErrPolicyNotFound defines policy not found error.
-var ErrPolicyNotFound = errors.New("policy not found")
+// PolicyGetter defines function to get policy for a given user.
+type PolicyGetter interface {
+	GetPolicy(key string) ([]*ladon.DefaultPolicy, error)
+}
 
 // Authorization implements authorization.AuthorizationInterface interface.
 type Authorization struct {
-	sync.RWMutex
+	getter PolicyGetter
 }
 
 // NewAuthorization create a new Authorization instance.
-func NewAuthorization() authorization.AuthorizationInterface {
-	return &Authorization{}
+func NewAuthorization(getter PolicyGetter) authorization.AuthorizationInterface {
+	return &Authorization{getter}
 }
 
 // Create create a policy.
@@ -63,12 +63,7 @@ func (auth *Authorization) Get(id string) (*ladon.DefaultPolicy, error) {
 
 // List returns all the policies under the username.
 func (auth *Authorization) List(username string) ([]*ladon.DefaultPolicy, error) {
-	pols, ok := policies[username]
-	if !ok {
-		return nil, ErrPolicyNotFound
-	}
-
-	return pols, nil
+	return auth.getter.GetPolicy(username)
 }
 
 // LogRejectedAccessRequest write rejected subject access to redis.
