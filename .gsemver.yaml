@@ -1,0 +1,15 @@
+majorPattern: "(?m)^BREAKING CHANGE:.*$"
+minorPattern: "^feat(?:\(.+\))?:.*"
+bumpStrategies:
+- branchesPattern: "^(master|release/.*)$"
+  strategy: "AUTO"
+  preRelease: false
+  preReleaseTemplate:
+  preReleaseOverwrite: false
+  buildMetadataTemplate:
+- branchesPattern: ".*"
+  strategy: "AUTO"
+  preRelease: false
+  preReleaseTemplate:
+  preReleaseOverwrite: false
+  buildMetadataTemplate: "{{Commits | len}}.{{(.Commits | first).Hash.Short}}"
