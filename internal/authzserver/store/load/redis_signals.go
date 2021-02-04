@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-package store
+package load
 
 import (
 	"crypto"
@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -77,7 +77,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 	switch notif.Command {
 	case NoticePolicyChanged, NoticeSecretChanged:
 		log.Info("Reloading secrets and policies")
-		reloadURLStructure(reloaded)
+		reloadQueue <- reloaded
 	default:
 		log.Warnf("Unknown notification command: %q", notif.Command)
 		return

@@ -39,7 +39,7 @@ func (ds *datastore) Policies() store.PolicyStore {
 }
 
 // NewFakeStore create fake store.
-func NewFakeStore() (store.Store, error) {
+func NewFakeStore() (store.Factory, error) {
 	// init some user records
 	users := make([]*v1.User, 0)
 	for i := 1; i <= ResourceCount; i++ {

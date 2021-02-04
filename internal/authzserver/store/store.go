@@ -4,171 +4,131 @@
 
 package store
 
+//go:generate mockgen -destination mock_store.go -package store github.com/marmotedu/iam/internal/authzserver/store StoreClient
+
 import (
-	"context"
 	"errors"
 	"sync"
-	"time"
 
+	"github.com/dgraph-io/ristretto"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/ory/ladon"
-
-	"github.com/marmotedu/iam/pkg/log"
 )
 
-// ErrSecretNotFound defines secret not found error.
-var ErrSecretNotFound = errors.New("secret not found")
-
-var secrets = make(map[string]*pb.SecretInfo)
-var policies = make(map[string][]*ladon.DefaultPolicy)
-
-var reloadMu sync.Mutex
-
-// CacheService defines a cache service which can load secrets and policies timing.
-type CacheService struct {
-	ctx      context.Context
-	addr     string
-	clientCA string
+// StoreClient defines functions used to get all secrets and policies.
+type StoreClient interface {
+	GetSecrets() (map[string]*pb.SecretInfo, error)
+	GetPolicies() (map[string][]*ladon.DefaultPolicy, error)
 }
 
-// GetSecret returns the secret information of the given secret.
-func GetSecret(secretID string) (*pb.SecretInfo, error) {
-	secret, ok := secrets[secretID]
+// Store is used to store secrets and policies.
+type Store struct {
+	lock     *sync.RWMutex
+	cli      StoreClient
+	secrets  *ristretto.Cache
+	policies *ristretto.Cache
+}
+
+var (
+	// ErrSecretNotFound defines secret not found error.
+	ErrSecretNotFound = errors.New("secret not found")
+	// ErrPolicyNotFound defines policy not found error.
+	ErrPolicyNotFound = errors.New("policy not found")
+)
+
+var onceStore sync.Once
+var storeIns *Store
+
+// GetStoreInsOr return store instance.
+func GetStoreInsOr(cli StoreClient) (*Store, error) {
+	var err error
+	if cli != nil {
+		var (
+			secretCache *ristretto.Cache
+			policyCache *ristretto.Cache
+		)
+
+		onceStore.Do(func() {
+			c := &ristretto.Config{
+				NumCounters: 100 * 10,
+				MaxCost:     100,
+				BufferItems: 64,
+				Cost:        nil,
+			}
+
+			secretCache, err = ristretto.NewCache(c)
+			if err != nil {
+				return
+			}
+			policyCache, err = ristretto.NewCache(c)
+			if err != nil {
+				return
+			}
+
+			storeIns = &Store{
+				cli:      cli,
+				lock:     new(sync.RWMutex),
+				secrets:  secretCache,
+				policies: policyCache,
+			}
+		})
+	}
+
+	return storeIns, err
+}
+
+// GetSecret return secret detail for the given key.
+func (s *Store) GetSecret(key string) (*pb.SecretInfo, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	value, ok := s.secrets.Get(key)
 	if !ok {
 		return nil, ErrSecretNotFound
 	}
 
-	return secret, nil
+	return value.(*pb.SecretInfo), nil
 }
 
-// New create a new cache service instance by the given configuration.
-func New(ctx context.Context, addr, clientCA string) *CacheService {
-	return &CacheService{
-		ctx:      ctx,
-		addr:     addr,
-		clientCA: clientCA,
-	}
-}
+// GetPolicy return user's ladon policies for the given user.
+func (s *Store) GetPolicy(key string) ([]*ladon.DefaultPolicy, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
 
-// Start start a cache service.
-func (s *CacheService) Start() {
-	grpcClient := GrpcClient{
-		Addr:     s.addr,
-		ClientCA: s.clientCA,
-	}
-	grpcClient.Connect()
-
-	go startPubSubLoop()
-	// 1s is the minimum amount of time between hot reloads. The
-	// interval counts from the start of one reload to the next.
-	go reloadLoop(s.ctx)
-	go reloadQueueLoop(s.ctx)
-	DoReload()
-}
-
-// shouldReload returns true if we should perform any reload. Reloads happens if
-// we have reload callback queued.
-func shouldReload() ([]func(), bool) {
-	requeueLock.Lock()
-	defer requeueLock.Unlock()
-	if len(requeue) == 0 {
-		return nil, false
-	}
-	n := requeue
-	requeue = []func(){}
-	return n, true
-}
-
-func reloadLoop(ctx context.Context, complete ...func()) {
-	ticker := time.NewTicker(1 * time.Second)
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		// We don't check for reload right away as the gateway peroms this on the
-		// startup sequence. We expect to start checking on the first tick after the
-		// gateway is up and running.
-		case <-ticker.C:
-			cb, ok := shouldReload()
-			if !ok {
-				continue
-			}
-			start := time.Now()
-			log.Info("reload: initiating")
-			DoReload()
-			log.Info("reload: complete")
-			for _, c := range cb {
-				// most of the callbacks are nil, we don't want to execute nil functions to
-				// avoid panics.
-				if c != nil {
-					c()
-				}
-			}
-			if len(complete) != 0 {
-				complete[0]()
-			}
-			log.Infof("reload: cycle completed in %v", time.Since(start))
-		}
-	}
-}
-
-// reloadQueue is used by reloadURLStructure to queue a reload. It's not
-// buffered, as reloadQueueLoop should pick these up immediately.
-var reloadQueue = make(chan func())
-
-var requeueLock sync.Mutex
-
-// This is a list of callbacks to execute on the next reload. It is protected by
-// requeueLock for concurrent use.
-var requeue []func()
-
-func reloadQueueLoop(ctx context.Context, cb ...func()) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case fn := <-reloadQueue:
-			requeueLock.Lock()
-			requeue = append(requeue, fn)
-			requeueLock.Unlock()
-			log.Info("Reload queued")
-			if len(cb) != 0 {
-				cb[0]()
-			}
-		}
-	}
-}
-
-// done will be called when the reload is finished. Note that if a
-// reload is already queued, another won't be queued, but done will
-// still be called when said queued reload is finished.
-func reloadURLStructure(done func()) {
-	reloadQueue <- done
-}
-
-// DoReload reload secrets and policies.
-func DoReload() {
-	reloadMu.Lock()
-	defer reloadMu.Unlock()
-
-	grpcClient := &GrpcClient{}
-	if !grpcClient.Connect() {
-		log.Error("Failed connecting to grpc server")
-		return
+	value, ok := s.policies.Get(key)
+	if !ok {
+		return nil, ErrPolicyNotFound
 	}
 
-	var err error
-	secrets, err = grpcClient.GetSecrets()
+	return value.([]*ladon.DefaultPolicy), nil
+}
+
+// Reload reload secrets and policies.
+func (s *Store) Reload() error {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	// reload secrets
+	secrets, err := s.cli.GetSecrets()
 	if err != nil {
-		log.Errorf("Error during syncing secrets: %s", err.Error())
-		return
+		return err
 	}
 
-	policies, err = grpcClient.GetPolicies()
+	s.secrets.Clear()
+	for key, val := range secrets {
+		s.secrets.Set(key, val, 1)
+	}
+
+	// reload policies
+	policies, err := s.cli.GetPolicies()
 	if err != nil {
-		log.Errorf("Error during syncing policies: %s", err.Error())
-		return
+		return err
 	}
 
-	log.Info("Secrets and policies reload complete")
+	s.policies.Clear()
+	for key, val := range policies {
+		s.policies.Set(key, val, 1)
+	}
+
+	return nil
 }

@@ -4,77 +4,62 @@
 
 package store
 
+//go:generate mockgen -destination mock_cacheclient.go -package store github.com/marmotedu/api/proto/apiserver/v1 CacheClient
+
 import (
 	"context"
+	"encoding/json"
 	"sync"
-	"sync/atomic"
 
 	"github.com/AlekSi/pointer"
-	jsoniter "github.com/json-iterator/go"
+	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/ory/ladon"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
-
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
-
-var (
-	rpcConnectMu      sync.Mutex
-	clientIsConnected bool
-	client            atomic.Value
-)
-
-// GrpcClient is a storage manager that uses the redis database.
-type GrpcClient struct {
-	Addr     string
-	ClientCA string
+// GRPCClient defines a grpc client used to get all secrets and policies.
+type GRPCClient struct {
+	cli pb.CacheClient
 }
 
-// Client returns grpc client.
-func (c *GrpcClient) Client() pb.CacheClient {
-	v := client.Load()
-	if v != nil {
-		return v.(pb.CacheClient)
+var _ StoreClient = &GRPCClient{}
+
+var once sync.Once
+var client *GRPCClient
+
+// GetGRPCClientOrDie return cache instance and panics on any error.
+func GetGRPCClientOrDie(address string, clientCA string) StoreClient {
+	if address != "" && clientCA != "" {
+		once.Do(func() {
+			var (
+				err   error
+				conn  *grpc.ClientConn
+				creds credentials.TransportCredentials
+			)
+
+			creds, err = credentials.NewClientTLSFromFile(clientCA, "")
+			if err != nil {
+				log.Panicf("credentials.NewClientTLSFromFile err: %v", err)
+			}
+
+			conn, err = grpc.Dial(address, grpc.WithBlock(), grpc.WithTransportCredentials(creds))
+			if err != nil {
+				log.Panicf("Connect to grpc server failed, error: %s", err.Error())
+			}
+
+			client = &GRPCClient{pb.NewCacheClient(conn)}
+			log.Infof("Connected to grpc server, address: %s", address)
+		})
 	}
 
-	return nil
-}
-
-// Connect will establish a connection to the RPC.
-func (c *GrpcClient) Connect() bool {
-	log.Debug("connecting to grpc server in block mode")
-	rpcConnectMu.Lock()
-	defer rpcConnectMu.Unlock()
-
-	if clientIsConnected {
-		return true
-	}
-
-	creds, err := credentials.NewClientTLSFromFile(c.ClientCA, "")
-	if err != nil {
-		log.Fatalf("credentials.NewClientTLSFromFile err: %v", err)
-	}
-
-	conn, err := grpc.Dial(c.Addr, grpc.WithBlock(), grpc.WithTransportCredentials(creds))
-	if err != nil {
-		log.Fatalf("Connect to grpc server failed, error: %s", err.Error())
-	}
-
-	log.Infof("Connected to grpc server, address: %s", c.Addr)
-
-	client.Store(pb.NewCacheClient(conn))
-
-	clientIsConnected = true
-
-	return true
+	return client
 }
 
 // GetSecrets returns all the authorization secrets.
-func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
+func (c *GRPCClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 	secrets := make(map[string]*pb.SecretInfo)
 
 	log.Info("Loading secrets")
@@ -84,7 +69,7 @@ func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := c.Client().ListSecrets(context.Background(), req)
+	resp, err := c.cli.ListSecrets(context.Background(), req)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +85,7 @@ func (c *GrpcClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 }
 
 // GetPolicies returns all the authorization policies.
-func (c *GrpcClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
+func (c *GRPCClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 	pols := make(map[string][]*ladon.DefaultPolicy)
 
 	log.Info("Loading policies")
@@ -110,7 +95,7 @@ func (c *GrpcClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := c.Client().ListPolicies(context.Background(), req)
+	resp, err := c.cli.ListPolicies(context.Background(), req)
 	if err != nil {
 		return nil, err
 	}

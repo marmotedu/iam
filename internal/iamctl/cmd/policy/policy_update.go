@@ -8,20 +8,17 @@ import (
 	"context"
 	"fmt"
 
-	jsoniter "github.com/json-iterator/go"
-	"github.com/ory/ladon"
-	"github.com/spf13/cobra"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
+	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
+	"github.com/ory/ladon"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
-
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 const (
 	updateUsageStr = "update POLICY_NAME POLICY"

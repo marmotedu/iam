@@ -13,6 +13,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/authzserver/authorization"
+	"github.com/marmotedu/iam/internal/authzserver/authorization/authorizer"
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
@@ -26,7 +27,8 @@ func Authorize(c *gin.Context) {
 		return
 	}
 
-	auth := authorization.NewAuthorizer(store.NewAuthorization())
+	getter, _ := store.GetStoreInsOr(nil)
+	auth := authorization.NewAuthorizer(authorizer.NewAuthorization(getter))
 	if r.Context == nil {
 		r.Context = ladon.Context{}
 	}

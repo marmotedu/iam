@@ -6,9 +6,9 @@ package etcd
 
 import (
 	"context"
-	"encoding/json"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
+	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 )
 

@@ -6,7 +6,9 @@ package etcd
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/coreos/etcd/clientv3"
@@ -63,52 +65,73 @@ func defaultOnKeepAliveFailed() {
 	log.Warn("etcdStore keepalive failed")
 }
 
-// NewEtcdStore create a etcd store with given options.
-func NewEtcdStore(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()) (store.Store, error) {
-	tlsConfig, err := opt.GetEtcdTLSConfig()
-	if err != nil {
-		return nil, err
+var etcdFactory store.Factory
+var once sync.Once
+
+// GetEtcdFactoryOr create a etcdFactory store with given options.
+func GetEtcdFactoryOr(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()) (store.Factory, error) {
+	if opt == nil && etcdFactory == nil {
+		return nil, fmt.Errorf("failed to get etcd store fatory")
 	}
 
-	if opt.UseTLS && tlsConfig == nil {
-		return nil, fmt.Errorf("enable etcdStore tls but tls config is empty")
-	}
-
-	etcdClient := &datastore{}
-	if onKeepaliveFailure == nil {
-		onKeepaliveFailure = defaultOnKeepAliveFailed
-	}
-	etcdClient.onKeepaliveFailure = onKeepaliveFailure
-
-	cli, err := clientv3.New(clientv3.Config{
-		Endpoints:   opt.Endpoints,
-		DialTimeout: time.Duration(opt.Timeout) * time.Second,
-		Username:    opt.Username,
-		Password:    opt.Password,
-		TLS:         tlsConfig,
-
-		DialOptions: []grpc.DialOption{
-			grpc.WithBlock(),
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	etcdClient.cli = cli
-	etcdClient.requestTimeout = time.Duration(opt.RequestTimeout) * time.Second
-	etcdClient.leaseTTLTimeout = opt.LeaseExpire
-	etcdClient.watchers = make(map[string]*EtcdWatcher)
-	etcdClient.namespace = opt.Namespace
-
-	if err := etcdClient.startSession(); err != nil {
-		if e := etcdClient.Close(); e != nil {
-			log.Errorf("etcdStore client close failed %s", e)
+	var err error
+	once.Do(func() {
+		var (
+			tlsConfig *tls.Config
+			cli       *clientv3.Client
+		)
+		tlsConfig, err = opt.GetEtcdTLSConfig()
+		if err != nil {
+			return
 		}
-		return nil, err
+
+		if opt.UseTLS && tlsConfig == nil {
+			err = fmt.Errorf("enable etcdFactory tls but tls config is empty")
+			return
+		}
+
+		ds := &datastore{}
+		if onKeepaliveFailure == nil {
+			onKeepaliveFailure = defaultOnKeepAliveFailed
+		}
+		ds.onKeepaliveFailure = onKeepaliveFailure
+
+		cli, err = clientv3.New(clientv3.Config{
+			Endpoints:   opt.Endpoints,
+			DialTimeout: time.Duration(opt.Timeout) * time.Second,
+			Username:    opt.Username,
+			Password:    opt.Password,
+			TLS:         tlsConfig,
+
+			DialOptions: []grpc.DialOption{
+				grpc.WithBlock(),
+			},
+		})
+		if err != nil {
+			return
+		}
+
+		ds.cli = cli
+		ds.requestTimeout = time.Duration(opt.RequestTimeout) * time.Second
+		ds.leaseTTLTimeout = opt.LeaseExpire
+		ds.watchers = make(map[string]*EtcdWatcher)
+		ds.namespace = opt.Namespace
+
+		err = ds.startSession()
+		if err != nil {
+			if e := ds.Close(); e != nil {
+				log.Errorf("etcdStore client close failed %s", e)
+			}
+			return
+		}
+		etcdFactory = ds
+	})
+
+	if etcdFactory == nil || err != nil {
+		return nil, fmt.Errorf("failed to get etcd store fatory, etcdFactory: %+v, error: %v", etcdFactory, err)
 	}
 
-	return etcdClient, nil
+	return etcdFactory, nil
 }
 
 func (ds *datastore) startSession() error {

@@ -5,9 +5,10 @@
 package jwt
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/marmotedu/component-base/pkg/json"
 )
 
 // ArgList defines a new pflag Value.

@@ -57,8 +57,6 @@ type AuthInterface interface {
 // CacheAuthInterface authentication interface for authzserver.
 type CacheAuthInterface interface {
 	GetSecret(secretID string) (*pb.SecretInfo, error)
-	// GetKeyExpires(secretID string) (int64, error)
-	// GetUsername(secretID string) (string, error)
 }
 
 // AuthMiddleware defines authentication middleware struct.

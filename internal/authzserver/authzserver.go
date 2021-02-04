@@ -24,6 +24,7 @@ import (
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/options"
 	"github.com/marmotedu/iam/internal/authzserver/store"
+	"github.com/marmotedu/iam/internal/authzserver/store/load"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/storage"
 )
@@ -309,7 +310,12 @@ func (completedOptions completedServerRunOptions) Init(stopCh <-chan struct{}) e
 	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
 
 	// start cacheService
-	store.New(ctx, completedOptions.RPCServer, completedOptions.ClientCA).Start()
+
+	storeIns, err := store.GetStoreInsOr(store.GetGRPCClientOrDie(completedOptions.RPCServer, completedOptions.ClientCA))
+	if err != nil {
+		return err
+	}
+	load.NewLoader(ctx, storeIns).Start()
 
 	// start analytics service
 	if completedOptions.AnalyticsOptions.Enable {
