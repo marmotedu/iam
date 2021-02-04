@@ -223,7 +223,7 @@ func (c *ExtraConfig) New() *grpcAPIServer {
 
 	cacheIns, err := cachev1.GetCacheInsOr(store.Client())
 	if err != nil {
-		log.Fatalf("Failed to get cache instance%s", err.Error())
+		log.Fatalf("Failed to get cache instance: %s", err.Error())
 	}
 
 	pb.RegisterCacheServer(grpcServer, cacheIns)

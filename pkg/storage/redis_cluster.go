@@ -115,11 +115,11 @@ func clusterConnectionIsOpen(cluster RedisCluster) bool {
 	c := singleton(cluster.IsCache)
 	testKey := "redis-test-" + uuid.NewV4().String()
 	if err := c.Set(testKey, "test", time.Second).Err(); err != nil {
-		log.Errorf("Error trying to set test key: %s", err.Error())
+		log.Warnf("Error trying to set test key: %s", err.Error())
 		return false
 	}
 	if _, err := c.Get(testKey).Result(); err != nil {
-		log.Errorf("Error trying to get test key: %s", err.Error())
+		log.Warnf("Error trying to get test key: %s", err.Error())
 		return false
 	}
 	return true
