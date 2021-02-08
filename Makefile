@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: gen boilerplate lint test build
+all: gen verify-copyright lint test build
 
 # ==============================================================================
 # Build options
@@ -126,9 +126,9 @@ format:
 verify-copyright:
 	@$(MAKE) copyright.verify
 
-## apply-copyright: Ensures source code files have copyright license headers.
+## add-copyright: Ensures source code files have copyright license headers.
 .PHONY: copyright
-apply-copyright:
+add-copyright:
 	@$(MAKE) copyright.add
 
 ## gen: Generate all necessary files, such as error code files.
