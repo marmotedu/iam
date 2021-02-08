@@ -28,7 +28,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	user, err := store.Client().Users().Get(c.Param("name"), metav1.GetOptions{})
+	user, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
@@ -44,7 +44,7 @@ func Update(c *gin.Context) {
 	}
 
 	// Save changed fields.
-	if err := store.Client().Users().Update(user, metav1.UpdateOptions{}); err != nil {
+	if err := store.Client().Users().Update(c, user, metav1.UpdateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

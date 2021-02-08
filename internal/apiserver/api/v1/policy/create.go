@@ -35,7 +35,7 @@ func Create(c *gin.Context) {
 
 	r.Username = c.GetString("username")
 
-	if err := store.Client().Policies().Create(&r, metav1.CreateOptions{}); err != nil {
+	if err := store.Client().Policies().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

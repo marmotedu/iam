@@ -24,20 +24,28 @@ Find more iam\-pump information at:
 
 .SH OPTIONS
 .PP
-\fB\-\-health\-check\-endpoint\-name\fP="healthz"
-	Specifies liveness health check endpoint name.
+\fB\-\-health\-check\-address\fP="0.0.0.0:7070"
+	Specifies liveness health check bind address.
 
 .PP
-\fB\-\-health\-check\-endpoint\-port\fP=7070
-	Specifies liveness health check endpoint port.
+\fB\-\-health\-check\-path\fP="healthz"
+	Specifies liveness health check request path.
 
 .PP
 \fB\-h\fP, \fB\-\-help\fP=false
 	help for iam\-pump
 
 .PP
-\fB\-\-log.enable\-caller\fP=false
-	Enable output of caller information in the log.
+\fB\-\-log.development\fP=false
+	Development puts the logger in development mode, which changes the behavior of DPanicLevel and takes stacktraces more liberally.
+
+.PP
+\fB\-\-log.disable\-caller\fP=false
+	Disable output of caller information in the log.
+
+.PP
+\fB\-\-log.disable\-stacktrace\fP=false
+	Disable the log to record a stack trace for all messages at or above panic level.
 
 .PP
 \fB\-\-log.enable\-color\fP=false
@@ -54,6 +62,10 @@ Find more iam\-pump information at:
 .PP
 \fB\-\-log.level\fP="info"
 	Minimum log output \fB\fCLEVEL\fR\&.
+
+.PP
+\fB\-\-log.name\fP=""
+	The name of the logger.
 
 .PP
 \fB\-\-log.output\-paths\fP=[stdout]

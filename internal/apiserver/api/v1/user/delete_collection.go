@@ -23,7 +23,7 @@ func DeleteCollection(c *gin.Context) {
 
 	usernames := c.QueryArray("name")
 
-	if err := store.Client().Users().DeleteCollection(usernames, metav1.DeleteOptions{}); err != nil {
+	if err := store.Client().Users().DeleteCollection(c, usernames, metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

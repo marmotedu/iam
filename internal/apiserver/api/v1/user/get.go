@@ -20,7 +20,7 @@ import (
 func Get(c *gin.Context) {
 	log.L(c).Info("get user function called.")
 
-	user, err := store.Client().Users().Get(c.Param("name"), metav1.GetOptions{})
+	user, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrUserNotFound, err.Error()), nil)
 		return

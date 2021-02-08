@@ -23,16 +23,16 @@ func (s *grpcAPIServer) Run(stopCh <-chan struct{}) {
 		log.Fatalf("failed to listen: %s", err.Error())
 	}
 
-	log.Infof("Start grpc server at %s", s.address)
-
 	go func() {
 		if err := s.Serve(listen); err != nil {
 			log.Fatalf("failed to start grpc server: %s", err.Error())
 		}
 	}()
 
+	log.Infof("start grpc server at %s", s.address)
+
 	<-stopCh
 
-	log.Infof("Grpc server on %s stopped", s.address)
 	s.GracefulStop()
+	log.Infof("grpc server on %s stopped", s.address)
 }

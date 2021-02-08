@@ -34,7 +34,7 @@ func Create(c *gin.Context) {
 	}
 
 	// Insert the user to the storage.
-	if err := store.Client().Users().Create(&r, metav1.CreateOptions{}); err != nil {
+	if err := store.Client().Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

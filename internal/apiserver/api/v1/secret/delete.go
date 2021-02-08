@@ -19,7 +19,7 @@ import (
 // Delete delete a secret by the secret identifier.
 func Delete(c *gin.Context) {
 	log.L(c).Info("delete secret function called.")
-	if err := store.Client().Secrets().Delete(c.GetString("username"), c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
+	if err := store.Client().Secrets().Delete(c, c.GetString("username"), c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

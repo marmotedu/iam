@@ -5,6 +5,7 @@
 package apiserver
 
 import (
+	"context"
 	"encoding/base64"
 	"net/http"
 	"strings"
@@ -132,7 +133,7 @@ func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 		password := login.Password
 
 		// Get the user information by the login username.
-		user, err := store.Client().Users().Get(username, metav1.GetOptions{})
+		user, err := store.Client().Users().Get(c, username, metav1.GetOptions{})
 		if err != nil {
 			log.Errorf("get user information failed: %s", err.Error())
 			return "", jwt.ErrFailedAuthentication
@@ -207,7 +208,7 @@ func (auth *jwtAuth) Unauthorized() func(c *gin.Context, code int, message strin
 
 func authenticateUser(username, password string) bool {
 	// fetch user from database
-	user, err := store.Client().Users().Get(username, metav1.GetOptions{})
+	user, err := store.Client().Users().Get(context.TODO(), username, metav1.GetOptions{})
 	if err != nil {
 		return false
 	}

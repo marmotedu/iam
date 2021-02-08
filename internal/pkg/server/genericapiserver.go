@@ -175,7 +175,6 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 	}
 
 	wg.Wait()
-	// log.Info("All servers stopped. Exiting.")
 
 	return nil
 }

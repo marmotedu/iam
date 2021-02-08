@@ -38,7 +38,7 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 
-	u, err := store.Client().Users().Get(c.Param("name"), metav1.GetOptions{})
+	u, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
@@ -52,7 +52,7 @@ func ChangePassword(c *gin.Context) {
 	u.Password = r.NewPassword
 
 	// Save changed fields.
-	if err := store.Client().Users().Update(u, metav1.UpdateOptions{}); err != nil {
+	if err := store.Client().Users().Update(c, u, metav1.UpdateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

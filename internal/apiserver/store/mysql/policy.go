@@ -5,6 +5,8 @@
 package mysql
 
 import (
+	"context"
+
 	"gorm.io/gorm"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -23,17 +25,17 @@ func newPolicies(ds *datastore) *policies {
 }
 
 // Create creates a new ladon policy.
-func (p *policies) Create(policy *v1.Policy, opts metav1.CreateOptions) error {
+func (p *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
 	return p.db.Create(&policy).Error
 }
 
 // Update updates policy by the policy identifier.
-func (p *policies) Update(policy *v1.Policy, opts metav1.UpdateOptions) error {
+func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
 	return p.db.Save(policy).Error
 }
 
 // Delete deletes the policy by the policy identifier.
-func (p *policies) Delete(username, name string, opts metav1.DeleteOptions) error {
+func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
@@ -41,17 +43,8 @@ func (p *policies) Delete(username, name string, opts metav1.DeleteOptions) erro
 	return p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
 }
 
-// DeleteCollection batch deletes policies by policies ids.
-func (p *policies) DeleteCollection(username string, names []string, opts metav1.DeleteOptions) error {
-	if opts.Unscoped {
-		p.db = p.db.Unscoped()
-	}
-
-	return p.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Policy{}).Error
-}
-
 // DeleteByUser deletes policies by username.
-func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
@@ -59,8 +52,17 @@ func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) erro
 	return p.db.Where("username = ?", username).Delete(&v1.Policy{}).Error
 }
 
+// DeleteCollection batch deletes policies by policies ids.
+func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
+	if opts.Unscoped {
+		p.db = p.db.Unscoped()
+	}
+
+	return p.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Policy{}).Error
+}
+
 // DeleteCollectionByUser batch deletes policies usernames.
-func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}
@@ -69,7 +71,7 @@ func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.Delete
 }
 
 // Get return policy by the policy identifier.
-func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
+func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
 	policy := &v1.Policy{}
 	d := p.db.Where("username = ? and name = ?", username, name).First(&policy)
 
@@ -77,7 +79,7 @@ func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Polic
 }
 
 // List return all policies.
-func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
+func (p *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
 	ret := &v1.PolicyList{}
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 

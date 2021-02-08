@@ -26,7 +26,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	policies, err := store.Client().Policies().List(c.GetString("username"), r)
+	policies, err := store.Client().Policies().List(c, c.GetString("username"), r)
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return

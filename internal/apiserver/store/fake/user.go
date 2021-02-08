@@ -5,6 +5,7 @@
 package fake
 
 import (
+	"context"
 	"strings"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -13,7 +14,6 @@ import (
 	"github.com/marmotedu/component-base/pkg/util/stringutil"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 	reflectutil "github.com/marmotedu/iam/internal/pkg/util/reflect"
@@ -28,7 +28,7 @@ func newUsers(ds *datastore) *users {
 }
 
 // Create creates a new user account.
-func (u *users) Create(user *v1.User, opts metav1.CreateOptions) error {
+func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
 	u.ds.Lock()
 	defer u.ds.Unlock()
 
@@ -47,7 +47,7 @@ func (u *users) Create(user *v1.User, opts metav1.CreateOptions) error {
 }
 
 // Update updates an user account information.
-func (u *users) Update(user *v1.User, opts metav1.UpdateOptions) error {
+func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
 	u.ds.Lock()
 	defer u.ds.Unlock()
 
@@ -63,12 +63,13 @@ func (u *users) Update(user *v1.User, opts metav1.UpdateOptions) error {
 }
 
 // Delete deletes the user by the user identifier.
-func (u *users) Delete(username string, opts metav1.DeleteOptions) error {
+func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
 	u.ds.Lock()
 	defer u.ds.Unlock()
 
 	// delete related policy first
-	if err := store.Client().Policies().DeleteByUser(username, opts); err != nil {
+	pol := newPolicies(u.ds)
+	if err := pol.DeleteByUser(username, opts); err != nil {
 		return err
 	}
 
@@ -86,12 +87,13 @@ func (u *users) Delete(username string, opts metav1.DeleteOptions) error {
 }
 
 // DeleteCollection batch deletes the users.
-func (u *users) DeleteCollection(usernames []string, opts metav1.DeleteOptions) error {
+func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	u.ds.Lock()
 	defer u.ds.Unlock()
 
 	// delete related policy first
-	if err := store.Client().Policies().DeleteCollectionByUser(usernames, opts); err != nil {
+	pol := newPolicies(u.ds)
+	if err := pol.DeleteCollectionByUser(usernames, opts); err != nil {
 		return err
 	}
 
@@ -109,7 +111,7 @@ func (u *users) DeleteCollection(usernames []string, opts metav1.DeleteOptions) 
 }
 
 // Get return an user by the user identifier.
-func (u *users) Get(username string, opts metav1.GetOptions) (*v1.User, error) {
+func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	u.ds.RLock()
 	defer u.ds.RUnlock()
 
@@ -123,7 +125,7 @@ func (u *users) Get(username string, opts metav1.GetOptions) (*v1.User, error) {
 }
 
 // List return all users.
-func (u *users) List(opts metav1.ListOptions) (*v1.UserList, error) {
+func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
 	u.ds.RLock()
 	defer u.ds.RUnlock()
 

@@ -21,7 +21,7 @@ import (
 func Delete(c *gin.Context) {
 	log.L(c).Info("delete user function called.")
 
-	if err := store.Client().Users().Delete(c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
+	if err := store.Client().Users().Delete(c, c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

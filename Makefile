@@ -118,17 +118,17 @@ release:
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
 format:
-	@find . ! -path "./vendor/*" -name "*.go" | xargs gofmt -s -w
-	@find . ! -path "./vendor/*" -name "*.go" | xargs goimports -w -local $(ROOT_PACKAGE)
+	@find . ! -path "./vendor/*" -name "*.go" | xargs --no-run-if-empty gofmt -s -w
+	@find . ! -path "./vendor/*" -name "*.go" | xargs --no-run-if-empty goimports -w -local $(ROOT_PACKAGE)
 
 ## verify-copyright: Verify the boilerplate headers for all files.
 .PHONY: verify-copyright
 verify-copyright:
 	@$(MAKE) copyright.verify
 
-## copyright: Ensures source code files have copyright license headers.
+## apply-copyright: Ensures source code files have copyright license headers.
 .PHONY: copyright
-copyright:
+apply-copyright:
 	@$(MAKE) copyright.add
 
 ## gen: Generate all necessary files, such as error code files.

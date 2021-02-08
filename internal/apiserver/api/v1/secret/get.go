@@ -21,6 +21,7 @@ func Get(c *gin.Context) {
 	log.L(c).Info("get secret function called.")
 
 	secret, err := store.Client().Secrets().Get(
+		c,
 		c.GetString("username"),
 		c.Param("name"),
 		metav1.GetOptions{},

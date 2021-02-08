@@ -5,6 +5,7 @@
 package fake
 
 import (
+	"context"
 	"strings"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -26,8 +27,8 @@ func newSecrets(ds *datastore) *secrets {
 	return &secrets{ds}
 }
 
-// Create creates a new secret account.
-func (s *secrets) Create(secret *v1.Secret, opts metav1.CreateOptions) error {
+// Create creates a new secret.
+func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
 	s.ds.Lock()
 	defer s.ds.Unlock()
 
@@ -46,7 +47,7 @@ func (s *secrets) Create(secret *v1.Secret, opts metav1.CreateOptions) error {
 }
 
 // Update updates an secret information by the secret identifier.
-func (s *secrets) Update(secret *v1.Secret, opts metav1.UpdateOptions) error {
+func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
 	s.ds.Lock()
 	defer s.ds.Unlock()
 
@@ -62,7 +63,7 @@ func (s *secrets) Update(secret *v1.Secret, opts metav1.UpdateOptions) error {
 }
 
 // Delete deletes the secret by the secret identifier.
-func (s *secrets) Delete(username, name string, opts metav1.DeleteOptions) error {
+func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	s.ds.Lock()
 	defer s.ds.Unlock()
 
@@ -80,7 +81,7 @@ func (s *secrets) Delete(username, name string, opts metav1.DeleteOptions) error
 }
 
 // DeleteCollection batch deletes the secrets.
-func (s *secrets) DeleteCollection(username string, names []string, opts metav1.DeleteOptions) error {
+func (s *secrets) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
 	s.ds.Lock()
 	defer s.ds.Unlock()
 
@@ -98,7 +99,7 @@ func (s *secrets) DeleteCollection(username string, names []string, opts metav1.
 }
 
 // Get return an secret by the secret identifier.
-func (s *secrets) Get(username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
+func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
 	s.ds.RLock()
 	defer s.ds.RUnlock()
 
@@ -112,7 +113,7 @@ func (s *secrets) Get(username, name string, opts metav1.GetOptions) (*v1.Secret
 }
 
 // List return all secrets.
-func (s *secrets) List(username string, opts metav1.ListOptions) (*v1.SecretList, error) {
+func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
 	s.ds.RLock()
 	defer s.ds.RUnlock()
 

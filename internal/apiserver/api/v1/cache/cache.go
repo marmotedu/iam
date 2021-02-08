@@ -50,7 +50,7 @@ func (c *Cache) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.
 		Limit:  r.Limit,
 	}
 
-	secrets, err := c.store.Secrets().List("", opts)
+	secrets, err := c.store.Secrets().List(ctx, "", opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
@@ -82,7 +82,7 @@ func (c *Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*p
 		Limit:  r.Limit,
 	}
 
-	policies, err := c.store.Policies().List("", opts)
+	policies, err := c.store.Policies().List(ctx, "", opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}

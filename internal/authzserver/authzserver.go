@@ -136,13 +136,12 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 	}
 
 	// create apiserver config from all options
-	apiServerConfig, err := CreateAuthzServerConfig(completedOptions.ServerRunOptions)
+	serverConfig, err := CreateAuthzServerConfig(completedOptions.ServerRunOptions)
 	if err != nil {
 		return err
 	}
 
-	// create apiserver according to apiserver config
-	server, err := CreateAuthzServer(apiServerConfig)
+	server, err := serverConfig.Complete().New()
 	if err != nil {
 		return err
 	}
@@ -209,16 +208,6 @@ func (c completedConfig) New() (*AuthzServer, error) {
 func (s *AuthzServer) Run(stopCh <-chan struct{}) error {
 	// run generic server
 	return s.GenericAPIServer.Run(stopCh)
-}
-
-// CreateAuthzServer create AuthzServer with authzServerConfig.
-func CreateAuthzServer(apiServerConfig *authzServerConfig) (*AuthzServer, error) {
-	apiServer, err := apiServerConfig.Complete().New()
-	if err != nil {
-		return nil, err
-	}
-
-	return apiServer, nil
 }
 
 func buildGenericConfig(s *options.ServerRunOptions) (genericConfig *genericapiserver.Config, lastErr error) {
@@ -309,12 +298,11 @@ func (completedOptions completedServerRunOptions) Init(stopCh <-chan struct{}) e
 	defer cancel()
 	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
 
-	// start cacheService
-
 	storeIns, err := store.GetStoreInsOr(store.GetGRPCClientOrDie(completedOptions.RPCServer, completedOptions.ClientCA))
 	if err != nil {
 		return err
 	}
+	// cron to reload all secrets and policies from iam-apiserver
 	load.NewLoader(ctx, storeIns).Start()
 
 	// start analytics service

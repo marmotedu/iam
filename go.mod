@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/AlekSi/pointer v1.1.0
+	github.com/DATA-DOG/go-sqlmock v1.3.3
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/arnaud-deprez/gsemver v0.5.1 // indirect
@@ -47,6 +48,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635
 	github.com/novalagung/gubrak v1.0.0
+	github.com/ofabry/go-callvis v0.6.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/olivere/elastic/v7 v7.0.22
 	github.com/ory/ladon v1.2.0

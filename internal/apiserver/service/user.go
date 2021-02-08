@@ -19,7 +19,7 @@ import (
 
 // ListUser returns user list in the storage. This function has a good performance.
 func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error) {
-	users, err := store.Client().Users().List(opts)
+	users, err := store.Client().Users().List(ctx, opts)
 	if err != nil {
 		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
@@ -38,7 +38,7 @@ func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, err
 		go func(u *v1.User) {
 			defer wg.Done()
 
-			policies, err := store.Client().Policies().List(u.Name, metav1.ListOptions{})
+			policies, err := store.Client().Policies().List(ctx, u.Name, metav1.ListOptions{})
 			if err != nil {
 				errChan <- errors.WithCode(code.ErrDatabase, err.Error())
 				return
@@ -85,14 +85,14 @@ func ListUser(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, err
 
 // ListUserBadPerformance returns user list in the storage. This function has a bad performance.
 func ListUserBadPerformance(opts metav1.ListOptions) (*v1.UserListV2, error) {
-	users, err := store.Client().Users().List(opts)
+	users, err := store.Client().Users().List(context.TODO(), opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	infos := make([]*v1.UserV2, 0)
 	for _, u := range users.Items {
-		policies, err := store.Client().Policies().List(u.Name, metav1.ListOptions{})
+		policies, err := store.Client().Policies().List(context.TODO(), u.Name, metav1.ListOptions{})
 		if err != nil {
 			return nil, errors.WithCode(code.ErrDatabase, err.Error())
 		}

@@ -30,7 +30,7 @@ func Update(c *gin.Context) {
 	username := c.GetString("username")
 	name := c.Param("name")
 
-	secret, err := store.Client().Secrets().Get(username, name, metav1.GetOptions{})
+	secret, err := store.Client().Secrets().Get(c, username, name, metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
@@ -45,7 +45,7 @@ func Update(c *gin.Context) {
 	}
 
 	// Save changed fields.
-	if err := store.Client().Secrets().Update(secret, metav1.UpdateOptions{}); err != nil {
+	if err := store.Client().Secrets().Update(c, secret, metav1.UpdateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}

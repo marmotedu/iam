@@ -5,6 +5,7 @@
 package fake
 
 import (
+	"context"
 	"strings"
 	"time"
 
@@ -28,7 +29,7 @@ func newPolicies(ds *datastore) *policies {
 }
 
 // Create creates a new ladon policy.
-func (p *policies) Create(policy *v1.Policy, opts metav1.CreateOptions) error {
+func (p *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -47,7 +48,7 @@ func (p *policies) Create(policy *v1.Policy, opts metav1.CreateOptions) error {
 }
 
 // Update updates policy by the policy identifier.
-func (p *policies) Update(policy *v1.Policy, opts metav1.UpdateOptions) error {
+func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -63,7 +64,7 @@ func (p *policies) Update(policy *v1.Policy, opts metav1.UpdateOptions) error {
 }
 
 // Delete deletes the policy by the policy identifier.
-func (p *policies) Delete(username, name string, opts metav1.DeleteOptions) error {
+func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -81,7 +82,7 @@ func (p *policies) Delete(username, name string, opts metav1.DeleteOptions) erro
 }
 
 // DeleteCollection batch deletes policies by policies ids.
-func (p *policies) DeleteCollection(username string, names []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -98,8 +99,7 @@ func (p *policies) DeleteCollection(username string, names []string, opts metav1
 	return nil
 }
 
-// DeleteByUser deletes policies by username.
-func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav1.DeleteOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -117,7 +117,7 @@ func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) erro
 }
 
 // DeleteCollectionByUser batch deletes policies usernames.
-func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 
@@ -135,7 +135,7 @@ func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.Delete
 }
 
 // Get return policy by the policy identifier.
-func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
+func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
 	p.ds.RLock()
 	defer p.ds.RUnlock()
 
@@ -149,7 +149,7 @@ func (p *policies) Get(username, name string, opts metav1.GetOptions) (*v1.Polic
 }
 
 // List return all policies.
-func (p *policies) List(username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
+func (p *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
 	p.ds.RLock()
 	defer p.ds.RUnlock()
 

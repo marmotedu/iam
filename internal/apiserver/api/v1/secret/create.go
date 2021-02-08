@@ -38,7 +38,7 @@ func Create(c *gin.Context) {
 
 	username := c.GetString("username")
 
-	sec, err := store.Client().Secrets().List(username, metav1.ListOptions{
+	sec, err := store.Client().Secrets().List(c, username, metav1.ListOptions{
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(-1),
 	})
@@ -56,7 +56,7 @@ func Create(c *gin.Context) {
 	// must reassign username
 	r.Username = username
 
-	if err := store.Client().Secrets().Create(&r, metav1.CreateOptions{}); err != nil {
+	if err := store.Client().Secrets().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}
