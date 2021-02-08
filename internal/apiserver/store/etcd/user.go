@@ -30,7 +30,7 @@ func (u *users) getKey(name string) string {
 
 // Create creates a new user account.
 func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(user.name), jsonutil.ToString(user)); err != nil {
+	if err := u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user)); err != nil {
 		return err
 	}
 
@@ -39,7 +39,7 @@ func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOpt
 
 // Update updates an user account information.
 func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(user.name), jsonutil.ToString(user)); err != nil {
+	if err := u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user)); err != nil {
 		return err
 	}
 
@@ -94,13 +94,15 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 	}
 
 	ret := &v1.UserList{
-		TotalCount: len(kvs),
+		ListMeta: metav1.ListMeta{
+			TotalCount: int64(len(kvs)),
+		},
 	}
 
-	for k, v := range kvs {
+	for _, v := range kvs {
 		var user v1.User
 		if err := json.Unmarshal(v.Value, &user); err != nil {
-			return err
+			return nil, err
 		}
 
 		ret.Items = append(ret.Items, &user)

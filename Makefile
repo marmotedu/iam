@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: gen verify-copyright lint test build
+all: gen verify-copyright format lint test build
 
 # ==============================================================================
 # Build options

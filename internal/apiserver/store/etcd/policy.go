@@ -24,13 +24,13 @@ func newPolicies(ds *datastore) *policies {
 
 var keyPolicy = "/policies/%v/%v"
 
-func (u *policies) getKey(username string, policyID string) string {
-	return fmt.Sprintf(keyPolicy, username, policyID)
+func (p *policies) getKey(username string, name string) string {
+	return fmt.Sprintf(keyPolicy, username, name)
 }
 
 // Create creates a new policy.
-func (u *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(policy.Username, policy.PolicyID), jsonutil.ToString(policy)); err != nil {
+func (p *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
+	if err := p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy)); err != nil {
 		return err
 	}
 
@@ -38,8 +38,8 @@ func (u *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.Cr
 }
 
 // Update updates an policy information.
-func (u *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(policy.Username, policy.PolicyID), jsonutil.ToString(policy)); err != nil {
+func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
+	if err := p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy)); err != nil {
 		return err
 	}
 
@@ -47,8 +47,8 @@ func (u *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.Up
 }
 
 // Delete deletes the policy by the policy identifier.
-func (u *policies) Delete(ctx context.Context, username, policyID string, opts metav1.DeleteOptions) error {
-	if _, err := u.ds.Delete(ctx, u.getKey(username, policyID)); err != nil {
+func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
+	if _, err := p.ds.Delete(ctx, p.getKey(username, name)); err != nil {
 		return err
 	}
 
@@ -56,8 +56,8 @@ func (u *policies) Delete(ctx context.Context, username, policyID string, opts m
 }
 
 // DeleteByUser deletes policies by username.
-func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) error {
-	if _, err := u.ds.Delete(ctx, u.getKey(username, "")); err != nil {
+func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav1.DeleteOptions) error {
+	if _, err := p.ds.Delete(ctx, p.getKey(username, "")); err != nil {
 		return err
 	}
 
@@ -65,18 +65,18 @@ func (p *policies) DeleteByUser(username string, opts metav1.DeleteOptions) erro
 }
 
 // DeleteCollection batch deletes the policies.
-func (u *policies) DeleteCollection(ctx context.Context, username string, policyIDs []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
 	return nil
 }
 
 // DeleteCollectionByUser batch deletes policies usernames.
-func (p *policies) DeleteCollectionByUser(usernames []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	return nil
 }
 
 // Get return an policy by the policy identifier.
-func (u *policies) Get(ctx context.Context, username, policyID string, opts metav1.GetOptions) (*v1.Policy, error) {
-	resp, err := u.ds.Get(ctx, u.getKey(username, policyID))
+func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
+	resp, err := p.ds.Get(ctx, p.getKey(username, name))
 	if err != nil {
 		return nil, err
 	}
@@ -89,20 +89,22 @@ func (u *policies) Get(ctx context.Context, username, policyID string, opts meta
 }
 
 // List return all policies.
-func (u *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
-	kvs, err := u.ds.List(ctx, u.getKey(username))
+func (p *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
+	kvs, err := p.ds.List(ctx, p.getKey(username, ""))
 	if err != nil {
 		return nil, err
 	}
 
 	ret := &v1.PolicyList{
-		TotalCount: len(kvs),
+		ListMeta: metav1.ListMeta{
+			TotalCount: int64(len(kvs)),
+		},
 	}
 
-	for k, v := range kvs {
+	for _, v := range kvs {
 		var policy v1.Policy
 		if err := json.Unmarshal(v.Value, &policy); err != nil {
-			return err
+			return nil, err
 		}
 
 		ret.Items = append(ret.Items, &policy)

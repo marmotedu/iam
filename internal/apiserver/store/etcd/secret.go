@@ -22,15 +22,16 @@ func newSecrets(ds *datastore) *secrets {
 	return &secrets{ds: ds}
 }
 
+//nolint: gosec
 var keySecret = "/secrets/%v/%v"
 
-func (u *secrets) getKey(username string, secretID string) string {
+func (s *secrets) getKey(username string, secretID string) string {
 	return fmt.Sprintf(keySecret, username, secretID)
 }
 
 // Create creates a new secret.
-func (u *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
+func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
+	if err := s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
 		return err
 	}
 
@@ -38,8 +39,8 @@ func (u *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.Cre
 }
 
 // Update updates an secret information.
-func (u *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
+func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
+	if err := s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
 		return err
 	}
 
@@ -47,8 +48,8 @@ func (u *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.Upd
 }
 
 // Delete deletes the secret by the secret identifier.
-func (u *secrets) Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error {
-	if _, err := u.ds.Delete(ctx, u.getKey(username, secretID)); err != nil {
+func (s *secrets) Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error {
+	if _, err := s.ds.Delete(ctx, s.getKey(username, secretID)); err != nil {
 		return err
 	}
 
@@ -56,13 +57,13 @@ func (u *secrets) Delete(ctx context.Context, username, secretID string, opts me
 }
 
 // DeleteCollection batch deletes the secrets.
-func (u *secrets) DeleteCollection(ctx context.Context, username string, secretIDs []string, opts metav1.DeleteOptions) error {
+func (s *secrets) DeleteCollection(ctx context.Context, username string, secretIDs []string, opts metav1.DeleteOptions) error {
 	return nil
 }
 
 // Get return an secret by the secret identifier.
-func (u *secrets) Get(ctx context.Context, username, secretID string, opts metav1.GetOptions) (*v1.Secret, error) {
-	resp, err := u.ds.Get(ctx, u.getKey(username, secretID))
+func (s *secrets) Get(ctx context.Context, username, secretID string, opts metav1.GetOptions) (*v1.Secret, error) {
+	resp, err := s.ds.Get(ctx, s.getKey(username, secretID))
 	if err != nil {
 		return nil, err
 	}
@@ -75,20 +76,22 @@ func (u *secrets) Get(ctx context.Context, username, secretID string, opts metav
 }
 
 // List return all secrets.
-func (u *secrets) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
-	kvs, err := u.ds.List(ctx, u.getKey(username))
+func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
+	kvs, err := s.ds.List(ctx, s.getKey(username, ""))
 	if err != nil {
 		return nil, err
 	}
 
 	ret := &v1.SecretList{
-		TotalCount: len(kvs),
+		ListMeta: metav1.ListMeta{
+			TotalCount: int64(len(kvs)),
+		},
 	}
 
-	for k, v := range kvs {
+	for _, v := range kvs {
 		var secret v1.Secret
 		if err := json.Unmarshal(v.Value, &secret); err != nil {
-			return err
+			return nil, err
 		}
 
 		ret.Items = append(ret.Items, &secret)

@@ -69,7 +69,7 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 
 	// delete related policy first
 	pol := newPolicies(u.ds)
-	if err := pol.DeleteByUser(username, opts); err != nil {
+	if err := pol.DeleteByUser(ctx, username, opts); err != nil {
 		return err
 	}
 
@@ -93,7 +93,7 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 
 	// delete related policy first
 	pol := newPolicies(u.ds)
-	if err := pol.DeleteCollectionByUser(usernames, opts); err != nil {
+	if err := pol.DeleteCollectionByUser(ctx, usernames, opts); err != nil {
 		return err
 	}
 
