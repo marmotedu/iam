@@ -5,13 +5,13 @@
 package middleware
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/component-base/pkg/json"
 
 	"github.com/marmotedu/iam/internal/authzserver/store/load"
+	"github.com/marmotedu/iam/pkg/log"
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -46,8 +46,9 @@ func notify(method string, command load.NotificationCommand) {
 		message, _ := json.Marshal(load.Notification{Command: command})
 
 		if err := redisStore.Publish(load.RedisPubSubChannel, string(message)); err != nil {
-			fmt.Println(err)
+			log.Errorw("publish redis message failed", "error", err.Error())
 		}
+		log.Debugw("publish redis message", "method", method, "command", command)
 	default:
 	}
 }

@@ -73,6 +73,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 		log.Errorf("Unmarshalling message body failed, malformed: ", err)
 		return
 	}
+	log.Infow("receive redis message", "command", notif.Command, "payload", message.Payload)
 
 	switch notif.Command {
 	case NoticePolicyChanged, NoticeSecretChanged:
