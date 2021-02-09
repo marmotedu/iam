@@ -254,7 +254,7 @@ linters-settings:
     for-loops: false # Report preallocation suggestions on for loops, false by default
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
-    allow-unused: false
+    allow-unused: true
     # Disable to ensure that nolint directives don't have a leading space. Default is true.
     allow-leading-space: true
     # Exclude following linters from requiring an explanation.  Default is [].
