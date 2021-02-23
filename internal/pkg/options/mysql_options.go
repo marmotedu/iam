@@ -5,14 +5,11 @@
 package options
 
 import (
-	"fmt"
 	"time"
 
+	"github.com/marmotedu/iam/pkg/db"
 	"github.com/spf13/pflag"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-
-	"github.com/marmotedu/iam/internal/pkg/logger"
 )
 
 // MySQLOptions defines options for mysql database.
@@ -77,38 +74,16 @@ func (o *MySQLOptions) AddFlags(fs *pflag.FlagSet) {
 
 // NewClient create mysql store with the given config.
 func (o *MySQLOptions) NewClient() (*gorm.DB, error) {
-	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
-		o.Username,
-		o.Password,
-		o.Host,
-		o.Database,
-		true,
-		"Local")
-
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
-		Logger: logger.New(o.LogLevel),
-	})
-	if err != nil {
-		return nil, err
+	opts := &db.Options{
+		Host:                  o.Host,
+		Username:              o.Username,
+		Password:              o.Password,
+		Database:              o.Database,
+		MaxIdleConnections:    o.MaxIdleConnections,
+		MaxOpenConnections:    o.MaxOpenConnections,
+		MaxConnectionLifeTime: o.MaxConnectionLifeTime,
+		LogLevel:              o.LogLevel,
 	}
 
-	if err := setupDatabase(db, o); err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
-// setupDatabase initialize the database tables.
-func setupDatabase(db *gorm.DB, o *MySQLOptions) error {
-	// db.LogMode(o.LogMode)
-	sqlDB, err := db.DB()
-	if err != nil {
-		return err
-	}
-
-	sqlDB.SetMaxOpenConns(o.MaxOpenConnections)
-	sqlDB.SetConnMaxLifetime(o.MaxConnectionLifeTime)
-	sqlDB.SetMaxIdleConns(o.MaxIdleConnections)
-	return nil
+	return db.New(opts)
 }

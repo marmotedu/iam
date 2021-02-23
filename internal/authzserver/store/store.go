@@ -50,9 +50,9 @@ func GetStoreInsOr(cli StoreClient) (*Store, error) {
 
 		onceStore.Do(func() {
 			c := &ristretto.Config{
-				NumCounters: 100 * 10,
-				MaxCost:     100,
-				BufferItems: 64,
+				NumCounters: 1e7,     // number of keys to track frequency of (10M).
+				MaxCost:     1 << 30, // maximum cost of cache (1GB).
+				BufferItems: 64,      // number of keys per Get buffer.
 				Cost:        nil,
 			}
 
