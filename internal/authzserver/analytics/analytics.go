@@ -84,7 +84,7 @@ func Analytics() *RedisAnalyticsHandler {
 }
 
 // Start start the analytics service.
-func (r *RedisAnalyticsHandler) Start(stopCh <-chan struct{}) {
+func (r *RedisAnalyticsHandler) Start() {
 	analytics = r
 	r.Store.Connect()
 
@@ -96,13 +96,11 @@ func (r *RedisAnalyticsHandler) Start(stopCh <-chan struct{}) {
 	}
 
 	// stop analytics workers
-	go r.Stop(stopCh)
+	go r.Stop()
 }
 
 // Stop stop the analytics service.
-func (r *RedisAnalyticsHandler) Stop(stopCh <-chan struct{}) {
-	<-stopCh
-
+func (r *RedisAnalyticsHandler) Stop() {
 	// flag to stop sending records into channel
 	atomic.SwapUint32(&r.shouldStop, 1)
 

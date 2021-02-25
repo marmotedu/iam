@@ -38,6 +38,10 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
+func (ds *datastore) Close() error {
+	return nil
+}
+
 // NewFakeStore create fake store.
 func NewFakeStore() (store.Factory, error) {
 	// init some user records

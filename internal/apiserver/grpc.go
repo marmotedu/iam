@@ -17,7 +17,7 @@ type grpcAPIServer struct {
 	address string
 }
 
-func (s *grpcAPIServer) Run(stopCh <-chan struct{}) {
+func (s *grpcAPIServer) Run() {
 	listen, err := net.Listen("tcp", s.address)
 	if err != nil {
 		log.Fatalf("failed to listen: %s", err.Error())
@@ -30,9 +30,9 @@ func (s *grpcAPIServer) Run(stopCh <-chan struct{}) {
 	}()
 
 	log.Infof("start grpc server at %s", s.address)
+}
 
-	<-stopCh
-
+func (s *grpcAPIServer) Close() {
 	s.GracefulStop()
-	log.Infof("grpc server on %s stopped", s.address)
+	log.Infof("GRPC server on %s stopped", s.address)
 }

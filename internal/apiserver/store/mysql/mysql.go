@@ -18,7 +18,7 @@ import (
 )
 
 type datastore struct {
-	*gorm.DB
+	db *gorm.DB
 
 	// can include two database instance if needed
 	// docker *grom.DB
@@ -35,6 +35,15 @@ func (ds *datastore) Secrets() store.SecretStore {
 
 func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
+}
+
+func (ds *datastore) Close() error {
+	db, err := ds.db.DB()
+	if err != nil {
+		return err
+	}
+
+	return db.Close()
 }
 
 var mysqlFactory store.Factory
@@ -113,7 +122,7 @@ func migrateDatabase(db *gorm.DB) error {
 
 // resetDatabase resets the database tables.
 // nolint:unused,deadcode // may be reused in the feature, or just show a migrate usage.
-func resetDatabase(db *gorm.DB, opt *genericoptions.MySQLOptions) error {
+func resetDatabase(db *gorm.DB) error {
 	if err := cleanDatabase(db); err != nil {
 		return err
 	}

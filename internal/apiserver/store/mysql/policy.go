@@ -21,7 +21,7 @@ type policies struct {
 }
 
 func newPolicies(ds *datastore) *policies {
-	return &policies{ds.DB}
+	return &policies{ds.db}
 }
 
 // Create creates a new ladon policy.

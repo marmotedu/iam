@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"strings"
-	"sync"
 	"time"
 
 	// limits "github.com/gin-contrib/size".
@@ -38,7 +38,6 @@ type GenericAPIServer struct {
 	// InsecureServingInfo holds configuration of the insecure HTTP server.
 	InsecureServingInfo *InsecureServingInfo
 
-	maxPingCount int
 	// ShutdownTimeout is the timeout used for server shutdown. This specifies the timeout before server
 	// gracefully shutdown returns.
 	ShutdownTimeout time.Duration
@@ -48,6 +47,8 @@ type GenericAPIServer struct {
 	enableMetrics   bool
 	enableProfiling bool
 	// wrapper for gin.Engine
+
+	insecureServer, secureServer *http.Server
 }
 
 // InstallAPIs install generic apis.
@@ -106,29 +107,28 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 	// s.GET("/debug/vars", expvar.Handler())
 }
 
-// Run spawns the http server. It only returns if stopCh is closed
-// or the port cannot be listened on initially.
-func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
-	insecureServer := &http.Server{
+// Run spawns the http server. It only returns when the port cannot be listened on initially.
+func (s *GenericAPIServer) Run() error {
+	s.insecureServer = &http.Server{
 		Addr:    s.InsecureServingInfo.Address,
 		Handler: s,
 	}
 
-	secureServer := &http.Server{
+	s.secureServer = &http.Server{
 		Addr:    s.SecureServingInfo.Address(),
 		Handler: s,
 	}
 
 	wg := sync.WaitGroup{}
 
-	wg.Add(2)
+	wg.Add(3)
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	go func() {
 		defer wg.Done()
 		log.Infof("Start to listening the incoming requests on http address: %s", s.InsecureServingInfo.Address)
 
-		if err := insecureServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := s.insecureServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err.Error())
 		}
 
@@ -145,7 +145,7 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 
 		log.Infof("Start to listening the incoming requests on https address: %s", s.SecureServingInfo.Address())
 
-		if err := secureServer.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
+		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err.Error())
 		}
 
@@ -153,25 +153,12 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 	}()
 
 	// Ping the server to make sure the router is working.
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	if s.healthz {
-		if err := s.pingGenericAPIServer(stopCh); err != nil {
+		if err := s.ping(ctx); err != nil {
 			return err
 		}
-	}
-
-	<-stopCh
-
-	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	if err := secureServer.Shutdown(ctx); err != nil {
-		log.Warnf("Shutdown secure server failed: %s", err.Error())
-	}
-
-	if err := insecureServer.Shutdown(ctx); err != nil {
-		log.Warnf("Shutdown insecure server failed: %s", err.Error())
 	}
 
 	wg.Wait()
@@ -179,14 +166,30 @@ func (s *GenericAPIServer) Run(stopCh <-chan struct{}) error {
 	return nil
 }
 
-// pingGenericAPIServer pings the http server to make sure the router is working.
-func (s *GenericAPIServer) pingGenericAPIServer(stopCh <-chan struct{}) error {
+// Close graceful shutdown the api server.
+func (s *GenericAPIServer) Close() {
+	// The context is used to inform the server it has 10 seconds to finish
+	// the request it is currently handling
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := s.secureServer.Shutdown(ctx); err != nil {
+		log.Warnf("Shutdown secure server failed: %s", err.Error())
+	}
+
+	if err := s.insecureServer.Shutdown(ctx); err != nil {
+		log.Warnf("Shutdown insecure server failed: %s", err.Error())
+	}
+}
+
+// ping pings the http server to make sure the router is working.
+func (s *GenericAPIServer) ping(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s/healthz", s.InsecureServingInfo.Address)
 	if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
 		url = fmt.Sprintf("http://127.0.0.1:%s/healthz", strings.Split(s.InsecureServingInfo.Address, ":")[1])
 	}
 
-	for i := 0; i < s.maxPingCount; i++ {
+	for {
 		// Ping the server by sending a GET request to `/healthz`.
 		// nolint: gosec
 		resp, err := http.Get(url)
@@ -203,12 +206,10 @@ func (s *GenericAPIServer) pingGenericAPIServer(stopCh <-chan struct{}) error {
 		time.Sleep(time.Second)
 
 		select {
-		case <-stopCh:
-			log.Warn("Ping server stoped.")
-			return nil
+		case <-ctx.Done():
+			log.Fatal("can not ping http server within the specified time interval.")
 		default:
 		}
 	}
-
-	return fmt.Errorf("the router has no response, or it might took too long to start up")
+	// return fmt.Errorf("the router has no response, or it might took too long to start up")
 }

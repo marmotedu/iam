@@ -20,6 +20,8 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/iam/pkg/shutdown"
+	"github.com/marmotedu/iam/pkg/shutdown/shutdownmanagers/posixsignal"
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/options"
@@ -87,7 +89,7 @@ Find more ladon information at:
 			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
-			return Run(completedOptions, genericapiserver.SetupSignalHandler())
+			return completedOptions.Run()
 		},
 		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
 			return nil
@@ -126,15 +128,16 @@ Find more ladon information at:
 }
 
 // Run runs the specified AuthzServer. This should never exit.
-func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) error {
+func (completedOptions *completedServerRunOptions) Run() error {
 	// To help debugging, immediately log config and version
 	log.Debugf("config: `%s`", completedOptions.String())
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	// initialize graceful shutdown
+	gs := shutdown.New()
+	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
 
-	if err := completedOptions.Init(ctx, stopCh); err != nil {
+	if err := completedOptions.Init(gs); err != nil {
 		return err
 	}
 
@@ -149,7 +152,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 		return err
 	}
 
-	return server.Run(stopCh)
+	return server.Run(gs)
 }
 
 // ExtraConfig defines extra configuration for the master.
@@ -208,9 +211,18 @@ func (c completedConfig) New() (*AuthzServer, error) {
 }
 
 // Run start to run AuthzServer.
-func (s *AuthzServer) Run(stopCh <-chan struct{}) error {
-	// run generic server
-	return s.GenericAPIServer.Run(stopCh)
+func (s *AuthzServer) Run(gs *shutdown.GracefulShutdown) error {
+	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		s.GenericAPIServer.Close()
+		return nil
+	}))
+
+	// start shutdown managers
+	if err := gs.Start(); err != nil {
+		log.Fatalf("start shutdown manager failed: %s", err.Error())
+	}
+
+	return s.GenericAPIServer.Run()
 }
 
 func buildGenericConfig(s *options.ServerRunOptions) (genericConfig *genericapiserver.Config, lastErr error) {
@@ -295,7 +307,10 @@ func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	return options, nil
 }
 
-func (completedOptions completedServerRunOptions) Init(ctx context.Context, stopCh <-chan struct{}) error {
+//nolint: govet
+func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShutdown) error {
+	ctx, cancel := context.WithCancel(context.Background())
+
 	// keep redis connected
 	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
 
@@ -309,8 +324,18 @@ func (completedOptions completedServerRunOptions) Init(ctx context.Context, stop
 	// start analytics service
 	if completedOptions.AnalyticsOptions.Enable {
 		analyticsStore := storage.RedisCluster{KeyPrefix: RedisKeyPrefix}
-		analytics.NewAnalytics(completedOptions.AnalyticsOptions, &analyticsStore).Start(stopCh)
+		analyticsIns := analytics.NewAnalytics(completedOptions.AnalyticsOptions, &analyticsStore)
+		analyticsIns.Start()
+		gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+			analyticsIns.Stop()
+			return nil
+		}))
 	}
+
+	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		cancel()
+		return nil
+	}))
 
 	return nil
 }

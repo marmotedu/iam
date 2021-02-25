@@ -20,7 +20,7 @@ type users struct {
 }
 
 func newUsers(ds *datastore) *users {
-	return &users{db: ds.DB}
+	return &users{db: ds.db}
 }
 
 // Create creates a new user account.

@@ -86,7 +86,7 @@ Find more iam-pump information at:
 			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
-			return Run(completedOptions, genericapiserver.SetupSignalHandler())
+			return completedOptions.Run(genericapiserver.SetupSignalHandler())
 		},
 		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
 			return nil
@@ -125,7 +125,7 @@ Find more iam-pump information at:
 }
 
 // Run runs the specified pump server. This should never exit.
-func Run(completedOptions completedPumpOptions, stopCh <-chan struct{}) error {
+func (completedOptions *completedPumpOptions) Run(stopCh <-chan struct{}) error {
 	// To help debugging, immediately log config and version
 	log.Infof("config: `%s`", completedOptions.String())
 	log.Infof("version: %+v", version.Get().ToJSON())

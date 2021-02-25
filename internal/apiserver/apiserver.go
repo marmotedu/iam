@@ -30,6 +30,8 @@ import (
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/iam/pkg/shutdown"
+	"github.com/marmotedu/iam/pkg/shutdown/shutdownmanagers/posixsignal"
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -85,7 +87,7 @@ Find more iam-apiserver information at:
 			log.InitWithOptions(completedOptions.Log)
 			defer log.Flush()
 
-			return Run(completedOptions, genericapiserver.SetupSignalHandler())
+			return completedOptions.Run()
 		},
 		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
 			return nil
@@ -124,12 +126,16 @@ Find more iam-apiserver information at:
 }
 
 // Run runs the specified APIServer. This should never exit.
-func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) error {
+func (completedOptions *completedServerRunOptions) Run() error {
 	// To help debugging, immediately log config and version
 	log.Debugf("config: `%s`", completedOptions.String())
 	log.Debugf("version: %+v", version.Get().ToJSON())
 
-	if err := completedOptions.Init(); err != nil {
+	// initialize graceful shutdown
+	gs := shutdown.New()
+	gs.AddShutdownManager(posixsignal.NewPosixSignalManager())
+
+	if err := completedOptions.Init(gs); err != nil {
 		return err
 	}
 
@@ -143,7 +149,7 @@ func Run(completedOptions completedServerRunOptions, stopCh <-chan struct{}) err
 		return err
 	}
 
-	return server.Run(stopCh)
+	return server.Run(gs)
 }
 
 // ExtraConfig defines extra configuration for the iam-apiserver.
@@ -232,12 +238,23 @@ func (c *ExtraConfig) New() *grpcAPIServer {
 }
 
 // Run start the APIServer.
-func (s *APIServer) Run(stopCh <-chan struct{}) error {
+func (s *APIServer) Run(gs *shutdown.GracefulShutdown) error {
 	// run grpc server
-	go s.GRPCAPIServer.Run(stopCh)
+	go s.GRPCAPIServer.Run()
 
-	// run generic server
-	return s.GenericAPIServer.Run(stopCh)
+	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		s.GRPCAPIServer.Close()
+		s.GenericAPIServer.Close()
+
+		return nil
+	}))
+
+	// start shutdown managers
+	if err := gs.Start(); err != nil {
+		log.Fatalf("start shutdown manager failed: %s", err.Error())
+	}
+
+	return s.GenericAPIServer.Run()
 }
 
 func buildGenericConfig(s *options.ServerRunOptions) (genericConfig *genericapiserver.Config, lastErr error) {
@@ -309,10 +326,19 @@ func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	return options, nil
 }
 
-func (completedOptions completedServerRunOptions) Init() error {
+func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShutdown) error {
 	if err := completedOptions.InitDataStore(); err != nil {
 		log.Warnf("init datastore: %s", err)
 	}
+
+	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
+		if mysqlStore != nil {
+			return mysqlStore.Close()
+		}
+
+		return nil
+	}))
 
 	return nil
 }

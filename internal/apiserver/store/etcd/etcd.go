@@ -61,6 +61,15 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
+// Close clsoe the etcdStore clinet.
+func (ds *datastore) Close() error {
+	if ds.cli != nil {
+		return ds.cli.Close()
+	}
+
+	return nil
+}
+
 func defaultOnKeepAliveFailed() {
 	log.Warn("etcdStore keepalive failed")
 }
@@ -161,19 +170,6 @@ func (ds *datastore) startSession() error {
 			}
 		}
 	}()
-
-	return nil
-}
-
-// Close clsoe the etcdStore clinet.
-func (ds *datastore) Close() error {
-	if ds.cli != nil {
-		err := ds.cli.Close()
-		if err != nil {
-			return err
-		}
-		ds.cli = nil
-	}
 
 	return nil
 }

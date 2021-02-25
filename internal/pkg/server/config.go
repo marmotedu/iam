@@ -37,7 +37,6 @@ type Config struct {
 	Healthz         bool
 	EnableProfiling bool
 	EnableMetrics   bool
-	MaxPingCount    int
 }
 
 // CertKey contains configuration items related to certificate.
@@ -85,7 +84,6 @@ func NewConfig() *Config {
 		Middlewares:     []string{},
 		EnableProfiling: true,
 		EnableMetrics:   true,
-		MaxPingCount:    3,
 		Jwt: &JwtInfo{
 			Realm:      "iam jwt",
 			Timeout:    1 * time.Hour,
@@ -102,10 +100,6 @@ type CompletedConfig struct {
 // Complete fills in any fields not set that are required to have valid data and can be derived
 // from other fields. If you're going to `ApplyOptions`, do that first. It's mutating the receiver.
 func (c *Config) Complete() CompletedConfig {
-	if c.MaxPingCount == 0 {
-		c.MaxPingCount = 3
-	}
-
 	return CompletedConfig{c}
 }
 
@@ -118,7 +112,6 @@ func (c CompletedConfig) New() (*GenericAPIServer, error) {
 		healthz:             c.Healthz,
 		enableMetrics:       c.EnableMetrics,
 		enableProfiling:     c.EnableProfiling,
-		maxPingCount:        c.MaxPingCount,
 		middlewares:         c.Middlewares,
 		Engine:              gin.New(),
 	}

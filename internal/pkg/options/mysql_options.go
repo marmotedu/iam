@@ -7,9 +7,10 @@ package options
 import (
 	"time"
 
-	"github.com/marmotedu/iam/pkg/db"
 	"github.com/spf13/pflag"
 	"gorm.io/gorm"
+
+	"github.com/marmotedu/iam/pkg/db"
 )
 
 // MySQLOptions defines options for mysql database.

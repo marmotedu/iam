@@ -5,8 +5,6 @@
 package options
 
 import (
-	"fmt"
-
 	"github.com/spf13/pflag"
 
 	"github.com/marmotedu/iam/internal/pkg/server"
@@ -14,10 +12,9 @@ import (
 
 // ServerRunOptions contains the options while running a generic api server.
 type ServerRunOptions struct {
-	Mode         string   `json:"mode" mapstructure:"mode"`
-	Healthz      bool     `json:"healthz" mapstructure:"healthz"`
-	Middlewares  []string `json:"middlewares" mapstructure:"middlewares"`
-	MaxPingCount int      `json:"max-ping-count" mapstructure:"max-ping-count"`
+	Mode        string   `json:"mode" mapstructure:"mode"`
+	Healthz     bool     `json:"healthz" mapstructure:"healthz"`
+	Middlewares []string `json:"middlewares" mapstructure:"middlewares"`
 }
 
 // NewServerRunOptions creates a new ServerRunOptions object with default parameters.
@@ -25,10 +22,9 @@ func NewServerRunOptions() *ServerRunOptions {
 	defaults := server.NewConfig()
 
 	return &ServerRunOptions{
-		Mode:         defaults.Mode,
-		Healthz:      defaults.Healthz,
-		Middlewares:  defaults.Middlewares,
-		MaxPingCount: defaults.MaxPingCount,
+		Mode:        defaults.Mode,
+		Healthz:     defaults.Healthz,
+		Middlewares: defaults.Middlewares,
 	}
 }
 
@@ -37,7 +33,6 @@ func (s *ServerRunOptions) ApplyTo(c *server.Config) error {
 	c.Mode = s.Mode
 	c.Healthz = s.Healthz
 	c.Middlewares = s.Middlewares
-	c.MaxPingCount = s.MaxPingCount
 
 	return nil
 }
@@ -45,14 +40,6 @@ func (s *ServerRunOptions) ApplyTo(c *server.Config) error {
 // Validate checks validation of ServerRunOptions.
 func (s *ServerRunOptions) Validate() []error {
 	errors := []error{}
-
-	if s.MaxPingCount < 0 {
-		errors = append(errors, fmt.Errorf("--server.max-ping-count can not be negative value"))
-	}
-
-	if s.Healthz && s.MaxPingCount < 1 {
-		errors = append(errors, fmt.Errorf("--server.max-ping-count must larger than 1 when healthz is enabled"))
-	}
 
 	return errors
 }
@@ -69,7 +56,4 @@ func (s *ServerRunOptions) AddFlags(fs *pflag.FlagSet) {
 
 	fs.StringSliceVar(&s.Middlewares, "server.middlewares", s.Middlewares, ""+
 		"List of allowed middlewares for server, comma separated. If this list is empty default middlewares will be used.")
-
-	fs.IntVar(&s.MaxPingCount, "server.max-ping-count", s.MaxPingCount, ""+
-		"The max number of ping attempts when server failed to startup.")
 }

@@ -41,7 +41,6 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/novalagung/gubrak v1.0.0
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/olivere/elastic/v7 v7.0.22
@@ -62,16 +61,17 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
 	github.com/tpkeeper/gin-dump v1.0.0
+	github.com/ugorji/go v1.1.13 // indirect
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.uber.org/zap v1.16.0
-	golang.org/x/mod v0.4.0 // indirect
+	golang.org/x/mod v0.4.1 // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
+	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
 	golang.org/x/text v0.3.5 // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324
-	golang.org/x/tools v0.0.0-20210114065538-d78b04bdf963
+	golang.org/x/tools v0.1.0
 	google.golang.org/grpc v1.35.0
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/vmihailenco/msgpack.v2 v2.9.1

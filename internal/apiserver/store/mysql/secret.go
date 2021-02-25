@@ -21,7 +21,7 @@ type secrets struct {
 }
 
 func newSecrets(ds *datastore) *secrets {
-	return &secrets{ds.DB}
+	return &secrets{ds.db}
 }
 
 // Create creates a new secret.
