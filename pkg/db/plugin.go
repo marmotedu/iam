@@ -1,3 +1,7 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package db
 
 import (
@@ -14,12 +18,15 @@ const (
 	startTime          = "_start_time"
 )
 
+// TracePlugin defines gorm plugin used to trace sql.
 type TracePlugin struct{}
 
+// Name returns the name of trace plugin.
 func (op *TracePlugin) Name() string {
 	return "tracePlugin"
 }
 
+// Initialize initialize the trace plugin.
 func (op *TracePlugin) Initialize(db *gorm.DB) (err error) {
 	// 开始前
 	_ = db.Callback().Create().Before("gorm:before_create").Register(callBackBeforeName, before)
@@ -43,7 +50,6 @@ var _ gorm.Plugin = &TracePlugin{}
 
 func before(db *gorm.DB) {
 	db.InstanceSet(startTime, time.Now())
-	return
 }
 
 func after(db *gorm.DB) {
@@ -56,8 +62,6 @@ func after(db *gorm.DB) {
 	if !ok {
 		return
 	}
-	//sql := db.Dialector.Explain(db.Statement.SQL.String(), db.Statement.Vars...)
+	// sql := db.Dialector.Explain(db.Statement.SQL.String(), db.Statement.Vars...)
 	log.Infof("sql cost time: %fs", time.Since(ts).Seconds())
-
-	return
 }

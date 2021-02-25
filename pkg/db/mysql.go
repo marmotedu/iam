@@ -1,12 +1,17 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package db
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/marmotedu/iam/internal/pkg/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"github.com/marmotedu/iam/internal/pkg/logger"
 )
 
 // Options defines optsions for mysql database.
@@ -21,6 +26,7 @@ type Options struct {
 	LogLevel              int
 }
 
+// New create a new gorm db instance with the given options.
 func New(opts *Options) (*gorm.DB, error) {
 	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		opts.Username,
@@ -50,7 +56,5 @@ func New(opts *Options) (*gorm.DB, error) {
 
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
 	sqlDB.SetMaxIdleConns(opts.MaxIdleConnections)
-
-	db.Use(&TracePlugin{})
 	return db, nil
 }
