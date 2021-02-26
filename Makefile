@@ -30,6 +30,7 @@ include scripts/make-rules/ca.mk
 include scripts/make-rules/release.mk
 include scripts/make-rules/swagger.mk
 include scripts/make-rules/dependencies.mk
+include scripts/make-rules/tools.mk
 
 # ==============================================================================
 # Usage
@@ -160,6 +161,11 @@ serve-swagger:
 .PHONY: dependencies
 dependencies:
 	@$(MAKE) dependencies.run
+
+## tools: install dependent tools.
+.PHONY: tools
+tools:
+	@$(MAKE) tools.install
 
 ## help: Show this help info.
 .PHONY: help

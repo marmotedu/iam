@@ -1,7 +1,3 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file.
-
 basePath: /v1
 consumes:
 - application/json
@@ -88,7 +84,8 @@ definitions:
         type: string
         x-go-name: Message
       reference:
-        description: Reference returns the reference document which maybe useful to solve this error.
+        description: Reference returns the reference document which maybe useful to
+          solve this error.
         type: string
         x-go-name: Reference
     title: ErrResponse defines the return messages when an error occurred.
@@ -157,7 +154,8 @@ definitions:
         format: int64
         type: integer
         x-go-name: TotalCount
-    title: PolicyList is the whole list of all policies which have been stored in stroage.
+    title: PolicyList is the whole list of all policies which have been stored in
+      stroage.
     type: object
     x-go-package: github.com/marmotedu/api/apiserver/v1
   Secret:
@@ -441,18 +439,21 @@ paths:
         name: labelSelector
         type: string
         x-go-name: LabelSelector
-      - description: FieldSelector restricts the list of returned objects by their fields. Defaults to everything.
+      - description: FieldSelector restricts the list of returned objects by their
+          fields. Defaults to everything.
         in: query
         name: fieldSelector
         type: string
         x-go-name: FieldSelector
-      - description: TimeoutSeconds specifies the seconds of ClientIP type session sticky time.
+      - description: TimeoutSeconds specifies the seconds of ClientIP type session
+          sticky time.
         format: int64
         in: query
         name: timeoutSeconds
         type: integer
         x-go-name: TimeoutSeconds
-      - description: Offset specify the number of records to skip before starting to return the records.
+      - description: Offset specify the number of records to skip before starting
+          to return the records.
         format: int64
         in: query
         name: offset
@@ -582,18 +583,21 @@ paths:
         name: labelSelector
         type: string
         x-go-name: LabelSelector
-      - description: FieldSelector restricts the list of returned objects by their fields. Defaults to everything.
+      - description: FieldSelector restricts the list of returned objects by their
+          fields. Defaults to everything.
         in: query
         name: fieldSelector
         type: string
         x-go-name: FieldSelector
-      - description: TimeoutSeconds specifies the seconds of ClientIP type session sticky time.
+      - description: TimeoutSeconds specifies the seconds of ClientIP type session
+          sticky time.
         format: int64
         in: query
         name: timeoutSeconds
         type: integer
         x-go-name: TimeoutSeconds
-      - description: Offset specify the number of records to skip before starting to return the records.
+      - description: Offset specify the number of records to skip before starting
+          to return the records.
         format: int64
         in: query
         name: offset
@@ -743,18 +747,21 @@ paths:
         name: labelSelector
         type: string
         x-go-name: LabelSelector
-      - description: FieldSelector restricts the list of returned objects by their fields. Defaults to everything.
+      - description: FieldSelector restricts the list of returned objects by their
+          fields. Defaults to everything.
         in: query
         name: fieldSelector
         type: string
         x-go-name: FieldSelector
-      - description: TimeoutSeconds specifies the seconds of ClientIP type session sticky time.
+      - description: TimeoutSeconds specifies the seconds of ClientIP type session
+          sticky time.
         format: int64
         in: query
         name: timeoutSeconds
         type: integer
         x-go-name: TimeoutSeconds
-      - description: Offset specify the number of records to skip before starting to return the records.
+      - description: Offset specify the number of records to skip before starting
+          to return the records.
         format: int64
         in: query
         name: offset

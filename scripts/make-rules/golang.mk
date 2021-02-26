@@ -71,8 +71,7 @@ go.clean:
 .PHONY: go.lint.verify
 go.lint.verify: go.build.verify
 ifeq (,$(shell which golangci-lint 2>/dev/null))
-	@echo "===========> Installing golangci lint"
-	@GO111MODULE=off $(GO) get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	@$(MAKE) tools.install.golangci-lint
 endif
 
 .PHONY: go.lint
@@ -83,8 +82,7 @@ go.lint: go.lint.verify
 .PHONY: go.test.verify
 go.test.verify: go.build.verify
 ifeq ($(shell which go-junit-report 2>/dev/null), )
-	@echo "===========> Installing go-junit-report"
-	@GO111MODULE=off $(GO) get -u github.com/jstemmer/go-junit-report
+	@$(MAKE) tools.install.go-junit-report
 endif
 
 .PHONY: go.test

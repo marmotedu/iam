@@ -13,29 +13,25 @@ release.verify: release.git-chglog.verify release.github-release.verify release.
 .PHONY: release.gsemver.verify                                      
 release.gsemver.verify: 
 ifeq (,$(shell which gsemver 2>/dev/null))    
-	@echo "===========> Installing gsemver"
-	@$(GO) get -u github.com/arnaud-deprez/gsemver
+	@$(MAKE) tools.install.gsemver
 endif 
 
 .PHONY: release.git-chglog.verify                                      
 release.git-chglog.verify: 
 ifeq (,$(shell which git-chglog 2>/dev/null))    
-	@echo "===========> Installing git-chglog"
-	@$(GO) get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+	@$(MAKE) tools.install.git-chglog
 endif 
 
 .PHONY: release.github-release.verify                                      
 release.github-release.verify: 
 ifeq (,$(shell which github-release 2>/dev/null))    
-	@echo "===========> Installing github-release"
-	@$(GO) get -u github.com/github-release/github-release
+	@$(MAKE) tools.install.github-release
 endif 
 
 .PHONY: release.coscmd.verify                                      
 release.coscmd.verify: 
 ifeq (,$(shell which coscmd 2>/dev/null))    
-	@echo "===========> Installing coscmd"
-	@pip install coscmd
+	@$(MAKE) tools.install.coscmd
 endif 
 
 .PHONY: release.run

@@ -9,8 +9,7 @@
 .PHONY: swagger.verify
 swagger.verify: 
 ifeq (,$(shell which swagger 2>/dev/null))
-	@echo "===========> Installing go-swagger"
-	@$(GO) get -u github.com/go-swagger/go-swagger/cmd/swagger
+	@$(MAKE) tools.install.swagger
 endif
 
 .PHONY: swagger.run
