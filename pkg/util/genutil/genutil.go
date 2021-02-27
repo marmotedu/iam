@@ -26,6 +26,6 @@ func OutDir(path string) (string, error) {
 	if !stat.IsDir() {
 		return "", fmt.Errorf("output directory %s is not a directory", outDir)
 	}
-	outDir = outDir + "/"
+	outDir += "/"
 	return outDir, nil
 }

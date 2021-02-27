@@ -370,7 +370,7 @@ func NewForConfigOrDie() *marmotedu.Clientset {
 
 func TableWriterDefaultConfig(table *tablewriter.Table) *tablewriter.Table {
 	table.SetAutoWrapText(false)
-	//table.SetAutoFormatHeaders(true)
+	// table.SetAutoFormatHeaders(true)
 	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")

@@ -35,7 +35,7 @@ func (t TTY) GetSize() *TerminalSize {
 func GetSize(fd uintptr) *TerminalSize {
 	winsize, err := term.GetWinsize(fd)
 	if err != nil {
-		//runtime.HandleError(fmt.Errorf("unable to get terminal size: %v", err))
+		// runtime.HandleError(fmt.Errorf("unable to get terminal size: %v", err))
 		return nil
 	}
 
