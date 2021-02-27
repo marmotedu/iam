@@ -119,8 +119,13 @@ release:
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
 format:
-	@find . ! -path "./vendor/*" -name "*.go" | xargs --no-run-if-empty gofmt -s -w
-	@find . ! -path "./vendor/*" -name "*.go" | xargs --no-run-if-empty goimports -w -local $(ROOT_PACKAGE)
+	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
+		xargs --no-run-if-empty gofmt -s -w
+	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
+		xargs --no-run-if-empty goimports -w -local $(ROOT_PACKAGE)
+	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
+		xargs --no-run-if-empty golines -w --max-len=120 \
+		--reformat-tags --shorten-comments --ignore-generated .
 
 ## verify-copyright: Verify the boilerplate headers for all files.
 .PHONY: verify-copyright
