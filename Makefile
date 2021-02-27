@@ -17,6 +17,11 @@ VERSION_PACKAGE=github.com/marmotedu/component-base/pkg/version
 # Copy githook scripts when execute makefile
 COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/)
 
+# Makefile settings
+ifndef V
+MAKEFLAGS += --no-print-directory
+endif
+
 # ==============================================================================
 # Includes
 
@@ -171,6 +176,11 @@ dependencies:
 .PHONY: tools
 tools:
 	@$(MAKE) tools.install
+
+## check-updates: Check outdated dependencies of the go projects.
+.PHONY: check-updates
+check-updates:
+	@$(MAKE) go.updates
 
 ## help: Show this help info.
 .PHONY: help

@@ -78,3 +78,7 @@ go.test: tools.verify.go-junit-report
 	@echo "===========> Run unit test"
 	@$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out -timeout=10m -short -v `go list ./...|grep -v github.com/marmotedu/iam/test` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
+
+.PHONY: go.updates
+go.updates: tools.verify.go-mod-outdated
+	@$(GO) list -u -m -json all | go-mod-outdated -update -direct

@@ -6,16 +6,16 @@
 # Makefile helper functions for tools 
 #
 
-DEP_TOOLS ?= swagger golangci-lint go-junit-report gsemver git-chglog github-release coscmd golines
+DEP_TOOLS ?= swagger golangci-lint go-junit-report gsemver git-chglog github-release coscmd golines go-mod-outdated
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS))
 
 tools.install.%:
 	@echo "===========> Installing $*"
-	@$(MAKE) --no-print-directory install.$*
+	@$(MAKE) install.$*
 
 tools.verify.%:
-	@if ! which $* &>/dev/null; then $(MAKE) --no-print-directory tools.install.$*; fi
+	@if ! which $* &>/dev/null; then $(MAKE) tools.install.$*; fi
 
 .PHONY: install.swagger
 install.swagger:
@@ -48,3 +48,7 @@ install.coscmd:
 .PHONY: install.golines
 install.golines:
 	@$(GO) get -u github.com/segmentio/golines
+
+.PHONY: install.go-mod-outdated
+install.go-mod-outdated:
+	@$(GO) get -u github.com/psampaz/go-mod-outdated
