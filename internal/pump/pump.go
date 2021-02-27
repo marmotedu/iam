@@ -279,7 +279,10 @@ func filterData(pump pumps.Pump, keys []interface{}) []interface{} {
 func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, purgeDelay int) {
 	timer := time.AfterFunc(time.Duration(purgeDelay)*time.Second, func() {
 		if pmp.GetTimeout() == 0 {
-			log.Warnf("Pump %s is taking more time than the value configured of purge_delay. You should try to set a timeout for this pump.", pmp.GetName())
+			log.Warnf(
+				"Pump %s is taking more time than the value configured of purge_delay. You should try to set a timeout for this pump.",
+				pmp.GetName(),
+			)
 		} else if pmp.GetTimeout() > purgeDelay {
 			log.Warnf("Pump %s is taking more time than the value configured of purge_delay. You should try lowering the timeout configured for this pump.", pmp.GetName())
 		}

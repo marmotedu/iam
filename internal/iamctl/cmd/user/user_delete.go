@@ -35,7 +35,10 @@ var (
 		# Delete user foo from platform
 		iamctl user delete foo`)
 
-	deleteUsageErrStr = fmt.Sprintf("expected '%s'.\nUSERNAME is required arguments for the delete command", deleteUsageStr)
+	deleteUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nUSERNAME is required arguments for the delete command",
+		deleteUsageStr,
+	)
 )
 
 // NewDeleteOptions returns an initialized DeleteOptions instance.

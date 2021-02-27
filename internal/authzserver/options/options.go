@@ -19,16 +19,16 @@ import (
 
 // ServerRunOptions runs a authzserver.
 type ServerRunOptions struct {
-	AuthzConfig             string                                 `json:"authzconfig" mapstructure:"-"`
-	RPCServer               string                                 `json:"rpcserver" mapstructure:"rpcserver"`
+	AuthzConfig             string                                 `json:"authzconfig"    mapstructure:"-"`
+	RPCServer               string                                 `json:"rpcserver"      mapstructure:"rpcserver"`
 	ClientCA                string                                 `json:"client-ca-file" mapstructure:"client-ca-file"`
-	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
-	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
-	SecureServing           *genericoptions.SecureServingOptions   `json:"secure" mapstructure:"secure"`
-	RedisOptions            *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
-	FeatureOptions          *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
-	Log                     *log.Options                           `json:"log" mapstructure:"log"`
-	AnalyticsOptions        *analytics.AnalyticsOptions            `json:"analytics" mapstructure:"analytics"`
+	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server"         mapstructure:"server"`
+	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure"       mapstructure:"insecure"`
+	SecureServing           *genericoptions.SecureServingOptions   `json:"secure"         mapstructure:"secure"`
+	RedisOptions            *genericoptions.RedisOptions           `json:"redis"          mapstructure:"redis"`
+	FeatureOptions          *genericoptions.FeatureOptions         `json:"feature"        mapstructure:"feature"`
+	Log                     *log.Options                           `json:"log"            mapstructure:"log"`
+	AnalyticsOptions        *analytics.AnalyticsOptions            `json:"analytics"      mapstructure:"analytics"`
 }
 
 // NewServerRunOptions creates a new ServerRunOptions object with default parameters.

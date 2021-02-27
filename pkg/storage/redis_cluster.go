@@ -236,7 +236,8 @@ func getRedisAddrs(config *Config) (addrs []string) {
 	return addrs
 }
 
-// RedisOpts is the overridden type of redis.UniversalOptions. simple() and cluster() functions are not public in redis library.
+// RedisOpts is the overridden type of redis.UniversalOptions. simple() and cluster() functions are not public in redis
+// library.
 // Therefore, they are redefined in here to use in creation of new redis cluster logic.
 // We don't want to use redis.NewUniversalClient() logic.
 type RedisOpts redis.UniversalOptions
@@ -975,10 +976,21 @@ func (r *RedisCluster) Exists(keyName string) (bool, error) {
 func (r *RedisCluster) RemoveFromList(keyName, value string) error {
 	fixedKey := r.fixKey(keyName)
 
-	log.Debug("Removing value from list", log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("value", value))
+	log.Debug(
+		"Removing value from list",
+		log.String("keyName", keyName),
+		log.String("fixedKey", fixedKey),
+		log.String("value", value),
+	)
 
 	if err := r.singleton().LRem(fixedKey, 0, value).Err(); err != nil {
-		log.Error("LREM command failed", log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("value", value), log.String("error", err.Error()))
+		log.Error(
+			"LREM command failed",
+			log.String("keyName", keyName),
+			log.String("fixedKey", fixedKey),
+			log.String("value", value),
+			log.String("error", err.Error()),
+		)
 		return err
 	}
 
@@ -991,8 +1003,17 @@ func (r *RedisCluster) GetListRange(keyName string, from, to int64) ([]string, e
 
 	elements, err := r.singleton().LRange(fixedKey, from, to).Result()
 	if err != nil {
-		log.Error("LRANGE command failed",
-			log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.Int64("from", from), log.Int64("to", to), log.String("error", err.Error()))
+		log.Error(
+			"LRANGE command failed",
+			log.String(
+				"keyName",
+				keyName,
+			),
+			log.String("fixedKey", fixedKey),
+			log.Int64("from", from),
+			log.Int64("to", to),
+			log.String("error", err.Error()),
+		)
 		return nil, err
 	}
 
@@ -1098,7 +1119,12 @@ func (r *RedisCluster) IsMemberOfSet(keyName, value string) bool {
 }
 
 // SetRollingWindow will append to a sorted set in redis and extract a timed window of values.
-func (r *RedisCluster) SetRollingWindow(keyName string, per int64, valueOverride string, pipeline bool) (int, []interface{}) {
+func (r *RedisCluster) SetRollingWindow(
+	keyName string,
+	per int64,
+	valueOverride string,
+	pipeline bool,
+) (int, []interface{}) {
 	log.Debugf("Incrementing raw key: %s", keyName)
 	if err := r.up(); err != nil {
 		log.Debug(err.Error())
@@ -1229,21 +1255,43 @@ func (r *RedisCluster) AddToSortedSet(keyName, value string, score float64) {
 	}
 	member := redis.Z{Score: score, Member: value}
 	if err := r.singleton().ZAdd(fixedKey, &member).Err(); err != nil {
-		log.Error("ZADD command failed", log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("error", err.Error()))
+		log.Error(
+			"ZADD command failed",
+			log.String("keyName", keyName),
+			log.String("fixedKey", fixedKey),
+			log.String("error", err.Error()),
+		)
 	}
 }
 
 // GetSortedSetRange gets range of elements of sorted set identified by keyName.
 func (r *RedisCluster) GetSortedSetRange(keyName, scoreFrom, scoreTo string) ([]string, []float64, error) {
 	fixedKey := r.fixKey(keyName)
-	log.Debug("Getting sorted set range",
-		log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("scoreFrom", scoreFrom), log.String("scoreTo", scoreTo))
+	log.Debug(
+		"Getting sorted set range",
+		log.String(
+			"keyName",
+			keyName,
+		),
+		log.String("fixedKey", fixedKey),
+		log.String("scoreFrom", scoreFrom),
+		log.String("scoreTo", scoreTo),
+	)
 
 	args := redis.ZRangeBy{Min: scoreFrom, Max: scoreTo}
 	values, err := r.singleton().ZRangeByScoreWithScores(fixedKey, &args).Result()
 	if err != nil {
-		log.Error("ZRANGEBYSCORE command failed",
-			log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("scoreFrom", scoreFrom), log.String("scoreTo", scoreTo), log.String("error", err.Error()))
+		log.Error(
+			"ZRANGEBYSCORE command failed",
+			log.String(
+				"keyName",
+				keyName,
+			),
+			log.String("fixedKey", fixedKey),
+			log.String("scoreFrom", scoreFrom),
+			log.String("scoreTo", scoreTo),
+			log.String("error", err.Error()),
+		)
 		return nil, nil, err
 	}
 
@@ -1266,11 +1314,26 @@ func (r *RedisCluster) GetSortedSetRange(keyName, scoreFrom, scoreTo string) ([]
 func (r *RedisCluster) RemoveSortedSetRange(keyName, scoreFrom, scoreTo string) error {
 	fixedKey := r.fixKey(keyName)
 
-	log.Debug("Removing sorted set range",
-		log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("scoreFrom", scoreFrom), log.String("scoreTo", scoreTo))
+	log.Debug(
+		"Removing sorted set range",
+		log.String(
+			"keyName",
+			keyName,
+		),
+		log.String("fixedKey", fixedKey),
+		log.String("scoreFrom", scoreFrom),
+		log.String("scoreTo", scoreTo),
+	)
 
 	if err := r.singleton().ZRemRangeByScore(fixedKey, scoreFrom, scoreTo).Err(); err != nil {
-		log.Debug("ZREMRANGEBYSCORE command failed", log.String("keyName", keyName), log.String("fixedKey", fixedKey), log.String("scoreFrom", scoreFrom), log.String("scoreTo", scoreTo), log.String("error", err.Error()))
+		log.Debug(
+			"ZREMRANGEBYSCORE command failed",
+			log.String("keyName", keyName),
+			log.String("fixedKey", fixedKey),
+			log.String("scoreFrom", scoreFrom),
+			log.String("scoreTo", scoreTo),
+			log.String("error", err.Error()),
+		)
 		return err
 	}
 

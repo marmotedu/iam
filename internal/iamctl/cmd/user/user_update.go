@@ -44,7 +44,10 @@ NOTICE: field will be updated to zero value if not specified.`)
 		# Update use foo's information
 		iamctl user update foo --nickname=foo2 --email=foo@qq.com --phone=1812883xxxx`)
 
-	updateUsageErrStr = fmt.Sprintf("expected '%s'.\nUSERNAME is required arguments for the update command", updateUsageStr)
+	updateUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nUSERNAME is required arguments for the update command",
+		updateUsageStr,
+	)
 )
 
 // NewUpdateOptions returns an initialized UpdateOptions instance.

@@ -10,10 +10,10 @@ import (
 
 // AnalyticsOptions contains configuration items related to analytics.
 type AnalyticsOptions struct {
-	PoolSize                int    `json:"pool-size" mapstructure:"pool-size"`
-	RecordsBufferSize       uint64 `json:"records-buffer-size" mapstructure:"records-buffer-size"`
-	StorageExpirationTime   int    `json:"storage-expiration-time" mapstructure:"storage-expiration-time"`
-	Enable                  bool   `json:"enable" mapstructure:"enable"`
+	PoolSize                int    `json:"pool-size"                 mapstructure:"pool-size"`
+	RecordsBufferSize       uint64 `json:"records-buffer-size"       mapstructure:"records-buffer-size"`
+	StorageExpirationTime   int    `json:"storage-expiration-time"   mapstructure:"storage-expiration-time"`
+	Enable                  bool   `json:"enable"                    mapstructure:"enable"`
 	EnableDetailedRecording bool   `json:"enable-detailed-recording" mapstructure:"enable-detailed-recording"`
 }
 

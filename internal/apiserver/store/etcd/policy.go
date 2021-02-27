@@ -65,7 +65,12 @@ func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav
 }
 
 // DeleteCollection batch deletes the policies.
-func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(
+	ctx context.Context,
+	username string,
+	names []string,
+	opts metav1.DeleteOptions,
+) error {
 	return nil
 }
 

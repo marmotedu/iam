@@ -33,7 +33,10 @@ var (
 		# Verify a JWT token
 		iamctl jwt verify XXX xxxxx.yyyyy.zzzzz`)
 
-	verifyUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRETKEY and TOKEN are required arguments for the subcmd1 command", veirfyUsageStr)
+	verifyUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nSECRETKEY and TOKEN are required arguments for the subcmd1 command",
+		veirfyUsageStr,
+	)
 )
 
 // NewVerifyOptions returns an initialized VerifyOptions instance.

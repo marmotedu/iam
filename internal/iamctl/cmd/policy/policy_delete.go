@@ -35,7 +35,10 @@ var (
 		# Delete a policy resource
 		iamctl policy delete foo`)
 
-	deleteUsageErrStr = fmt.Sprintf("expected '%s'.\nPOLICY_NAME is required arguments for the delete command", deleteUsageStr)
+	deleteUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nPOLICY_NAME is required arguments for the delete command",
+		deleteUsageStr,
+	)
 )
 
 // NewDeleteOptions returns an initialized DeleteOptions instance.

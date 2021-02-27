@@ -68,7 +68,11 @@ func (a *auth) BasicAuth() gin.HandlerFunc {
 		auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
 
 		if len(auth) != 2 || auth[0] != "Basic" {
-			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."), nil)
+			core.WriteResponse(
+				c,
+				errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."),
+				nil,
+			)
 			c.Abort()
 
 			return
@@ -78,7 +82,11 @@ func (a *auth) BasicAuth() gin.HandlerFunc {
 		pair := strings.SplitN(string(payload), ":", 2)
 
 		if len(pair) != 2 || !authenticateUser(pair[0], pair[1]) {
-			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."), nil)
+			core.WriteResponse(
+				c,
+				errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."),
+				nil,
+			)
 			c.Abort()
 
 			return

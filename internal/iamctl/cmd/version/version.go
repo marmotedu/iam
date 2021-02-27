@@ -65,7 +65,12 @@ func NewCmdVersion(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *co
 		},
 	}
 
-	cmd.Flags().BoolVar(&o.ClientOnly, "client", o.ClientOnly, "If true, shows client version only (no server required).")
+	cmd.Flags().BoolVar(
+		&o.ClientOnly,
+		"client",
+		o.ClientOnly,
+		"If true, shows client version only (no server required).",
+	)
 	cmd.Flags().BoolVar(&o.Short, "short", o.Short, "If true, print just the version number.")
 	cmd.Flags().StringVarP(&o.Output, "output", "o", o.Output, "One of 'yaml' or 'json'.")
 

@@ -73,7 +73,15 @@ func TestRefStrings(t *testing.T) {
 
 		h128.Write([]byte(elem.s))
 		if v1, v2 := h128.Sum128(); v1 != elem.h64_1 || v2 != elem.h64_2 {
-			t.Errorf("[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)", elem.s, elem.seed, v1, v2, elem.h64_1, elem.h64_2)
+			t.Errorf(
+				"[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)",
+				elem.s,
+				elem.seed,
+				v1,
+				v2,
+				elem.h64_1,
+				elem.h64_2,
+			)
 		}
 
 		h128.Reset()
@@ -84,7 +92,15 @@ func TestRefStrings(t *testing.T) {
 		}
 
 		if v1, v2 := Sum128WithSeed([]byte(elem.s), elem.seed); v1 != elem.h64_1 || v2 != elem.h64_2 {
-			t.Errorf("[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)", elem.s, elem.seed, v1, v2, elem.h64_1, elem.h64_2)
+			t.Errorf(
+				"[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)",
+				elem.s,
+				elem.seed,
+				v1,
+				v2,
+				elem.h64_1,
+				elem.h64_2,
+			)
 		}
 	}
 }
@@ -109,7 +125,15 @@ func TestIncremental(t *testing.T) {
 			t.Errorf("[Hash32] key: '%s', seed: '%d': 0x%x (want 0x%x)", elem.s, elem.seed, v, elem.h32)
 		}
 		if v1, v2 := h128.Sum128(); v1 != elem.h64_1 || v2 != elem.h64_2 {
-			t.Errorf("[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)", elem.s, elem.seed, v1, v2, elem.h64_1, elem.h64_2)
+			t.Errorf(
+				"[Hash128] key: '%s', seed: '%d': 0x%x-0x%x (want 0x%x-0x%x)",
+				elem.s,
+				elem.seed,
+				v1,
+				v2,
+				elem.h64_1,
+				elem.h64_2,
+			)
 		}
 	}
 }

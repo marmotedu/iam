@@ -18,23 +18,23 @@ import (
 
 // PumpConfig defines options for pump back-end.
 type PumpConfig struct {
-	Type                  string                     `json:"type" mapstructure:"type"`
-	Filters               analytics.AnalyticsFilters `json:"filters" mapstructure:"filters"`
-	Timeout               int                        `json:"timeout" mapstructure:"timeout"`
+	Type                  string                     `json:"type"                    mapstructure:"type"`
+	Filters               analytics.AnalyticsFilters `json:"filters"                 mapstructure:"filters"`
+	Timeout               int                        `json:"timeout"                 mapstructure:"timeout"`
 	OmitDetailedRecording bool                       `json:"omit-detailed-recording" mapstructure:"omit-detailed-recording"`
-	Meta                  map[string]interface{}     `json:"meta" mapstructure:"meta"`
+	Meta                  map[string]interface{}     `json:"meta"                    mapstructure:"meta"`
 }
 
 // PumpOptions runs a pumpserver.
 type PumpOptions struct {
-	PumpConfig            string                       `json:"pumpconfig" mapstructure:"-"`
-	PurgeDelay            int                          `json:"purge-delay" mapstructure:"purge-delay"`
-	Pumps                 map[string]PumpConfig        `json:"pumps" mapstructure:"pumps"`
-	HealthCheckPath       string                       `json:"health-check-path" mapstructure:"health-check-path"`
-	HealthCheckAddress    string                       `json:"health-check-address" mapstructure:"health-check-address"`
+	PumpConfig            string                       `json:"pumpconfig"              mapstructure:"-"`
+	PurgeDelay            int                          `json:"purge-delay"             mapstructure:"purge-delay"`
+	Pumps                 map[string]PumpConfig        `json:"pumps"                   mapstructure:"pumps"`
+	HealthCheckPath       string                       `json:"health-check-path"       mapstructure:"health-check-path"`
+	HealthCheckAddress    string                       `json:"health-check-address"    mapstructure:"health-check-address"`
 	OmitDetailedRecording bool                         `json:"omit-detailed-recording" mapstructure:"omit-detailed-recording"`
-	RedisOptions          *genericoptions.RedisOptions `json:"redis" mapstructure:"redis"`
-	Log                   *log.Options                 `json:"log" mapstructure:"log"`
+	RedisOptions          *genericoptions.RedisOptions `json:"redis"                   mapstructure:"redis"`
+	Log                   *log.Options                 `json:"log"                     mapstructure:"log"`
 }
 
 // NewPumpOptions creates a new PumpOptions object with default parameters.

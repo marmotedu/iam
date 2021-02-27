@@ -53,7 +53,12 @@ func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav
 }
 
 // DeleteCollection batch deletes policies by policies ids.
-func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(
+	ctx context.Context,
+	username string,
+	names []string,
+	opts metav1.DeleteOptions,
+) error {
 	if opts.Unscoped {
 		p.db = p.db.Unscoped()
 	}

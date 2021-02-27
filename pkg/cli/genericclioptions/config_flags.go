@@ -127,7 +127,12 @@ func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {
 	}
 
 	if f.BearerToken != nil {
-		flags.StringVar(f.BearerToken, FlagBearerToken, *f.BearerToken, "Bearer token for authentication to the API server")
+		flags.StringVar(
+			f.BearerToken,
+			FlagBearerToken,
+			*f.BearerToken,
+			"Bearer token for authentication to the API server",
+		)
 	}
 
 	if f.Username != nil {
@@ -169,8 +174,12 @@ func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {
 	}
 
 	if f.Timeout != nil {
-		flags.DurationVar(f.Timeout, FlagTimeout, *f.Timeout,
-			"The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.")
+		flags.DurationVar(
+			f.Timeout,
+			FlagTimeout,
+			*f.Timeout,
+			"The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.",
+		)
 	}
 
 	if f.MaxRetries != nil {
@@ -178,7 +187,12 @@ func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {
 	}
 
 	if f.RetryInterval != nil {
-		flags.DurationVar(f.RetryInterval, FlagRetryInterval, *f.RetryInterval, "The interval time between each attempt.")
+		flags.DurationVar(
+			f.RetryInterval,
+			FlagRetryInterval,
+			*f.RetryInterval,
+			"The interval time between each attempt.",
+		)
 	}
 }
 

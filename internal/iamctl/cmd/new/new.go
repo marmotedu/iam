@@ -43,7 +43,10 @@ This can improve your R&D efficiency.`)
 		# Create command 'test' with two subcommands
 		iamctl new -g test "This is a test command with two subcommands"`)
 
-	newUsageErrStr = fmt.Sprintf("expected '%s'.\nat least CMD_NAME is a required argument for the new command", newUsageStr)
+	newUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nat least CMD_NAME is a required argument for the new command",
+		newUsageStr,
+	)
 
 	cmdTemplate = `// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
 // Use of this source code is governed by a MIT style

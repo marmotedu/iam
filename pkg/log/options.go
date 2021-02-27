@@ -45,15 +45,15 @@ const (
 
 // Options contains configuration items related to log.
 type Options struct {
-	OutputPaths       []string `json:"output-paths" mapstructure:"output-paths"`
+	OutputPaths       []string `json:"output-paths"       mapstructure:"output-paths"`
 	ErrorOutputPaths  []string `json:"error-output-paths" mapstructure:"error-output-paths"`
-	Level             string   `json:"level" mapstructure:"level"`
-	Format            string   `json:"format" mapstructure:"format"`
-	DisableCaller     bool     `json:"disable-caller" mapstructure:"disable-caller"`
+	Level             string   `json:"level"              mapstructure:"level"`
+	Format            string   `json:"format"             mapstructure:"format"`
+	DisableCaller     bool     `json:"disable-caller"     mapstructure:"disable-caller"`
 	DisableStacktrace bool     `json:"disable-stacktrace" mapstructure:"disable-stacktrace"`
-	EnableColor       bool     `json:"enable-color" mapstructure:"enable-color"`
-	Development       bool     `json:"development" mapstructure:"development"`
-	Name              string   `json:"name" mapstructure:"name"`
+	EnableColor       bool     `json:"enable-color"       mapstructure:"enable-color"`
+	Development       bool     `json:"development"        mapstructure:"development"`
+	Name              string   `json:"name"               mapstructure:"name"`
 }
 
 // NewOptions creates a Options object with default parameters.
@@ -97,8 +97,13 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.BoolVar(&o.EnableColor, flagEnableColor, o.EnableColor, "Enable output ansi colors in plain format logs.")
 	fs.StringSliceVar(&o.OutputPaths, flagOutputPaths, o.OutputPaths, "Output paths of log.")
 	fs.StringSliceVar(&o.ErrorOutputPaths, flagErrorOutputPaths, o.ErrorOutputPaths, "Error output paths of log.")
-	fs.BoolVar(&o.Development, flagDevelopment, o.Development, "Development puts the logger in development mode, which changes "+
-		"the behavior of DPanicLevel and takes stacktraces more liberally.")
+	fs.BoolVar(
+		&o.Development,
+		flagDevelopment,
+		o.Development,
+		"Development puts the logger in development mode, which changes "+
+			"the behavior of DPanicLevel and takes stacktraces more liberally.",
+	)
 	fs.StringVar(&o.Name, flagName, o.Name, "The name of the logger.")
 }
 

@@ -46,7 +46,10 @@ var (
 		# Sign a token with expires and sign method
 		iamctl sign tgydj8d9EQSnFqKf iBdEdFNBLN1nR3fV --timeout=2h --algorithm=HS256`)
 
-	signUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRETID and SECRETKEY are required arguments for the sign command", signUsageStr)
+	signUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nSECRETID and SECRETKEY are required arguments for the sign command",
+		signUsageStr,
+	)
 )
 
 // NewSignOptions returns an initialized SignOptions instance.
@@ -92,9 +95,24 @@ func NewCmdSign(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 
 	// mark flag as deprecated
 	cmd.Flags().DurationVar(&o.Timeout, "timeout", o.Timeout, "JWT token expires time.")
-	cmd.Flags().DurationVar(&o.NotBefore, "not-before", o.NotBefore, "Identifies the time before which the JWT MUST NOT be accepted for processing.")
-	cmd.Flags().StringVar(&o.Algorithm, "algorithm", o.Algorithm, "Signing algorithm - possible values are HS256, HS384, HS512.")
-	cmd.Flags().StringVar(&o.Audience, "audience", o.Audience, "Identifies the recipients that the JWT is intended for.")
+	cmd.Flags().DurationVar(
+		&o.NotBefore,
+		"not-before",
+		o.NotBefore,
+		"Identifies the time before which the JWT MUST NOT be accepted for processing.",
+	)
+	cmd.Flags().StringVar(
+		&o.Algorithm,
+		"algorithm",
+		o.Algorithm,
+		"Signing algorithm - possible values are HS256, HS384, HS512.",
+	)
+	cmd.Flags().StringVar(
+		&o.Audience,
+		"audience",
+		o.Audience,
+		"Identifies the recipients that the JWT is intended for.",
+	)
 	cmd.Flags().StringVar(&o.Issuer, "issuer", o.Issuer, "Identifies the principal that issued the JWT.")
 	cmd.Flags().Var(&o.Claims, "claim", "Add additional claims. may be used more than once.")
 	cmd.Flags().Var(&o.Head, "header", "Add additional header params. may be used more than once.")

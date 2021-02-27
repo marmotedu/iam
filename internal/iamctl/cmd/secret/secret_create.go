@@ -48,7 +48,10 @@ This will generate secretID and secretKey which can be used to sign JWT token.`)
 		# Create secret with a specified expire time and description
 		iamctl secret create foo --expires=1988121600 --description="secret for iam"`)
 
-	createUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRET_NAME is required arguments for the create command", createUsageStr)
+	createUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nSECRET_NAME is required arguments for the create command",
+		createUsageStr,
+	)
 )
 
 // NewCreateOptions returns an initialized CreateOptions instance.

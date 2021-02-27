@@ -44,7 +44,12 @@ func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1
 }
 
 // DeleteCollection batch deletes the secrets.
-func (s *secrets) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
+func (s *secrets) DeleteCollection(
+	ctx context.Context,
+	username string,
+	names []string,
+	opts metav1.DeleteOptions,
+) error {
 	if opts.Unscoped {
 		s.db = s.db.Unscoped()
 	}

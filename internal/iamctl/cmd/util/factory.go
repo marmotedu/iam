@@ -15,7 +15,8 @@ import (
 // of resources and different API sets.
 // The rings are here for a reason. In order for composers to be able to provide alternative factory implementations
 // they need to provide low level pieces of *certain* functions so that when the factory calls back into itself
-// it uses the custom version of the function. Rather than try to enumerate everything that someone would want to override
+// it uses the custom version of the function. Rather than try to enumerate everything that someone would want to
+// override
 // we split the factory into rings, where each ring can depend on methods in an earlier ring, but cannot depend
 // upon peer methods in its own ring.
 // TODO: make the functions interfaces

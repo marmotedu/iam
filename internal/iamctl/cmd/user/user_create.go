@@ -45,7 +45,10 @@ If nickname not specified, username will be used.`)
 		# Create user wt 
 		iamctl user create foo Foo@2020 foo@foxmail.com --phone=18128845xxx --nickname=colin`)
 
-	createUsageErrStr = fmt.Sprintf("expected '%s'.\nUSERNAME, PASSWORD and EMAIL are required arguments for the create command", createUsageStr)
+	createUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nUSERNAME, PASSWORD and EMAIL are required arguments for the create command",
+		createUsageStr,
+	)
 )
 
 // NewCreateOptions returns an initialized CreateOptions instance.

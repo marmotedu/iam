@@ -24,7 +24,8 @@ import (
 // ErrKeyNotFound is a standard error for when a key is not found in the storage engine.
 var ErrKeyNotFound = errors.New("key not found")
 
-// Handler is a standard interface to a storage backend, used by AuthorisationManager to read and write key values to the backend.
+// Handler is a standard interface to a storage backend, used by AuthorisationManager to read and write key values to
+// the backend.
 type Handler interface {
 	GetKey(string) (string, error) // Returned string is expected to be a JSON object (user.SessionState)
 	GetMultiKey([]string) ([]string, error)

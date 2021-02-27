@@ -36,7 +36,10 @@ var (
 		# Delete secret foo
 		iamctl secret delete foo`)
 
-	deleteUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRET_NAME is required arguments for the delete command", deleteUsageStr)
+	deleteUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nSECRET_NAME is required arguments for the delete command",
+		deleteUsageStr,
+	)
 )
 
 // NewDeleteOptions returns an initialized DeleteOptions instance.

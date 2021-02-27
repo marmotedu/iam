@@ -100,7 +100,12 @@ var (
 	licensef  = pflag.StringP("licensef", "f", "", "license file")
 	year      = pflag.StringP("year", "y", fmt.Sprint(time.Now().Year()), "copyright year(s)")
 	verbose   = pflag.BoolP("verbose", "v", false, "verbose mode: print the name of the files that are modified")
-	checkonly = pflag.BoolP("check", "", false, "check only mode: verify presence of license headers and exit with non-zero code if missing")
+	checkonly = pflag.BoolP(
+		"check",
+		"",
+		false,
+		"check only mode: verify presence of license headers and exit with non-zero code if missing",
+	)
 	skipDirs  = pflag.StringSliceP("skip-dirs", "", nil, "regexps of directories to skip")
 	skipFiles = pflag.StringSliceP("skip-files", "", nil, "regexps of files to skip")
 	help      = pflag.BoolP("help", "h", false, "show this help message")
@@ -324,7 +329,23 @@ func licenseHeader(path string, tmpl *template.Template, data *copyrightData) ([
 		lic, err = prefix(tmpl, data, "/*", " * ", " */")
 	case ".js", ".mjs", ".cjs", ".jsx", ".tsx", ".css", ".tf", ".ts":
 		lic, err = prefix(tmpl, data, "/**", " * ", " */")
-	case ".cc", ".cpp", ".cs", ".go", ".hh", ".hpp", ".java", ".m", ".mm", ".proto", ".rs", ".scala", ".swift", ".dart", ".groovy", ".kt", ".kts":
+	case ".cc",
+		".cpp",
+		".cs",
+		".go",
+		".hh",
+		".hpp",
+		".java",
+		".m",
+		".mm",
+		".proto",
+		".rs",
+		".scala",
+		".swift",
+		".dart",
+		".groovy",
+		".kt",
+		".kts":
 		lic, err = prefix(tmpl, data, "", "// ", "")
 	case ".py", ".sh", ".yaml", ".yml", ".dockerfile", "dockerfile", ".rb", "gemfile":
 		lic, err = prefix(tmpl, data, "", "# ", "")

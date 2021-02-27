@@ -19,15 +19,15 @@ import (
 // ServerRunOptions runs a iam api server.
 type ServerRunOptions struct {
 	APIConfig               string                                 `json:"apiconfig" mapstructure:"-"`
-	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server" mapstructure:"server"`
-	GRPCOptions             *genericoptions.GRPCOptions            `json:"grpc" mapstructure:"grpc"`
-	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
-	SecureServing           *genericoptions.SecureServingOptions   `json:"secure" mapstructure:"secure"`
-	MySQLOptions            *genericoptions.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
-	RedisOptions            *genericoptions.RedisOptions           `json:"redis" mapstructure:"redis"`
-	JwtOptions              *genericoptions.JwtOptions             `json:"jwt" mapstructure:"jwt"`
-	Log                     *log.Options                           `json:"log" mapstructure:"log"`
-	FeatureOptions          *genericoptions.FeatureOptions         `json:"feature" mapstructure:"feature"`
+	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server"    mapstructure:"server"`
+	GRPCOptions             *genericoptions.GRPCOptions            `json:"grpc"      mapstructure:"grpc"`
+	InsecureServing         *genericoptions.InsecureServingOptions `json:"insecure"  mapstructure:"insecure"`
+	SecureServing           *genericoptions.SecureServingOptions   `json:"secure"    mapstructure:"secure"`
+	MySQLOptions            *genericoptions.MySQLOptions           `json:"mysql"     mapstructure:"mysql"`
+	RedisOptions            *genericoptions.RedisOptions           `json:"redis"     mapstructure:"redis"`
+	JwtOptions              *genericoptions.JwtOptions             `json:"jwt"       mapstructure:"jwt"`
+	Log                     *log.Options                           `json:"log"       mapstructure:"log"`
+	FeatureOptions          *genericoptions.FeatureOptions         `json:"feature"   mapstructure:"feature"`
 }
 
 // NewServerRunOptions creates a new ServerRunOptions object with default parameters.

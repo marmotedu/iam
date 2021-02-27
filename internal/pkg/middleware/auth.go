@@ -111,7 +111,11 @@ func (a *AuthMiddleware) AuthMiddlewareFunc() gin.HandlerFunc {
 		authHeader := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
 
 		if len(authHeader) != authHeaderCount {
-			core.WriteResponse(c, errors.WithCode(code.ErrInvalidAuthHeader, "Authorization header format is wrong."), nil)
+			core.WriteResponse(
+				c,
+				errors.WithCode(code.ErrInvalidAuthHeader, "Authorization header format is wrong."),
+				nil,
+			)
 			c.Abort()
 
 			return

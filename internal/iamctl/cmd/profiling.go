@@ -19,7 +19,12 @@ var (
 )
 
 func addProfilingFlags(flags *pflag.FlagSet) {
-	flags.StringVar(&profileName, "profile", "none", "Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)")
+	flags.StringVar(
+		&profileName,
+		"profile",
+		"none",
+		"Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)",
+	)
 	flags.StringVar(&profileOutput, "profile-output", "profile.pprof", "Name of the file to write the profile to")
 }
 

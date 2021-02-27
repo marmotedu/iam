@@ -186,7 +186,10 @@ func handleFields(l *zap.Logger, args []interface{}, additional ...zap.Field) []
 		keyStr, isString := key.(string)
 		if !isString {
 			// if the key isn't a string, DPanic and stop logging
-			l.DPanic("non-string key argument passed to logging, ignoring all later arguments", zap.Any("invalid key", key))
+			l.DPanic(
+				"non-string key argument passed to logging, ignoring all later arguments",
+				zap.Any("invalid key", key),
+			)
 			break
 		}
 

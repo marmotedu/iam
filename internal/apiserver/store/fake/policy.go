@@ -82,7 +82,12 @@ func (p *policies) Delete(ctx context.Context, username, name string, opts metav
 }
 
 // DeleteCollection batch deletes policies by policies ids.
-func (p *policies) DeleteCollection(ctx context.Context, username string, names []string, opts metav1.DeleteOptions) error {
+func (p *policies) DeleteCollection(
+	ctx context.Context,
+	username string,
+	names []string,
+	opts metav1.DeleteOptions,
+) error {
 	p.ds.Lock()
 	defer p.ds.Unlock()
 

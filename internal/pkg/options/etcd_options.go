@@ -17,19 +17,19 @@ import (
 
 // EtcdOptions defines options for etcd cluster.
 type EtcdOptions struct {
-	Endpoints            []string `json:"endpoints" mapstructure:"endpoints"`
-	Timeout              int      `json:"timeout" mapstructure:"timeout"`
-	RequestTimeout       int      `json:"request-timeout" mapstructure:"request-timeout"`
-	LeaseExpire          int      `json:"lease-expire" mapstructure:"lease-expire"`
-	Username             string   `json:"username" mapstructure:"username"`
-	Password             string   `json:"password" mapstructure:"password"`
-	UseTLS               bool     `json:"use-tls" mapstructure:"use-tls"`
-	CaCert               string   `json:"ca-cert" mapstructure:"ca-cert"`
-	Cert                 string   `json:"cert" mapstructure:"cert"`
-	Key                  string   `json:"key" mapstructure:"key"`
+	Endpoints            []string `json:"endpoints"               mapstructure:"endpoints"`
+	Timeout              int      `json:"timeout"                 mapstructure:"timeout"`
+	RequestTimeout       int      `json:"request-timeout"         mapstructure:"request-timeout"`
+	LeaseExpire          int      `json:"lease-expire"            mapstructure:"lease-expire"`
+	Username             string   `json:"username"                mapstructure:"username"`
+	Password             string   `json:"password"                mapstructure:"password"`
+	UseTLS               bool     `json:"use-tls"                 mapstructure:"use-tls"`
+	CaCert               string   `json:"ca-cert"                 mapstructure:"ca-cert"`
+	Cert                 string   `json:"cert"                    mapstructure:"cert"`
+	Key                  string   `json:"key"                     mapstructure:"key"`
 	HealthBeatPathPrefix string   `json:"health_beat_path_prefix" mapstructure:"health_beat_path_prefix"`
-	HealthBeatIFaceName  string   `json:"health_beat_iface_name" mapstructure:"health_beat_iface_name"`
-	Namespace            string   `json:"namespace" mapstructure:"namespace"`
+	HealthBeatIFaceName  string   `json:"health_beat_iface_name"  mapstructure:"health_beat_iface_name"`
+	Namespace            string   `json:"namespace"               mapstructure:"namespace"`
 }
 
 // NewEtcdOptions create a `zero` value instance.
@@ -68,8 +68,18 @@ func (o *EtcdOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.CaCert, "etcd.ca-cert", o.CaCert, "Path to cacert for connecting to etcd cluster.")
 	fs.StringVar(&o.Cert, "etcd.cert", o.Cert, "Path to cert file for connecting to etcd cluster.")
 	fs.StringVar(&o.Key, "etcd.key", o.Key, "Path to key file for connecting to etcd cluster.")
-	fs.StringVar(&o.HealthBeatPathPrefix, "etcd.health-beat-path-pre", o.HealthBeatPathPrefix, "health beat path prefix.")
-	fs.StringVar(&o.HealthBeatIFaceName, "etcd.health-beat-iface-name", o.HealthBeatIFaceName, "health beat registry iface name, such as eth0.")
+	fs.StringVar(
+		&o.HealthBeatPathPrefix,
+		"etcd.health-beat-path-pre",
+		o.HealthBeatPathPrefix,
+		"health beat path prefix.",
+	)
+	fs.StringVar(
+		&o.HealthBeatIFaceName,
+		"etcd.health-beat-iface-name",
+		o.HealthBeatIFaceName,
+		"health beat registry iface name, such as eth0.",
+	)
 	fs.StringVar(&o.Namespace, "etcd.namespace", o.Namespace, "Etcd storage namespace.")
 }
 

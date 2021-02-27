@@ -57,24 +57,24 @@ const (
 
 // BaseMongoConf defines options needed when connnect to mongo db.
 type BaseMongoConf struct {
-	MongoURL                      string    `json:"mongo_url" mapstructure:"mongo_url"`
-	MongoUseSSL                   bool      `json:"mongo_use_ssl" mapstructure:"mongo_use_ssl"`
-	MongoSSLInsecureSkipVerify    bool      `json:"mongo_ssl_insecure_skip_verify" mapstructure:"mongo_ssl_insecure_skip_verify"`
+	MongoURL                      string    `json:"mongo_url"                         mapstructure:"mongo_url"`
+	MongoUseSSL                   bool      `json:"mongo_use_ssl"                     mapstructure:"mongo_use_ssl"`
+	MongoSSLInsecureSkipVerify    bool      `json:"mongo_ssl_insecure_skip_verify"    mapstructure:"mongo_ssl_insecure_skip_verify"`
 	MongoSSLAllowInvalidHostnames bool      `json:"mongo_ssl_allow_invalid_hostnames" mapstructure:"mongo_ssl_allow_invalid_hostnames"`
-	MongoSSLCAFile                string    `json:"mongo_ssl_ca_file" mapstructure:"mongo_ssl_ca_file"`
-	MongoSSLPEMKeyfile            string    `json:"mongo_ssl_pem_keyfile" mapstructure:"mongo_ssl_pem_keyfile"`
-	MongoDBType                   MongoType `json:"mongo_db_type" mapstructure:"mongo_db_type"`
+	MongoSSLCAFile                string    `json:"mongo_ssl_ca_file"                 mapstructure:"mongo_ssl_ca_file"`
+	MongoSSLPEMKeyfile            string    `json:"mongo_ssl_pem_keyfile"             mapstructure:"mongo_ssl_pem_keyfile"`
+	MongoDBType                   MongoType `json:"mongo_db_type"                     mapstructure:"mongo_db_type"`
 }
 
 // MongoConf defines mongo specific options.
 type MongoConf struct {
 	BaseMongoConf
 
-	CollectionName            string `json:"collection_name" mapstructure:"collection_name"`
-	MaxInsertBatchSizeBytes   int    `json:"max_insert_batch_size_bytes" mapstructure:"max_insert_batch_size_bytes"`
-	MaxDocumentSizeBytes      int    `json:"max_document_size_bytes" mapstructure:"max_document_size_bytes"`
+	CollectionName            string `json:"collection_name"               mapstructure:"collection_name"`
+	MaxInsertBatchSizeBytes   int    `json:"max_insert_batch_size_bytes"   mapstructure:"max_insert_batch_size_bytes"`
+	MaxDocumentSizeBytes      int    `json:"max_document_size_bytes"       mapstructure:"max_document_size_bytes"`
 	CollectionCapMaxSizeBytes int    `json:"collection_cap_max_size_bytes" mapstructure:"collection_cap_max_size_bytes"`
-	CollectionCapEnable       bool   `json:"collection_cap_enable" mapstructure:"collection_cap_enable"`
+	CollectionCapEnable       bool   `json:"collection_cap_enable"         mapstructure:"collection_cap_enable"`
 }
 
 func loadCertficateAndKeyFromFile(path string) (*tls.Certificate, error) {
@@ -171,7 +171,8 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 				tlsConfig.InsecureSkipVerify = true
 				tlsConfig.VerifyPeerCertificate = func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
 					// Code copy/pasted and adapted from
-					// https://github.com/golang/go/blob/81555cb4f3521b53f9de4ce15f64b77cc9df61b9/src/crypto/tls/handshake_client.go#L327-L344, but adapted to skip the hostname verification.
+					// https://github.com/golang/go/blob/81555cb4f3521b53f9de4ce15f64b77cc9df61b9/src/crypto/tls/handshake_client.go#L327-L344,
+					// but adapted to skip the hostname verification.
 					// See https://github.com/golang/go/issues/21971#issuecomment-412836078.
 
 					// If this is the first handshake on a connection, process and

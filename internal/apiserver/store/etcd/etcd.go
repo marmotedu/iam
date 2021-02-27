@@ -298,7 +298,13 @@ func (w *EtcdWatcher) Cancel() {
 }
 
 // Watch watch etcd.
-func (ds *datastore) Watch(ctx context.Context, prefix string, onCreate EtcdCreateEventFunc, onModify EtcdModifyEventFunc, onDelete EtcdDeleteEventFunc) error {
+func (ds *datastore) Watch(
+	ctx context.Context,
+	prefix string,
+	onCreate EtcdCreateEventFunc,
+	onModify EtcdModifyEventFunc,
+	onDelete EtcdDeleteEventFunc,
+) error {
 	_, ok := ds.watchers[prefix]
 	if ok {
 		return fmt.Errorf("watch prefix %s already registered", prefix)

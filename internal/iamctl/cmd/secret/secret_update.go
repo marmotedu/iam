@@ -39,7 +39,10 @@ var (
 		# Update a secret resource
 		iamctl secret update foo --expires=4h --description="new description"`)
 
-	updateUsageErrStr = fmt.Sprintf("expected '%s'.\nSECRET_NAME is required arguments for the update command", updateUsageStr)
+	updateUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nSECRET_NAME is required arguments for the update command",
+		updateUsageStr,
+	)
 )
 
 // NewUpdateOptions returns an initialized UpdateOptions instance.

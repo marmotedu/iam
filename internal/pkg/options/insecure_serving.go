@@ -18,7 +18,7 @@ import (
 // No one should be using these anymore.
 type InsecureServingOptions struct {
 	BindAddress string `json:"bind-address" mapstructure:"bind-address"`
-	BindPort    int    `json:"bind-port" mapstructure:"bind-port"`
+	BindPort    int    `json:"bind-port"    mapstructure:"bind-port"`
 }
 
 // NewInsecureServingOptions is for creating an unauthenticated, unauthorized, insecure port.
@@ -45,7 +45,13 @@ func (s *InsecureServingOptions) Validate() []error {
 	var errors []error
 
 	if s.BindPort < 0 || s.BindPort > 65535 {
-		errors = append(errors, fmt.Errorf("--insecure.bind-port %v must be between 0 and 65535, inclusive. 0 for turning off insecure (HTTP) port", s.BindPort))
+		errors = append(
+			errors,
+			fmt.Errorf(
+				"--insecure.bind-port %v must be between 0 and 65535, inclusive. 0 for turning off insecure (HTTP) port",
+				s.BindPort,
+			),
+		)
 	}
 
 	return errors

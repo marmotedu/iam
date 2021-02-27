@@ -53,7 +53,8 @@ const (
 	SectionTipsHelp = `{{if .HasSubCommands}}Use "{{$rootCmd}} <command> --help" for more information about a given command.
 {{end}}`
 
-	// SectionTipsGlobalOptions is the help template section that displays the 'options' hint for displaying global flags.
+	// SectionTipsGlobalOptions is the help template section that displays the 'options' hint for displaying global
+	// flags.
 	SectionTipsGlobalOptions = `{{if $optionsCmdFor}}Use "{{$optionsCmdFor}}" for a list of global command-line options (applies to all commands).
 {{end}}`
 )

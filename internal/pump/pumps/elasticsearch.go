@@ -89,7 +89,12 @@ func getOperator(conf ElasticsearchConf) (ElasticsearchOperator, error) {
 
 	e := new(Elasticsearch7Operator)
 
-	e.esClient, err = elastic.NewClient(elastic.SetURL(urls...), elastic.SetSniff(conf.EnableSniffing), elastic.SetBasicAuth(conf.Username, conf.Password), elastic.SetHttpClient(httpClient))
+	e.esClient, err = elastic.NewClient(
+		elastic.SetURL(urls...),
+		elastic.SetSniff(conf.EnableSniffing),
+		elastic.SetBasicAuth(conf.Username, conf.Password),
+		elastic.SetHttpClient(httpClient),
+	)
 
 	if err != nil {
 		return e, err

@@ -64,8 +64,13 @@ func (f *MatchVersionFlags) checkMatchingServerVersion() error {
 		clientVersion := version.Get()
 
 		// GitVersion includes GitCommit and GitTreeState, but best to be safe?
-		if clientVersion.GitVersion != sVer.GitVersion || clientVersion.GitCommit != sVer.GitCommit || clientVersion.GitTreeState != sVer.GitTreeState {
-			f.matchesServerVersionErr = fmt.Errorf("server version (%#v) differs from client version (%#v)", sVer, version.Get())
+		if clientVersion.GitVersion != sVer.GitVersion || clientVersion.GitCommit != sVer.GitCommit ||
+			clientVersion.GitTreeState != sVer.GitTreeState {
+			f.matchesServerVersionErr = fmt.Errorf(
+				"server version (%#v) differs from client version (%#v)",
+				sVer,
+				version.Get(),
+			)
 		}
 	})
 
@@ -94,7 +99,12 @@ func (f *MatchVersionFlags) ToRawIAMConfigLoader() clientcmd.ClientConfig {
 }
 
 func (f *MatchVersionFlags) AddFlags(flags *pflag.FlagSet) {
-	flags.BoolVar(&f.RequireMatchedServerVersion, flagMatchBinaryVersion, f.RequireMatchedServerVersion, "Require server version to match client version")
+	flags.BoolVar(
+		&f.RequireMatchedServerVersion,
+		flagMatchBinaryVersion,
+		f.RequireMatchedServerVersion,
+		"Require server version to match client version",
+	)
 }
 
 func NewMatchVersionFlags(delegate genericclioptions.RESTClientGetter) *MatchVersionFlags {

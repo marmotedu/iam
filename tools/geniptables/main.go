@@ -208,8 +208,13 @@ func (g *Generator) generate() {
 		}
 		for _, p := range g.ports {
 			if g.log {
-				g.Printf("iptables -%s INPUT -p tcp -s %s --dport %s -j LOG --log-level 7 --log-prefix \"Accept %s access\"\n",
-					g.action, h, p, p)
+				g.Printf(
+					"iptables -%s INPUT -p tcp -s %s --dport %s -j LOG --log-level 7 --log-prefix \"Accept %s access\"\n",
+					g.action,
+					h,
+					p,
+					p,
+				)
 			}
 			g.Printf("iptables -%s INPUT -p tcp -s %s --dport %s -j ACCEPT\n", g.action, h, p)
 		}

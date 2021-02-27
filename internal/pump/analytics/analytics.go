@@ -21,7 +21,7 @@ type AnalyticsRecord struct {
 	Request    string    `json:"request"`
 	Policies   string    `json:"policies"`
 	Deciders   string    `json:"deciders"`
-	ExpireAt   time.Time `bson:"expireAt" json:"expireAt"`
+	ExpireAt   time.Time `json:"expireAt"   bson:"expireAt"`
 }
 
 // GetFieldNames returns all the AnalyticsRecord field names.

@@ -114,7 +114,10 @@ func (k *KafkaPump) Init(config interface{}) error {
 			log.Fatalf("Failed initialize kafka mechanism: %s", mechErr.Error())
 		}
 	default:
-		log.Warn("IAM pump doesn't support this SASL mechanism.", log.String("SASL-Mechanism", k.kafkaConf.SASLMechanism))
+		log.Warn(
+			"IAM pump doesn't support this SASL mechanism.",
+			log.String("SASL-Mechanism", k.kafkaConf.SASLMechanism),
+		)
 	}
 
 	// Kafka writer connection config

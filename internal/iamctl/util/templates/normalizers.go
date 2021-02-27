@@ -58,7 +58,11 @@ type normalizer struct {
 
 func (s normalizer) markdown() normalizer {
 	bytes := []byte(s.string)
-	formatted := blackfriday.Markdown(bytes, &ASCIIRenderer{Indentation: Indentation}, blackfriday.EXTENSION_NO_INTRA_EMPHASIS)
+	formatted := blackfriday.Markdown(
+		bytes,
+		&ASCIIRenderer{Indentation: Indentation},
+		blackfriday.EXTENSION_NO_INTRA_EMPHASIS,
+	)
 	s.string = string(formatted)
 	return s
 }

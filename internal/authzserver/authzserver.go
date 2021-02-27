@@ -314,7 +314,9 @@ func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShut
 	// keep redis connected
 	go storage.ConnectToRedis(ctx, buildStorageConfig(completedOptions))
 
-	storeIns, err := store.GetStoreInsOr(store.GetGRPCClientOrDie(completedOptions.RPCServer, completedOptions.ClientCA))
+	storeIns, err := store.GetStoreInsOr(
+		store.GetGRPCClientOrDie(completedOptions.RPCServer, completedOptions.ClientCA),
+	)
 	if err != nil {
 		return err
 	}

@@ -14,9 +14,14 @@ import (
 )
 
 var (
-	cliAlgorithm = pflag.StringP("algorithm", "", "HS256", "Signing algorithm - possible values are HS256, HS384, HS512")
-	cliTimeout   = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
-	help         = pflag.BoolP("help", "h", false, "Print this help message")
+	cliAlgorithm = pflag.StringP(
+		"algorithm",
+		"",
+		"HS256",
+		"Signing algorithm - possible values are HS256, HS384, HS512",
+	)
+	cliTimeout = pflag.DurationP("timeout", "", 2*time.Hour, "JWT token expires time")
+	help       = pflag.BoolP("help", "h", false, "Print this help message")
 )
 
 func main() {
