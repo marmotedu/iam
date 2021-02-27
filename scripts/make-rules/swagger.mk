@@ -6,14 +6,8 @@
 # Makefile helper functions for swagger
 #
 
-.PHONY: swagger.verify
-swagger.verify: 
-ifeq (,$(shell which swagger 2>/dev/null))
-	@$(MAKE) tools.install.swagger
-endif
-
 .PHONY: swagger.run
-swagger.run: swagger.verify
+swagger.run: tools.verify.swagger
 	@echo "===========> Generating swagger API docs"
 	@swagger generate spec --scan-models -w $(ROOT_DIR)/cmd/genswaggertypedocs -o $(ROOT_DIR)/api/swagger/swagger.yaml
 

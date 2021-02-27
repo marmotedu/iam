@@ -6,13 +6,16 @@
 # Makefile helper functions for tools 
 #
 
-DEP_TOOLS ?= swagger golangci-lint go-junit-report gsemver git-chglog github-release coscmd
+DEP_TOOLS ?= swagger golangci-lint go-junit-report gsemver git-chglog github-release coscmd golines
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS))
 
 tools.install.%:
 	@echo "===========> Installing $*"
 	@$(MAKE) --no-print-directory install.$*
+
+tools.verify.%:
+	@if ! which $* &>/dev/null; then $(MAKE) --no-print-directory tools.install.$*; fi
 
 .PHONY: install.swagger
 install.swagger:
@@ -41,3 +44,7 @@ install.github-release:
 .PHONY: install.coscmd
 install.coscmd: 
 	@pip install coscmd
+
+.PHONY: install.golines
+install.golines:
+	@$(GO) get -u github.com/segmentio/golines

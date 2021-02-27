@@ -68,25 +68,13 @@ go.clean:
 	@echo "===========> Cleaning all build output"
 	@-rm -vrf $(OUTPUT_DIR)
 
-.PHONY: go.lint.verify
-go.lint.verify: go.build.verify
-ifeq (,$(shell which golangci-lint 2>/dev/null))
-	@$(MAKE) tools.install.golangci-lint
-endif
-
 .PHONY: go.lint
-go.lint: go.lint.verify
+go.lint: tools.verify.golangci-lint
 	@echo "===========> Run golangci to lint source codes"
 	@golangci-lint run $(ROOT_DIR)/...
 
-.PHONY: go.test.verify
-go.test.verify: go.build.verify
-ifeq ($(shell which go-junit-report 2>/dev/null), )
-	@$(MAKE) tools.install.go-junit-report
-endif
-
 .PHONY: go.test
-go.test: go.test.verify
+go.test: tools.verify.go-junit-report
 	@echo "===========> Run unit test"
 	@$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out -timeout=10m -short -v `go list ./...|grep -v github.com/marmotedu/iam/test` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html

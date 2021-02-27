@@ -118,7 +118,7 @@ release:
 
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
-format:
+format: tools.verify.golines
 	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
 		xargs --no-run-if-empty gofmt -s -w
 	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
