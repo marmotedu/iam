@@ -9,20 +9,17 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
-	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Get get an user by the user identifier.
-func Get(c *gin.Context) {
+func (u *UserHandler) Get(c *gin.Context) {
 	log.L(c).Info("get user function called.")
 
-	user, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
+	user, err := u.srv.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrUserNotFound, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

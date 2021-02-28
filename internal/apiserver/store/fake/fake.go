@@ -42,11 +42,30 @@ func (ds *datastore) Close() error {
 	return nil
 }
 
-// NewFakeStore create fake store.
-func NewFakeStore() (store.Factory, error) {
+var fakeFactory store.Factory
+var once sync.Once
+
+// GetFakeFactoryOr create fake store.
+func GetFakeFactoryOr() (store.Factory, error) {
+	once.Do(func() {
+		fakeFactory = &datastore{
+			users:    FakeUsers(ResourceCount),
+			secrets:  FakeSecrets(ResourceCount),
+			policies: FakePolicies(ResourceCount),
+		}
+	})
+
+	if fakeFactory == nil {
+		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v", fakeFactory)
+	}
+	return fakeFactory, nil
+}
+
+// FakeUsers returns fake user data.
+func FakeUsers(count int) []*v1.User {
 	// init some user records
 	users := make([]*v1.User, 0)
-	for i := 1; i <= ResourceCount; i++ {
+	for i := 1; i <= count; i++ {
 		users = append(users, &v1.User{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: fmt.Sprintf("user%d", i),
@@ -58,9 +77,13 @@ func NewFakeStore() (store.Factory, error) {
 		})
 	}
 
-	// init some secrets records
+	return users
+}
+
+// FakeSecrets returns fake secret data.
+func FakeSecrets(count int) []*v1.Secret {
 	secrets := make([]*v1.Secret, 0)
-	for i := 1; i <= ResourceCount; i++ {
+	for i := 1; i <= count; i++ {
 		secrets = append(secrets, &v1.Secret{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: fmt.Sprintf("secret%d", i),
@@ -72,9 +95,13 @@ func NewFakeStore() (store.Factory, error) {
 		})
 	}
 
-	// init some policy records
+	return secrets
+}
+
+// FakePolicies returns fake policy data.
+func FakePolicies(count int) []*v1.Policy {
 	policies := make([]*v1.Policy, 0)
-	for i := 1; i <= ResourceCount; i++ {
+	for i := 1; i <= count; i++ {
 		policies = append(policies, &v1.Policy{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: fmt.Sprintf("policy%d", i),
@@ -85,9 +112,5 @@ func NewFakeStore() (store.Factory, error) {
 		})
 	}
 
-	return &datastore{
-		users:    users,
-		secrets:  secrets,
-		policies: policies,
-	}, nil
+	return policies
 }

@@ -11,13 +11,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // List list all the secrets.
-func List(c *gin.Context) {
+func (s *SecretHandler) List(c *gin.Context) {
 	log.L(c).Info("list secret function called.")
 	var r metav1.ListOptions
 	if err := c.ShouldBindQuery(&r); err != nil {
@@ -25,9 +24,9 @@ func List(c *gin.Context) {
 		return
 	}
 
-	secrets, err := store.Client().Secrets().List(c, c.GetString("username"), r)
+	secrets, err := s.srv.Secrets().List(c, c.GetString("username"), r)
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

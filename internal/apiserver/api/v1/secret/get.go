@@ -9,25 +9,17 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
-	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Get get an policy by the secret identifier.
-func Get(c *gin.Context) {
+func (s *SecretHandler) Get(c *gin.Context) {
 	log.L(c).Info("get secret function called.")
 
-	secret, err := store.Client().Secrets().Get(
-		c,
-		c.GetString("username"),
-		c.Param("name"),
-		metav1.GetOptions{},
-	)
+	secret, err := s.srv.Secrets().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

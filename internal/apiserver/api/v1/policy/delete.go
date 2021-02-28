@@ -9,19 +9,16 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
-	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Delete deletes the policy by the policy identifier.
-func Delete(c *gin.Context) {
+func (p *PolicyHandler) Delete(c *gin.Context) {
 	log.L(c).Info("delete policy function called.")
 
-	if err := store.Client().Policies().Delete(c, c.GetString("username"), c.Param("name"), metav1.DeleteOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if err := p.srv.Policies().Delete(c, c.GetString("username"), c.Param("name"), metav1.DeleteOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

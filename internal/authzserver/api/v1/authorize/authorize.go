@@ -18,20 +18,32 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
+// AuthzHandler create a authorize handler used to handle authorize request.
+type AuthzHandler struct {
+	store *store.Store
+}
+
+// NewAuthzHandler creates a authorize handler.
+func NewAuthzHandler(store *store.Store) *AuthzHandler {
+	return &AuthzHandler{
+		store: store,
+	}
+}
+
 // Authorize returns whether a request is allow or deny to access a resource and do some action
 // under specified condition.
-func Authorize(c *gin.Context) {
+func (a *AuthzHandler) Authorize(c *gin.Context) {
 	var r ladon.Request
 	if err := c.ShouldBind(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
 		return
 	}
 
-	getter, _ := store.GetStoreInsOr(nil)
-	auth := authorization.NewAuthorizer(authorizer.NewAuthorization(getter))
+	auth := authorization.NewAuthorizer(authorizer.NewAuthorization(a.store))
 	if r.Context == nil {
 		r.Context = ladon.Context{}
 	}
+
 	r.Context["username"] = c.GetString("username")
 	rsp := auth.Authorize(&r)
 

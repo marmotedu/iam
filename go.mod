@@ -10,7 +10,7 @@ require (
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/buger/jsonparser v1.1.1
-	github.com/coreos/etcd v3.3.25+incompatible
+	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0
 	github.com/dgraph-io/ristretto v0.0.3
@@ -94,7 +94,7 @@ require (
 	golang.org/x/tools v0.1.0
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705 // indirect
-	google.golang.org/grpc v1.36.0
+	google.golang.org/grpc v1.35.0
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22

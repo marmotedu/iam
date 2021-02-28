@@ -25,7 +25,6 @@ import (
 
 	cachev1 "github.com/marmotedu/iam/internal/apiserver/api/v1/cache"
 	"github.com/marmotedu/iam/internal/apiserver/options"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
@@ -225,7 +224,8 @@ func (c *ExtraConfig) New() *grpcAPIServer {
 	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize), grpc.Creds(creds)}
 	grpcServer := grpc.NewServer(opts...)
 
-	cacheIns, err := cachev1.GetCacheInsOr(store.Client())
+	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
+	cacheIns, err := cachev1.GetCacheInsOr(storeIns)
 	if err != nil {
 		log.Fatalf("Failed to get cache instance: %s", err.Error())
 	}
@@ -346,7 +346,7 @@ func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShut
 func (completedOptions completedServerRunOptions) InitDataStore() error {
 	completedOptions.InitRedisStore()
 
-	mysqlStore, err := mysql.GetMySQLFactoryOr(completedOptions.MySQLOptions)
+	_, err := mysql.GetMySQLFactoryOr(completedOptions.MySQLOptions)
 	if err != nil {
 		return err
 	}
@@ -357,7 +357,7 @@ func (completedOptions completedServerRunOptions) InitDataStore() error {
 			return err
 		}
 	*/
-	store.SetClient(mysqlStore)
+	// store.SetClient(mysqlStore)
 	return nil
 }
 

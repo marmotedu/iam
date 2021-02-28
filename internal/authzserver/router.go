@@ -11,6 +11,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/authzserver/api/v1/authorize"
+	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 )
@@ -21,10 +22,13 @@ func installHandler(g *gin.Engine) *gin.Engine {
 		core.WriteResponse(c, errors.WithCode(code.ErrPageNotFound, "page not found."), nil)
 	})
 
+	storeIns, _ := store.GetStoreInsOr(nil)
 	apiv1 := g.Group("/v1", authMiddleware.AuthCacheMiddlewareFunc())
 	{
+		authzHandler := authorize.NewAuthzHandler(storeIns)
+
 		// Router for authorization
-		apiv1.POST("/authz", authorize.Authorize)
+		apiv1.POST("/authz", authzHandler.Authorize)
 	}
 
 	return g

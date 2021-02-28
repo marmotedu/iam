@@ -11,14 +11,13 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/service"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // List list the users in the storage.
 // Only administrator can call this function.
-func List(c *gin.Context) {
+func (u *UserHandler) List(c *gin.Context) {
 	log.L(c).Info("list user function called.")
 
 	var r metav1.ListOptions
@@ -27,9 +26,9 @@ func List(c *gin.Context) {
 		return
 	}
 
-	users, err := service.ListUser(c, r)
+	users, err := u.srv.Users().List(c, r)
 	if err != nil {
-		core.WriteResponse(c, errors.WithStack(err), nil)
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

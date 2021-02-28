@@ -2,5 +2,5 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// Package service is the place where you can implements more complex business logic.
-package service // import "github.com/marmotedu/iam/internal/apiserver/service"
+// Package v1 is the place where you can implements more complex business logic.
+package v1 // import "github.com/marmotedu/iam/internal/apiserver/service/v1"

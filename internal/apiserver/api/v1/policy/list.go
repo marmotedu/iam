@@ -11,13 +11,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // List return all policies.
-func List(c *gin.Context) {
+func (p *PolicyHandler) List(c *gin.Context) {
 	log.L(c).Info("list policy function called.")
 
 	var r metav1.ListOptions
@@ -26,9 +25,9 @@ func List(c *gin.Context) {
 		return
 	}
 
-	policies, err := store.Client().Policies().List(c, c.GetString("username"), r)
+	policies, err := p.srv.Policies().List(c, c.GetString("username"), r)
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

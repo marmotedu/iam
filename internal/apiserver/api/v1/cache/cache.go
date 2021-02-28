@@ -28,10 +28,10 @@ var cacheServer *Cache
 var once sync.Once
 
 // GetCacheInsOr return cache server instance with given factory.
-func GetCacheInsOr(factory store.Factory) (*Cache, error) {
-	if factory != nil {
+func GetCacheInsOr(store store.Factory) (*Cache, error) {
+	if store != nil {
 		once.Do(func() {
-			cacheServer = &Cache{factory}
+			cacheServer = &Cache{store}
 		})
 	}
 

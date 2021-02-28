@@ -60,6 +60,10 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 2. 扫码入群
 3. 访问土拨鼠教育官网
 
+## 谁在用
+
+如果你有项目在使用iam系统模板，也欢迎联系作者，加入使用案例。
+
 ## License
 
 IAM is licensed under the MIT. See [LICENSE](LICENSE) for the full license text.

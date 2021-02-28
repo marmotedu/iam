@@ -12,13 +12,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Update updates policy by the policy identifier.
-func Update(c *gin.Context) {
+func (p *PolicyHandler) Update(c *gin.Context) {
 	log.L(c).Info("update policy function called.")
 
 	var r v1.Policy
@@ -27,21 +26,22 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	if errs := r.Validate(); len(errs) != 0 {
-		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)
-		return
-	}
-
-	pol, err := store.Client().Policies().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
+	pol, err := p.store.Policies().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}
 
+	// only update policy string
 	pol.Policy = r.Policy
 
-	if err := store.Client().Policies().Update(c, pol, metav1.UpdateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if errs := pol.Validate(); len(errs) != 0 {
+		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)
+		return
+	}
+
+	if err := p.srv.Policies().Update(c, pol, metav1.UpdateOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

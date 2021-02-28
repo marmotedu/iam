@@ -12,13 +12,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Update update a key by the secret key identifier.
-func Update(c *gin.Context) {
+func (s *SecretHandler) Update(c *gin.Context) {
 	log.L(c).Info("update secret function called.")
 
 	var r v1.Secret
@@ -30,12 +29,13 @@ func Update(c *gin.Context) {
 	username := c.GetString("username")
 	name := c.Param("name")
 
-	secret, err := store.Client().Secrets().Get(c, username, name, metav1.GetOptions{})
+	secret, err := s.srv.Secrets().Get(c, username, name, metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}
 
+	// only update expires and description
 	secret.Expires = r.Expires
 	secret.Description = r.Description
 
@@ -44,9 +44,8 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	// Save changed fields.
-	if err := store.Client().Secrets().Update(c, secret, metav1.UpdateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if err := s.srv.Secrets().Update(c, secret, metav1.UpdateOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

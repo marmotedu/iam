@@ -12,13 +12,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Update update a user info by the user identifier.
-func Update(c *gin.Context) {
+func (u *UserHandler) Update(c *gin.Context) {
 	log.L(c).Info("update user function called.")
 
 	var r v1.User
@@ -28,7 +27,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	user, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
+	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
@@ -44,8 +43,8 @@ func Update(c *gin.Context) {
 	}
 
 	// Save changed fields.
-	if err := store.Client().Users().Update(c, user, metav1.UpdateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if err := u.srv.Users().Update(c, user, metav1.UpdateOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

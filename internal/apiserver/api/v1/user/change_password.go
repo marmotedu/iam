@@ -11,7 +11,6 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
@@ -28,7 +27,7 @@ type ChangePasswordRequest struct {
 }
 
 // ChangePassword change the user's password by the user identifier.
-func ChangePassword(c *gin.Context) {
+func (u *UserHandler) ChangePassword(c *gin.Context) {
 	log.L(c).Info("change password function called.")
 
 	var r ChangePasswordRequest
@@ -38,22 +37,20 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 
-	u, err := store.Client().Users().Get(c, c.Param("name"), metav1.GetOptions{})
+	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return
 	}
 
-	if err := u.Compare(r.OldPassword); err != nil {
+	if err := user.Compare(r.OldPassword); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrPasswordIncorrect, err.Error()), nil)
 		return
 	}
 
-	u.Password = r.NewPassword
-
-	// Save changed fields.
-	if err := store.Client().Users().Update(c, u, metav1.UpdateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	user.Password = r.NewPassword
+	if err := u.srv.Users().ChangePassword(c, user); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

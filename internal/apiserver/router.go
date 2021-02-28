@@ -13,6 +13,7 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/policy"
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/secret"
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/user"
+	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 
@@ -50,21 +51,23 @@ func installAPI(g *gin.Engine) *gin.Engine {
 	})
 
 	// v1 handlers, requiring authentication
+	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
 	v1 := g.Group("/v1")
 	{
 		// user RESTful resource
 		userv1 := v1.Group("/users")
 		{
-			userv1.POST("", user.Create)
+			userHandler := user.NewUserHandler(storeIns)
 
+			userv1.POST("", userHandler.Create)
 			userv1.Use(authMiddleware.AuthMiddlewareFunc(), middleware.Validation())
-			// v1.PUT("/find_password", user.FindPassword)
-			userv1.DELETE("", user.DeleteCollection) // admin api
-			userv1.DELETE(":name", user.Delete)      // admin api
-			userv1.PUT(":name/change_password", user.ChangePassword)
-			userv1.PUT(":name", user.Update)
-			userv1.GET("", user.List)
-			userv1.GET(":name", user.Get) // admin api
+			// v1.PUT("/find_password", userHandler.FindPassword)
+			userv1.DELETE("", userHandler.DeleteCollection) // admin api
+			userv1.DELETE(":name", userHandler.Delete)      // admin api
+			userv1.PUT(":name/change_password", userHandler.ChangePassword)
+			userv1.PUT(":name", userHandler.Update)
+			userv1.GET("", userHandler.List)
+			userv1.GET(":name", userHandler.Get) // admin api
 		}
 
 		v1.Use(authMiddleware.AuthMiddlewareFunc())
@@ -72,22 +75,26 @@ func installAPI(g *gin.Engine) *gin.Engine {
 		// policy RESTful resource
 		policyv1 := v1.Group("/policies", middleware.Publish())
 		{
-			policyv1.POST("", policy.Create)
-			policyv1.DELETE("", policy.DeleteCollection)
-			policyv1.DELETE(":name", policy.Delete)
-			policyv1.PUT(":name", policy.Update)
-			policyv1.GET("", policy.List)
-			policyv1.GET(":name", policy.Get)
+			policyHandler := policy.NewPolicyHandler(storeIns)
+
+			policyv1.POST("", policyHandler.Create)
+			policyv1.DELETE("", policyHandler.DeleteCollection)
+			policyv1.DELETE(":name", policyHandler.Delete)
+			policyv1.PUT(":name", policyHandler.Update)
+			policyv1.GET("", policyHandler.List)
+			policyv1.GET(":name", policyHandler.Get)
 		}
 
 		// secret RESTful resource
 		secretv1 := v1.Group("/secrets", middleware.Publish())
 		{
-			secretv1.POST("", secret.Create)
-			secretv1.DELETE(":name", secret.Delete)
-			secretv1.PUT(":name", secret.Update)
-			secretv1.GET("", secret.List)
-			secretv1.GET(":name", secret.Get)
+			secretHandler := secret.NewSecretHandler(storeIns)
+
+			secretv1.POST("", secretHandler.Create)
+			secretv1.DELETE(":name", secretHandler.Delete)
+			secretv1.PUT(":name", secretHandler.Update)
+			secretv1.GET("", secretHandler.List)
+			secretv1.GET(":name", secretHandler.Get)
 		}
 	}
 

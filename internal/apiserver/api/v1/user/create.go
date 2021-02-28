@@ -12,13 +12,12 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Create add new user to the storage.
-func Create(c *gin.Context) {
+func (u *UserHandler) Create(c *gin.Context) {
 	log.L(c).Info("user create function called.")
 
 	var r v1.User
@@ -34,8 +33,8 @@ func Create(c *gin.Context) {
 	}
 
 	// Insert the user to the storage.
-	if err := store.Client().Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 

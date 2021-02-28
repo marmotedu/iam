@@ -12,14 +12,13 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Create creates a new ladon policy.
 // It will convert the policy to string and store it in the storage.
-func Create(c *gin.Context) {
+func (p *PolicyHandler) Create(c *gin.Context) {
 	log.L(c).Info("create policy function called.")
 
 	var r v1.Policy
@@ -35,8 +34,8 @@ func Create(c *gin.Context) {
 
 	r.Username = c.GetString("username")
 
-	if err := store.Client().Policies().Create(c, &r, metav1.CreateOptions{}); err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+	if err := p.srv.Policies().Create(c, &r, metav1.CreateOptions{}); err != nil {
+		core.WriteResponse(c, err, nil)
 		return
 	}
 
