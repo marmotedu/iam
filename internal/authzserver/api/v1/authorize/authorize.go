@@ -14,17 +14,16 @@ import (
 
 	"github.com/marmotedu/iam/internal/authzserver/authorization"
 	"github.com/marmotedu/iam/internal/authzserver/authorization/authorizer"
-	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
 // AuthzHandler create a authorize handler used to handle authorize request.
 type AuthzHandler struct {
-	store *store.Store
+	store authorizer.PolicyGetter
 }
 
 // NewAuthzHandler creates a authorize handler.
-func NewAuthzHandler(store *store.Store) *AuthzHandler {
+func NewAuthzHandler(store authorizer.PolicyGetter) *AuthzHandler {
 	return &AuthzHandler{
 		store: store,
 	}
