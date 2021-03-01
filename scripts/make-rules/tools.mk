@@ -6,7 +6,7 @@
 # Makefile helper functions for tools 
 #
 
-DEP_TOOLS ?= swagger golangci-lint go-junit-report gsemver git-chglog github-release coscmd golines go-mod-outdated
+DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS))
 
@@ -52,3 +52,11 @@ install.golines:
 .PHONY: install.go-mod-outdated
 install.go-mod-outdated:
 	@$(GO) get -u github.com/psampaz/go-mod-outdated
+
+.PHONY: install.mockgen
+install.mockgen:
+	@$(GO) get -u github.com/golang/mock/mockgen
+
+.PHONY: install.gotests
+install.gotests:
+	@$(GO) get -u github.com/cweill/gotests/...
