@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
