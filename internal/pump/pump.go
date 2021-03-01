@@ -19,9 +19,7 @@ import (
 	"github.com/marmotedu/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	msgpack "gopkg.in/vmihailenco/msgpack.v2"
-
-	"github.com/marmotedu/iam/pkg/log"
+	"github.com/vmihailenco/msgpack"
 
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/internal/pump/analytics"
@@ -30,6 +28,7 @@ import (
 	"github.com/marmotedu/iam/internal/pump/server"
 	"github.com/marmotedu/iam/internal/pump/storage"
 	"github.com/marmotedu/iam/internal/pump/storage/redis"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 const (
@@ -139,7 +138,7 @@ func (completedOptions *completedPumpOptions) Run(stopCh <-chan struct{}) error 
 	// start the worker loop
 	log.Infof("Starting purge loop @%d%s", completedOptions.PurgeDelay, "(s)")
 
-	StartPurgeLoop(completedOptions.PurgeDelay, completedOptions.OmitDetailedRecording)
+	StartPurgeLoop(stopCh, completedOptions.PurgeDelay, completedOptions.OmitDetailedRecording)
 	return nil
 }
 
@@ -210,7 +209,7 @@ func initialisePumps(completedOptions completedPumpOptions) {
 }
 
 // StartPurgeLoop start a loop to moves the data to any back-end.
-func StartPurgeLoop(secInterval int, omitDetails bool) {
+func StartPurgeLoop(stopCh <-chan struct{}, secInterval int, omitDetails bool) {
 	for range time.Tick(time.Duration(secInterval) * time.Second) {
 		analyticsValues := analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
 		if len(analyticsValues) > 0 {
@@ -234,6 +233,13 @@ func StartPurgeLoop(secInterval int, omitDetails bool) {
 
 			// Send to pumps
 			writeToPumps(keys, secInterval)
+		}
+
+		select {
+		case <-stopCh:
+			log.Info("stop purge loop")
+			return
+		default:
 		}
 	}
 }
