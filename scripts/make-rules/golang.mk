@@ -76,7 +76,9 @@ go.lint: tools.verify.golangci-lint
 .PHONY: go.test
 go.test: tools.verify.go-junit-report
 	@echo "===========> Run unit test"
-	@$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out -timeout=10m -short -v `go list ./...|grep -v github.com/marmotedu/iam/test` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
+	@$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out \
+		-timeout=10m -short -v `go list ./...|\
+		egrep -v 'github.com/marmotedu/iam/test|github.com/marmotedu/iam/pkg/log|github.com/marmotedu/iam/third_party|github.com/marmotedu/iam/internal/pump/storage|github.com/marmotedu/iam/internal/pump|github.com/marmotedu/iam/internal/pkg/logger'` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 
 .PHONY: go.updates
