@@ -81,6 +81,10 @@ go.test: tools.verify.go-junit-report
 		egrep -v 'github.com/marmotedu/iam/test|github.com/marmotedu/iam/pkg/log|github.com/marmotedu/iam/third_party|github.com/marmotedu/iam/internal/pump/storage|github.com/marmotedu/iam/internal/pump|github.com/marmotedu/iam/internal/pkg/logger'` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 
+.PHONY: go.test.cover
+go.test.cover: go.test
+	@$(GO) tool cover -func=$(OUTPUT_DIR)/coverage.out
+
 .PHONY: go.updates
 go.updates: tools.verify.go-mod-outdated
 	@$(GO) list -u -m -json all | go-mod-outdated -update -direct
