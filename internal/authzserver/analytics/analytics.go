@@ -53,7 +53,7 @@ func (a *AnalyticsRecord) SetExpiry(expiresInSeconds int64) {
 
 // RedisAnalyticsHandler will record analytics data to a redis back end as defined in the Config object.
 type RedisAnalyticsHandler struct {
-	Store            storage.AnalyticsHandler
+	store            storage.AnalyticsHandler
 	poolSize         int
 	recordsChan      chan *AnalyticsRecord
 	workerBufferSize uint64
@@ -71,7 +71,7 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Re
 	recordsChan := make(chan *AnalyticsRecord, recordsBufferSize)
 
 	return &RedisAnalyticsHandler{
-		Store:            store,
+		store:            store,
 		poolSize:         ps,
 		workerBufferSize: workerBufferSize,
 		recordsChan:      recordsChan,
@@ -86,7 +86,7 @@ func Analytics() *RedisAnalyticsHandler {
 // Start start the analytics service.
 func (r *RedisAnalyticsHandler) Start() {
 	analytics = r
-	r.Store.Connect()
+	r.store.Connect()
 
 	// start worker pool
 	atomic.SwapUint32(&r.shouldStop, 0)
@@ -141,7 +141,7 @@ func (r *RedisAnalyticsHandler) recordWorker() {
 			// check if channel was closed and it is time to exit from worker
 			if !ok {
 				// send what is left in buffer
-				r.Store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)
+				r.store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)
 				return
 			}
 
@@ -164,7 +164,7 @@ func (r *RedisAnalyticsHandler) recordWorker() {
 
 		// send data to Redis and reset buffer
 		if len(recordsBuffer) > 0 && (readyToSend || time.Since(lastSentTS) >= recordsBufferForcedFlushInterval) {
-			r.Store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)
+			r.store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)
 			recordsBuffer = recordsBuffer[:0]
 			lastSentTS = time.Now()
 		}
