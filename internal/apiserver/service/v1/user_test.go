@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/AlekSi/pointer"
+	gomock "github.com/golang/mock/gomock"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 
@@ -40,6 +41,11 @@ func BenchmarkListUser(b *testing.B) {
 }
 
 func Test_newUsers(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockFactory := store.NewMockFactory(ctrl)
+
 	type args struct {
 		srv *service
 	}
@@ -48,7 +54,15 @@ func Test_newUsers(t *testing.T) {
 		args args
 		want *userService
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				srv: &service{store: mockFactory},
+			},
+			want: &userService{
+				store: mockFactory,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

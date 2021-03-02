@@ -93,67 +93,7 @@ func TestPolicyManager_FindRequestCandidates(t *testing.T) {
 }
 
 func TestPolicyManager_FindPoliciesForSubject(t *testing.T) {
-	type fields struct {
-		client AuthorizationInterface
-	}
-	type args struct {
-		subject string
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    ladon.Policies
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			m := &PolicyManager{
-				client: tt.fields.client,
-			}
-			got, err := m.FindPoliciesForSubject(tt.args.subject)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("PolicyManager.FindPoliciesForSubject() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("PolicyManager.FindPoliciesForSubject() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }
 
 func TestPolicyManager_FindPoliciesForResource(t *testing.T) {
-	type fields struct {
-		client AuthorizationInterface
-	}
-	type args struct {
-		resource string
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    ladon.Policies
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			m := &PolicyManager{
-				client: tt.fields.client,
-			}
-			got, err := m.FindPoliciesForResource(tt.args.resource)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("PolicyManager.FindPoliciesForResource() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("PolicyManager.FindPoliciesForResource() = %v, want %v", got, tt.want)
-			}
-		})
-	}
 }

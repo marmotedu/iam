@@ -8,19 +8,34 @@ import (
 	"reflect"
 	"testing"
 
+	gomock "github.com/golang/mock/gomock"
+
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
 func TestNewService(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockFactory := store.NewMockFactory(ctrl)
+
 	type args struct {
 		store store.Factory
 	}
 	tests := []struct {
 		name string
 		args args
-		want Service
+		want *service
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			args: args{
+				store: mockFactory,
+			},
+			want: &service{
+				store: mockFactory,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -32,21 +47,25 @@ func TestNewService(t *testing.T) {
 }
 
 func Test_service_Users(t *testing.T) {
-	type fields struct {
-		store store.Factory
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockFactory := store.NewMockFactory(ctrl)
+	s := &service{
+		store: mockFactory,
 	}
+
 	tests := []struct {
-		name   string
-		fields fields
-		want   UserSrv
+		name string
+		want UserSrv
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			want: newUsers(s),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				store: tt.fields.store,
-			}
 			if got := s.Users(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("service.Users() = %v, want %v", got, tt.want)
 			}
@@ -55,21 +74,25 @@ func Test_service_Users(t *testing.T) {
 }
 
 func Test_service_Secrets(t *testing.T) {
-	type fields struct {
-		store store.Factory
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockFactory := store.NewMockFactory(ctrl)
+	s := &service{
+		store: mockFactory,
 	}
+
 	tests := []struct {
-		name   string
-		fields fields
-		want   SecretSrv
+		name string
+		want SecretSrv
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			want: newSecrets(s),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				store: tt.fields.store,
-			}
 			if got := s.Secrets(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("service.Secrets() = %v, want %v", got, tt.want)
 			}
@@ -78,21 +101,25 @@ func Test_service_Secrets(t *testing.T) {
 }
 
 func Test_service_Policies(t *testing.T) {
-	type fields struct {
-		store store.Factory
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockFactory := store.NewMockFactory(ctrl)
+	s := &service{
+		store: mockFactory,
 	}
+
 	tests := []struct {
-		name   string
-		fields fields
-		want   PolicySrv
+		name string
+		want PolicySrv
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			want: newPolicies(s),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				store: tt.fields.store,
-			}
 			if got := s.Policies(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("service.Policies() = %v, want %v", got, tt.want)
 			}
