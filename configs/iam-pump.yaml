@@ -3,8 +3,8 @@
 # license that can be found in the LICENSE file.
 
 purge-delay: 10 # 审计日志清理时间间隔，默认 10s
-health-check-endpoint-name: healthz # 健康检查路由，默认为 healthz
-health-check-endpoint-port: 7070 # 健康检查绑定端口，默认为 7070
+health-check-path: healthz # 健康检查路由，默认为 /healthz
+health-check-address: 0.0.0.0:7070 # 健康检查绑定端口，默认为 0.0.0.0:7070
 omit-detailed-recording: true # 设置为 true 会记录详细的授权审计日志，默认为 false
 
 # Redis 配置
