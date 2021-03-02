@@ -16,7 +16,7 @@ release.verify: tools.verify.git-chglog tools.verify.github-release tools.verify
 
 .PHONY: release.tag
 release.tag: tools.verify.gsemver release.ensure-tag
-	@git push origin v`gsemver bump`
+	@git push origin `git describe --tags --abbrev=0`
 
 .PHONY: release.ensure-tag
 release.ensure-tag: tools.verify.gsemver
