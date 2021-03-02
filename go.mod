@@ -13,7 +13,6 @@ require (
 	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0
-	github.com/cweill/gotests v1.6.0 // indirect
 	github.com/dgraph-io/ristretto v0.0.3
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/dlclark/regexp2 v1.4.0 // indirect
@@ -81,6 +80,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tpkeeper/gin-dump v1.0.0
 	github.com/ugorji/go v1.2.4 // indirect
+	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
@@ -103,7 +103,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/mysql v1.0.4
 	gorm.io/gorm v1.20.12
-	honnef.co/go/tools v0.0.1-2020.1.6 // indirect
+	honnef.co/go/tools v0.1.2 // indirect
 	k8s.io/klog v1.0.0
 )
 
