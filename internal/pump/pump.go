@@ -192,16 +192,16 @@ func initialisePumps(completedOptions completedPumpOptions) {
 		if err != nil {
 			log.Errorf("Pump load error (skipping): %s", err.Error())
 		} else {
-			thisPmp := pmpType.New()
-			initErr := thisPmp.Init(pmp.Meta)
+			pmpIns := pmpType.New()
+			initErr := pmpIns.Init(pmp.Meta)
 			if initErr != nil {
 				log.Errorf("Pump init error (skipping): %s", initErr.Error())
 			} else {
-				log.Infof("Init Pump: %s", thisPmp.GetName())
-				thisPmp.SetFilters(pmp.Filters)
-				thisPmp.SetTimeout(pmp.Timeout)
-				thisPmp.SetOmitDetailedRecording(pmp.OmitDetailedRecording)
-				pmps[i] = thisPmp
+				log.Infof("Init Pump: %s", pmpIns.GetName())
+				pmpIns.SetFilters(pmp.Filters)
+				pmpIns.SetTimeout(pmp.Timeout)
+				pmpIns.SetOmitDetailedRecording(pmp.OmitDetailedRecording)
+				pmps[i] = pmpIns
 			}
 		}
 		i++
