@@ -20,7 +20,6 @@ import (
 const analyticsKeyName = "iam-system-analytics"
 
 const (
-	recordsBufferFlushInterval       = 200 * time.Millisecond
 	recordsBufferForcedFlushInterval = 1 * time.Second
 )
 
@@ -53,12 +52,13 @@ func (a *AnalyticsRecord) SetExpiry(expiresInSeconds int64) {
 
 // RedisAnalyticsHandler will record analytics data to a redis back end as defined in the Config object.
 type RedisAnalyticsHandler struct {
-	store            storage.AnalyticsHandler
-	poolSize         int
-	recordsChan      chan *AnalyticsRecord
-	workerBufferSize uint64
-	shouldStop       uint32
-	poolWg           sync.WaitGroup
+	store                      storage.AnalyticsHandler
+	poolSize                   int
+	recordsChan                chan *AnalyticsRecord
+	workerBufferSize           uint64
+	recordsBufferFlushInterval uint64
+	shouldStop                 uint32
+	poolWg                     sync.WaitGroup
 }
 
 // NewAnalytics returns a new analytics instance.
@@ -71,10 +71,11 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Re
 	recordsChan := make(chan *AnalyticsRecord, recordsBufferSize)
 
 	return &RedisAnalyticsHandler{
-		store:            store,
-		poolSize:         ps,
-		workerBufferSize: workerBufferSize,
-		recordsChan:      recordsChan,
+		store:                      store,
+		poolSize:                   ps,
+		workerBufferSize:           workerBufferSize,
+		recordsBufferFlushInterval: options.FlushInterval,
+		recordsChan:                recordsChan,
 	}
 }
 
@@ -156,7 +157,7 @@ func (r *RedisAnalyticsHandler) recordWorker() {
 			// identify that buffer is ready to be sent
 			readyToSend = uint64(len(recordsBuffer)) == r.workerBufferSize
 
-		case <-time.After(recordsBufferFlushInterval):
+		case <-time.After(time.Duration(r.recordsBufferFlushInterval) * time.Millisecond):
 			// nothing was received for that period of time
 			// anyways send whatever we have, don't hold data too long in buffer
 			readyToSend = true

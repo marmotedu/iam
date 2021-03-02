@@ -60,6 +60,7 @@ analytics:
     enable: true # 设置为 true 后 iam-authz-server 会记录授权审计日志
     pool-size: 50 # 指定 worker 的个数，默认 50
     records-buffer-size:  2000 # 缓存的授权日志消息数
+    flush-interval: 200 # 超时投递时间，单位：毫秒，0 < flush-interval <= 1000。
     enable-detailed-recording: true # 开启记录详情，详细记录的功能
     storage-expiration-time: 24h0m0s # key 过期时间
 

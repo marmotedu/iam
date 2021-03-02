@@ -5,6 +5,7 @@
 package analytics
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/spf13/pflag"
@@ -14,6 +15,7 @@ import (
 type AnalyticsOptions struct {
 	PoolSize                int           `json:"pool-size"                 mapstructure:"pool-size"`
 	RecordsBufferSize       uint64        `json:"records-buffer-size"       mapstructure:"records-buffer-size"`
+	FlushInterval           uint64        `json:"flush-interval"            mapstructure:"flush-interval"`
 	StorageExpirationTime   time.Duration `json:"storage-expiration-time"   mapstructure:"storage-expiration-time"`
 	Enable                  bool          `json:"enable"                    mapstructure:"enable"`
 	EnableDetailedRecording bool          `json:"enable-detailed-recording" mapstructure:"enable-detailed-recording"`
@@ -25,6 +27,7 @@ func NewAnalyticsOptions() *AnalyticsOptions {
 		Enable:                  true,
 		PoolSize:                50,
 		RecordsBufferSize:       1000,
+		FlushInterval:           200,
 		EnableDetailedRecording: true,
 		StorageExpirationTime:   time.Duration(24) * time.Hour,
 	}
@@ -33,7 +36,16 @@ func NewAnalyticsOptions() *AnalyticsOptions {
 // Validate is used to parse and validate the parameters entered by the user at
 // the command line when the program starts.
 func (o *AnalyticsOptions) Validate() []error {
-	return []error{}
+	if o == nil {
+		return nil
+	}
+	errors := []error{}
+
+	if o.Enable && (o.FlushInterval < 1 || o.FlushInterval > 1000) {
+		errors = append(errors, fmt.Errorf("--analytics.flush-interval %v must be between 1 and 1000", o.FlushInterval))
+	}
+
+	return errors
 }
 
 // AddFlags adds flags related to features for a specific api server to the
