@@ -8,11 +8,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/olekukonko/tablewriter"
-	"github.com/spf13/cobra"
-
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
+	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -107,7 +106,8 @@ func (o *GetOptions) Run(args []string) error {
 			user.Email,
 			user.Phone,
 			user.CreatedAt.Format("2006-01-02 15:04:05"),
-			user.UpdatedAt.Format("2006-01-02 15:04:05")},
+			user.UpdatedAt.Format("2006-01-02 15:04:05"),
+		},
 	}
 
 	table = setHeader(table)

@@ -12,10 +12,9 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/marmotedu/component-base/pkg/util/stringutil"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
-
-	"github.com/marmotedu/component-base/pkg/util/stringutil"
 )
 
 var (

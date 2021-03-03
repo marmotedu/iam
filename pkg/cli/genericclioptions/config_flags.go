@@ -11,11 +11,10 @@ import (
 	"time"
 
 	"github.com/AlekSi/pointer"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
-
 	"github.com/marmotedu/marmotedu-sdk-go/rest"
 	"github.com/marmotedu/marmotedu-sdk-go/tools/clientcmd"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 // Defines flag for iamctl.

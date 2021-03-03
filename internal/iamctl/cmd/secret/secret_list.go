@@ -8,11 +8,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/olekukonko/tablewriter"
-	"github.com/spf13/cobra"
-
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
+	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -32,14 +31,12 @@ type ListOptions struct {
 	genericclioptions.IOStreams
 }
 
-var (
-	listExample = templates.Examples(`
+var listExample = templates.Examples(`
 		# List all secrets
 		iamctl secret list
 
 		# List secrets with limit and offset 
 		iamctl secret list --offset=0 --limit=5`)
-)
 
 // NewListOptions returns an initialized ListOptions instance.
 func NewListOptions(ioStreams genericclioptions.IOStreams) *ListOptions {

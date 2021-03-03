@@ -27,11 +27,9 @@ type Version struct {
 	ServerVersion *version.Info `json:"serverVersion,omitempty" yaml:"serverVersion,omitempty"`
 }
 
-var (
-	versionExample = templates.Examples(`
+var versionExample = templates.Examples(`
 		# Print the client and server versions for the current context
 		iamctl version`)
-)
 
 // Options is a struct to support version command.
 type Options struct {

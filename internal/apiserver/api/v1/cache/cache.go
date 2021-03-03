@@ -24,8 +24,10 @@ type Cache struct {
 	store store.Factory
 }
 
-var cacheServer *Cache
-var once sync.Once
+var (
+	cacheServer *Cache
+	once        sync.Once
+)
 
 // GetCacheInsOr return cache server instance with given factory.
 func GetCacheInsOr(store store.Factory) (*Cache, error) {

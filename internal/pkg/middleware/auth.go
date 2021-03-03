@@ -12,7 +12,6 @@ import (
 	ginjwt "github.com/appleboy/gin-jwt/v2"
 	jwt "github.com/dgrijalva/jwt-go/v4"
 	"github.com/gin-gonic/gin"
-
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
@@ -92,7 +91,6 @@ func NewAuthMiddleware(auth AuthInterface, cacheClient CacheAuthInterface) (*Aut
 			TimeFunc:         time.Now,
 			// TODO: HTTPStatusMessageFunc:
 		})
-
 		if err != nil {
 			return nil, err
 		}

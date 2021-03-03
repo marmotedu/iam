@@ -36,8 +36,10 @@ var (
 	ErrPolicyNotFound = errors.New("policy not found")
 )
 
-var onceStore sync.Once
-var storeIns *Store
+var (
+	onceStore sync.Once
+	storeIns  *Store
+)
 
 // GetStoreInsOr return store instance.
 func GetStoreInsOr(cli StoreClient) (*Store, error) {

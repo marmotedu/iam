@@ -6,14 +6,12 @@
 package options
 
 import (
-	"github.com/marmotedu/component-base/pkg/json"
-
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
-
-	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/internal/pkg/server"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ServerRunOptions runs a iam api server.

@@ -14,12 +14,10 @@ import (
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
-var (
-	secretLong = templates.LongDesc(`
+var secretLong = templates.LongDesc(`
 	Secret management commands.
 
 	This commands allow you to manage your secret on iam platform.`)
-)
 
 // NewCmdSecret returns new initialized instance of 'secret' sub command.
 func NewCmdSecret(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.Command {

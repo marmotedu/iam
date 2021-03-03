@@ -11,8 +11,7 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 )
 
-type authzAuth struct {
-}
+type authzAuth struct{}
 
 var _ middleware.CacheAuthInterface = &authzAuth{}
 

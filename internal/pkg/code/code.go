@@ -7,9 +7,8 @@ package code
 import (
 	"net/http"
 
-	"github.com/novalagung/gubrak"
-
 	"github.com/marmotedu/errors"
+	"github.com/novalagung/gubrak"
 )
 
 // ErrCode implements `github.com/marmotedu/errors`.Coder interface.

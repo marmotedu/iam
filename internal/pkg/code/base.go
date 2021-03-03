@@ -10,7 +10,7 @@ package code
 // common: basic errors.
 // Code must start with 1xxxxx.
 const (
-	// Success - 200: OK.
+	// ErrSuccess - 200: OK.
 	ErrSuccess int = iota + 100001
 
 	// ErrUnknown - 500: Internal server error.

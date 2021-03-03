@@ -10,10 +10,9 @@ import (
 	"io"
 	"os"
 
+	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
 
 	"github.com/marmotedu/iam/internal/iamctl/cmd/color"
 	"github.com/marmotedu/iam/internal/iamctl/cmd/completion"

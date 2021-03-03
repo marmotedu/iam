@@ -8,14 +8,13 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
 	// import mysql driver.
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -35,8 +34,7 @@ type DBOptions struct {
 	genericclioptions.IOStreams
 }
 
-var (
-	setExample = templates.Examples(`
+var setExample = templates.Examples(`
 		# Create new iam platform database and tables
 		iamctl set db --mysql.host=127.0.0.1:3306 --mysql.username=iam --mysql.password=iamxxxx --mysql.database=iam
 
@@ -45,7 +43,6 @@ var (
 
 		# drop and create iam platform database and tables
 		iamctl set db -d --mysql.host=127.0.0.1:3306 --mysql.username=iam --mysql.password=iamxxxx --mysql.database=iam`)
-)
 
 // NewDBOptions returns an initialized DBOptions instance.
 func NewDBOptions(ioStreams genericclioptions.IOStreams) *DBOptions {

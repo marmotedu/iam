@@ -33,11 +33,9 @@ type ValidateInfo struct {
 	Message  string
 }
 
-var (
-	validateExample = templates.Examples(`
+var validateExample = templates.Examples(`
 		# Validate the basic environment for iamctl to run
 		iamctl validate`)
-)
 
 // NewValidateOptions returns an initialized ValidateOptions instance.
 func NewValidateOptions(ioStreams genericclioptions.IOStreams) *ValidateOptions {

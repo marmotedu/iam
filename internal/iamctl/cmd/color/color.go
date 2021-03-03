@@ -10,10 +10,9 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/marmotedu/component-base/pkg/util/stringutil"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
-
-	"github.com/marmotedu/component-base/pkg/util/stringutil"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"

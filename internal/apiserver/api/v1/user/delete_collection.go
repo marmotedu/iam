@@ -6,7 +6,6 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 

@@ -7,9 +7,9 @@ package db
 import (
 	"time"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"gorm.io/gorm"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 const (

@@ -41,9 +41,11 @@ type Config struct {
 // ErrRedisIsDown is returned when we can't communicate with redis.
 var ErrRedisIsDown = errors.New("storage: Redis is either down or ws not configured")
 
-var singlePool atomic.Value
-var singleCachePool atomic.Value
-var redisUp atomic.Value
+var (
+	singlePool      atomic.Value
+	singleCachePool atomic.Value
+	redisUp         atomic.Value
+)
 
 var disableRedis atomic.Value
 
@@ -1107,7 +1109,6 @@ func (r *RedisCluster) IsMemberOfSet(keyName, value string) bool {
 		return false
 	}
 	val, err := r.singleton().SIsMember(r.fixKey(keyName), value).Result()
-
 	if err != nil {
 		log.Errorf("Error trying to check set member: %s", err.Error())
 		return false

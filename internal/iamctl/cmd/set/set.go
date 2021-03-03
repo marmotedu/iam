@@ -6,19 +6,17 @@
 package set
 
 import (
+	"github.com/spf13/cobra"
+
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
-
-	"github.com/spf13/cobra"
 )
 
-var (
-	setLong = templates.LongDesc(`
+var setLong = templates.LongDesc(`
 	Configure objects.
 
 	These commands help you make changes to existing objects.`)
-)
 
 // NewCmdSet returns an initialized Command instance for 'set' sub command.
 func NewCmdSet(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.Command {

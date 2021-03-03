@@ -7,11 +7,10 @@ package user
 import (
 	"context"
 
-	"github.com/olekukonko/tablewriter"
-	"github.com/spf13/cobra"
-
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
+	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -31,14 +30,12 @@ type ListOptions struct {
 	genericclioptions.IOStreams
 }
 
-var (
-	listExample = templates.Examples(`
+var listExample = templates.Examples(`
 		# List all users
 		iamctl user list
 
 		# List users with limit and offset
 		iamctl user list --offset=0 --limit=10`)
-)
 
 // NewListOptions returns an initialized ListOptions instance.
 func NewListOptions(ioStreams genericclioptions.IOStreams) *ListOptions {
@@ -106,8 +103,10 @@ func (o *ListOptions) Run(args []string) error {
 	table := tablewriter.NewWriter(o.Out)
 
 	for _, user := range users.Items {
-		data = append(data, []string{user.Name, user.Nickname, user.Email,
-			user.Phone, user.CreatedAt.Format("2006-01-02 15:04:05"), user.UpdatedAt.Format("2006-01-02 15:04:05")})
+		data = append(data, []string{
+			user.Name, user.Nickname, user.Email,
+			user.Phone, user.CreatedAt.Format("2006-01-02 15:04:05"), user.UpdatedAt.Format("2006-01-02 15:04:05"),
+		})
 	}
 
 	table = setHeader(table)

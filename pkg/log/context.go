@@ -32,6 +32,7 @@ const (
 func WithContext(ctx context.Context) context.Context {
 	return std.WithContext(ctx)
 }
+
 func (l *zapLogger) WithContext(ctx context.Context) context.Context {
 	return context.WithValue(ctx, logContextKey, l)
 }

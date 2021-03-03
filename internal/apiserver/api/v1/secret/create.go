@@ -7,7 +7,6 @@ package secret
 import (
 	"github.com/AlekSi/pointer"
 	"github.com/gin-gonic/gin"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
@@ -41,7 +40,6 @@ func (s *SecretHandler) Create(c *gin.Context) {
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(-1),
 	})
-
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 		return

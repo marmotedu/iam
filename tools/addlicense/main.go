@@ -116,11 +116,13 @@ var patterns = struct {
 	files []*regexp.Regexp
 }{}
 
-var licenseTemplate = make(map[string]*template.Template)
-var usage = func() {
-	fmt.Println(helpText)
-	pflag.PrintDefaults()
-}
+var (
+	licenseTemplate = make(map[string]*template.Template)
+	usage           = func() {
+		fmt.Println(helpText)
+		pflag.PrintDefaults()
+	}
+)
 
 // nolint: gocognit // no lint
 func main() {

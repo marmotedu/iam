@@ -13,11 +13,9 @@ import (
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
 )
 
-var (
-	optionsExample = templates.Examples(`
+var optionsExample = templates.Examples(`
 		# Print flags inherited by all commands
 		iamctl options`)
-)
 
 // NewCmdOptions implements the options command.
 func NewCmdOptions(out io.Writer) *cobra.Command {

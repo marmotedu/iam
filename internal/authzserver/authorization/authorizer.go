@@ -5,9 +5,8 @@
 package authorization
 
 import (
-	"github.com/ory/ladon"
-
 	authzv1 "github.com/marmotedu/api/authz/v1"
+	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/pkg/log"
 )

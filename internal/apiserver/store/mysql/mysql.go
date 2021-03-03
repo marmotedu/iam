@@ -8,9 +8,8 @@ import (
 	"fmt"
 	"sync"
 
-	"gorm.io/gorm"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
+	"gorm.io/gorm"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
@@ -46,8 +45,10 @@ func (ds *datastore) Close() error {
 	return db.Close()
 }
 
-var mysqlFactory store.Factory
-var once sync.Once
+var (
+	mysqlFactory store.Factory
+	once         sync.Once
+)
 
 // GetMySQLFactoryOr create mysql factory with the given config.
 func GetMySQLFactoryOr(opts *genericoptions.MySQLOptions) (store.Factory, error) {

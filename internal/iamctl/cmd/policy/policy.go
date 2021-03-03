@@ -13,12 +13,10 @@ import (
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
-var (
-	policyLong = templates.LongDesc(`
+var policyLong = templates.LongDesc(`
 	Authorization policy management commands.
 
 	This commands allow you to manage your authorization policy on iam platform.`)
-)
 
 // NewCmdPolicy returns new initialized instance of 'policy' sub command.
 func NewCmdPolicy(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.Command {

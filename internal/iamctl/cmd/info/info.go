@@ -11,9 +11,8 @@ import (
 	"strconv"
 
 	hoststat "github.com/likexian/host-stat-go"
-	"github.com/spf13/cobra"
-
 	"github.com/marmotedu/component-base/pkg/util/iputil"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -35,11 +34,9 @@ type InfoOptions struct {
 	genericclioptions.IOStreams
 }
 
-var (
-	infoExample = templates.Examples(`
+var infoExample = templates.Examples(`
 		# Print the host information
 		iamctl info`)
-)
 
 // NewInfoOptions returns an initialized InfoOptions instance.
 func NewInfoOptions(ioStreams genericclioptions.IOStreams) *InfoOptions {

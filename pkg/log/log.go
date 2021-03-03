@@ -133,11 +133,13 @@ func (l *infoLogger) Info(msg string, fields ...Field) {
 		checkedEntry.Write(fields...)
 	}
 }
+
 func (l *infoLogger) Infof(format string, args ...interface{}) {
 	if checkedEntry := l.log.Check(l.level, fmt.Sprintf(format, args...)); checkedEntry != nil {
 		checkedEntry.Write()
 	}
 }
+
 func (l *infoLogger) Infow(msg string, keysAndValues ...interface{}) {
 	if checkedEntry := l.log.Check(l.level, msg); checkedEntry != nil {
 		checkedEntry.Write(handleFields(l.log, keysAndValues)...)
@@ -200,8 +202,10 @@ func handleFields(l *zap.Logger, args []interface{}, additional ...zap.Field) []
 	return append(fields, additional...)
 }
 
-var std = New(NewOptions())
-var mu sync.Mutex
+var (
+	std = New(NewOptions())
+	mu  sync.Mutex
+)
 
 // InitWithOptions initializes.
 func InitWithOptions(opts *Options) {
@@ -304,6 +308,7 @@ func StdInfoLogger() *log.Logger {
 
 // V return a leveled InfoLogger.
 func V(level int) InfoLogger { return std.V(level) }
+
 func (l *zapLogger) V(level int) InfoLogger {
 	lvl := zapcore.Level(-1 * level)
 	if l.zapLogger.Core().Enabled(lvl) {
@@ -322,6 +327,7 @@ func (l *zapLogger) Write(p []byte) (n int, err error) {
 
 // WithValues creates a child logger and adds adds Zap fields to it.
 func WithValues(keysAndValues ...interface{}) Logger { return std.WithValues(keysAndValues...) }
+
 func (l *zapLogger) WithValues(keysAndValues ...interface{}) Logger {
 	newLogger := l.zapLogger.With(handleFields(l.zapLogger, keysAndValues)...)
 	return NewLogger(newLogger)
@@ -330,6 +336,7 @@ func (l *zapLogger) WithValues(keysAndValues ...interface{}) Logger {
 // WithName adds a new path segment to the logger's name. Segments are joined by
 // periods. By default, Loggers are unnamed.
 func WithName(s string) Logger { return std.WithName(s) }
+
 func (l *zapLogger) WithName(name string) Logger {
 	newLogger := l.zapLogger.Named(name)
 	return NewLogger(newLogger)
@@ -338,6 +345,7 @@ func (l *zapLogger) WithName(name string) Logger {
 // Flush calls the underlying Core's Sync method, flushing any buffered
 // log entries. Applications should take care to call Sync before exiting.
 func Flush() { std.Flush() }
+
 func (l *zapLogger) Flush() {
 	_ = l.zapLogger.Sync()
 }
@@ -375,6 +383,7 @@ func CheckIntLevel(level int32) bool {
 func Debug(msg string, fields ...Field) {
 	std.zapLogger.Debug(msg, fields...)
 }
+
 func (l *zapLogger) Debug(msg string, fields ...Field) {
 	l.zapLogger.Debug(msg, fields...)
 }
@@ -383,6 +392,7 @@ func (l *zapLogger) Debug(msg string, fields ...Field) {
 func Debugf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Debugf(format, v...)
 }
+
 func (l *zapLogger) Debugf(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Debugf(format, v...)
 }
@@ -391,6 +401,7 @@ func (l *zapLogger) Debugf(format string, v ...interface{}) {
 func Debugw(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Debugw(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Debugw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Debugw(msg, keysAndValues...)
 }
@@ -399,6 +410,7 @@ func (l *zapLogger) Debugw(msg string, keysAndValues ...interface{}) {
 func Info(msg string, fields ...Field) {
 	std.zapLogger.Info(msg, fields...)
 }
+
 func (l *zapLogger) Info(msg string, fields ...Field) {
 	l.zapLogger.Info(msg, fields...)
 }
@@ -407,6 +419,7 @@ func (l *zapLogger) Info(msg string, fields ...Field) {
 func Infof(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Infof(format, v...)
 }
+
 func (l *zapLogger) Infof(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Infof(format, v...)
 }
@@ -415,6 +428,7 @@ func (l *zapLogger) Infof(format string, v ...interface{}) {
 func Infow(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Infow(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Infow(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Infow(msg, keysAndValues...)
 }
@@ -423,6 +437,7 @@ func (l *zapLogger) Infow(msg string, keysAndValues ...interface{}) {
 func Warn(msg string, fields ...Field) {
 	std.zapLogger.Warn(msg, fields...)
 }
+
 func (l *zapLogger) Warn(msg string, fields ...Field) {
 	l.zapLogger.Warn(msg, fields...)
 }
@@ -431,6 +446,7 @@ func (l *zapLogger) Warn(msg string, fields ...Field) {
 func Warnf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Warnf(format, v...)
 }
+
 func (l *zapLogger) Warnf(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Warnf(format, v...)
 }
@@ -439,6 +455,7 @@ func (l *zapLogger) Warnf(format string, v ...interface{}) {
 func Warnw(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Warnw(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Warnw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Warnw(msg, keysAndValues...)
 }
@@ -447,6 +464,7 @@ func (l *zapLogger) Warnw(msg string, keysAndValues ...interface{}) {
 func Error(msg string, fields ...Field) {
 	std.zapLogger.Error(msg, fields...)
 }
+
 func (l *zapLogger) Error(msg string, fields ...Field) {
 	l.zapLogger.Error(msg, fields...)
 }
@@ -455,6 +473,7 @@ func (l *zapLogger) Error(msg string, fields ...Field) {
 func Errorf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Errorf(format, v...)
 }
+
 func (l *zapLogger) Errorf(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Errorf(format, v...)
 }
@@ -463,6 +482,7 @@ func (l *zapLogger) Errorf(format string, v ...interface{}) {
 func Errorw(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Errorw(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Errorw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Errorw(msg, keysAndValues...)
 }
@@ -471,6 +491,7 @@ func (l *zapLogger) Errorw(msg string, keysAndValues ...interface{}) {
 func Panic(msg string, fields ...Field) {
 	std.zapLogger.Panic(msg, fields...)
 }
+
 func (l *zapLogger) Panic(msg string, fields ...Field) {
 	l.zapLogger.Panic(msg, fields...)
 }
@@ -479,6 +500,7 @@ func (l *zapLogger) Panic(msg string, fields ...Field) {
 func Panicf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Panicf(format, v...)
 }
+
 func (l *zapLogger) Panicf(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Panicf(format, v...)
 }
@@ -487,6 +509,7 @@ func (l *zapLogger) Panicf(format string, v ...interface{}) {
 func Panicw(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Panicw(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Panicw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Panicw(msg, keysAndValues...)
 }
@@ -495,6 +518,7 @@ func (l *zapLogger) Panicw(msg string, keysAndValues ...interface{}) {
 func Fatal(msg string, fields ...Field) {
 	std.zapLogger.Fatal(msg, fields...)
 }
+
 func (l *zapLogger) Fatal(msg string, fields ...Field) {
 	l.zapLogger.Fatal(msg, fields...)
 }
@@ -503,6 +527,7 @@ func (l *zapLogger) Fatal(msg string, fields ...Field) {
 func Fatalf(format string, v ...interface{}) {
 	std.zapLogger.Sugar().Fatalf(format, v...)
 }
+
 func (l *zapLogger) Fatalf(format string, v ...interface{}) {
 	l.zapLogger.Sugar().Fatalf(format, v...)
 }
@@ -511,6 +536,7 @@ func (l *zapLogger) Fatalf(format string, v ...interface{}) {
 func Fatalw(msg string, keysAndValues ...interface{}) {
 	std.zapLogger.Sugar().Fatalw(msg, keysAndValues...)
 }
+
 func (l *zapLogger) Fatalw(msg string, keysAndValues ...interface{}) {
 	l.zapLogger.Sugar().Fatalw(msg, keysAndValues...)
 }
@@ -519,6 +545,7 @@ func (l *zapLogger) Fatalw(msg string, keysAndValues ...interface{}) {
 func L(ctx context.Context) *zapLogger {
 	return std.L(ctx)
 }
+
 func (l *zapLogger) L(ctx context.Context) *zapLogger {
 	lg := l.clone()
 

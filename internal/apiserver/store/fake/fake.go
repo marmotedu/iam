@@ -42,8 +42,10 @@ func (ds *datastore) Close() error {
 	return nil
 }
 
-var fakeFactory store.Factory
-var once sync.Once
+var (
+	fakeFactory store.Factory
+	once        sync.Once
+)
 
 // GetFakeFactoryOr create fake store.
 func GetFakeFactoryOr() (store.Factory, error) {

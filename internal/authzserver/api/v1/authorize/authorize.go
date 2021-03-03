@@ -7,10 +7,9 @@ package authorize
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ory/ladon"
-
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
+	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/internal/authzserver/authorization"
 	"github.com/marmotedu/iam/internal/authzserver/authorization/authorizer"

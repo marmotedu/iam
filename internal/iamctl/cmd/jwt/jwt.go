@@ -13,12 +13,10 @@ import (
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
-var (
-	jwtLong = templates.LongDesc(`
+var jwtLong = templates.LongDesc(`
 	JWT command.
 
 	This commands is used to sigin/show/verify jwt token.`)
-)
 
 // NewCmdJWT returns new initialized instance of 'jwt' sub command.
 func NewCmdJWT(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.Command {

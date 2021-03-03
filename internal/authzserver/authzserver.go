@@ -11,23 +11,21 @@ import (
 
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
 	"github.com/marmotedu/component-base/pkg/cli/globalflag"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
 	"github.com/marmotedu/component-base/pkg/term"
 	"github.com/marmotedu/component-base/pkg/version"
 	"github.com/marmotedu/component-base/pkg/version/verflag"
 	"github.com/marmotedu/errors"
-
-	"github.com/marmotedu/iam/pkg/log"
-	"github.com/marmotedu/iam/pkg/shutdown"
-	"github.com/marmotedu/iam/pkg/shutdown/shutdownmanagers/posixsignal"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/options"
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/authzserver/store/load"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
+	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/iam/pkg/shutdown"
+	"github.com/marmotedu/iam/pkg/shutdown/shutdownmanagers/posixsignal"
 	"github.com/marmotedu/iam/pkg/storage"
 )
 
@@ -75,7 +73,7 @@ Find more ladon information at:
 			}
 
 			// set default options
-			completedOptions, err := Complete(s)
+			completedOptions, err := complete(s)
 			if err != nil {
 				return err
 			}
@@ -275,7 +273,7 @@ func CreateAuthzServerConfig(s *options.ServerRunOptions) (*authzServerConfig, e
 	config := &authzServerConfig{
 		GenericConfig: genericConfig,
 		ExtraConfig:   ExtraConfig{
-			//SecretKey: s.SecretKey,
+			// SecretKey: s.SecretKey,
 		},
 	}
 
@@ -287,9 +285,9 @@ type completedServerRunOptions struct {
 	*options.ServerRunOptions
 }
 
-// Complete set default ServerRunOptions.
+// complete set default ServerRunOptions.
 // Should be called after authzserver flags parsed.
-func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
+func complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	var options completedServerRunOptions
 
 	genericapiserver.LoadConfig(s.AuthzConfig, recommendedFileName)

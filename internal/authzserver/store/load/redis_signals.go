@@ -104,7 +104,6 @@ func (r *RedisNotifier) Notify(notif interface{}) bool {
 	}
 
 	toSend, err := json.Marshal(notif)
-
 	if err != nil {
 		log.Errorf("Problem marshaling notification: %s", err.Error())
 		return false

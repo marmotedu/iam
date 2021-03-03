@@ -27,8 +27,10 @@ type GRPCClient struct {
 
 var _ StoreClient = &GRPCClient{}
 
-var once sync.Once
-var client *GRPCClient
+var (
+	once   sync.Once
+	client *GRPCClient
+)
 
 // GetGRPCClientOrDie return cache instance and panics on any error.
 func GetGRPCClientOrDie(address string, clientCA string) StoreClient {

@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/coreos/etcd/clientv3"
-
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"google.golang.org/grpc"
 
@@ -74,8 +73,10 @@ func defaultOnKeepAliveFailed() {
 	log.Warn("etcdStore keepalive failed")
 }
 
-var etcdFactory store.Factory
-var once sync.Once
+var (
+	etcdFactory store.Factory
+	once        sync.Once
+)
 
 // GetEtcdFactoryOr create a etcdFactory store with given options.
 func GetEtcdFactoryOr(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()) (store.Factory, error) {

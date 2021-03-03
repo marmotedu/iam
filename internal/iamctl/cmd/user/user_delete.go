@@ -8,10 +8,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/spf13/cobra"
-
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/marmotedu-sdk-go/marmotedu/service/iam"
+	"github.com/spf13/cobra"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"

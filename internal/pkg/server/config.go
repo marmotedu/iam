@@ -13,9 +13,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-
 	"github.com/marmotedu/component-base/pkg/util/homedir"
+	"github.com/spf13/viper"
 )
 
 const (

@@ -14,12 +14,10 @@ import (
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
-var (
-	userLong = templates.LongDesc(`
+var userLong = templates.LongDesc(`
 	User management commands.
 
 Administrator can use all subcommands, non-administrator only allow to use create/get/upate. When call get/update non-administrator only allow to operate their own resources, if permission not allowed, will return an 'Permission denied' error.`)
-)
 
 // NewCmdUser returns new initialized instance of 'user' sub command.
 func NewCmdUser(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.Command {

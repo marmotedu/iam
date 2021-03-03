@@ -8,23 +8,19 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"sync"
-
 	"strings"
+	"sync"
 	"time"
 
 	// limits "github.com/gin-contrib/size".
-
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
-	ginprometheus "github.com/zsais/go-gin-prometheus"
-
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/component-base/pkg/version"
-
-	"github.com/marmotedu/iam/pkg/log"
+	ginprometheus "github.com/zsais/go-gin-prometheus"
 
 	"github.com/marmotedu/iam/internal/pkg/middleware"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // GenericAPIServer contains state for a iam api server.

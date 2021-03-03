@@ -33,14 +33,12 @@ type ListOptions struct {
 	genericclioptions.IOStreams
 }
 
-var (
-	listExample = templates.Examples(`
+var listExample = templates.Examples(`
 		# Display all policy resources
 		iamctl poicy list
 
 		# Display all policy resources with offset and limit
 		iamctl policy list --offset=0 --limit=10`)
-)
 
 // NewListOptions returns an initialized ListOptions instance.
 func NewListOptions(ioStreams genericclioptions.IOStreams) *ListOptions {

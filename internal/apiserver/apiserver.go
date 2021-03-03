@@ -73,7 +73,7 @@ Find more iam-apiserver information at:
 			}
 
 			// set default options
-			completedOptions, err := Complete(s)
+			completedOptions, err := complete(s)
 			if err != nil {
 				return err
 			}
@@ -302,9 +302,9 @@ type completedServerRunOptions struct {
 	*options.ServerRunOptions
 }
 
-// Complete set default ServerRunOptions.
+// complete set default ServerRunOptions.
 // Should be called after iam-apiserver flags parsed.
-func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
+func complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	var options completedServerRunOptions
 
 	genericapiserver.LoadConfig(s.APIConfig, recommendedFileName)

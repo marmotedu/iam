@@ -6,7 +6,6 @@ package policy
 
 import (
 	"github.com/gin-gonic/gin"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"

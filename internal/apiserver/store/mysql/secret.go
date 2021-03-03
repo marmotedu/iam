@@ -7,11 +7,10 @@ package mysql
 import (
 	"context"
 
-	"gorm.io/gorm"
-
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"gorm.io/gorm"
 
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 )
