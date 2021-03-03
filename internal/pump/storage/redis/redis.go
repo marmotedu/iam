@@ -11,18 +11,20 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
+	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ------------------- REDIS CLUSTER STORAGE MANAGER -------------------------------
 
 // RedisKeyPrefix defines prefix for iam analytics key.
-const RedisKeyPrefix string = "analytics-"
-const defaultRedisAddress = "127.0.0.1:6379"
+const (
+	RedisKeyPrefix      = "analytics-"
+	defaultRedisAddress = "127.0.0.1:6379"
+)
 
 var redisClusterSingleton redis.UniversalClient
 
@@ -39,6 +41,7 @@ func NewRedisClusterPool(forceReconnect bool, config genericoptions.RedisOptions
 	if !forceReconnect {
 		if redisClusterSingleton != nil {
 			log.Debug("Redis pool already INITIALIZED")
+
 			return redisClusterSingleton
 		}
 	} else {
@@ -228,6 +231,7 @@ func (r *RedisClusterStorageManager) Init(config interface{}) error {
 	}
 
 	r.KeyPrefix = RedisKeyPrefix
+
 	return nil
 }
 
@@ -236,6 +240,7 @@ func (r *RedisClusterStorageManager) Connect() bool {
 	if r.db == nil {
 		log.Debug("Connecting to redis cluster")
 		r.db = NewRedisClusterPool(false, r.Config)
+
 		return true
 	}
 
@@ -243,6 +248,7 @@ func (r *RedisClusterStorageManager) Connect() bool {
 
 	// Reset it just in case
 	r.db = redisClusterSingleton
+
 	return true
 }
 
@@ -265,6 +271,7 @@ func (r *RedisClusterStorageManager) GetAndDeleteSet(keyName string) []interface
 	if r.db == nil {
 		log.Warn("Connection dropped, connecting..")
 		r.Connect()
+
 		return r.GetAndDeleteSet(keyName)
 	}
 
@@ -281,7 +288,6 @@ func (r *RedisClusterStorageManager) GetAndDeleteSet(keyName string) []interface
 
 		return nil
 	})
-
 	if err != nil {
 		log.Errorf("Multi command failed: %s", err)
 		r.Connect()
@@ -313,8 +319,10 @@ func (r *RedisClusterStorageManager) SetKey(keyName, session string, timeout int
 	}
 	if err != nil {
 		log.Errorf("Error trying to set value: %s", err.Error())
-		return err
+
+		return errors.Wrap(err, "failed to set key")
 	}
+
 	return nil
 }
 
@@ -324,7 +332,8 @@ func (r *RedisClusterStorageManager) SetExp(keyName string, timeout int64) error
 	if err != nil {
 		log.Errorf("Could not EXPIRE key: %s", err.Error())
 	}
-	return err
+
+	return errors.Wrap(err, "failed to set expire time for key")
 }
 
 func (r *RedisClusterStorageManager) ensureConnection() {

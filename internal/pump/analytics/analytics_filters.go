@@ -18,6 +18,7 @@ func (filters AnalyticsFilters) ShouldFilter(record AnalyticsRecord) bool {
 	case len(filters.Usernames) > 0 && !stringInSlice(record.Username, filters.Usernames):
 		return true
 	}
+
 	return false
 }
 
@@ -36,5 +37,6 @@ func stringInSlice(a string, list []string) bool {
 			return true
 		}
 	}
+
 	return false
 }

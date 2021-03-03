@@ -11,9 +11,8 @@ import (
 
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // SyslogPump defines a syslog pump with syslog specific options and common options.
@@ -25,9 +24,7 @@ type SyslogPump struct {
 	CommonPumpConfig
 }
 
-var (
-	logPrefix = "syslog-pump"
-)
+var logPrefix = "syslog-pump"
 
 // SyslogConf defines syslog specific options.
 type SyslogConf struct {
@@ -40,6 +37,7 @@ type SyslogConf struct {
 // New create a syslog pump instance.
 func (s *SyslogPump) New() Pump {
 	newPump := SyslogPump{}
+
 	return &newPump
 }
 
@@ -53,7 +51,6 @@ func (s *SyslogPump) Init(config interface{}) error {
 	// Read configuration file
 	s.syslogConf = &SyslogConf{}
 	err := mapstructure.Decode(config, &s.syslogConf)
-
 	if err != nil {
 		log.Fatalf("Failed to decode configuration: %s", err.Error())
 	}
@@ -65,6 +62,7 @@ func (s *SyslogPump) Init(config interface{}) error {
 	initWriter(s)
 
 	log.Debug("Syslog Pump active")
+
 	return nil
 }
 
@@ -78,7 +76,6 @@ func initWriter(s *SyslogPump) {
 		s.syslogConf.NetworkAddr,
 		syslog.Priority(s.syslogConf.LogLevel),
 		tag)
-
 	if err != nil {
 		log.Fatalf("failed to connect to Syslog Daemon: %s", err.Error())
 	}

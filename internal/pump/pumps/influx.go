@@ -38,6 +38,7 @@ type InfluxConf struct {
 // New create a influx pump instance.
 func (i *InfluxPump) New() Pump {
 	newPump := InfluxPump{}
+
 	return &newPump
 }
 
@@ -50,7 +51,6 @@ func (i *InfluxPump) GetName() string {
 func (i *InfluxPump) Init(config interface{}) error {
 	i.dbConf = &InfluxConf{}
 	err := mapstructure.Decode(config, &i.dbConf)
-
 	if err != nil {
 		log.Fatalf("Failed to decode configuration: %s", err.Error())
 	}
@@ -68,7 +68,6 @@ func (i *InfluxPump) connect() client.Client {
 		Username: i.dbConf.Username,
 		Password: i.dbConf.Password,
 	})
-
 	if err != nil {
 		log.Errorf("Influx connection failed: %s", err.Error())
 		time.Sleep(5 * time.Second)
@@ -131,6 +130,7 @@ func (i *InfluxPump) WriteData(ctx context.Context, data []interface{}) error {
 		// New record
 		if pt, err = client.NewPoint(table, tags, fields, time.Now()); err != nil {
 			log.Error(err.Error())
+
 			continue
 		}
 

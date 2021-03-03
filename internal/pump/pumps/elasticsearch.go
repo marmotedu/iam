@@ -12,12 +12,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 	elastic "github.com/olivere/elastic/v7"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // ElasticsearchPump defines a elasticsearch pump with elasticsearch specific options and common options.
@@ -97,7 +97,7 @@ func getOperator(conf ElasticsearchConf) (ElasticsearchOperator, error) {
 	)
 
 	if err != nil {
-		return e, err
+		return e, errors.Wrap(err, "failed to new es client")
 	}
 	// Setup a bulk processor
 	p := e.esClient.BulkProcessor().Name("IAMPumpESv6BackgroundProcessor")
@@ -119,12 +119,13 @@ func getOperator(conf ElasticsearchConf) (ElasticsearchOperator, error) {
 
 	e.bulkProcessor, err = p.Do(context.Background())
 
-	return e, err
+	return e, errors.Wrap(err, "failed to start bulk processor")
 }
 
 // New create a elasticsearch pump instance.
 func (e *ElasticsearchPump) New() Pump {
 	newPump := ElasticsearchPump{}
+
 	return &newPump
 }
 
@@ -202,6 +203,7 @@ func getIndexName(esConf *ElasticsearchConf) string {
 		// This formats the date to be YYYY.MM.DD but Golang makes you use a specific date for its date formatting
 		indexName += "-" + currentTime.Format("2006.01.02")
 	}
+
 	return indexName
 }
 
@@ -232,6 +234,7 @@ func (e Elasticsearch7Operator) processData(ctx context.Context, data []interfac
 		d, ok := data[dataIndex].(analytics.AnalyticsRecord)
 		if !ok {
 			log.Errorf("Error while writing %s: data not of type analytics.AnalyticsRecord", data[dataIndex])
+
 			continue
 		}
 

@@ -9,15 +9,13 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/ory/ladon"
-
-	"github.com/marmotedu/iam/pkg/log"
-
-	"github.com/marmotedu/iam/internal/pump/analytics"
-
 	"github.com/mitchellh/mapstructure"
+	"github.com/ory/ladon"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // PrometheusPump defines a prometheus pump with prometheus specific options and common options.
@@ -47,6 +45,7 @@ func (p *PrometheusPump) New() Pump {
 	)
 
 	prometheus.MustRegister(newPump.TotalStatusMetrics)
+
 	return &newPump
 }
 
@@ -95,5 +94,6 @@ func (p *PrometheusPump) WriteData(ctx context.Context, data []interface{}) erro
 
 		p.TotalStatusMetrics.WithLabelValues(code, record.Username).Inc()
 	}
+
 	return nil
 }

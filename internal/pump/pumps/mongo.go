@@ -20,12 +20,12 @@ import (
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/mgo.v2"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // Define unit constant.
@@ -80,7 +80,7 @@ type MongoConf struct {
 func loadCertficateAndKeyFromFile(path string) (*tls.Certificate, error) {
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to read file")
 	}
 
 	var cert tls.Certificate
@@ -94,7 +94,7 @@ func loadCertficateAndKeyFromFile(path string) (*tls.Certificate, error) {
 		} else {
 			cert.PrivateKey, err = parsePrivateKey(block.Bytes)
 			if err != nil {
-				return nil, fmt.Errorf("failure reading private key from \"%s\": %s", path, err)
+				return nil, fmt.Errorf("failure reading private key from \"%s\": %w", path, err)
 			}
 		}
 		raw = rest
@@ -124,6 +124,7 @@ func parsePrivateKey(der []byte) (crypto.PrivateKey, error) {
 	if key, err := x509.ParseECPrivateKey(der); err == nil {
 		return key, nil
 	}
+
 	return nil, fmt.Errorf("failed to parse private key")
 }
 
@@ -145,7 +146,7 @@ func mongoType(session *mgo.Session) MongoType {
 // nolint: gocognit
 func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 	if dialInfo, err = mgo.ParseURL(conf.MongoURL); err != nil {
-		return dialInfo, err
+		return dialInfo, errors.Wrap(err, "failed to parse mongo url")
 	}
 
 	// nolint: nestif
@@ -182,7 +183,7 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 						var cert *x509.Certificate
 						cert, err = x509.ParseCertificate(asn1Data)
 						if err != nil {
-							return err
+							return errors.Wrap(err, "failed to parse certificate")
 						}
 						certs[i] = cert
 					}
@@ -202,7 +203,7 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 					}
 					_, err = certs[0].Verify(opts)
 
-					return err
+					return errors.Wrap(err, "failed to verify certificate")
 				}
 			}
 
@@ -226,6 +227,7 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 // New create a mongo pump instance.
 func (m *MongoPump) New() Pump {
 	newPump := MongoPump{}
+
 	return &newPump
 }
 
@@ -339,7 +341,7 @@ func (m *MongoPump) collectionExists(name string) (bool, error) {
 	if err != nil {
 		log.Errorf("Unable to get column names: %s", err.Error())
 
-		return false, err
+		return false, errors.Wrap(err, "failed to get collection names")
 	}
 
 	for _, coll := range colNames {
@@ -366,7 +368,7 @@ func (m *MongoPump) ensureIndexes() error {
 
 	err = c.EnsureIndex(orgIndex)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to ensures an index with the given key exists")
 	}
 
 	apiIndex := mgo.Index{
@@ -376,7 +378,7 @@ func (m *MongoPump) ensureIndexes() error {
 
 	err = c.EnsureIndex(apiIndex)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to ensures an index with the given key exists")
 	}
 
 	logBrowserIndex := mgo.Index{
@@ -387,7 +389,7 @@ func (m *MongoPump) ensureIndexes() error {
 
 	err = c.EnsureIndex(logBrowserIndex)
 	if err != nil && !strings.Contains(err.Error(), "already exists with a different name") {
-		return err
+		return errors.Wrap(err, "failed to ensures an index with the given key exists")
 	}
 
 	return nil

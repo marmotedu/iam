@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/marmotedu/component-base/pkg/json"
+	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl"
@@ -52,6 +53,7 @@ type KafkaConf struct {
 // New create a kafka pump instance.
 func (k *KafkaPump) New() Pump {
 	newPump := KafkaPump{}
+
 	return &newPump
 }
 
@@ -65,7 +67,6 @@ func (k *KafkaPump) Init(config interface{}) error {
 	// Read configuration file
 	k.kafkaConf = &KafkaConf{}
 	err := mapstructure.Decode(config, &k.kafkaConf)
-
 	if err != nil {
 		log.Fatalf("Failed to decode configuration: %s", err.Error())
 	}
@@ -79,7 +80,8 @@ func (k *KafkaPump) Init(config interface{}) error {
 			cert, err = tls.LoadX509KeyPair(k.kafkaConf.SSLCertFile, k.kafkaConf.SSLKeyFile)
 			if err != nil {
 				log.Debugf("Error loading mTLS certificates: %s", err.Error())
-				return err
+
+				return errors.Wrap(err, "failed loading mTLS certificates")
 			}
 			tlsConfig = &tls.Config{
 				Certificates:       []tls.Certificate{cert},
@@ -122,7 +124,7 @@ func (k *KafkaPump) Init(config interface{}) error {
 
 	// Kafka writer connection config
 	dialer := &kafka.Dialer{
-		Timeout:       k.kafkaConf.Timeout * time.Second,
+		Timeout:       k.kafkaConf.Timeout,
 		ClientID:      k.kafkaConf.ClientID,
 		TLS:           tlsConfig,
 		SASLMechanism: mechanism,
@@ -132,13 +134,14 @@ func (k *KafkaPump) Init(config interface{}) error {
 	k.writerConfig.Topic = k.kafkaConf.Topic
 	k.writerConfig.Balancer = &kafka.LeastBytes{}
 	k.writerConfig.Dialer = dialer
-	k.writerConfig.WriteTimeout = k.kafkaConf.Timeout * time.Second
-	k.writerConfig.ReadTimeout = k.kafkaConf.Timeout * time.Second
+	k.writerConfig.WriteTimeout = k.kafkaConf.Timeout
+	k.writerConfig.ReadTimeout = k.kafkaConf.Timeout
 	if k.kafkaConf.Compressed {
 		k.writerConfig.CompressionCodec = snappy.NewCompressionCodec()
 	}
 
 	log.Infof("Kafka config: %s", k.writerConfig)
+
 	return nil
 }
 
@@ -183,11 +186,13 @@ func (k *KafkaPump) WriteData(ctx context.Context, data []interface{}) error {
 		log.Error("unable to write message", log.String("error", kafkaError.Error()))
 	}
 	log.Debugf("ElapsedTime in seconds for %d records %v", len(data), time.Since(startTime))
+
 	return nil
 }
 
 func (k *KafkaPump) write(ctx context.Context, messages []kafka.Message) error {
 	kafkaWriter := kafka.NewWriter(k.writerConfig)
 	defer kafkaWriter.Close()
+
 	return kafkaWriter.WriteMessages(ctx, messages...)
 }

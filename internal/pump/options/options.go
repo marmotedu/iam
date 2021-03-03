@@ -6,14 +6,12 @@
 package options
 
 import (
-	"github.com/marmotedu/component-base/pkg/json"
-
 	cliflag "github.com/marmotedu/component-base/pkg/cli/flag"
-
-	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/component-base/pkg/json"
 
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // PumpConfig defines options for pump back-end.
@@ -81,5 +79,6 @@ func (s *PumpOptions) Flags() (fss cliflag.NamedFlagSets) {
 
 func (s *PumpOptions) String() string {
 	data, _ := json.Marshal(s)
+
 	return string(data)
 }

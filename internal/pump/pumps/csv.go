@@ -12,11 +12,11 @@ import (
 	"path"
 	"time"
 
+	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 
-	"github.com/marmotedu/iam/pkg/log"
-
 	"github.com/marmotedu/iam/internal/pump/analytics"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 // CSVPump defines a csv pump with csv specific options and common options.
@@ -34,6 +34,7 @@ type CSVConf struct {
 // New create a csv pump instance.
 func (c *CSVPump) New() Pump {
 	newPump := CSVPump{}
+
 	return &newPump
 }
 
@@ -46,7 +47,6 @@ func (c *CSVPump) GetName() string {
 func (c *CSVPump) Init(conf interface{}) error {
 	c.csvConf = &CSVConf{}
 	err := mapstructure.Decode(conf, &c.csvConf)
-
 	if err != nil {
 		log.Fatalf("Failed to decode configuration: %s", err.Error())
 	}
@@ -57,6 +57,7 @@ func (c *CSVPump) Init(conf interface{}) error {
 	}
 
 	log.Debug("CSV Initialized")
+
 	return nil
 }
 
@@ -94,7 +95,8 @@ func (c *CSVPump) WriteData(ctx context.Context, data []interface{}) error {
 		err := writer.Write(headers)
 		if err != nil {
 			log.Errorf("Failed to write file headers: %s", err.Error())
-			return err
+
+			return errors.Wrap(err, "failed to write file headers")
 		}
 	}
 
@@ -110,5 +112,6 @@ func (c *CSVPump) WriteData(ctx context.Context, data []interface{}) error {
 	}
 
 	writer.Flush()
+
 	return nil
 }

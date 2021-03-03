@@ -40,8 +40,10 @@ const (
 	appName = "iam-pump"
 )
 
-var analyticsStore storage.AnalyticsStorage
-var pmps []pumps.Pump
+var (
+	analyticsStore storage.AnalyticsStorage
+	pmps           []pumps.Pump
+)
 
 // NewPumpCommand creates a *cobra.Command object with default parameters.
 func NewPumpCommand() *cobra.Command {
@@ -67,11 +69,11 @@ Find more iam-pump information at:
 			cliflag.PrintFlags(cmd.Flags())
 
 			if err := viper.BindPFlags(cmd.Flags()); err != nil {
-				return err
+				return errors.Wrap(err, "failed to bind pflags")
 			}
 
 			// set default options
-			completedOptions, err := Complete(s)
+			completedOptions, err := complete(s)
 			if err != nil {
 				return err
 			}
@@ -96,6 +98,7 @@ Find more iam-pump information at:
 					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
 				}
 			}
+
 			return nil
 		},
 	}
@@ -117,6 +120,7 @@ Find more iam-pump information at:
 	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
+
 		return nil
 	})
 
@@ -139,6 +143,7 @@ func (completedOptions *completedPumpOptions) Run(stopCh <-chan struct{}) error 
 	log.Infof("Starting purge loop @%d%s", completedOptions.PurgeDelay, "(s)")
 
 	StartPurgeLoop(stopCh, completedOptions.PurgeDelay, completedOptions.OmitDetailedRecording)
+
 	return nil
 }
 
@@ -147,14 +152,14 @@ type completedPumpOptions struct {
 	*options.PumpOptions
 }
 
-// Complete completes the PumpOptions with provided PumpOptions returning completedPumpOptions.
-func Complete(s *options.PumpOptions) (completedPumpOptions, error) {
+// complete completes the PumpOptions with provided PumpOptions returning completedPumpOptions.
+func complete(s *options.PumpOptions) (completedPumpOptions, error) {
 	var options completedPumpOptions
 
 	genericapiserver.LoadConfig(s.PumpConfig, recommendedFileName)
 
 	if err := viper.Unmarshal(s); err != nil {
-		return options, err
+		return options, errors.Wrap(err, "failed to unmarshal viper configuration")
 	}
 
 	options.PumpOptions = s
@@ -164,6 +169,7 @@ func Complete(s *options.PumpOptions) (completedPumpOptions, error) {
 
 func setupAnalyticsStore(completedOptions completedPumpOptions) error {
 	analyticsStore = &redis.RedisClusterStorageManager{}
+
 	return analyticsStore.Init(completedOptions.RedisOptions)
 }
 
@@ -238,6 +244,7 @@ func StartPurgeLoop(stopCh <-chan struct{}, secInterval int, omitDetails bool) {
 		select {
 		case <-stopCh:
 			log.Info("stop purge loop")
+
 			return
 		default:
 		}
@@ -279,6 +286,7 @@ func filterData(pump pumps.Pump, keys []interface{}) []interface{} {
 		newLenght++
 	}
 	filteredKeys = filteredKeys[:newLenght]
+
 	return filteredKeys
 }
 
@@ -299,13 +307,11 @@ func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, pu
 	log.Debugf("Writing to: %s", pmp.GetName())
 
 	ch := make(chan error, 1)
-	// Load pump timeout
-	timeout := pmp.GetTimeout()
 	var ctx context.Context
 	var cancel context.CancelFunc
 	// Initialize context depending if the pump has a configured timeout
-	if timeout > 0 {
-		ctx, cancel = context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
+	if tm := pmp.GetTimeout(); tm > 0 {
+		ctx, cancel = context.WithTimeout(context.Background(), time.Duration(tm)*time.Second)
 	} else {
 		ctx, cancel = context.WithCancel(context.Background())
 	}
@@ -324,6 +330,7 @@ func execPumpWriting(wg *sync.WaitGroup, pmp pumps.Pump, keys *[]interface{}, pu
 			log.Warnf("Error Writing to: %s - Error: %s", pmp.GetName(), err.Error())
 		}
 	case <-ctx.Done():
+		//nolint: errorlint
 		switch ctx.Err() {
 		case context.Canceled:
 			log.Warnf("The writing to %s have got canceled.", pmp.GetName())
