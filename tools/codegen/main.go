@@ -136,9 +136,12 @@ func main() {
 	outputName := *output
 	if outputName == "" {
 		absDir, _ := filepath.Abs(dir)
-		baseName := fmt.Sprintf("%s_generated.go", filepath.Base(absDir))
+		baseName := fmt.Sprintf("%s_generated.go", strings.ReplaceAll(filepath.Base(absDir), "-", "_"))
 		if len(flag.Args()) == 1 {
-			baseName = fmt.Sprintf("%s_generated.go", filepath.Base(strings.TrimSuffix(flag.Args()[0], ".go")))
+			baseName = fmt.Sprintf(
+				"%s_generated.go",
+				strings.ReplaceAll(filepath.Base(strings.TrimSuffix(flag.Args()[0], ".go")), "-", "_"),
+			)
 		}
 
 		outputName = filepath.Join(dir, strings.ToLower(baseName))
