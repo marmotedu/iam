@@ -6,6 +6,8 @@ package main
 
 import (
 	"testing"
+
+	"github.com/spf13/cobra"
 )
 
 func TestCleanupForInclude(t *testing.T) {
@@ -40,5 +42,47 @@ func TestCleanupForInclude(t *testing.T) {
 				actual,
 			)
 		}
+	}
+}
+
+func TestMarkdownPostProcessing(t *testing.T) {
+	type args struct {
+		cmd       *cobra.Command
+		dir       string
+		processor func(string) string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := MarkdownPostProcessing(tt.args.cmd, tt.args.dir, tt.args.processor); (err != nil) != tt.wantErr {
+				t.Errorf("MarkdownPostProcessing() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_cleanupForInclude(t *testing.T) {
+	type args struct {
+		md string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := cleanupForInclude(tt.args.md); got != tt.want {
+				t.Errorf("cleanupForInclude() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
