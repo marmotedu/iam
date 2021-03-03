@@ -19,6 +19,10 @@ run:
   # include test files or not, default is true
   tests: true
 
+  # list of build tags, all linters use it. Default is empty list.    
+  build-tags:    
+    - mytag  
+
   # which dirs to skip: issues from them won't be reported;
   # can use regexp here: generated.*, regexp is applied on full path;
   # default value is empty list, but default dirs are skipped independently
@@ -73,6 +77,11 @@ output:
   # make issues output unique by line, default is true
   uniq-by-line: true
 
+  # add a prefix to the output file references; default is no prefix
+  path-prefix: ""
+
+  # sorts results by: filepath, line and column
+  sort-results: true
 
 # all available settings of specific linters
 linters-settings:
@@ -101,13 +110,26 @@ linters-settings:
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     #exclude: errcheck.txt
   exhaustive:
+    # check switch statements in generated files also
+    check-generated: false
     # indicates that switch statements are to be considered exhaustive if a
     # 'default' case is present, even if all enum members aren't listed in the
     # switch
     default-signifies-exhaustive: false
+  exhaustivestruct:
+    struct-patterns:
+      - '*.Test'
+      - '*.Test2'
+      - '*.Embedded'
+      - '*.External'
   funlen:
     lines: 150
     statements: 50
+  gci:
+    # put imports beginning with prefix after 3rd-party packages;
+    # only support one prefix
+    # if not set, use goimports.local-prefixes
+    local-prefixes: github.com/marmotedu/iam
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 30
@@ -126,6 +148,10 @@ linters-settings:
     # By default list of stable checks is used.
     enabled-checks:
       #- rangeValCopy
+      - nestingreduce
+      - truncatecmp
+      - unnamedresult
+      - ruleguard
 
     # Which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
     disabled-checks:
@@ -140,17 +166,63 @@ linters-settings:
     disabled-tags:
       - experimental
 
-    settings: # settings passed to gocritic
+    # Settings passed to gocritic.
+    # The settings key is the name of a supported gocritic checker.
+    # The list of supported checkers can be find in https://go-critic.github.io/overview.
+    settings:
       captLocal: # must be valid enabled check name
+        # whether to restrict checker to params only (default true)
         paramsOnly: true
+      elseif:
+        # whether to skip balanced if-else pairs (default true)
+        skipBalanced: true
+      hugeParam:
+        # size in bytes that makes the warning trigger (default 80)
+        sizeThreshold: 80
+      nestingReduce:
+        # min number of statements inside a branch to trigger a warning (default 5)
+        bodyWidth: 5
+      rangeExprCopy:
+        # size in bytes that makes the warning trigger (default 512)
+        sizeThreshold: 512
+        # whether to check test functions (default true)
+        skipTestFuncs: true
       rangeValCopy:
+        # size in bytes that makes the warning trigger (default 128)
         sizeThreshold: 32
+        # whether to check test functions (default true)
+        skipTestFuncs: true
+      ruleguard:
+        # path to a gorules file for the ruleguard checker
+        rules: ''
+      truncateCmp:
+        # whether to skip int/uint/uintptr types (default true)
+        skipArchDependent: true
+      underef:
+        # whether to skip (*x).method() calls where x is a pointer receiver (default true)
+        skipRecvDeref: true
+      unnamedResult:
+        # whether to check exported functions
+        checkExported: true
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 30
+  cyclop:
+    # the maximal code complexity to report
+    max-complexity: 20
+    # the maximal average package complexity. If it's higher than 0.0 (float) the check is enabled (default 0.0)
+    package-average: 0.0
+    # should ignore tests (default false)
+    skip-tests: false
   godot:
-    # check all top-level comments, not only declarations
-    check-all: false
+    # comments to be checked: `declarations`, `toplevel`, or `all`
+    scope: declarations
+    # list of regexps for excluding particular comment lines from check
+    exclude:
+      # example: exclude comments which contain numbers
+      # - '[0-9]+'
+    # check that each sentence starts with a capital letter
+    capital: false
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging
@@ -164,6 +236,34 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
+  goheader:
+    values:
+      const:
+        # define here const type values in format k:v, for example:
+        # COMPANY: MY COMPANY
+      regexp:
+        # define here regexp type values, for example
+        # AUTHOR: .*@mycompany\.com
+    template: # |-
+      # put here copyright header template for source code files, for example:
+      # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
+      #
+      # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
+      # SPDX-License-Identifier: Apache-2.0
+
+      # Licensed under the Apache License, Version 2.0 (the "License");
+      # you may not use this file except in compliance with the License.
+      # You may obtain a copy of the License at:
+
+      #   http://www.apache.org/licenses/LICENSE-2.0
+
+      # Unless required by applicable law or agreed to in writing, software
+      # distributed under the License is distributed on an "AS IS" BASIS,
+      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      # See the License for the specific language governing permissions and
+      # limitations under the License.
+    template-path:
+      # also as alternative of directive 'template' you may put the path to file with the template source
   goimports:
     # put imports beginning with prefix after 3rd-party packages;
     # it's a comma-separated list of prefixes
@@ -176,6 +276,9 @@ linters-settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
         checks: argument,case,condition,operation,return,assign
+        # ignored-numbers: 1000
+        # ignored-files: magic_.*.go
+        # ignored-functions: math.*
   gomodguard:
     allowed:
       modules:                                                        # List of allowed modules
@@ -199,6 +302,7 @@ linters-settings:
         - github.com/MakeNowJust/heredoc:
             version: "> 2.0.9"
             reason: "use the latest version"
+      local_replace_directives: false     # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -227,6 +331,12 @@ linters-settings:
     packages-with-error-message:
       # specify an error message to output when a blacklisted package is used
       - github.com/Sirupsen/logrus: "logging is allowed only by logutils.Log"
+  ifshort:
+    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
+    # Has higher priority than max-decl-chars.
+    max-decl-lines: 1
+    # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
+    max-decl-chars: 30
   lll:
     # max line length, lines longer will be reported. Default is 120.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option
@@ -255,6 +365,11 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  predeclared:
+    # comma-separated list of predeclared identifiers to not report on
+    ignore: ""
+    # include method names and field names (i.e., qualified names) in checks
+    q: false
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
     allow-unused: true
@@ -269,9 +384,31 @@ linters-settings:
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: warning
+    rules:
+      - name: indent-error-flow
+        severity: warning
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (id|export|internal)_test\.go
+  thelper:
+    # The following configurations enable all checks. It can be omitted because all checks are enabled by default.
+    # You can enable only required checks deleting unnecessary checks.
+    test:
+      first: true
+      name: true
+      begin: true
+    benchmark:
+      first: true
+      name: true
+      begin: true
+    tb:
+      first: true
+      name: true
+      begin: true
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
@@ -294,6 +431,8 @@ linters-settings:
     # Allow calls and assignments to be cuddled as long as the lines have any
     # matching variables, fields or types. Default is true.
     allow-assign-and-call: true
+    # Allow assignments to be cuddled with anything. Default is false.
+    allow-assign-and-anything: false
     # Allow multiline assignments to be cuddled. Default is true.
     allow-multiline-assign: true
     # Allow declarations (var) to be cuddled.
@@ -306,12 +445,52 @@ linters-settings:
     force-err-cuddling: false
     # Allow leading comments to be separated with empty liens
     allow-separated-leading-comment: false
+  gofumpt:
+    # Choose whether or not to use the extra rules that are disabled
+    # by default
+    extra-rules: false
+  errorlint:
+    # Report non-wrapping error creation using fmt.Errorf
+    errorf: true
+  makezero:
+    # Allow only slices initialized with a length of zero. Default is false.
+    always: false
+  forbidigo:
+    # Forbid the following identifiers
+    forbid:
+      #- fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
+      - fmt.Print.* # too much log noise
+      - ginkgo\\.F.* # these are used just for local development
+    # Exclude godoc examples from forbidigo checks.  Default is true.
+    exclude_godoc_examples: false
+  importas:
+    # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
+    servingv1: knative.dev/serving/pkg/apis/serving/v1
+    # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
+    autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+
+  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
+  #  for more info.
+  #custom:
+    # Each custom linter should have a unique name.
+    #example:
+      # The path to the plugin *.so. Can be absolute or local. Required for each custom linter
+      #path: /path/to/example.so
+      # The description of the linter. Optional, just for documentation purposes.
+      #description: This is an example usage of a plugin linter.
+      # Intended to point to the repo location of the linter. Optional, just for documentation purposes.
+      #original-url: github.com/golangci/example-linter
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
+  fast: false
+  presets:
+    - bugs
+    - unused
   enable:
+    - megacheck
     - bodyclose
     - deadcode
     - depguard
@@ -356,6 +535,28 @@ linters:
     - prealloc
     - gomodguard
     - exhaustive
+    - revive
+    - ifshort
+    - forbidigo
+    - makezero
+    - thelper
+    - predeclared
+    - cyclop
+    - durationcheck
+    - paralleltest
+    - errorlint
+    - exhaustivestruct
+    - exportloopref
+    - gci
+    - gofumpt
+    - goheader
+    - vetshadow
+    - nlreturn
+    - noctx
+    - sqlclosecheck
+    - tparallel
+    - wrapcheck
+
   # don't enable:
     #- goerr113
     #- gomnd
@@ -364,6 +565,13 @@ linters:
     #- gochecknoglobals
 
 issues:
+  # List of regexps of issue texts to exclude, empty list by default.
+  # But independently from this option we use default exclude patterns,
+  # it can be disabled by `exclude-use-default: false`. To list all
+  # excluded by default patterns execute `golangci-lint run --help`
+  exclude:
+    - abcdef
+
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: (cmd/[a-z]*/.*|store/.*)\.go
@@ -380,6 +588,16 @@ issues:
     - path: (validator/.*|code/.*|validator/.*)
       linters:
         - gochecknoinits
+
+    # Exclude some staticcheck messages
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+
+    # Exclude lll issues for long lines with go:generate
+    - linters:
+        - lll
+      source: "^//go:generate "
 
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
@@ -414,6 +632,9 @@ issues:
 
   # Show only new issues created in git patch with set file path.
   #new-from-patch: path/to/patch/file
+
+  # Fix found issues (if it's supported by the linter)
+  fix: true
 
 severity:
   # Default value is empty string.
