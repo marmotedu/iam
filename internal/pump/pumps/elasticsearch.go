@@ -154,7 +154,7 @@ func (e *ElasticsearchPump) Init(config interface{}) error {
 		e.esConf.DocumentType = "iam_analytics"
 	}
 
-	var re = regexp.MustCompile(`(.*)\/\/(.*):(.*)\@(.*)`)
+	re := regexp.MustCompile(`(.*)\/\/(.*):(.*)\@(.*)`)
 	printableURL := re.ReplaceAllString(e.esConf.ElasticsearchURL, `$1//***:***@$4`)
 
 	log.Infof("Elasticsearch URL: %s", printableURL)

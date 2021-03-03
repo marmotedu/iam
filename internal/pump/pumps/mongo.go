@@ -281,9 +281,9 @@ func (m *MongoPump) Init(config interface{}) error {
 }
 
 func (m *MongoPump) capCollection() (ok bool) {
-	var colName = m.dbConf.CollectionName
-	var colCapMaxSizeBytes = m.dbConf.CollectionCapMaxSizeBytes
-	var colCapEnable = m.dbConf.CollectionCapEnable
+	colName := m.dbConf.CollectionName
+	colCapMaxSizeBytes := m.dbConf.CollectionCapMaxSizeBytes
+	colCapEnable := m.dbConf.CollectionCapEnable
 
 	if !colCapEnable {
 		return false

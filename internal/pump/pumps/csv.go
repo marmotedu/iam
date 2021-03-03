@@ -89,7 +89,7 @@ func (c *CSVPump) WriteData(ctx context.Context, data []interface{}) error {
 
 	if appendHeader {
 		startRecord := analytics.AnalyticsRecord{}
-		var headers = startRecord.GetFieldNames()
+		headers := startRecord.GetFieldNames()
 
 		err := writer.Write(headers)
 		if err != nil {
