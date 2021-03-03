@@ -25,6 +25,7 @@ type UserSrv interface {
 	DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error
 	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error)
+	ListWithBadPerformance(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error)
 	ChangePassword(ctx context.Context, user *v1.User) error
 }
 
@@ -104,16 +105,16 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
 }
 
-// ListUserBadPerformance returns user list in the storage. This function has a bad performance.
-func ListUserBadPerformance(opts metav1.ListOptions) (*v1.UserListV2, error) {
-	users, err := store.Client().Users().List(context.TODO(), opts)
+// ListWithBadPerformance returns user list in the storage. This function has a bad performance.
+func (u *userService) ListWithBadPerformance(ctx context.Context, opts metav1.ListOptions) (*v1.UserListV2, error) {
+	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	infos := make([]*v1.UserV2, 0)
-	for _, u := range users.Items {
-		policies, err := store.Client().Policies().List(context.TODO(), u.Name, metav1.ListOptions{})
+	for _, user := range users.Items {
+		policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
 		if err != nil {
 			return nil, errors.WithCode(code.ErrDatabase, err.Error())
 		}
@@ -121,14 +122,14 @@ func ListUserBadPerformance(opts metav1.ListOptions) (*v1.UserListV2, error) {
 		infos = append(infos, &v1.UserV2{
 			User: &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
-					ID:        u.ID,
-					Name:      u.Name,
-					CreatedAt: u.CreatedAt,
-					UpdatedAt: u.UpdatedAt,
+					ID:        user.ID,
+					Name:      user.Name,
+					CreatedAt: user.CreatedAt,
+					UpdatedAt: user.UpdatedAt,
 				},
-				Nickname: u.Nickname,
-				Email:    u.Email,
-				Phone:    u.Phone,
+				Nickname: user.Nickname,
+				Email:    user.Email,
+				Phone:    user.Phone,
 			},
 			TotalPolicy: policies.TotalCount,
 		})

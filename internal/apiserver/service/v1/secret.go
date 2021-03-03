@@ -66,7 +66,7 @@ func (s *secretService) DeleteCollection(
 	secretIDs []string,
 	opts metav1.DeleteOptions,
 ) error {
-	if err := s.store.Policies().DeleteCollection(ctx, username, secretIDs, opts); err != nil {
+	if err := s.store.Secrets().DeleteCollection(ctx, username, secretIDs, opts); err != nil {
 		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
