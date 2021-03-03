@@ -77,5 +77,6 @@ func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
 
 func (s *ServerRunOptions) String() string {
 	data, _ := json.Marshal(s)
+
 	return string(data)
 }

@@ -6,6 +6,7 @@ package authzserver
 
 import (
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
@@ -22,7 +23,8 @@ func newAuthzServerJwt() middleware.CacheAuthInterface {
 func (a *authzAuth) GetSecret(secretID string) (*pb.SecretInfo, error) {
 	cli, err := store.GetStoreInsOr(nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get store instance failed")
 	}
+
 	return cli.GetSecret(secretID)
 }

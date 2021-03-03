@@ -118,6 +118,7 @@ func joinPoliciesNames(policies ladon.Policies) string {
 	for _, policy := range policies {
 		names = append(names, policy.GetID())
 	}
+
 	return strings.Join(names, ", ")
 }
 

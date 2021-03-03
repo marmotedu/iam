@@ -7,11 +7,11 @@ package store
 //go:generate mockgen -destination mock_store.go -package store github.com/marmotedu/iam/internal/authzserver/store StoreClient
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/dgraph-io/ristretto"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
 )
 
@@ -76,6 +76,7 @@ func GetStoreInsOr(cli StoreClient) (*Store, error) {
 		})
 	}
 
+	//nolint: wrapcheck
 	return storeIns, err
 }
 
@@ -86,6 +87,7 @@ func (s *Store) GetSecret(key string) (*pb.SecretInfo, error) {
 
 	value, ok := s.secrets.Get(key)
 	if !ok {
+		//nolint: wrapcheck
 		return nil, ErrSecretNotFound
 	}
 
@@ -99,6 +101,7 @@ func (s *Store) GetPolicy(key string) ([]*ladon.DefaultPolicy, error) {
 
 	value, ok := s.policies.Get(key)
 	if !ok {
+		//nolint: wrapcheck
 		return nil, ErrPolicyNotFound
 	}
 
@@ -113,7 +116,7 @@ func (s *Store) Reload() error {
 	// reload secrets
 	secrets, err := s.cli.GetSecrets()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "list secrets failed")
 	}
 
 	s.secrets.Clear()
@@ -124,7 +127,7 @@ func (s *Store) Reload() error {
 	// reload policies
 	policies, err := s.cli.GetPolicies()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "list policies failed")
 	}
 
 	s.policies.Clear()

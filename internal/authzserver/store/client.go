@@ -13,6 +13,7 @@ import (
 
 	"github.com/AlekSi/pointer"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -73,7 +74,7 @@ func (c *GRPCClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 
 	resp, err := c.cli.ListSecrets(context.Background(), req)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "list secrets failed")
 	}
 
 	log.Infof("Secrets found (%d total):", len(resp.Items))
@@ -83,7 +84,7 @@ func (c *GRPCClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 		secrets[v.SecretId] = v
 	}
 
-	return secrets, err
+	return secrets, nil
 }
 
 // GetPolicies returns all the authorization policies.
@@ -99,7 +100,7 @@ func (c *GRPCClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 
 	resp, err := c.cli.ListPolicies(context.Background(), req)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "list policies failed")
 	}
 
 	log.Infof("Policies found (%d total)[username:name]:", len(resp.Items))
@@ -111,6 +112,7 @@ func (c *GRPCClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 
 		if err := json.Unmarshal([]byte(v.PolicyStr), &policy); err != nil {
 			log.Warnf("failed to load policy for %s, error: %s", v.Name, err.Error())
+
 			continue
 		}
 

@@ -69,7 +69,7 @@ Find more ladon information at:
 			cliflag.PrintFlags(cmd.Flags())
 
 			if err := viper.BindPFlags(cmd.Flags()); err != nil {
-				return err
+				return errors.Wrap(err, "bind pflags failed")
 			}
 
 			// set default options
@@ -98,6 +98,7 @@ Find more ladon information at:
 					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
 				}
 			}
+
 			return nil
 		},
 	}
@@ -119,6 +120,7 @@ Find more ladon information at:
 	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
+
 		return nil
 	})
 
@@ -140,12 +142,12 @@ func (completedOptions *completedServerRunOptions) Run() error {
 	}
 
 	// create apiserver config from all options
-	serverConfig, err := CreateAuthzServerConfig(completedOptions.ServerRunOptions)
+	serverConfig, err := createAuthzServerConfig(completedOptions.ServerRunOptions)
 	if err != nil {
 		return err
 	}
 
-	server, err := serverConfig.Complete().New()
+	server, err := serverConfig.complete().New()
 	if err != nil {
 		return err
 	}
@@ -178,16 +180,16 @@ type completedConfig struct {
 	ExtraConfig   completedExtraConfig
 }
 
-// Complete fills in any fields not set that are required to have valid data and can be derived from other fields.
-func (c *ExtraConfig) Complete() completedExtraConfig {
+// complete fills in any fields not set that are required to have valid data and can be derived from other fields.
+func (c *ExtraConfig) complete() completedExtraConfig {
 	return completedExtraConfig{c}
 }
 
-// Complete fills in any fields not set that are required to have valid data. It's mutating the receiver.
-func (c *authzServerConfig) Complete() completedConfig {
+// complete fills in any fields not set that are required to have valid data. It's mutating the receiver.
+func (c *authzServerConfig) complete() completedConfig {
 	return completedConfig{
 		c.GenericConfig.Complete(),
-		c.ExtraConfig.Complete(),
+		c.ExtraConfig.complete(),
 	}
 }
 
@@ -196,7 +198,7 @@ func (c *authzServerConfig) Complete() completedConfig {
 func (c completedConfig) New() (*AuthzServer, error) {
 	genericServer, err := c.GenericConfig.New()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "create generic server failed")
 	}
 
 	s := &AuthzServer{
@@ -212,6 +214,7 @@ func (c completedConfig) New() (*AuthzServer, error) {
 func (s *AuthzServer) Run(gs *shutdown.GracefulShutdown) error {
 	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		s.GenericAPIServer.Close()
+
 		return nil
 	}))
 
@@ -262,8 +265,8 @@ func buildStorageConfig(completedOptions completedServerRunOptions) *storage.Con
 	}
 }
 
-// CreateAuthzServerConfig create authzServerConfig based on options.ServerRunOptions.
-func CreateAuthzServerConfig(s *options.ServerRunOptions) (*authzServerConfig, error) {
+// createAuthzServerConfig create authzServerConfig based on options.ServerRunOptions.
+func createAuthzServerConfig(s *options.ServerRunOptions) (*authzServerConfig, error) {
 	genericConfig, err := buildGenericConfig(s)
 	if err != nil {
 		return nil, err
@@ -293,11 +296,11 @@ func complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	genericapiserver.LoadConfig(s.AuthzConfig, recommendedFileName)
 
 	if err := viper.Unmarshal(s); err != nil {
-		return options, err
+		return options, errors.Wrap(err, "unmarshal viper configuration failed")
 	}
 
 	if err := s.SecureServing.Complete(); err != nil {
-		return options, err
+		return options, errors.Wrap(err, "complete secure server configuration failed")
 	}
 
 	options.ServerRunOptions = s
@@ -316,7 +319,7 @@ func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShut
 		store.GetGRPCClientOrDie(completedOptions.RPCServer, completedOptions.ClientCA),
 	)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "get store instance failed")
 	}
 	// cron to reload all secrets and policies from iam-apiserver
 	load.NewLoader(ctx, storeIns).Start()
@@ -328,12 +331,14 @@ func (completedOptions completedServerRunOptions) Init(gs *shutdown.GracefulShut
 		analyticsIns.Start()
 		gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 			analyticsIns.Stop()
+
 			return nil
 		}))
 	}
 
 	gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		cancel()
+
 		return nil
 	}))
 

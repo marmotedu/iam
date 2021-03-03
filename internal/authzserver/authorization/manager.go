@@ -5,6 +5,7 @@
 package authorization
 
 import (
+	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
 )
 
@@ -59,7 +60,7 @@ func (m *PolicyManager) FindRequestCandidates(r *ladon.Request) (ladon.Policies,
 
 	policies, err := m.client.List(username)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "list policies failed")
 	}
 
 	ret := make([]ladon.Policy, 0, len(policies))

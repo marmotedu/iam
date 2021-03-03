@@ -71,6 +71,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 	notif := Notification{}
 	if err := json.Unmarshal([]byte(message.Payload), &notif); err != nil {
 		log.Errorf("Unmarshalling message body failed, malformed: ", err)
+
 		return
 	}
 	log.Infow("receive redis message", "command", notif.Command, "payload", message.Payload)
@@ -81,6 +82,7 @@ func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded
 		reloadQueue <- reloaded
 	default:
 		log.Warnf("Unknown notification command: %q", notif.Command)
+
 		return
 	}
 
@@ -106,6 +108,7 @@ func (r *RedisNotifier) Notify(notif interface{}) bool {
 	toSend, err := json.Marshal(notif)
 	if err != nil {
 		log.Errorf("Problem marshaling notification: %s", err.Error())
+
 		return false
 	}
 

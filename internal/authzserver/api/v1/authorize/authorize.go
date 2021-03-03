@@ -34,6 +34,7 @@ func (a *AuthzHandler) Authorize(c *gin.Context) {
 	var r ladon.Request
 	if err := c.ShouldBind(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 

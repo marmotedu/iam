@@ -53,6 +53,7 @@ func shouldReload() ([]func(), bool) {
 	}
 	n := requeue
 	requeue = []func(){}
+
 	return n, true
 }
 

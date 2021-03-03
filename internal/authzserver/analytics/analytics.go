@@ -41,7 +41,7 @@ func (a *AnalyticsRecord) SetExpiry(expiresInSeconds int64) {
 	expiry := time.Duration(expiresInSeconds) * time.Second
 	if expiresInSeconds == 0 {
 		// Expiry is set to 100 years
-		expiry = (24 * time.Hour) * (365 * 100)
+		expiry = 24 * 365 * 100 * time.Hour
 	}
 
 	t := time.Now()
@@ -142,6 +142,7 @@ func (r *RedisAnalyticsHandler) recordWorker() {
 			if !ok {
 				// send what is left in buffer
 				r.store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)
+
 				return
 			}
 
