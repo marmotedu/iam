@@ -45,5 +45,6 @@ func FromContext(ctx context.Context) Logger {
 			return logger.(Logger)
 		}
 	}
+
 	return WithName("Unknown-Context")
 }

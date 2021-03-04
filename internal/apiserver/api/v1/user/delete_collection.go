@@ -21,6 +21,7 @@ func (u *UserHandler) DeleteCollection(c *gin.Context) {
 
 	if err := u.srv.Users().DeleteCollection(c, usernames, metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

@@ -19,7 +19,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -30,6 +29,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/marmotedu/errors"
 	"github.com/spf13/pflag"
 	"golang.org/x/sync/errgroup"
 )
@@ -198,6 +198,7 @@ func main() {
 					lic, err := licenseHeader(f.path, t, data)
 					if err != nil {
 						fmt.Printf("%s: %v\n", f.path, err)
+
 						return err
 					}
 					if lic == nil { // Unknown fileExtension
@@ -207,22 +208,26 @@ func main() {
 					isMissingLicenseHeader, err := fileHasLicense(f.path)
 					if err != nil {
 						fmt.Printf("%s: %v\n", f.path, err)
+
 						return err
 					}
 					if isMissingLicenseHeader {
 						fmt.Printf("%s\n", f.path)
+
 						return errors.New("missing license header")
 					}
 				} else {
 					modified, err := addLicense(f.path, f.mode, t, data)
 					if err != nil {
 						fmt.Printf("%s: %v\n", f.path, err)
+
 						return err
 					}
 					if *verbose && modified {
 						fmt.Printf("%s added license\n", f.path)
 					}
 				}
+
 				return nil
 			})
 		}
@@ -251,7 +256,8 @@ func getPatterns(patterns []string) ([]*regexp.Regexp, error) {
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
 			fmt.Printf("can't compile regexp %q\n", p)
-			return nil, err
+
+			return nil, errors.Wrap(err, "compile regexp failed")
 		}
 		patternsRe = append(patternsRe, patternRe)
 	}
@@ -263,6 +269,7 @@ func walk(ch chan<- *file, start string) {
 	_ = filepath.Walk(start, func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
 			fmt.Printf("%s error: %v\n", path, err)
+
 			return nil
 		}
 		if fi.IsDir() {
@@ -282,6 +289,7 @@ func walk(ch chan<- *file, start string) {
 		}
 
 		ch <- &file{path, fi.Mode()}
+
 		return nil
 	})
 }
@@ -296,7 +304,7 @@ func addLicense(path string, fmode os.FileMode, tmpl *template.Template, data *c
 
 	b, err := ioutil.ReadFile(path)
 	if err != nil || hasLicense(b) {
-		return false, err
+		return false, errors.Wrap(err, "read file failed")
 	}
 
 	line := hashBang(b)
@@ -309,6 +317,7 @@ func addLicense(path string, fmode os.FileMode, tmpl *template.Template, data *c
 		lic = append(line, lic...)
 	}
 	b = append(lic, b...)
+
 	return true, ioutil.WriteFile(path, b, fmode)
 }
 
@@ -316,8 +325,9 @@ func addLicense(path string, fmode os.FileMode, tmpl *template.Template, data *c
 func fileHasLicense(path string) (bool, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil || hasLicense(b) {
-		return false, err
+		return false, errors.Wrap(err, "read file failed")
 	}
+
 	return true, nil
 }
 
@@ -364,6 +374,7 @@ func licenseHeader(path string, tmpl *template.Template, data *copyrightData) ([
 	case ".ml", ".mli", ".mll", ".mly":
 		lic, err = prefix(tmpl, data, "(**", "   ", "*)")
 	}
+
 	return lic, err
 }
 
@@ -371,6 +382,7 @@ func fileExtension(name string) string {
 	if v := filepath.Ext(name); v != "" {
 		return strings.ToLower(v)
 	}
+
 	return strings.ToLower(filepath.Base(name))
 }
 
@@ -397,6 +409,7 @@ func hashBang(b []byte) []byte {
 			return line
 		}
 	}
+
 	return nil
 }
 
@@ -405,6 +418,7 @@ func hasLicense(b []byte) bool {
 	if len(b) < 1000 {
 		n = len(b)
 	}
+
 	return bytes.Contains(bytes.ToLower(b[:n]), []byte("copyright")) ||
 		bytes.Contains(bytes.ToLower(b[:n]), []byte("mozilla public"))
 }
@@ -414,7 +428,7 @@ func hasLicense(b []byte) bool {
 func prefix(t *template.Template, d *copyrightData, top, mid, bot string) ([]byte, error) {
 	var buf bytes.Buffer
 	if err := t.Execute(&buf, d); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "render template failed")
 	}
 	var out bytes.Buffer
 	if top != "" {
@@ -428,6 +442,7 @@ func prefix(t *template.Template, d *copyrightData, top, mid, bot string) ([]byt
 		fmt.Fprintln(&out, bot)
 	}
 	fmt.Fprintln(&out)
+
 	return out.Bytes(), nil
 }
 

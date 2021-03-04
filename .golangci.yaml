@@ -209,7 +209,7 @@ linters-settings:
     min-complexity: 30
   cyclop:
     # the maximal code complexity to report
-    max-complexity: 20
+    max-complexity: 50
     # the maximal average package complexity. If it's higher than 0.0 (float) the check is enabled (default 0.0)
     package-average: 0.0
     # should ignore tests (default false)
@@ -500,7 +500,7 @@ linters:
     - funlen
     - gochecknoinits
     - goconst
-    - gocritic
+      #- gocritic
     - gocyclo
     - gofmt
     - goimports
@@ -570,10 +570,22 @@ issues:
   # it can be disabled by `exclude-use-default: false`. To list all
   # excluded by default patterns execute `golangci-lint run --help`
   exclude:
-    - abcdef
+    - tools/.*
+    - test/.*
+    - third_party/.*
 
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
+    - linters:
+      - revive
+      path: (log/.*)\.go
+    - linters:
+      - wrapcheck
+      path: (cmd/.*|pkg/.*)\.go
+
+    - path: (cmd/.*|test/.*|tools/.*)\.go
+      linters:
+        - forbidigo
     - path: (cmd/[a-z]*/.*|store/.*)\.go
       linters:
         - dupl

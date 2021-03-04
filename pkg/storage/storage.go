@@ -85,6 +85,7 @@ func GenerateToken(orgID, keyID, hashAlgorithm string) (string, error) {
 		}
 
 		jsonToken := fmt.Sprintf(`{"org":"%s","id":"%s","h":"%s"}`, orgID, keyID, hashAlgorithm)
+
 		return base64.StdEncoding.EncodeToString([]byte(jsonToken)), err
 	}
 
@@ -101,6 +102,7 @@ func TokenHashAlgo(token string) string {
 	if strings.HasPrefix(token, B64JSONPrefix) {
 		if jsonToken, err := base64.StdEncoding.DecodeString(token); err == nil {
 			hashAlgo, _ := jsonparser.GetString(jsonToken, "h")
+
 			return hashAlgo
 		}
 	}
@@ -154,6 +156,7 @@ func hashFunction(algorithm string) (hash.Hash, error) {
 func HashStr(in string) string {
 	h, _ := hashFunction(TokenHashAlgo(in))
 	_, _ = h.Write([]byte(in))
+
 	return hex.EncodeToString(h.Sum(nil))
 }
 

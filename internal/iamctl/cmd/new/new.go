@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package new used to generate demo command code.
+//nolint: predeclared
 package new
 
 import (
@@ -584,6 +585,7 @@ func (o *NewOptions) CreateCommandWithSubCommands() error {
 		return err
 	}
 
+	//nolint: revive
 	if err := o.GenerateGoCode(o.CommandName+"_subcmd2.go", subcmd2Template); err != nil {
 		return err
 	}

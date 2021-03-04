@@ -19,6 +19,7 @@ func (s *SecretHandler) Get(c *gin.Context) {
 	secret, err := s.srv.Secrets().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

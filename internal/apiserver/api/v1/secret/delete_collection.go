@@ -23,6 +23,7 @@ func (s *SecretHandler) DeleteCollection(c *gin.Context) {
 		metav1.DeleteOptions{},
 	); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

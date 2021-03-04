@@ -19,6 +19,7 @@ func (u *UserHandler) Delete(c *gin.Context) {
 
 	if err := u.srv.Users().Delete(c, c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

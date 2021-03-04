@@ -27,6 +27,7 @@ func main() {
 
 	if h {
 		flag.Usage()
+
 		return
 	}
 

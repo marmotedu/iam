@@ -19,6 +19,7 @@ func (p *PolicyHandler) Get(c *gin.Context) {
 	pol, err := p.srv.Policies().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

@@ -55,7 +55,7 @@ func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.Up
 	for _, pol := range p.ds.policies {
 		if pol.Username == policy.Username && pol.Name == policy.Name {
 			if _, err := reflectutil.CopyObj(policy, pol, nil); err != nil {
-				return err
+				return errors.Wrap(err, "copy policy failed")
 			}
 		}
 	}
@@ -163,7 +163,7 @@ func (p *policies) List(ctx context.Context, username string, opts metav1.ListOp
 	name, _ := selector.RequiresExactMatch("name")
 
 	policies := make([]*v1.Policy, 0)
-	var i int = 0
+	i := 0
 	for _, pol := range p.ds.policies {
 		if i == ol.Limit {
 			break

@@ -30,6 +30,7 @@ func main() {
 
 	if err != nil || !parsedT.Valid {
 		fmt.Println("token valid failed", err)
+
 		return
 	}
 

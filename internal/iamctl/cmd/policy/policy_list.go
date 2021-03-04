@@ -112,5 +112,6 @@ func (o *ListOptions) Run(args []string) error {
 
 		fmt.Fprintf(o.Out, "%12s %s\n", color.RedString(pol.Name+":"), bf.String())
 	}
+
 	return nil
 }

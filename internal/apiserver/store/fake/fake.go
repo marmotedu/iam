@@ -60,6 +60,7 @@ func GetFakeFactoryOr() (store.Factory, error) {
 	if fakeFactory == nil {
 		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v", fakeFactory)
 	}
+
 	return fakeFactory, nil
 }
 

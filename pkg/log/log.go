@@ -173,12 +173,14 @@ func handleFields(l *zap.Logger, args []interface{}, additional ...zap.Field) []
 		// it breaks implementation agnosticism), so we can give a better error message.
 		if _, ok := args[i].(zap.Field); ok {
 			l.DPanic("strongly-typed Zap Field passed to logr", zap.Any("zap field", args[i]))
+
 			break
 		}
 
 		// make sure this isn't a mismatched key
 		if i == len(args)-1 {
 			l.DPanic("odd number of arguments passed as key-value pairs for logging", zap.Any("ignored key", args[i]))
+
 			break
 		}
 
@@ -192,6 +194,7 @@ func handleFields(l *zap.Logger, args []interface{}, additional ...zap.Field) []
 				"non-string key argument passed to logging, ignoring all later arguments",
 				zap.Any("invalid key", key),
 			)
+
 			break
 		}
 
@@ -291,6 +294,7 @@ func StdErrLogger() *log.Logger {
 	if l, err := zap.NewStdLogAt(std.zapLogger, zapcore.ErrorLevel); err == nil {
 		return l
 	}
+
 	return nil
 }
 
@@ -303,6 +307,7 @@ func StdInfoLogger() *log.Logger {
 	if l, err := zap.NewStdLogAt(std.zapLogger, zapcore.InfoLevel); err == nil {
 		return l
 	}
+
 	return nil
 }
 
@@ -317,11 +322,13 @@ func (l *zapLogger) V(level int) InfoLogger {
 			log:   l.zapLogger,
 		}
 	}
+
 	return disabledInfoLogger
 }
 
 func (l *zapLogger) Write(p []byte) (n int, err error) {
 	l.zapLogger.Info(string(p))
+
 	return len(p), nil
 }
 
@@ -330,6 +337,7 @@ func WithValues(keysAndValues ...interface{}) Logger { return std.WithValues(key
 
 func (l *zapLogger) WithValues(keysAndValues ...interface{}) Logger {
 	newLogger := l.zapLogger.With(handleFields(l.zapLogger, keysAndValues)...)
+
 	return NewLogger(newLogger)
 }
 
@@ -339,6 +347,7 @@ func WithName(s string) Logger { return std.WithName(s) }
 
 func (l *zapLogger) WithName(name string) Logger {
 	newLogger := l.zapLogger.Named(name)
+
 	return NewLogger(newLogger)
 }
 
@@ -376,6 +385,7 @@ func CheckIntLevel(level int32) bool {
 		lvl = zapcore.DebugLevel
 	}
 	checkEntry := std.zapLogger.Check(lvl, "")
+
 	return checkEntry != nil
 }
 
@@ -556,7 +566,9 @@ func (l *zapLogger) L(ctx context.Context) *zapLogger {
 	return lg
 }
 
+//nolint:predeclared
 func (l *zapLogger) clone() *zapLogger {
 	copy := *l
+
 	return &copy
 }

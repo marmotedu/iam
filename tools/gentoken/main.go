@@ -33,6 +33,7 @@ func main() {
 
 	if *help {
 		pflag.Usage()
+
 		return
 	}
 
@@ -44,6 +45,7 @@ func main() {
 	token, err := createJWTToken(*cliAlgorithm, *cliTimeout, os.Args[1], os.Args[2])
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
+
 		return
 	}
 

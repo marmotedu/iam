@@ -114,5 +114,6 @@ func (o *UpdateOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "policy/%s updated\n", ret.Name)
+
 	return nil
 }

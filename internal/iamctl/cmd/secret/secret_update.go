@@ -113,5 +113,6 @@ func (o *UpdateOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "secret/%s updated\n", secret.Name)
+
 	return nil
 }

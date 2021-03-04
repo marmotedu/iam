@@ -43,6 +43,7 @@ func (op *TracePlugin) Initialize(db *gorm.DB) (err error) {
 	_ = db.Callback().Update().After("gorm:after_update").Register(callBackAfterName, after)
 	_ = db.Callback().Row().After("gorm:row").Register(callBackAfterName, after)
 	_ = db.Callback().Raw().After("gorm:raw").Register(callBackAfterName, after)
+
 	return
 }
 

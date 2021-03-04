@@ -120,5 +120,6 @@ func (o *CreateOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "policy/%s created\n", ret.Name)
+
 	return nil
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/jsonutil"
+	"github.com/marmotedu/errors"
 )
 
 type secrets struct {
@@ -31,20 +32,12 @@ func (s *secrets) getKey(username string, secretID string) string {
 
 // Create creates a new secret.
 func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
-	if err := s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
-		return err
-	}
-
-	return nil
+	return s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret))
 }
 
 // Update updates an secret information.
 func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
-	if err := s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret)); err != nil {
-		return err
-	}
-
-	return nil
+	return s.ds.Put(ctx, s.getKey(secret.Username, secret.SecretID), jsonutil.ToString(secret))
 }
 
 // Delete deletes the secret by the secret identifier.
@@ -75,8 +68,9 @@ func (s *secrets) Get(ctx context.Context, username, secretID string, opts metav
 
 	var secret v1.Secret
 	if err := json.Unmarshal(resp, &secret); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unmarshal to Secret struct failed")
 	}
+
 	return &secret, nil
 }
 
@@ -96,7 +90,7 @@ func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOpt
 	for _, v := range kvs {
 		var secret v1.Secret
 		if err := json.Unmarshal(v.Value, &secret); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "unmarshal to Secret struct failed")
 		}
 
 		ret.Items = append(ret.Items, &secret)

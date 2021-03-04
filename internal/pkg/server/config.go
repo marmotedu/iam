@@ -5,7 +5,6 @@
 package server
 
 import (
-	"fmt"
 	"net"
 	"path/filepath"
 	"strconv"
@@ -15,6 +14,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/component-base/pkg/util/homedir"
 	"github.com/spf13/viper"
+
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 const (
@@ -143,6 +144,6 @@ func LoadConfig(cfg string, defaultName string) {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("WARNING: viper failed to discover and load the configuration file: %s", err.Error())
+		log.Warnf("WARNING: viper failed to discover and load the configuration file: %s", err.Error())
 	}
 }

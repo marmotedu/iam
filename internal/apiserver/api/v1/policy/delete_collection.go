@@ -18,6 +18,7 @@ func (p *PolicyHandler) DeleteCollection(c *gin.Context) {
 
 	if err := p.srv.Policies().DeleteCollection(c, c.GetString("username"), c.QueryArray("name"), metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

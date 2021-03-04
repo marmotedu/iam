@@ -104,6 +104,7 @@ type logger struct {
 func (l *logger) LogMode(level gormlogger.LogLevel) gormlogger.Interface {
 	newlogger := *l
 	newlogger.LogLevel = level
+
 	return &newlogger
 }
 
@@ -168,6 +169,7 @@ func fileWithLineNum() string {
 		// if ok && (!strings.HasPrefix(file, gormSourceDir) || strings.HasSuffix(file, "_test.go")) {
 		if ok && !strings.HasSuffix(file, "_test.go") {
 			dir, f := filepath.Split(file)
+
 			return filepath.Join(filepath.Base(dir), f) + ":" + strconv.FormatInt(int64(line), 10)
 		}
 	}

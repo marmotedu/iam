@@ -33,23 +33,27 @@ func (u *UserHandler) ChangePassword(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+
 		return
 	}
 
 	if err := user.Compare(r.OldPassword); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrPasswordIncorrect, err.Error()), nil)
+
 		return
 	}
 
 	user.Password = r.NewPassword
 	if err := u.srv.Users().ChangePassword(c, user); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

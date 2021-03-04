@@ -22,12 +22,14 @@ func (p *PolicyHandler) Update(c *gin.Context) {
 	var r v1.Policy
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	pol, err := p.store.Policies().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+
 		return
 	}
 
@@ -36,11 +38,13 @@ func (p *PolicyHandler) Update(c *gin.Context) {
 
 	if errs := pol.Validate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)
+
 		return
 	}
 
 	if err := p.srv.Policies().Update(c, pol, metav1.UpdateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

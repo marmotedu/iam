@@ -45,6 +45,7 @@ type infoLogger struct {
 
 func (l *infoLogger) Write(p []byte) (n int, err error) {
 	l.logger.Info(string(p[:len(p)-1]))
+
 	return len(p), nil
 }
 
@@ -54,6 +55,7 @@ type warnLogger struct {
 
 func (l *warnLogger) Write(p []byte) (n int, err error) {
 	l.logger.Warn(string(p[:len(p)-1]))
+
 	return len(p), nil
 }
 
@@ -63,6 +65,7 @@ type fatalLogger struct {
 
 func (l *fatalLogger) Write(p []byte) (n int, err error) {
 	l.logger.Fatal(string(p[:len(p)-1]))
+
 	return len(p), nil
 }
 
@@ -72,5 +75,6 @@ type errorLogger struct {
 
 func (l *errorLogger) Write(p []byte) (n int, err error) {
 	l.logger.Error(string(p[:len(p)-1]))
+
 	return len(p), nil
 }

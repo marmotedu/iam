@@ -22,12 +22,14 @@ func (u *UserHandler) List(c *gin.Context) {
 	var r metav1.ListOptions
 	if err := c.ShouldBindQuery(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	users, err := u.srv.Users().List(c, r)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

@@ -65,6 +65,7 @@ func forceMultiLine(s string) string {
 	if len(s) > 60 && !strings.Contains(s, "\n") {
 		s += "\n"
 	}
+
 	return s
 }
 

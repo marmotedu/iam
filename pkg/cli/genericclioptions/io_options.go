@@ -37,6 +37,7 @@ func NewTestIOStreams() (IOStreams, *bytes.Buffer, *bytes.Buffer, *bytes.Buffer)
 // NewTestIOStreamsDiscard returns a valid IOStreams that just discards.
 func NewTestIOStreamsDiscard() IOStreams {
 	in := &bytes.Buffer{}
+
 	return IOStreams{
 		In:     in,
 		Out:    ioutil.Discard,

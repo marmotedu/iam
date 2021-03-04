@@ -44,6 +44,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
 		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
+
 		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
@@ -63,6 +64,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 			policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
 			if err != nil {
 				errChan <- errors.WithCode(code.ErrDatabase, err.Error())
+
 				return
 			}
 
@@ -102,6 +104,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	}
 
 	log.L(ctx).Debugf("get %d users from backend storage.", len(infos))
+
 	return &v1.UserListV2{ListMeta: users.ListMeta, Items: infos}, nil
 }
 

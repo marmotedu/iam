@@ -23,12 +23,14 @@ func (u *UserHandler) Update(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+
 		return
 	}
 
@@ -38,12 +40,14 @@ func (u *UserHandler) Update(c *gin.Context) {
 
 	if errs := user.ValidateUpdate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)
+
 		return
 	}
 
 	// Save changed fields.
 	if err := u.srv.Users().Update(c, user, metav1.UpdateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

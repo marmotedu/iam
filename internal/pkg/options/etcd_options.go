@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/marmotedu/errors"
 	"github.com/spf13/pflag"
 )
 
@@ -94,7 +93,7 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 		var err error
 		cert, err = tls.LoadX509KeyPair(o.Cert, o.Key)
 		if err != nil {
-			return nil, errors.Wrap(err, "load etcd cert and key")
+			return nil, err
 		}
 		certLoaded = true
 		o.UseTLS = true
@@ -102,7 +101,7 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 	if o.CaCert != "" {
 		data, err := ioutil.ReadFile(o.CaCert)
 		if err != nil {
-			return nil, errors.Wrap(err, "read cacert file")
+			return nil, err
 		}
 		capool = x509.NewCertPool()
 		for {
@@ -113,7 +112,7 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 			}
 			cacert, err := x509.ParseCertificate(block.Bytes)
 			if err != nil {
-				return nil, errors.Wrap(err, "parse cacert file")
+				return nil, err
 			}
 			capool.AddCert(cacert)
 		}
@@ -129,7 +128,9 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 		if certLoaded {
 			cfg.Certificates = []tls.Certificate{cert}
 		}
+
 		return cfg, nil
 	}
+
 	return nil, nil
 }

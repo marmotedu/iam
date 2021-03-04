@@ -18,6 +18,7 @@ func (s *SecretHandler) Delete(c *gin.Context) {
 	opts := metav1.DeleteOptions{Unscoped: true}
 	if err := s.srv.Secrets().Delete(c, c.GetString("username"), c.Param("name"), opts); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

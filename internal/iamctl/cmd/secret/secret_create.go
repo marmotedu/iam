@@ -130,5 +130,6 @@ func (o *CreateOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "secret/%s created\n", secret.Name)
+
 	return nil
 }

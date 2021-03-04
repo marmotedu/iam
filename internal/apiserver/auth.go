@@ -133,6 +133,7 @@ func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 		var login basicAuth
 		if err := c.ShouldBindJSON(&login); err != nil {
 			log.Errorf("parse login parameters: %s", err.Error())
+
 			return "", jwt.ErrMissingLoginValues
 		}
 
@@ -143,6 +144,7 @@ func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 		user, err := store.Client().Users().Get(c, username, metav1.GetOptions{})
 		if err != nil {
 			log.Errorf("get user information failed: %s", err.Error())
+
 			return "", jwt.ErrFailedAuthentication
 		}
 
@@ -188,6 +190,7 @@ func (auth *jwtAuth) PayloadFunc() func(data interface{}) jwt.MapClaims {
 func (auth *jwtAuth) IdentityHandler() func(c *gin.Context) interface{} {
 	return func(c *gin.Context) interface{} {
 		claims := jwt.ExtractClaims(c)
+
 		return claims[jwt.IdentityKey]
 	}
 }
@@ -198,6 +201,7 @@ func (auth *jwtAuth) Authorizator() func(data interface{}, c *gin.Context) bool 
 		if v, ok := data.(string); ok {
 			// c.Request.Header.Add(log.KeyUsername, v)
 			c.Set(CtxUsername, v)
+
 			return true
 		}
 

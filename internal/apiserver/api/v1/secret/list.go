@@ -20,12 +20,14 @@ func (s *SecretHandler) List(c *gin.Context) {
 	var r metav1.ListOptions
 	if err := c.ShouldBindQuery(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	secrets, err := s.srv.Secrets().List(c, c.GetString("username"), r)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

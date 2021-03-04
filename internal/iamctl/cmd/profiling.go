@@ -43,9 +43,11 @@ func initProfiling() error {
 	// output anything. We choose to sample all events.
 	case "block":
 		runtime.SetBlockProfileRate(1)
+
 		return nil
 	case "mutex":
 		runtime.SetMutexProfileFraction(1)
+
 		return nil
 	default:
 		// Check the profile name is valid.
@@ -65,6 +67,7 @@ func flushProfiling() error {
 		pprof.StopCPUProfile()
 	case "heap":
 		runtime.GC()
+
 		fallthrough
 	default:
 		profile := pprof.Lookup(profileName)

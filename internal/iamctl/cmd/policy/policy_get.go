@@ -108,5 +108,6 @@ func (o *GetOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "%12s %s\n", color.RedString(policy.Name+":"), bf.String())
+
 	return nil
 }

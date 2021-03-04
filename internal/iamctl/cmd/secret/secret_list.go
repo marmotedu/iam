@@ -80,6 +80,7 @@ func (o *ListOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []str
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

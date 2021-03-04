@@ -43,6 +43,7 @@ func GetLoggerConfig(formatter gin.LogFormatter, output io.Writer, skipPaths []s
 	if formatter == nil {
 		formatter = GetDefaultLogFormatterWithRequestID()
 	}
+
 	return gin.LoggerConfig{
 		Formatter: formatter,
 		Output:    output,
@@ -64,6 +65,7 @@ func GetDefaultLogFormatterWithRequestID() gin.LogFormatter {
 			// Truncate in a golang < 1.8 safe way
 			param.Latency -= param.Latency % time.Second
 		}
+
 		return fmt.Sprintf("%s%3d%s - [%s] \"%v %s%s%s %s\" %s",
 			// param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 			statusColor, param.StatusCode, resetColor,
@@ -83,6 +85,7 @@ func GetRequestIDFromContext(c *gin.Context) string {
 			return requestID
 		}
 	}
+
 	return ""
 }
 

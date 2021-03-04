@@ -127,5 +127,6 @@ func (o *UpdateOptions) Run(args []string) error {
 	}
 
 	fmt.Fprintf(o.Out, "user/%s updated\n", ret.Name)
+
 	return nil
 }

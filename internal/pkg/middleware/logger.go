@@ -29,6 +29,7 @@ var defaultLogFormatter = func(param gin.LogFormatterParams) string {
 		// Truncate in a golang < 1.8 safe way
 		param.Latency = param.Latency - param.Latency%time.Second
 	}
+
 	return fmt.Sprintf("%s%3d%s - [%s] \"%v %s%s%s %s\" %s",
 		// param.TimeStamp.Format("2006/01/02 - 15:04:05"),
 		statusColor, param.StatusCode, resetColor,
@@ -63,6 +64,7 @@ func LoggerWithWriter(out io.Writer, notlogged ...string) gin.HandlerFunc {
 }
 
 // LoggerWithConfig instance a Logger middleware with config.
+//nolint:ifshort
 func LoggerWithConfig(conf gin.LoggerConfig) gin.HandlerFunc {
 	formatter := conf.Formatter
 	if formatter == nil {

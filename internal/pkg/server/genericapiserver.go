@@ -6,6 +6,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -90,6 +91,7 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 		mw, ok := middleware.Middlewares[m]
 		if !ok {
 			log.Warnf("can not find middleware: %s", m)
+
 			continue
 		}
 
@@ -124,7 +126,7 @@ func (s *GenericAPIServer) Run() error {
 		defer wg.Done()
 		log.Infof("Start to listening the incoming requests on http address: %s", s.InsecureServingInfo.Address)
 
-		if err := s.insecureServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := s.insecureServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err.Error())
 		}
 
@@ -141,7 +143,7 @@ func (s *GenericAPIServer) Run() error {
 
 		log.Infof("Start to listening the incoming requests on https address: %s", s.SecureServingInfo.Address())
 
-		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
+		if err := s.secureServer.ListenAndServeTLS(cert, key); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err.Error())
 		}
 
@@ -186,9 +188,14 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 	}
 
 	for {
+		// Change NewRequest to NewRequestWithContext and pass context it
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+		if err != nil {
+			return nil
+		}
 		// Ping the server by sending a GET request to `/healthz`.
 		// nolint: gosec
-		resp, err := http.Get(url)
+		resp, err := http.DefaultClient.Do(req)
 		if err == nil && resp.StatusCode == http.StatusOK {
 			log.Info("The router has been deployed successfully.")
 

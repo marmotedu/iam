@@ -71,7 +71,7 @@ func (o *InfoOptions) Run(args []string) error {
 
 	hostInfo, err := hoststat.GetHostInfo()
 	if err != nil {
-		return fmt.Errorf("get host info failed!error:%v", err)
+		return fmt.Errorf("get host info failed!error:%w", err)
 	}
 
 	info.HostName = hostInfo.HostName
@@ -79,7 +79,7 @@ func (o *InfoOptions) Run(args []string) error {
 
 	memStat, err := hoststat.GetMemStat()
 	if err != nil {
-		return fmt.Errorf("get mem stat failed!error:%v", err)
+		return fmt.Errorf("get mem stat failed!error:%w", err)
 	}
 
 	info.MemTotal = strconv.FormatUint(memStat.MemTotal, 10) + "M"
@@ -88,7 +88,7 @@ func (o *InfoOptions) Run(args []string) error {
 
 	cpuStat, err := hoststat.GetCPUInfo()
 	if err != nil {
-		return fmt.Errorf("get cpu stat failed!error:%v", err)
+		return fmt.Errorf("get cpu stat failed!error:%w", err)
 	}
 
 	info.CPUCore = cpuStat.CoreCount

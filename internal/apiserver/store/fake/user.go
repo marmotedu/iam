@@ -54,7 +54,7 @@ func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOpt
 	for _, u := range u.ds.users {
 		if u.Name == user.Name {
 			if _, err := reflectutil.CopyObj(user, u, nil); err != nil {
-				return err
+				return errors.Wrap(err, "copy user failed")
 			}
 		}
 	}
@@ -134,7 +134,7 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 	username, _ := selector.RequiresExactMatch("name")
 
 	users := make([]*v1.User, 0)
-	var i int = 0
+	i := 0
 	for _, user := range u.ds.users {
 		if i == ol.Limit {
 			break

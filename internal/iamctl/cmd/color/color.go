@@ -213,6 +213,7 @@ func NewCmdColor(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobr
 func (o *ColorOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string) error {
 	if len(o.Type) == 0 {
 		o.Type = []string{"fg", "bg"}
+
 		return nil
 	}
 
@@ -238,6 +239,7 @@ func (o *ColorOptions) Validate(cmd *cobra.Command, args []string) error {
 func (o *ColorOptions) Run(args []string) error {
 	if o.Example {
 		fmt.Fprint(o.Out, colorCodeExample+"\n")
+
 		return nil
 	}
 

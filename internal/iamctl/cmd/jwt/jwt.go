@@ -32,5 +32,6 @@ func NewCmdJWT(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra.
 	cmd.AddCommand(NewCmdSign(f, ioStreams))
 	cmd.AddCommand(NewCmdShow(f, ioStreams))
 	cmd.AddCommand(NewCmdVerify(f, ioStreams))
+
 	return cmd
 }

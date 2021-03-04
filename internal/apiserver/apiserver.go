@@ -69,7 +69,7 @@ Find more iam-apiserver information at:
 			cliflag.PrintFlags(cmd.Flags())
 
 			if err := viper.BindPFlags(cmd.Flags()); err != nil {
-				return err
+				return errors.Wrap(err, "bind pflags failed")
 			}
 
 			// set default options
@@ -97,6 +97,7 @@ Find more iam-apiserver information at:
 					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
 				}
 			}
+
 			return nil
 		},
 	}
@@ -118,6 +119,7 @@ Find more iam-apiserver information at:
 	cmd.SetUsageFunc(func(cmd *cobra.Command) error {
 		fmt.Fprintf(cmd.OutOrStderr(), usageFmt, cmd.UseLine())
 		cliflag.PrintSections(cmd.OutOrStderr(), namedFlagSets, cols)
+
 		return nil
 	})
 
@@ -143,7 +145,7 @@ func (completedOptions *completedServerRunOptions) Run() error {
 		return err
 	}
 
-	server, err := serverConfig.Complete().New()
+	server, err := serverConfig.complete().New()
 	if err != nil {
 		return err
 	}
@@ -179,8 +181,8 @@ type APIServer struct {
 	GenericAPIServer *genericapiserver.GenericAPIServer
 }
 
-// Complete fills in any fields not set that are required to have valid data and can be derived from other fields.
-func (c *ExtraConfig) Complete() completedExtraConfig {
+// complete fills in any fields not set that are required to have valid data and can be derived from other fields.
+func (c *ExtraConfig) complete() completedExtraConfig {
 	if c.Addr == "" {
 		c.Addr = "127.0.0.1:8081"
 	}
@@ -188,11 +190,11 @@ func (c *ExtraConfig) Complete() completedExtraConfig {
 	return completedExtraConfig{c}
 }
 
-// Complete fills in any fields not set that are required to have valid data. It's mutating the receiver.
-func (c *apiServerConfig) Complete() completedConfig {
+// complete fills in any fields not set that are required to have valid data. It's mutating the receiver.
+func (c *apiServerConfig) complete() completedConfig {
 	return completedConfig{
 		c.GenericConfig.Complete(),
-		c.ExtraConfig.Complete(),
+		c.ExtraConfig.complete(),
 	}
 }
 
@@ -201,7 +203,7 @@ func (c *apiServerConfig) Complete() completedConfig {
 func (c completedConfig) New() (*APIServer, error) {
 	genericServer, err := c.GenericConfig.New()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "create generic server failed")
 	}
 	initRouter(genericServer.Engine)
 
@@ -310,7 +312,7 @@ func complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	genericapiserver.LoadConfig(s.APIConfig, recommendedFileName)
 
 	if err := viper.Unmarshal(s); err != nil {
-		return options, err
+		return options, errors.Wrap(err, "unmarshal to struct failed")
 	}
 
 	if s.JwtOptions.Key == "" {
@@ -318,7 +320,7 @@ func complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	}
 
 	if err := s.SecureServing.Complete(); err != nil {
-		return options, err
+		return options, errors.Wrap(err, "complete secure server configuration failed")
 	}
 
 	options.ServerRunOptions = s
@@ -348,7 +350,7 @@ func (completedOptions completedServerRunOptions) InitDataStore() error {
 
 	_, err := mysql.GetMySQLFactoryOr(completedOptions.MySQLOptions)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "get mysql instance failed")
 	}
 
 	// uncomment the following lines if you want to switch to etcd storage.

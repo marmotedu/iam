@@ -109,6 +109,7 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 
 func (o *Options) String() string {
 	data, _ := json.Marshal(o)
+
 	return string(data)
 }
 
@@ -156,5 +157,6 @@ func (o *Options) Build() error {
 	}
 	zap.RedirectStdLog(logger.Named(o.Name))
 	zap.ReplaceGlobals(logger)
+
 	return nil
 }

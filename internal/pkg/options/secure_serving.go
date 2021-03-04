@@ -161,13 +161,14 @@ func CreateListener(addr string) (net.Listener, int, error) {
 
 	ln, err := net.Listen(network, addr)
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to listen on %v: %v", addr, err)
+		return nil, 0, fmt.Errorf("failed to listen on %v: %w", addr, err)
 	}
 
 	// get port
 	tcpAddr, ok := ln.Addr().(*net.TCPAddr)
 	if !ok {
 		ln.Close()
+
 		return nil, 0, fmt.Errorf("invalid listen address: %q", ln.Addr().String())
 	}
 

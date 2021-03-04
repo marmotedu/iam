@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/jsonutil"
+	"github.com/marmotedu/errors"
 )
 
 type users struct {
@@ -30,20 +31,12 @@ func (u *users) getKey(name string) string {
 
 // Create creates a new user account.
 func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user)); err != nil {
-		return err
-	}
-
-	return nil
+	return u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user))
 }
 
 // Update updates an user account information.
 func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
-	if err := u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user)); err != nil {
-		return err
-	}
-
-	return nil
+	return u.ds.Put(ctx, u.getKey(user.Name), jsonutil.ToString(user))
 }
 
 // Delete deletes the user by the user identifier.
@@ -65,11 +58,8 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	// delete related policy first
 	pol := newPolicies(u.ds)
-	if err := pol.DeleteCollectionByUser(ctx, usernames, opts); err != nil {
-		return err
-	}
 
-	return nil
+	return pol.DeleteCollectionByUser(ctx, usernames, opts)
 }
 
 // Get return an user by the user identifier.
@@ -81,8 +71,9 @@ func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions
 
 	var user v1.User
 	if err := json.Unmarshal(resp, &user); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unmarshal to User struct failed")
 	}
+
 	return &user, nil
 }
 
@@ -102,7 +93,7 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 	for _, v := range kvs {
 		var user v1.User
 		if err := json.Unmarshal(v.Value, &user); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "unmarshal to User struct failed")
 		}
 
 		ret.Items = append(ret.Items, &user)

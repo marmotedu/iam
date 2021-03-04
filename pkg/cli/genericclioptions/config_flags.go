@@ -93,6 +93,7 @@ func (f *ConfigFlags) ToRawIAMConfigLoader() clientcmd.ClientConfig {
 	if f.usePersistentConfig {
 		return f.toRawIAMPersistentConfigLoader()
 	}
+
 	return f.toRawIAMConfigLoader()
 }
 
@@ -199,6 +200,7 @@ func (f *ConfigFlags) AddFlags(flags *pflag.FlagSet) {
 func (f *ConfigFlags) WithDeprecatedPasswordFlag() *ConfigFlags {
 	f.Username = pointer.ToString("")
 	f.Password = pointer.ToString("")
+
 	return f
 }
 
@@ -206,6 +208,7 @@ func (f *ConfigFlags) WithDeprecatedPasswordFlag() *ConfigFlags {
 func (f *ConfigFlags) WithDeprecatedSecretFlag() *ConfigFlags {
 	f.SecretID = pointer.ToString("")
 	f.SecretKey = pointer.ToString("")
+
 	return f
 }
 

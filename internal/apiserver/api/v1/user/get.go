@@ -19,6 +19,7 @@ func (u *UserHandler) Get(c *gin.Context) {
 	user, err := u.srv.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

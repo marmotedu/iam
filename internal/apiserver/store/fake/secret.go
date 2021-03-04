@@ -54,7 +54,7 @@ func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.Upd
 	for _, sec := range s.ds.secrets {
 		if sec.Username == secret.Username && sec.Name == secret.Name {
 			if _, err := reflectutil.CopyObj(secret, sec, nil); err != nil {
-				return err
+				return errors.Wrap(err, "copy secret failed")
 			}
 		}
 	}
@@ -127,7 +127,7 @@ func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOpt
 	name, _ := selector.RequiresExactMatch("name")
 
 	secrets := make([]*v1.Secret, 0)
-	var i int = 0
+	i := 0
 	for _, sec := range s.ds.secrets {
 		if i == ol.Limit {
 			break

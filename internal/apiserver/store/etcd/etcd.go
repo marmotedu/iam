@@ -13,6 +13,7 @@ import (
 
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
+	"github.com/marmotedu/errors"
 	"google.golang.org/grpc"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
@@ -97,6 +98,7 @@ func GetEtcdFactoryOr(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()
 
 		if opt.UseTLS && tlsConfig == nil {
 			err = fmt.Errorf("enable etcdFactory tls but tls config is empty")
+
 			return
 		}
 
@@ -132,13 +134,14 @@ func GetEtcdFactoryOr(opt *genericoptions.EtcdOptions, onKeepaliveFailure func()
 			if e := ds.Close(); e != nil {
 				log.Errorf("etcdStore client close failed %s", e)
 			}
+
 			return
 		}
 		etcdFactory = ds
 	})
 
 	if etcdFactory == nil || err != nil {
-		return nil, fmt.Errorf("failed to get etcd store fatory, etcdFactory: %+v, error: %v", etcdFactory, err)
+		return nil, fmt.Errorf("failed to get etcd store fatory, etcdFactory: %+v, error: %w", etcdFactory, err)
 	}
 
 	return etcdFactory, nil
@@ -149,13 +152,13 @@ func (ds *datastore) startSession() error {
 
 	resp, err := ds.cli.Grant(ctx, int64(ds.leaseTTLTimeout))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "creates new lease failed")
 	}
 	ds.leaseID = resp.ID
 
 	ch, err := ds.cli.KeepAlive(ctx, ds.leaseID)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "keep alive failed")
 	}
 	ds.leaseLiving = true
 
@@ -167,6 +170,7 @@ func (ds *datastore) startSession() error {
 				if ds.onKeepaliveFailure != nil {
 					ds.onKeepaliveFailure()
 				}
+
 				break
 			}
 		}
@@ -187,6 +191,7 @@ func (ds *datastore) RestartSession() error {
 	if ds.leaseLiving {
 		return fmt.Errorf("session is living, can't restart")
 	}
+
 	return ds.startSession()
 }
 
@@ -211,15 +216,16 @@ func (ds *datastore) grantLease(ctx context.Context, ttlSeconds int64) (*clientv
 	defer cancel()
 	resp, err := ds.cli.Grant(nctx, ttlSeconds)
 	if err != nil {
-		return nil, fmt.Errorf("grant lease: %s", err.Error())
+		return nil, fmt.Errorf("grant lease: %w", err)
 	}
-	return resp, err
+
+	return resp, nil
 }
 
 func (ds *datastore) PutWithLease(ctx context.Context, key string, val string, ttlSeconds int64) error {
 	resp, err := ds.grantLease(ctx, ttlSeconds)
 	if err != nil {
-		return fmt.Errorf("put with grant lease: %s", err.Error())
+		return fmt.Errorf("put with grant lease: %w", err)
 	}
 
 	nctx, cancel := context.WithTimeout(ctx, ds.requestTimeout)
@@ -230,8 +236,11 @@ func (ds *datastore) PutWithLease(ctx context.Context, key string, val string, t
 	opts := []clientv3.OpOption{
 		clientv3.WithLease(leaseID),
 	}
-	_, err = ds.cli.Put(nctx, key, val, opts...)
-	return err
+	if _, err = ds.cli.Put(nctx, key, val, opts...); err != nil {
+		return errors.Wrap(err, "put key-value pair to etcd failed")
+	}
+
+	return nil
 }
 
 func (ds *datastore) put(ctx context.Context, key string, val string, session bool) error {
@@ -240,12 +249,18 @@ func (ds *datastore) put(ctx context.Context, key string, val string, session bo
 
 	key = ds.getKey(key)
 	if session {
-		_, err := ds.cli.Put(nctx, key, val, clientv3.WithLease(ds.leaseID))
-		return err
+		if _, err := ds.cli.Put(nctx, key, val, clientv3.WithLease(ds.leaseID)); err != nil {
+			return errors.Wrap(err, "put key-value pair to etcd failed")
+		}
+
+		return nil
 	}
 
-	_, err := ds.cli.Put(nctx, key, val)
-	return err
+	if _, err := ds.cli.Put(nctx, key, val); err != nil {
+		return errors.Wrap(err, "put key-value pair to etcd failed")
+	}
+
+	return nil
 }
 
 func (ds *datastore) Get(ctx context.Context, key string) ([]byte, error) {
@@ -256,7 +271,7 @@ func (ds *datastore) Get(ctx context.Context, key string) ([]byte, error) {
 
 	resp, err := ds.cli.Get(nctx, key)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get key from etcd failed")
 	}
 	if len(resp.Kvs) == 0 {
 		return nil, fmt.Errorf("no such key")
@@ -280,15 +295,16 @@ func (ds *datastore) List(ctx context.Context, prefix string) ([]EtcdKeyValue, e
 	resp, err := ds.cli.Get(nctx, prefix, clientv3.WithPrefix(),
 		clientv3.WithSort(clientv3.SortByKey, clientv3.SortDescend))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get key from etcd failed")
 	}
 	ret := make([]EtcdKeyValue, len(resp.Kvs))
-	for i := 0; i < len(resp.Kvs); i += 1 {
+	for i := 0; i < len(resp.Kvs); i++ {
 		ret[i] = EtcdKeyValue{
 			Key:   string(resp.Kvs[i].Key[len(ds.namespace):]),
 			Value: resp.Kvs[i].Value,
 		}
 	}
+
 	return ret, nil
 }
 
@@ -306,8 +322,7 @@ func (ds *datastore) Watch(
 	onModify EtcdModifyEventFunc,
 	onDelete EtcdDeleteEventFunc,
 ) error {
-	_, ok := ds.watchers[prefix]
-	if ok {
+	if _, ok := ds.watchers[prefix]; ok {
 		return fmt.Errorf("watch prefix %s already registered", prefix)
 	}
 
@@ -342,6 +357,7 @@ func (ds *datastore) Watch(
 		}
 		log.Infof("stop watching %s", prefix)
 	}()
+
 	return nil
 }
 
@@ -364,7 +380,7 @@ func (ds *datastore) Delete(ctx context.Context, key string) ([]byte, error) {
 
 	dresp, err := ds.cli.Delete(nctx, key, clientv3.WithPrevKV())
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "delete key from etcd failed")
 	}
 
 	if dresp.Deleted == 1 {

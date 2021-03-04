@@ -177,6 +177,7 @@ func (a *AuthMiddleware) AuthCacheMiddlewareFunc() gin.HandlerFunc {
 		if err != nil || !parsedT.Valid {
 			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, err.Error()), nil)
 			c.Abort()
+
 			return
 		}
 

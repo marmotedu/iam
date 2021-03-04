@@ -67,6 +67,7 @@ func NewCmdShow(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 			if len(args) != 1 {
 				return cmdutil.UsageErrorf(cmd, showUsageErrStr)
 			}
+
 			return nil
 		},
 	}
@@ -97,18 +98,18 @@ func (o *ShowOptions) Run(args []string) error {
 
 	token, err := jwt.Parse(string(tokenData), nil)
 	if token == nil {
-		return fmt.Errorf("malformed token: %v", err)
+		return fmt.Errorf("malformed token: %w", err)
 	}
 
 	// Print the token details
 	fmt.Println("Header:")
 	if err := printJSON(o.Compact, token.Header); err != nil {
-		return fmt.Errorf("failed to output header: %v", err)
+		return fmt.Errorf("failed to output header: %w", err)
 	}
 
 	fmt.Println("Claims:")
 	if err := printJSON(o.Compact, token.Claims); err != nil {
-		return fmt.Errorf("failed to output claims: %v", err)
+		return fmt.Errorf("failed to output claims: %w", err)
 	}
 
 	return nil

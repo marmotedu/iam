@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/jsonutil"
+	"github.com/marmotedu/errors"
 )
 
 type policies struct {
@@ -30,20 +31,12 @@ func (p *policies) getKey(username string, name string) string {
 
 // Create creates a new policy.
 func (p *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
-	if err := p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy)); err != nil {
-		return err
-	}
-
-	return nil
+	return p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy))
 }
 
 // Update updates an policy information.
 func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
-	if err := p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy)); err != nil {
-		return err
-	}
-
-	return nil
+	return p.ds.Put(ctx, p.getKey(policy.Username, policy.Name), jsonutil.ToString(policy))
 }
 
 // Delete deletes the policy by the policy identifier.
@@ -88,8 +81,9 @@ func (p *policies) Get(ctx context.Context, username, name string, opts metav1.G
 
 	var policy v1.Policy
 	if err := json.Unmarshal(resp, &policy); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unmarshal to Policy struct failed")
 	}
+
 	return &policy, nil
 }
 
@@ -109,7 +103,7 @@ func (p *policies) List(ctx context.Context, username string, opts metav1.ListOp
 	for _, v := range kvs {
 		var policy v1.Policy
 		if err := json.Unmarshal(v.Value, &policy); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "unmarshal to Policy struct failed")
 		}
 
 		ret.Items = append(ret.Items, &policy)

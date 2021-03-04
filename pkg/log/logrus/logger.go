@@ -31,5 +31,6 @@ func NewLogger(zapLogger *zap.Logger) *logrus.Logger {
 	logger := logrus.New()
 	logger.SetOutput(ioutil.Discard)
 	logger.AddHook(newHook(zapLogger))
+
 	return logger
 }

@@ -29,7 +29,7 @@ var (
 	help       = pflag.BoolP("help", "h", false, "Print this help message")
 )
 
-var head string = `#!/usr/bin/env bash
+var head = `#!/usr/bin/env bash
 
 #############################
 #  SETUP
@@ -71,7 +71,7 @@ iptables -A INPUT -p tcp -m multiport --dport 80,443 -j ACCEPT
 # Allow iam services
 `
 
-var tail string = `
+var tail = `
 # Allow two types of ICMP
 iptables -A INPUT -p icmp --icmp-type 8/0 -j LOG --log-level 7 --log-prefix "Accept Ping"
 iptables -A INPUT -p icmp --icmp-type 8/0 -j ACCEPT
@@ -86,7 +86,7 @@ iptables -A INPUT -j LOG --log-level 7 --log-prefix "Default Deny"
 iptables -A INPUT -j DROP 
 `
 
-var refreshDeny string = `iptables -D INPUT -j LOG --log-level 7 --log-prefix "Default Deny" &>/dev/null
+var refreshDeny = `iptables -D INPUT -j LOG --log-level 7 --log-prefix "Default Deny" &>/dev/null
 iptables -D INPUT -j DROP &>/dev/null
 iptables -A INPUT -j LOG --log-level 7 --log-prefix "Default Deny"
 iptables -A INPUT -j DROP
@@ -130,6 +130,7 @@ func main() {
 
 	if *help {
 		pflag.Usage()
+
 		return
 	}
 
@@ -152,6 +153,7 @@ func main() {
 		// if use cidr, tool will not allow generate rules for a specified host
 		if *cidr != "" {
 			pflag.Usage()
+
 			return
 		}
 		g.filter = os.Args[1:]

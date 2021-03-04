@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
+	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
@@ -39,7 +40,7 @@ func (ds *datastore) Policies() store.PolicyStore {
 func (ds *datastore) Close() error {
 	db, err := ds.db.DB()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "get gorm db instance failed")
 	}
 
 	return db.Close()
@@ -82,7 +83,7 @@ func GetMySQLFactoryOr(opts *genericoptions.MySQLOptions) (store.Factory, error)
 	})
 
 	if mysqlFactory == nil || err != nil {
-		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v, error: %v", mysqlFactory, err)
+		return nil, fmt.Errorf("failed to get mysql store fatory, mysqlFactory: %+v, error: %w", mysqlFactory, err)
 	}
 
 	return mysqlFactory, nil
@@ -92,13 +93,13 @@ func GetMySQLFactoryOr(opts *genericoptions.MySQLOptions) (store.Factory, error)
 // nolint:unused // may be reused in the feature, or just show a migrate usage.
 func cleanDatabase(db *gorm.DB) error {
 	if err := db.Migrator().DropTable(&v1.User{}); err != nil {
-		return err
+		return errors.Wrap(err, "drop user table failed")
 	}
 	if err := db.Migrator().DropTable(&v1.Policy{}); err != nil {
-		return err
+		return errors.Wrap(err, "drop policy table failed")
 	}
 	if err := db.Migrator().DropTable(&v1.Secret{}); err != nil {
-		return err
+		return errors.Wrap(err, "drop secret table failed")
 	}
 
 	return nil
@@ -106,23 +107,23 @@ func cleanDatabase(db *gorm.DB) error {
 
 // migrateDatabase run auto migration for given models, will only add missing fields,
 // won't delete/change current data.
-// nolint:unused // may be reused in the feature, or just show a migrate usage.
+// nolint:unused,revive // may be reused in the feature, or just show a migrate usage.
 func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&v1.User{}); err != nil {
-		return err
+		return errors.Wrap(err, "migrate user model failed")
 	}
 	if err := db.AutoMigrate(&v1.Policy{}); err != nil {
-		return err
+		return errors.Wrap(err, "migrate policy model failed")
 	}
 	if err := db.AutoMigrate(&v1.Secret{}); err != nil {
-		return err
+		return errors.Wrap(err, "migrate secret model failed")
 	}
 
 	return nil
 }
 
 // resetDatabase resets the database tables.
-// nolint:unused,deadcode // may be reused in the feature, or just show a migrate usage.
+// nolint:unused,deadcode,revive // may be reused in the feature, or just show a migrate usage.
 func resetDatabase(db *gorm.DB) error {
 	if err := cleanDatabase(db); err != nil {
 		return err

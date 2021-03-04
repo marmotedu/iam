@@ -56,5 +56,6 @@ func New(opts *Options) (*gorm.DB, error) {
 
 	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
 	sqlDB.SetMaxIdleConns(opts.MaxIdleConnections)
+
 	return db, nil
 }

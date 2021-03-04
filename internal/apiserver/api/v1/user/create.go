@@ -23,17 +23,20 @@ func (u *UserHandler) Create(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
+
 		return
 	}
 
 	if errs := r.Validate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)
+
 		return
 	}
 
 	// Insert the user to the storage.
 	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

@@ -71,6 +71,7 @@ func NewCmdVerify(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cob
 			if len(args) != 2 {
 				return cmdutil.UsageErrorf(cmd, verifyUsageErrStr)
 			}
+
 			return nil
 		},
 	}
@@ -109,18 +110,18 @@ func (o *VerifyOptions) Run(args []string) error {
 	if o.Debug && token != nil {
 		fmt.Println("Header:")
 		if pErr := printJSON(o.Compact, token.Header); pErr != nil {
-			return fmt.Errorf("failed to output header: %v", pErr)
+			return fmt.Errorf("failed to output header: %w", pErr)
 		}
 
 		fmt.Println("Claims:")
 		if pErr := printJSON(o.Compact, token.Claims); pErr != nil {
-			return fmt.Errorf("failed to output claims: %v", pErr)
+			return fmt.Errorf("failed to output claims: %w", pErr)
 		}
 	}
 
 	// Print an error if we can't parse for some reason
 	if err != nil {
-		return fmt.Errorf("couldn't parse token: %v", err)
+		return fmt.Errorf("couldn't parse token: %w", err)
 	}
 
 	// Is token invalid?
@@ -131,7 +132,7 @@ func (o *VerifyOptions) Run(args []string) error {
 	if !o.Debug {
 		// Print the token details
 		if err := printJSON(o.Compact, token.Claims); err != nil {
-			return fmt.Errorf("failed to output claims: %v", err)
+			return fmt.Errorf("failed to output claims: %w", err)
 		}
 	}
 

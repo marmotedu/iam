@@ -18,6 +18,7 @@ func (p *PolicyHandler) Delete(c *gin.Context) {
 
 	if err := p.srv.Policies().Delete(c, c.GetString("username"), c.Param("name"), metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

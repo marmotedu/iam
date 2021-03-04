@@ -23,6 +23,7 @@ func isPrintable(s []byte) bool {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -92,6 +93,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 				for _, t := range convertableTypes {
 					if rv.Type().ConvertibleTo(t) {
 						convertParams(rv.Convert(t).Interface(), idx)
+
 						return
 					}
 				}
@@ -113,6 +115,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 				if len(vars) > idx {
 					newSQL.WriteString(vars[idx])
 					idx++
+
 					continue
 				}
 			}

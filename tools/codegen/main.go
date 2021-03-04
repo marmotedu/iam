@@ -26,7 +26,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-var errCodeDocPrefix string = `# 错误码
+var errCodeDocPrefix = `# 错误码
 
 ！！IAM 系统错误码列表，由 {{.}}codegen -type=int -doc{{.}} 命令生成，不要对此文件做任何更改。
 
@@ -158,6 +158,7 @@ func isDirectory(name string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	return info.IsDir()
 }
 
@@ -296,8 +297,10 @@ func (g *Generator) format() []byte {
 		// The user can compile the output to see the error.
 		log.Printf("warning: internal error: invalid Go generated: %s", err)
 		log.Printf("warning: compile the package to analyze the error")
+
 		return g.buf.Bytes()
 	}
+
 	return src
 }
 
@@ -325,6 +328,7 @@ func (v *Value) ParseComment() (string, string) {
 	reg := regexp.MustCompile(`\w\s*-\s*(\d{3})\s*:\s*([A-Z].*)\s*\.\n*`)
 	if !reg.MatchString(v.comment) {
 		log.Printf("constant '%s' have wrong comment format, register with 500 as default", v.originalName)
+
 		return "500", "Internal server error"
 	}
 
@@ -431,5 +435,6 @@ func (f *File) genDecl(node ast.Node) bool {
 			f.values = append(f.values, v)
 		}
 	}
+
 	return false
 }
