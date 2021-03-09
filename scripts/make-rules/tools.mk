@@ -6,7 +6,7 @@
 # Makefile helper functions for tools 
 #
 
-DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint
+DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS))
 
@@ -60,3 +60,7 @@ install.mockgen:
 .PHONY: install.gotests
 install.gotests:
 	@$(GO) get -u github.com/cweill/gotests/...
+
+.PHONY: install.protoc-gen-go
+install.protoc-gen-go:
+	@$(GO) get -u github.com/golang/protobuf/protoc-gen-go

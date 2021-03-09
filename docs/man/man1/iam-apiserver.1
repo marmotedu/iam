@@ -5,7 +5,7 @@ Jan 2015
 
 .SH NAME
 .PP
-iam\-apiserver \- The IAM API server to validates and configures data for the api objects
+iam\-apiserver \- IAM API Server
 
 
 .SH SYNOPSIS
@@ -21,13 +21,17 @@ others. The API Server services REST operations to do the api objects management
 
 .PP
 Find more iam\-apiserver information at:
-    https://github.com/marmotedu/iam/blob/master/docs/admin/iam\-apiserver.md
+    https://github.com/marmotedu/iam/blob/master/docs/guide/en\-US/cmd/iam\-apiserver.md
 
 
 .SH OPTIONS
 .PP
 \fB\-\-apiconfig\fP=""
 	IAM APIServer config file.
+
+.PP
+\fB\-c\fP, \fB\-\-config\fP=""
+	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
 
 .PP
 \fB\-\-feature.enable\-metrics\fP=true
@@ -48,10 +52,6 @@ Find more iam\-apiserver information at:
 .PP
 \fB\-\-grpc.max\-msg\-size\fP=4194304
 	gRPC max message size.
-
-.PP
-\fB\-h\fP, \fB\-\-help\fP=false
-	help for iam\-apiserver
 
 .PP
 \fB\-\-insecure.bind\-address\fP="127.0.0.1"
@@ -224,10 +224,6 @@ Find more iam\-apiserver information at:
 .PP
 \fB\-\-server.healthz\fP=true
 	Add self readiness check and install /healthz router.
-
-.PP
-\fB\-\-server.max\-ping\-count\fP=3
-	The max number of ping attempts when server failed to startup.
 
 .PP
 \fB\-\-server.middlewares\fP=[]

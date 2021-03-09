@@ -47,21 +47,21 @@ func main() {
 	switch module {
 	case "iam-apiserver":
 		// generate manpage for iam-apiserver
-		apiServer := apiserver.NewAPIServerCommand()
+		apiServer := apiserver.NewApp("iam-apiserver").Command()
 		genMarkdown(apiServer, "", outDir)
 		for _, c := range apiServer.Commands() {
 			genMarkdown(c, "iam-apiserver", outDir)
 		}
 	case "iam-authz-server":
 		// generate manpage for iam-authz-server
-		authzServer := authzserver.NewAuthzServerCommand()
+		authzServer := authzserver.NewApp("iam-authz-server").Command()
 		genMarkdown(authzServer, "", outDir)
 		for _, c := range authzServer.Commands() {
 			genMarkdown(c, "iam-authz-server", outDir)
 		}
 	case "iam-pump":
 		// generate manpage for iam-pump
-		pump := pump.NewPumpCommand()
+		pump := pump.NewApp("iam-pump").Command()
 		genMarkdown(pump, "", outDir)
 		for _, c := range pump.Commands() {
 			genMarkdown(c, "iam-pump", outDir)

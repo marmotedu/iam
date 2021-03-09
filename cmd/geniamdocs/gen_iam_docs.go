@@ -36,15 +36,15 @@ func main() {
 	switch module {
 	case "iam-apiserver":
 		// generate docs for iam-apiserver
-		apiServer := apiserver.NewAPIServerCommand()
+		apiServer := apiserver.NewApp("iam-apiserver").Command()
 		_ = doc.GenMarkdownTree(apiServer, outDir)
 	case "iam-authz-server":
 		// generate docs for iam-authz-server
-		authzServer := authzserver.NewAuthzServerCommand()
+		authzServer := authzserver.NewApp("iam-authz-server").Command()
 		_ = doc.GenMarkdownTree(authzServer, outDir)
 	case "iam-pump":
 		// generate docs for iam-pump
-		iamPump := pump.NewPumpCommand()
+		iamPump := pump.NewApp("iam-pump").Command()
 		_ = doc.GenMarkdownTree(iamPump, outDir)
 	default:
 		fmt.Fprintf(os.Stderr, "Module %s is not supported", module)

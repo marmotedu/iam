@@ -48,6 +48,15 @@ type GenericAPIServer struct {
 	insecureServer, secureServer *http.Server
 }
 
+func initGenericAPIServer(s *GenericAPIServer) {
+	// do some setup
+	// s.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	s.Setup()
+	s.InstallMiddlewares()
+	s.InstallAPIs()
+}
+
 // InstallAPIs install generic apis.
 func (s *GenericAPIServer) InstallAPIs() {
 	// install healthz handler
@@ -104,6 +113,17 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 	// s.Use(limits.RequestSizeLimiter(10))
 	// s.GET("/debug/vars", expvar.Handler())
 }
+
+/*
+// preparedGenericAPIServer is a private wrapper that enforces a call of PrepareRun() before Run can be invoked.
+type preparedGenericAPIServer struct {
+	*GenericAPIServer
+}
+
+func (s *GenericAPIServer) PrepareRun() preparedGenericAPIServer {
+	return preparedGenericAPIServer{s}
+}
+*/
 
 // Run spawns the http server. It only returns when the port cannot be listened on initially.
 func (s *GenericAPIServer) Run() error {
@@ -191,7 +211,7 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 		// Change NewRequest to NewRequestWithContext and pass context it
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 		if err != nil {
-			return nil
+			return err
 		}
 		// Ping the server by sending a GET request to `/healthz`.
 		// nolint: gosec

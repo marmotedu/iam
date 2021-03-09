@@ -116,12 +116,7 @@ func (c CompletedConfig) New() (*GenericAPIServer, error) {
 		Engine:              gin.New(),
 	}
 
-	// do some setup
-	// s.GET(path, ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	s.Setup()
-	s.InstallMiddlewares()
-	s.InstallAPIs()
+	initGenericAPIServer(s)
 
 	return s, nil
 }

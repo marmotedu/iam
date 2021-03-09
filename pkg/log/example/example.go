@@ -41,7 +41,7 @@ func main() {
 		ErrorOutputPaths: []string{"error.log"},
 	}
 	// 初始化全局logger
-	log.InitWithOptions(opts)
+	log.Init(opts)
 	defer log.Flush()
 
 	// Debug、Info(with field)、Warnf、Errorw使用

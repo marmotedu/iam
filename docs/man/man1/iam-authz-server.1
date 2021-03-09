@@ -5,7 +5,7 @@ Jan 2015
 
 .SH NAME
 .PP
-iam\-authz\-server \- Authorization server to decide who is able to do what on something given some context
+iam\-authz\-server \- IAM Authorization Server
 
 
 .SH SYNOPSIS
@@ -20,7 +20,7 @@ It is written inspired by AWS IAM policiis.
 
 .PP
 Find more iam\-authz\-server information at:
-    https://github.com/marmotedu/iam/blob/master/docs/admin/iam\-authz\-server.md,
+    https://github.com/marmotedu/iam/blob/master/docs/guide/en\-US/cmd/iam\-authz\-server.md,
 
 .PP
 Find more ladon information at:
@@ -57,16 +57,16 @@ Find more ladon information at:
 	If set, any request presenting a client certificate signed by one of the authorities in the client\-ca\-file is authenticated with an identity corresponding to the CommonName of the client certificate.
 
 .PP
+\fB\-c\fP, \fB\-\-config\fP=""
+	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
+
+.PP
 \fB\-\-feature.enable\-metrics\fP=true
 	Enables metrics on the apiserver at /metrics
 
 .PP
 \fB\-\-feature.profiling\fP=true
 	Enable profiling via web interface host:port/debug/pprof/
-
-.PP
-\fB\-h\fP, \fB\-\-help\fP=false
-	help for iam\-authz\-server
 
 .PP
 \fB\-\-insecure.bind\-address\fP="127.0.0.1"
@@ -195,10 +195,6 @@ Find more ladon information at:
 .PP
 \fB\-\-server.healthz\fP=true
 	Add self readiness check and install /healthz router.
-
-.PP
-\fB\-\-server.max\-ping\-count\fP=3
-	The max number of ping attempts when server failed to startup.
 
 .PP
 \fB\-\-server.middlewares\fP=[]

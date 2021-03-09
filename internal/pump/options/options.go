@@ -23,9 +23,8 @@ type PumpConfig struct {
 	Meta                  map[string]interface{}     `json:"meta"                    mapstructure:"meta"`
 }
 
-// PumpOptions runs a pumpserver.
-type PumpOptions struct {
-	PumpConfig            string                       `json:"pumpconfig"              mapstructure:"-"`
+// Options runs a pumpserver.
+type Options struct {
 	PurgeDelay            int                          `json:"purge-delay"             mapstructure:"purge-delay"`
 	Pumps                 map[string]PumpConfig        `json:"pumps"                   mapstructure:"pumps"`
 	HealthCheckPath       string                       `json:"health-check-path"       mapstructure:"health-check-path"`
@@ -35,9 +34,9 @@ type PumpOptions struct {
 	Log                   *log.Options                 `json:"log"                     mapstructure:"log"`
 }
 
-// NewPumpOptions creates a new PumpOptions object with default parameters.
-func NewPumpOptions() *PumpOptions {
-	s := PumpOptions{
+// NewOptions creates a new Options object with default parameters.
+func NewOptions() *Options {
+	s := Options{
 		PurgeDelay: 10,
 		Pumps: map[string]PumpConfig{
 			"csv": {
@@ -57,28 +56,27 @@ func NewPumpOptions() *PumpOptions {
 }
 
 // Flags returns flags for a specific APIServer by section name.
-func (s *PumpOptions) Flags() (fss cliflag.NamedFlagSets) {
-	s.RedisOptions.AddFlags(fss.FlagSet("redis"))
-	s.Log.AddFlags(fss.FlagSet("logs"))
+func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
+	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
+	o.Log.AddFlags(fss.FlagSet("logs"))
 
 	// Note: the weird ""+ in below lines seems to be the only way to get gofmt to
 	// arrange these text blocks sensibly. Grrr.
 	fs := fss.FlagSet("misc")
-	fs.StringVar(&s.PumpConfig, "pumpconfig", s.PumpConfig, "IAM pump config file.")
-	fs.IntVar(&s.PurgeDelay, "purge-delay", s.PurgeDelay, ""+
+	fs.IntVar(&o.PurgeDelay, "purge-delay", o.PurgeDelay, ""+
 		"This setting the purge delay (in seconds) when purge the data from Redis to MongoDB or other data stores.")
-	fs.StringVar(&s.HealthCheckPath, "health-check-path", s.HealthCheckPath, ""+
+	fs.StringVar(&o.HealthCheckPath, "health-check-path", o.HealthCheckPath, ""+
 		"Specifies liveness health check request path.")
-	fs.StringVar(&s.HealthCheckAddress, "health-check-address", s.HealthCheckAddress, ""+
+	fs.StringVar(&o.HealthCheckAddress, "health-check-address", o.HealthCheckAddress, ""+
 		"Specifies liveness health check bind address.")
-	fs.BoolVar(&s.OmitDetailedRecording, "omit-detailed-recording", s.OmitDetailedRecording, ""+
+	fs.BoolVar(&o.OmitDetailedRecording, "omit-detailed-recording", o.OmitDetailedRecording, ""+
 		"Setting this to true will avoid writing policy fields for each authorization request in pumps.")
 
 	return fss
 }
 
-func (s *PumpOptions) String() string {
-	data, _ := json.Marshal(s)
+func (o *Options) String() string {
+	data, _ := json.Marshal(o)
 
 	return string(data)
 }

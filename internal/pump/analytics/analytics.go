@@ -45,7 +45,7 @@ func (a *AnalyticsRecord) GetLineValues() []string {
 	for i := 0; i < val.NumField(); i++ {
 		valueField := val.Field(i)
 		typeField := val.Type().Field(i)
-		thisVal := ""
+		var thisVal string
 		switch typeField.Type.String() {
 		case "int":
 			thisVal = strconv.Itoa(int(valueField.Int()))

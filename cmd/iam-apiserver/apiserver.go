@@ -7,14 +7,19 @@
 package main
 
 import (
+	"math/rand"
 	"os"
+	"runtime"
+	"time"
 
 	"github.com/marmotedu/iam/internal/apiserver"
 )
 
 func main() {
-	command := apiserver.NewAPIServerCommand()
-	if err := command.Execute(); err != nil {
-		os.Exit(1)
+	rand.Seed(time.Now().UTC().UnixNano())
+	if len(os.Getenv("GOMAXPROCS")) == 0 {
+		runtime.GOMAXPROCS(runtime.NumCPU())
 	}
+
+	apiserver.NewApp("iam-apiserver").Run()
 }

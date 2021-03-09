@@ -135,7 +135,7 @@ func (r *RedisAnalyticsHandler) recordWorker() {
 	// read records from channel and process
 	lastSentTS := time.Now()
 	for {
-		readyToSend := false
+		var readyToSend bool
 		select {
 		case record, ok := <-r.recordsChan:
 			// check if channel was closed and it is time to exit from worker

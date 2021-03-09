@@ -50,7 +50,7 @@ $ go run example2.go
 
 ### 初始化日志包
 
-可以使用 `InitWithOptions` 来初始化一个日志包，如下：
+可以使用 `Init` 来初始化一个日志包，如下：
 
 ```go
 // logger配置    
@@ -63,7 +63,7 @@ opts := &log.Options{
     ErrorOutputPaths: []string{"error.log"},
 }
 // 初始化全局logger    
-log.InitWithOptions(opts)
+log.Init(opts)
 ```
 
 Format 支持 `console` 和 `json` 2 种格式：

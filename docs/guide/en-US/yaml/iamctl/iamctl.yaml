@@ -7,7 +7,7 @@ synopsis: iamctl controls the iam platform
 description: |-
     iamctl controls the iam platform, is the client side tool for iam platform.
 
-     Find more information at: https://github.com/marmotedu/iam/blob/master/docs/user-guide/iamctl/iamctl.md
+     Find more information at: https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iamctl/iamctl.md
 options:
     - name: iamconfig
       usage: Path to the iamconfig file to use for CLI requests

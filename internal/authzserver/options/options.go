@@ -15,9 +15,8 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// ServerRunOptions runs a authzserver.
-type ServerRunOptions struct {
-	AuthzConfig             string                                 `json:"authzconfig"    mapstructure:"-"`
+// Options runs a authzserver.
+type Options struct {
 	RPCServer               string                                 `json:"rpcserver"      mapstructure:"rpcserver"`
 	ClientCA                string                                 `json:"client-ca-file" mapstructure:"client-ca-file"`
 	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server"         mapstructure:"server"`
@@ -29,9 +28,9 @@ type ServerRunOptions struct {
 	AnalyticsOptions        *analytics.AnalyticsOptions            `json:"analytics"      mapstructure:"analytics"`
 }
 
-// NewServerRunOptions creates a new ServerRunOptions object with default parameters.
-func NewServerRunOptions() *ServerRunOptions {
-	s := ServerRunOptions{
+// NewOptions creates a new Options object with default parameters.
+func NewOptions() *Options {
+	o := Options{
 		RPCServer:               "127.0.0.1:8081",
 		ClientCA:                "",
 		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
@@ -43,31 +42,30 @@ func NewServerRunOptions() *ServerRunOptions {
 		AnalyticsOptions:        analytics.NewAnalyticsOptions(),
 	}
 
-	return &s
+	return &o
 }
 
 // ApplyTo applies the run options to the method receiver and returns self.
-func (s *ServerRunOptions) ApplyTo(c *server.Config) error {
+func (o *Options) ApplyTo(c *server.Config) error {
 	return nil
 }
 
 // Flags returns flags for a specific APIServer by section name.
-func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
-	s.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
-	s.AnalyticsOptions.AddFlags(fss.FlagSet("analytics"))
-	s.RedisOptions.AddFlags(fss.FlagSet("redis"))
-	s.FeatureOptions.AddFlags(fss.FlagSet("features"))
-	s.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
-	s.SecureServing.AddFlags(fss.FlagSet("secure serving"))
-	s.Log.AddFlags(fss.FlagSet("logs"))
+func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
+	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
+	o.AnalyticsOptions.AddFlags(fss.FlagSet("analytics"))
+	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
+	o.FeatureOptions.AddFlags(fss.FlagSet("features"))
+	o.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
+	o.SecureServing.AddFlags(fss.FlagSet("secure serving"))
+	o.Log.AddFlags(fss.FlagSet("logs"))
 
 	// Note: the weird ""+ in below lines seems to be the only way to get gofmt to
 	// arrange these text blocks sensibly. Grrr.
 	fs := fss.FlagSet("misc")
-	fs.StringVar(&s.AuthzConfig, "authzconfig", s.AuthzConfig, "IAM AuthzServer config file.")
-	fs.StringVar(&s.RPCServer, "rpcserver", s.RPCServer, "The address of iam rpc server. "+
+	fs.StringVar(&o.RPCServer, "rpcserver", o.RPCServer, "The address of iam rpc server. "+
 		"The rpc server can provide all the secrets and policies to use.")
-	fs.StringVar(&s.ClientCA, "client-ca-file", s.ClientCA, ""+
+	fs.StringVar(&o.ClientCA, "client-ca-file", o.ClientCA, ""+
 		"If set, any request presenting a client certificate signed by one of "+
 		"the authorities in the client-ca-file is authenticated with an identity "+
 		"corresponding to the CommonName of the client certificate.")
@@ -75,8 +73,13 @@ func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
 	return fss
 }
 
-func (s *ServerRunOptions) String() string {
-	data, _ := json.Marshal(s)
+func (o *Options) String() string {
+	data, _ := json.Marshal(o)
 
 	return string(data)
+}
+
+// Complete set default Options.
+func (o *Options) Complete() error {
+	return o.SecureServing.Complete()
 }

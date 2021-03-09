@@ -210,8 +210,8 @@ var (
 	mu  sync.Mutex
 )
 
-// InitWithOptions initializes.
-func InitWithOptions(opts *Options) {
+// Init initializes logger with specified options.
+func Init(opts *Options) {
 	mu.Lock()
 	defer mu.Unlock()
 	std = New(opts)

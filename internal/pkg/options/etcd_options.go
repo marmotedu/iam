@@ -106,7 +106,7 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 		capool = x509.NewCertPool()
 		for {
 			var block *pem.Block
-			block, data = pem.Decode(data)
+			block, _ = pem.Decode(data)
 			if block == nil {
 				break
 			}

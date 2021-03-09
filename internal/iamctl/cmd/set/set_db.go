@@ -155,7 +155,7 @@ func (o *DBOptions) ensureSchema() error {
 
 	db, err := gorm.Open("mysql", dns)
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 
