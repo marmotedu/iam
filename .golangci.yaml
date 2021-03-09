@@ -132,7 +132,7 @@ linters-settings:
     local-prefixes: github.com/marmotedu/iam
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 30
+    min-complexity: 50
   nestif:
     # minimal complexity of if statements to report, 5 by default
     min-complexity: 5
@@ -505,12 +505,14 @@ linters:
     - gofmt
     - goimports
     - golint
+    - importas
+    - wastedassign
+    - nilerr
     - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
     - misspell
     - nakedret
@@ -530,7 +532,6 @@ linters:
     - gocognit
     - godot
     - godox
-    - maligned
     - nestif
     - prealloc
     - gomodguard
@@ -555,14 +556,17 @@ linters:
     - noctx
     - sqlclosecheck
     - tparallel
-    - wrapcheck
 
   # don't enable:
+    #- wrapcheck
+    #- forcetypeassert
     #- goerr113
     #- gomnd
     #- wsl
     #- testpackage
     #- gochecknoglobals
+    #- interfacer
+    #- maligned
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default.
@@ -600,6 +604,12 @@ issues:
     - path: (validator/.*|code/.*|validator/.*)
       linters:
         - gochecknoinits
+    - path: (pkg/app/.*)\.go
+      linters:
+        - deadcode
+        - unused
+        - varcheck
+        - forbidigo
 
     # Exclude some staticcheck messages
     - linters:
