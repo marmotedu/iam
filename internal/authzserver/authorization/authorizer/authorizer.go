@@ -92,7 +92,7 @@ func (auth *Authorization) LogRejectedAccessRequest(r *ladon.Request, p ladon.Po
 	}
 
 	record.SetExpiry(0)
-	_ = analytics.Analytics().RecordHit(&record)
+	_ = analytics.GetAnalytics().RecordHit(&record)
 }
 
 // LogGrantedAccessRequest write granted subject access to redis.
@@ -110,7 +110,7 @@ func (auth *Authorization) LogGrantedAccessRequest(r *ladon.Request, p ladon.Pol
 	}
 
 	record.SetExpiry(0)
-	_ = analytics.Analytics().RecordHit(&record)
+	_ = analytics.GetAnalytics().RecordHit(&record)
 }
 
 func joinPoliciesNames(policies ladon.Policies) string {

@@ -78,8 +78,8 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *An
 	}
 }
 
-// Analytics returns the existed analytics instance.
-func Analytics() *Analytics {
+// GetAnalytics returns the existed analytics instance.
+func GetAnalytics() *Analytics {
 	return analytics
 }
 
