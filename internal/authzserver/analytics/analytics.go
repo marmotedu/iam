@@ -72,9 +72,9 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Re
 	return &RedisAnalyticsHandler{
 		store:                      store,
 		poolSize:                   ps,
+		recordsChan:                recordsChan,
 		workerBufferSize:           workerBufferSize,
 		recordsBufferFlushInterval: options.FlushInterval,
-		recordsChan:                recordsChan,
 	}
 }
 
