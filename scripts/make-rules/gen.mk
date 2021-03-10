@@ -31,7 +31,6 @@ gen.ca.%:
 	$(eval CA := $(word 1,$(subst ., ,$*)))
 	@echo "===========> Generating CA files for $(CA)"
 	@${ROOT_DIR}/scripts/gencerts.sh generate-iam-cert $(OUTPUT_DIR)/cert $(CA)
-	#@${ROOT_DIR}/scripts/gencerts.sh create-iam-certs $(CA)
 
 .PHONY: gen.ca
 gen.ca: $(addprefix gen.ca., $(CAS))
