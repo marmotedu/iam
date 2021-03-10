@@ -38,7 +38,7 @@ func GetCacheInsOr(store store.Factory) (*Cache, error) {
 	}
 
 	if cacheServer == nil {
-		return nil, fmt.Errorf("faild to get cache instance")
+		return nil, fmt.Errorf("got nil cache server")
 	}
 
 	return cacheServer, nil

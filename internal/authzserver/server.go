@@ -65,8 +65,9 @@ func createAuthzServer(cfg *config.Config) (*authzServer, error) {
 }
 
 func (s *authzServer) PrepareRun() preparedAuthzServer {
-	installHandler(s.genericAPIServer.Engine)
 	_ = s.initialize()
+
+	installHandler(s.genericAPIServer.Engine)
 
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		s.genericAPIServer.Close()
@@ -133,9 +134,7 @@ func (s *authzServer) initialize() error {
 	// keep redis connected
 	go storage.ConnectToRedis(ctx, s.buildStorageConfig())
 
-	storeIns, err := store.GetStoreInsOr(
-		store.GetGRPCClientOrDie(s.rpcServer, s.clientCA),
-	)
+	storeIns, err := store.GetStoreInsOr(store.GetGRPCClientOrDie(s.rpcServer, s.clientCA))
 	if err != nil {
 		return errors.Wrap(err, "get store instance failed")
 	}

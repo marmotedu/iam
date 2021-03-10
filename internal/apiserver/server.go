@@ -9,13 +9,13 @@ import (
 	"fmt"
 
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
-	"github.com/marmotedu/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
 	cachev1 "github.com/marmotedu/iam/internal/apiserver/api/v1/cache"
 	"github.com/marmotedu/iam/internal/apiserver/config"
+	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
@@ -26,10 +26,8 @@ import (
 )
 
 type apiServer struct {
-	gs           *shutdown.GracefulShutdown
-	mysqlOptions *genericoptions.MySQLOptions
-	redisOptions *genericoptions.RedisOptions
-	// etcdOptions      *genericoptions.EtcdOptions
+	gs               *shutdown.GracefulShutdown
+	redisOptions     *genericoptions.RedisOptions
 	gRPCAPIServer    *grpcAPIServer
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
@@ -40,9 +38,11 @@ type preparedAPIServer struct {
 
 // ExtraConfig defines extra configuration for the iam-apiserver.
 type ExtraConfig struct {
-	Addr       string
-	MaxMsgSize int
-	ServerCert genericoptions.GeneratableKeyCert
+	Addr         string
+	MaxMsgSize   int
+	ServerCert   genericoptions.GeneratableKeyCert
+	mysqlOptions *genericoptions.MySQLOptions
+	// etcdOptions      *genericoptions.EtcdOptions
 }
 
 func createAPIServer(cfg *config.Config) (*apiServer, error) {
@@ -69,10 +69,8 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 	}
 
 	server := &apiServer{
-		gs:           gs,
-		mysqlOptions: cfg.MySQLOptions,
-		redisOptions: cfg.RedisOptions,
-		// etcdOptions:      cfg.EtcdOptions,
+		gs:               gs,
+		redisOptions:     cfg.RedisOptions,
 		genericAPIServer: genericServer,
 		gRPCAPIServer:    extraServer,
 	}
@@ -83,9 +81,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 func (s *apiServer) PrepareRun() preparedAPIServer {
 	initRouter(s.genericAPIServer.Engine)
 
-	if err := s.initDataStore(); err != nil {
-		log.Warnf("init datastore: %s", err)
-	}
+	s.initRedisStore()
 
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
@@ -135,8 +131,9 @@ func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
 	opts := []grpc.ServerOption{grpc.MaxRecvMsgSize(c.MaxMsgSize), grpc.Creds(creds)}
 	grpcServer := grpc.NewServer(opts...)
 
-	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
-	// storeIns, _ := etcd.GetEtcdFactoryOr(nil, nil)
+	storeIns, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)
+	// storeIns, _ := etcd.GetEtcdFactoryOr(c.etcdOptions, nil)
+	store.SetClient(storeIns)
 	cacheIns, err := cachev1.GetCacheInsOr(storeIns)
 	if err != nil {
 		log.Fatalf("Failed to get cache instance: %s", err.Error())
@@ -173,27 +170,12 @@ func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Con
 //nolint: unparam
 func buildExtraConfig(cfg *config.Config) (*ExtraConfig, error) {
 	return &ExtraConfig{
-		Addr:       fmt.Sprintf("%s:%d", cfg.GRPCOptions.BindAddress, cfg.GRPCOptions.BindPort),
-		MaxMsgSize: cfg.GRPCOptions.MaxMsgSize,
-		ServerCert: cfg.SecureServing.ServerCert,
+		Addr:         fmt.Sprintf("%s:%d", cfg.GRPCOptions.BindAddress, cfg.GRPCOptions.BindPort),
+		MaxMsgSize:   cfg.GRPCOptions.MaxMsgSize,
+		ServerCert:   cfg.SecureServing.ServerCert,
+		mysqlOptions: cfg.MySQLOptions,
+		// etcdOptions:      cfg.EtcdOptions,
 	}, nil
-}
-
-func (s *apiServer) initDataStore() error {
-	s.initRedisStore()
-
-	_, err := mysql.GetMySQLFactoryOr(s.mysqlOptions)
-	if err != nil {
-		return errors.Wrap(err, "get mysql instance failed")
-	}
-
-	// uncomment the following lines if you want to switch to etcd storage.
-	/*
-		if _, err := etcd.GetEtcdFactoryOr(s.etcdOptions, nil); err != nil {
-			return err
-		}
-	*/
-	return nil
 }
 
 func (s *apiServer) initRedisStore() {
