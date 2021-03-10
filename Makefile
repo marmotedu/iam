@@ -14,14 +14,6 @@ all: gen verify-copyright format lint test build
 ROOT_PACKAGE=github.com/marmotedu/iam
 VERSION_PACKAGE=github.com/marmotedu/component-base/pkg/version
 
-# Copy githook scripts when execute makefile
-COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/)
-
-# Makefile settings
-ifndef V
-MAKEFLAGS += --no-print-directory
-endif
-
 # ==============================================================================
 # Includes
 
@@ -124,13 +116,9 @@ release:
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
 format: tools.verify.golines
-	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
-		xargs --no-run-if-empty gofmt -s -w
-	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
-		xargs --no-run-if-empty goimports -w -local $(ROOT_PACKAGE)
-	@find . \( -path ./vendor -o -path ./third_party \) -prune -o -name *.go -print | \
-		xargs --no-run-if-empty golines -w --max-len=120 \
-		--reformat-tags --shorten-comments --ignore-generated .
+	@$(FIND) -type f -name '*.go' | $(XARGS) gofmt -s -w
+	@$(FIND) -type f -name '*.go' | $(XARGS) goimports -w -local $(ROOT_PACKAGE)
+	@$(FIND) -type f -name '*.go' | $(XARGS) golines -w --max-len=120 --reformat-tags --shorten-comments --ignore-generated .
 
 ## verify-copyright: Verify the boilerplate headers for all files.
 .PHONY: verify-copyright

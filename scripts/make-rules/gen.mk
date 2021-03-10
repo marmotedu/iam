@@ -10,7 +10,7 @@
 CAS=iam-apiserver iam-authz-server admin
 
 .PHONY: gen.run
-gen.run: gen.errcode gen.docgo
+gen.run: gen.clean gen.errcode gen.docgo
 
 .PHONY: gen.errcode
 gen.errcode: gen.errcode.code gen.errcode.doc
@@ -24,7 +24,7 @@ gen.errcode.code:
 gen.errcode.doc:
 	@echo "===========> Generating error code markdown documentation"
 	@$(GO) run ${ROOT_DIR}/tools/codegen/main.go -type=int -doc \
-		-output ${ROOT_DIR}/docs/guide/zh-CN/api/error_code.md ${ROOT_DIR}/internal/pkg/code
+		-output ${ROOT_DIR}/docs/guide/zh-CN/api/error_code_generated.md ${ROOT_DIR}/internal/pkg/code
 
 .PHONY: gen.ca.%
 gen.ca.%:
@@ -40,3 +40,8 @@ gen.ca: $(addprefix gen.ca., $(CAS))
 gen.docgo:
 	@echo "===========> Generating missing doc.go for go packages"
 	@${ROOT_DIR}/scripts/gendoc.sh
+
+.PHONY: gen.clean
+gen.clean:
+	@rm -rf ./api/client/{clientset,informers,listers}
+	@$(FIND) -type f -name '*_generated.go' -delete

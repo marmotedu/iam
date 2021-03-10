@@ -57,6 +57,17 @@ else
 	IMAGE_PLAT := $(PLATFORM)
 endif
 
+# Linux command settings
+FIND := find . ! -path './third_party/*' ! -path './vendor/*'
+XARGS := xargs --no-run-if-empty
+
+# Makefile settings
+ifndef V
+MAKEFLAGS += --no-print-directory
+endif
+
+# Copy githook scripts when execute makefile
+COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/)
 COMMA := ,
 SPACE :=
 SPACE +=
