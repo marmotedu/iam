@@ -34,7 +34,7 @@ type AnalyticsRecord struct {
 	ExpireAt   time.Time `json:"expireAt"   bson:"expireAt"`
 }
 
-var analytics *RedisAnalyticsHandler
+var analytics *Analytics
 
 // SetExpiry set expiration time to a key.
 func (a *AnalyticsRecord) SetExpiry(expiresInSeconds int64) {
@@ -49,8 +49,8 @@ func (a *AnalyticsRecord) SetExpiry(expiresInSeconds int64) {
 	a.ExpireAt = t2
 }
 
-// RedisAnalyticsHandler will record analytics data to a redis back end as defined in the Config object.
-type RedisAnalyticsHandler struct {
+// Analytics will record analytics data to a redis back end as defined in the Config object.
+type Analytics struct {
 	store                      storage.AnalyticsHandler
 	poolSize                   int
 	recordsChan                chan *AnalyticsRecord
@@ -61,7 +61,7 @@ type RedisAnalyticsHandler struct {
 }
 
 // NewAnalytics returns a new analytics instance.
-func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *RedisAnalyticsHandler {
+func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Analytics {
 	ps := options.PoolSize
 	recordsBufferSize := options.RecordsBufferSize
 	workerBufferSize := recordsBufferSize / uint64(ps)
@@ -69,7 +69,7 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Re
 
 	recordsChan := make(chan *AnalyticsRecord, recordsBufferSize)
 
-	return &RedisAnalyticsHandler{
+	return &Analytics{
 		store:                      store,
 		poolSize:                   ps,
 		recordsChan:                recordsChan,
@@ -79,12 +79,12 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *Re
 }
 
 // Analytics returns the existed analytics instance.
-func Analytics() *RedisAnalyticsHandler {
+func Analytics() *Analytics {
 	return analytics
 }
 
 // Start start the analytics service.
-func (r *RedisAnalyticsHandler) Start() {
+func (r *Analytics) Start() {
 	analytics = r
 	r.store.Connect()
 
@@ -100,7 +100,7 @@ func (r *RedisAnalyticsHandler) Start() {
 }
 
 // Stop stop the analytics service.
-func (r *RedisAnalyticsHandler) Stop() {
+func (r *Analytics) Stop() {
 	// flag to stop sending records into channel
 	atomic.SwapUint32(&r.shouldStop, 1)
 
@@ -112,7 +112,7 @@ func (r *RedisAnalyticsHandler) Stop() {
 }
 
 // RecordHit will store an AnalyticsRecord in Redis.
-func (r *RedisAnalyticsHandler) RecordHit(record *AnalyticsRecord) error {
+func (r *Analytics) RecordHit(record *AnalyticsRecord) error {
 	// check if we should stop sending records 1st
 	if atomic.LoadUint32(&r.shouldStop) > 0 {
 		return nil
@@ -125,7 +125,7 @@ func (r *RedisAnalyticsHandler) RecordHit(record *AnalyticsRecord) error {
 	return nil
 }
 
-func (r *RedisAnalyticsHandler) recordWorker() {
+func (r *Analytics) recordWorker() {
 	defer r.poolWg.Done()
 
 	// this is buffer to send one pipelined command to redis
