@@ -85,6 +85,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 				// Send to pumps
 				writeToPumps(keys, s.secInterval)
 			}
+		// exit consumption cycle when receive SIGINT and SIGTERM signal
 		case <-stopCh:
 			log.Info("stop purge loop")
 
