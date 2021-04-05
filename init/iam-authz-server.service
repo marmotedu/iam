@@ -4,7 +4,9 @@ Documentation=https://github.com/marmotedu/iam/blob/master/init/README.md
 
 [Service]
 WorkingDirectory=${IAM_DATA_DIR}/iam-authz-server
-ExecStart=${IAM_INSTALL_DIR}/bin/iam-authz-server --authzconfig=${IAM_CONFIG_DIR}/iam-authz-server.yaml
+ExecStartPre=/usr/bin/mkdir -p ${IAM_DATA_DIR}/iam-apiserver
+ExecStartPre=/usr/bin/mkdir -p ${IAM_LOG_DIR}
+ExecStart=${IAM_INSTALL_DIR}/bin/iam-authz-server --config=${IAM_CONFIG_DIR}/iam-authz-server.yaml
 Restart=always
 RestartSec=5
 StartLimitInterval=0
