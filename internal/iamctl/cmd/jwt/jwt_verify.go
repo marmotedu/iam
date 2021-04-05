@@ -77,7 +77,7 @@ func NewCmdVerify(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cob
 	}
 
 	// mark flag as deprecated
-	cmd.Flags().BoolVarP(&o.Compact, "compact", "c", o.Compact, "Output compact JSON.")
+	cmd.Flags().BoolVar(&o.Compact, "compact", o.Compact, "Output compact JSON.")
 	cmd.Flags().BoolVarP(&o.Debug, "debug", "v", o.Debug, "Print out all kinds of debug data.")
 
 	return cmd

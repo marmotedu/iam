@@ -73,7 +73,7 @@ func NewCmdShow(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 	}
 
 	// mark flag as deprecated
-	cmd.Flags().BoolVarP(&o.Compact, "compact", "c", o.Compact, "output compact JSON.")
+	cmd.Flags().BoolVar(&o.Compact, "compact", o.Compact, "output compact JSON.")
 
 	return cmd
 }
