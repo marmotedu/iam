@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # The root of the build/dist directory
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${IAM_ROOT}/scripts/lib/init.sh"
 
-# OUT_DIR can come in from the Makefile, so honor it.    
-readonly LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"    
-readonly LOCAL_OUTPUT_CAPATH="${LOCAL_OUTPUT_ROOT}/cert" 
+# OUT_DIR can come in from the Makefile, so honor it.
+readonly LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
+readonly LOCAL_OUTPUT_CAPATH="${LOCAL_OUTPUT_ROOT}/cert"
+
+# Hostname for the cert
+readonly CERT_HOSTNAME="${CERT_HOSTNAME:-iam.api.marmotedu.com,iam.authz.marmotedu.com},127.0.0.1,localhost"
 
 # Run the cfssl command to generates certificate files for iam service, the
 # certificate files will save in $1 directory.
@@ -19,10 +22,10 @@ readonly LOCAL_OUTPUT_CAPATH="${LOCAL_OUTPUT_ROOT}/cert"
 #   $1 (the directory that certificate files to save)
 #   $2 (the prefix of the certificate filename)
 function generate-iam-cert() {
-	local cert_dir=${1}    
-  local prefix=${2}
+  local cert_dir=${1}
+  local prefix=${2:-}
 
- 	mkdir -p "${cert_dir}"    
+  mkdir -p "${cert_dir}"
   pushd "${cert_dir}"
 
   iam::util::ensure-cfssl
@@ -37,15 +40,15 @@ function generate-iam-cert() {
     "profiles": {
       "iam": {
         "usages": [
-            "signing",
-            "key encipherment",
-            "server auth",
-            "client auth"
+          "signing",
+          "key encipherment",
+          "server auth",
+          "client auth"
         ],
         "expiry": "876000h"
       }
-    }
   }
+}
 }
 EOF
   fi
@@ -78,10 +81,14 @@ EOF
     ${CFSSL_BIN} gencert -initca ca-csr.json | ${CFSSLJSON_BIN} -bare ca -
   fi
 
+  if [[ -z "${prefix}" ]];then
+    return 0
+  fi
+
   echo "Generate "${prefix}" certificates..."
-  echo '{"CN":"'"${prefix}"'","hosts":["127.0.0.1", "*"],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"BeiJing","L":"BeiJing","O":"iam","OU":"marmotedu"}]}' \
-   | ${CFSSL_BIN} gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=iam - \
-   | ${CFSSLJSON_BIN} -bare "${prefix}"
+  echo '{"CN":"'"${prefix}"'","hosts":[],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"BeiJing","L":"BeiJing","O":"iam","OU":"marmotedu"}]}' \
+    | ${CFSSL_BIN} gencert -hostname="${CERT_HOSTNAME}" -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=iam - \
+    | ${CFSSLJSON_BIN} -bare "${prefix}"
 
   # the popd will access `directory stack`, no `real` parameters is actually needed
   # shellcheck disable=SC2119
@@ -109,11 +116,11 @@ EOF
 #   IAM_ADMIN_CERT_BASE64
 #
 function create-iam-certs {
-	local prefix=${1}
-    
-	iam::util::ensure-temp-dir
+  local prefix=${1}
 
-	generate-iam-cert "${IAM_TEMP}/cfssl" ${prefix}
+  iam::util::ensure-temp-dir
+
+  generate-iam-cert "${IAM_TEMP}/cfssl" ${prefix}
 
 	pushd "${IAM_TEMP}/cfssl"
 	IAM_CA_KEY_BASE64=$(cat "ca-key.pem" | base64 | tr -d '\r\n')
