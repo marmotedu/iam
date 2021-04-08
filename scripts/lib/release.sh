@@ -117,15 +117,17 @@ function iam::release::package_src_tarball() {
   else
     find "${IAM_ROOT}" -mindepth 1 -maxdepth 1 \
       ! \( \
-      \( -path "${IAM_ROOT}"/_\*        -o \
-      -path "${IAM_ROOT}"/.git\*     -o \
-      -path "${IAM_ROOT}"/.config\*  -o \
-      -path "${IAM_ROOT}"/.chglog\*  -o \
-      -path "${IAM_ROOT}"/.gitlint  -o \
-      -path "${IAM_ROOT}"/.golangci.yaml  -o \
-      -path "${IAM_ROOT}"/.goreleaser.yml  -o \
+      \( -path "${IAM_ROOT}"/_\* -o \
+      -path "${IAM_ROOT}"/.git\* -o \
+      -path "${IAM_ROOT}"/.gitignore\* -o \
+      -path "${IAM_ROOT}"/.gsemver.yaml\* -o \
+      -path "${IAM_ROOT}"/.config\* -o \
+      -path "${IAM_ROOT}"/.chglog\* -o \
+      -path "${IAM_ROOT}"/.gitlint -o \
+      -path "${IAM_ROOT}"/.golangci.yaml -o \
+      -path "${IAM_ROOT}"/.goreleaser.yml -o \
       -path "${IAM_ROOT}"/.note.md -o \
-      -path "${IAM_ROOT}"/.todo.md    \
+      -path "${IAM_ROOT}"/.todo.md \
       \) -prune \
       \) -print0 \
       | "${TAR}" czf "${src_tarball}" --transform "s|${IAM_ROOT#/*}|iam|" --null -T -
