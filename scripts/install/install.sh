@@ -193,6 +193,8 @@ function iam::install::prepare_iam()
     cd $WORKSPACE/golang/src/github.com/marmotedu
     git clone --depth 1 https://github.com/marmotedu/iam
   fi
+  # NOTICE: 这里要重新赋值IAM_ROOT
+  IAM_ROOT=$WORKSPACE/golang/src/github.com/marmotedu/iam
 
   pushd ${IAM_ROOT}
   # 2. 配置 $HOME/.bashrc 添加一些便捷入口

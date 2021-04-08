@@ -441,7 +441,7 @@ EOF
   #mkdir -p "${release_stage}/hack"
   #cp -R "${IAM_ROOT}/hack/lib" "${release_stage}/hack/"
 
-  cp -R ${IAM_ROOT}/{docs,configs,deployments,init,README.md,LICENSE} "${release_stage}/"
+  cp -R ${IAM_ROOT}/{docs,configs,scripts,deployments,init,README.md,LICENSE} "${release_stage}/"
 
   echo "${IAM_GIT_VERSION}" > "${release_stage}/version"
 
