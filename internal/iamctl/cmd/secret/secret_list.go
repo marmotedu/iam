@@ -109,7 +109,6 @@ func (o *ListOptions) Run(args []string) error {
 			secret.SecretKey,
 			time.Unix(secret.Expires, 0).Format("2006-01-02 15:04:05"),
 			secret.CreatedAt.Format("2006-01-02 15:04:05"),
-			secret.UpdatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 

@@ -373,7 +373,7 @@ func NewForConfigOrDie() *marmotedu.Clientset {
 
 func TableWriterDefaultConfig(table *tablewriter.Table) *tablewriter.Table {
 	table.SetAutoWrapText(false)
-	// table.SetAutoFormatHeaders(true)
+	table.SetAutoFormatHeaders(true)
 	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetCenterSeparator("")
@@ -381,7 +381,7 @@ func TableWriterDefaultConfig(table *tablewriter.Table) *tablewriter.Table {
 	table.SetRowSeparator("")
 	table.SetHeaderLine(false)
 	table.SetBorder(false)
-	table.SetTablePadding("\t") // pad with tabs
+	table.SetTablePadding("  ") // pad with two space
 	table.SetNoWhiteSpace(true)
 
 	return table

@@ -40,13 +40,12 @@ func NewCmdSecret(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cob
 
 // setHeader set headers for secret commands.
 func setHeader(table *tablewriter.Table) *tablewriter.Table {
-	table.SetHeader([]string{"Name", "SecretID", "SecretKey", "Expires", "Created", "Updated"})
+	table.SetHeader([]string{"Name", "SecretID", "SecretKey", "Expires", "Created"})
 	table.SetHeaderColor(tablewriter.Colors{tablewriter.FgGreenColor},
 		tablewriter.Colors{tablewriter.FgRedColor},
 		tablewriter.Colors{tablewriter.FgCyanColor},
 		tablewriter.Colors{tablewriter.FgMagentaColor},
-		tablewriter.Colors{tablewriter.FgGreenColor},
-		tablewriter.Colors{tablewriter.FgWhiteColor})
+		tablewriter.Colors{tablewriter.FgGreenColor})
 
 	return table
 }
