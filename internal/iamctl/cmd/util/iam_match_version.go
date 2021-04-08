@@ -118,7 +118,7 @@ func NewMatchVersionFlags(delegate genericclioptions.RESTClientGetter) *MatchVer
 // TODO this isn't what we want.  Each iamclient should be setting defaults as it sees fit.
 func setIAMDefaults(config *rest.Config) error {
 	// TODO remove this hack.  This is allowing the GetOptions to be serialized.
-	config.GroupVersion = &scheme.GroupVersion{Group: "", Version: "v1"}
+	config.GroupVersion = &scheme.GroupVersion{Group: "iam.api", Version: "v1"}
 
 	if config.APIPath == "" {
 		config.APIPath = "/api"
