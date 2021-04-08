@@ -116,6 +116,7 @@ release:
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
 format: tools.verify.golines
+	@echo "===========> Formating codes"
 	@$(FIND) -type f -name '*.go' | $(XARGS) gofmt -s -w
 	@$(FIND) -type f -name '*.go' | $(XARGS) goimports -w -local $(ROOT_PACKAGE)
 	@$(FIND) -type f -name '*.go' | $(XARGS) golines -w --max-len=120 --reformat-tags --shorten-comments --ignore-generated .
@@ -126,7 +127,7 @@ verify-copyright:
 	@$(MAKE) copyright.verify
 
 ## add-copyright: Ensures source code files have copyright license headers.
-.PHONY: copyright
+.PHONY: add-copyright
 add-copyright:
 	@$(MAKE) copyright.add
 
