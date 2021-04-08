@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 function iam::util::sourced_variable {
@@ -190,7 +190,7 @@ iam::util::find-binary-for-platform() {
     "${IAM_ROOT}/_output/local/bin/${platform}/${lookfor}"
     "${IAM_ROOT}/_output/platforms/${platform}/${lookfor}"
   )
-  
+
   # List most recently-updated location.
   local -r bin=$( (ls -t "${locations[@]}" 2>/dev/null || true) | head -1 )
   echo -n "${bin}"
@@ -225,11 +225,13 @@ iam::util::gen-docs() {
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-apiserver"
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-authz-server"
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-pump"
+  "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iamctl"
 
   mkdir -p "${dest}/docs/man/man1/"
   "${genman}" "${dest}/docs/man/man1/" "iam-apiserver"
   "${genman}" "${dest}/docs/man/man1/" "iam-authz-server"
   "${genman}" "${dest}/docs/man/man1/" "iam-pump"
+  "${genman}" "${dest}/docs/man/man1/" "iamctl"
 
   mkdir -p "${dest}/docs/guide/en-US/yaml/iamctl/"
   "${genyaml}" "${dest}/docs/guide/en-US/yaml/iamctl/"

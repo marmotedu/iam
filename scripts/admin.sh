@@ -19,11 +19,11 @@ function findPid() {
   echo -n `ps -ef -u $UID|grep "${base_dir}/${server} ${args}"|egrep -v 'grep|admin.sh'|awk '{print $2}'`
 }
 
-function waitProcess() {    
-  i=0        
-  while (($i<${timeout}))        
-  do        
-    if [ "`findPid`" == "" -a "$1" == "stop" ];then        
+function waitProcess() {
+  i=0
+  while (($i<${timeout}))
+  do
+    if [ "`findPid`" == "" -a "$1" == "stop" ];then
       break
     fi
 
@@ -33,17 +33,17 @@ function waitProcess() {
 
     echo waiting to $1 ...
 
-    sleep 1        
+    sleep 1
 
-    ((i++))        
-  done        
+    ((i++))
+  done
 
   if [ "$i" -ge "${timeout}" -a "$1" == "stop" ];then
     echo "waiting timeout(${timeout}s), send SIGKILL signal."
     kill -9 `findPid`
   fi
   sleep 1
-} 
+}
 
 
 function start()
@@ -64,7 +64,7 @@ function start()
   fi
 }
 
-function status() 
+function status()
 {
   if [ "`findPid`" != "" ];then
     echo ${server} is running
@@ -73,7 +73,7 @@ function status()
   fi
 }
 
-function stop() 
+function stop()
 {
   if [ "`findPid`" != "" ];then
     echo "send SIGKILL signal to `findPid`"
@@ -91,18 +91,18 @@ function stop()
 case "$2" in
   'start')
     start
-    ;;  
+    ;;
   'stop')
     stop
-    ;;  
+    ;;
   'status')
     status
-    ;;  
+    ;;
   'restart')
     stop && start
-    ;;  
-  *)  
+    ;;
+  *)
     echo "usage: $0 {start|stop|restart|status}"
     exit 0
-    ;;  
+    ;;
 esac

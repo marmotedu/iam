@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 : << EOF
@@ -16,7 +16,7 @@ API 性能测试脚本，会自动执行 wrk 命令，采集数据、分析数�
 使用方式 (对比2次测试结果)
 1. 性能测试：./wrktest.sh iam-apiserver http://127.0.0.1:8080/healthz
 2. 执行命令： ./wrktest.sh diff apiserver.dat http.dat
- 
+
 > Note: 需要确保系统安装了 wrk 和 gnuplot 工具
 EOF
 
@@ -28,7 +28,7 @@ source "${iamroot}/scripts/lib/color.sh"
 
 # Set wrk options
 iam::wrk::setup() {
-  duration="300s" 
+  duration="300s"
   #concurrent="200 500 1000 3000 5000 10000 15000 20000 25000 50000 100000 200000 500000 1000000"
   concurrent="200 500 1000 3000 5000 10000 15000 20000 25000 50000"
   threads=$((3 * `grep -c processor /proc/cpuinfo`))
@@ -56,7 +56,7 @@ EOF
 }
 
 # Convert plot data to useable data
-function iam::wrk::convert_plot_data() 
+function iam::wrk::convert_plot_data()
 {
   echo "$1" | awk -v datfile="${wrkdir}/${datfile}" ' {
   if ($0 ~ "Running") {
@@ -220,22 +220,22 @@ iam::wrk::start_performance_test() {
 Success rate graphic file is: ${COLOR_MAGENTA}${wrkdir}/${successrate}${COLOR_NORMAL}"
 }
 
-while getopts "hd:n:" opt;do          
-  case ${opt} in                     
-    d)                                                
+while getopts "hd:n:" opt;do
+  case ${opt} in
+    d)
       wrkdir=${OPTARG}
-      ;;                                              
+      ;;
     n)
       jobname=${OPTARG}
-      ;;                                              
+      ;;
     ?)
       iam::wrk::usage
       exit 0
-      ;;                                                       
-  esac                                                         
-done                                                      
+      ;;
+  esac
+done
 
-shift $(($OPTIND-1)) 
+shift $(($OPTIND-1))
 
 mkdir -p ${wrkdir}
 case $1 in

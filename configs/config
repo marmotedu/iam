@@ -7,7 +7,7 @@ user:
   #secret-key: # 密钥 Key
   client-certificate: ${CONFIG_USER_CLIENT_CERTIFICATE} # 用于 TLS 的客户端证书文件路径
   client-key: ${CONFIG_USER_CLIENT_KEY} # 用于 TLS 的客户端 key 文件路径
-  #client-certificate-data: 
+  #client-certificate-data:
   #client-key-data:
 
 server:

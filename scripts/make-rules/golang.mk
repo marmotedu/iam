@@ -1,5 +1,5 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # ==============================================================================
@@ -7,7 +7,7 @@
 #
 
 GO := go
-GO_SUPPORTED_VERSIONS ?= 1.13|1.14|1.15
+GO_SUPPORTED_VERSIONS ?= 1.13|1.14|1.15|1.16|1.17
 GO_LDFLAGS += -X $(VERSION_PACKAGE).GitVersion=$(VERSION) \
 	-X $(VERSION_PACKAGE).GitCommit=$(GIT_COMMIT) \
 	-X $(VERSION_PACKAGE).GitTreeState=$(GIT_TREE_STATE) \

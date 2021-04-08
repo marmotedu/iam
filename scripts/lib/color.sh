@@ -21,18 +21,18 @@ COLOR_BGREEN='\033[42m';COLOR_BYELLOW='\033[43m';
 COLOR_BBLUE='\033[44m';COLOR_BMAGENTA='\033[45m';
 COLOR_BCYAN='\033[46m';COLOR_BWHITE='\033[47m';
 
-# Print colors you can use 
+# Print colors you can use
 iam::color::print_color()
-{    
-  echo    
-  echo -e ${bmagenta}--back-color:${normal}    
-  echo "bblack; bgreen; bblue; bcyan; bred; byellow; bmagenta; bwhite"    
-  echo    
-  echo -e ${red}--font-color:${normal}    
-  echo "black; red; green; yellow; blue; magenta; cyan; white"    
-  echo    
-  echo -e ${bold}--font:${normal}    
-  echo "normal; italic; reverse; nounder; bold; noitalic; conceal; noblink;     
-  dim; blink; nobold; under"    
-  echo    
+{
+  echo
+  echo -e ${bmagenta}--back-color:${normal}
+  echo "bblack; bgreen; bblue; bcyan; bred; byellow; bmagenta; bwhite"
+  echo
+  echo -e ${red}--font-color:${normal}
+  echo "black; red; green; yellow; blue; magenta; cyan; white"
+  echo
+  echo -e ${bold}--font:${normal}
+  echo "normal; italic; reverse; nounder; bold; noitalic; conceal; noblink;
+  dim; blink; nobold; under"
+  echo
 }

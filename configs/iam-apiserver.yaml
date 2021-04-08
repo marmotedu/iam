@@ -34,10 +34,10 @@ secure:
 
 # MySQL 数据库相关配置
 mysql:
-  host: ${MYSQL_HOST} # MySQL 机器 ip 和端口，默认 127.0.0.1:3306
-  username: ${MYSQL_USERNAME} # MySQL 用户名(建议授权最小权限集)
-  password: ${MYSQL_PASSWORD} # MySQL 用户密码
-  database: ${MYSQL_DATABASE} # iam 系统所用的数据库名
+  host: ${MARIADB_HOST} # MySQL 机器 ip 和端口，默认 127.0.0.1:3306
+  username: ${MARIADB_USERNAME} # MySQL 用户名(建议授权最小权限集)
+  password: ${MARIADB_PASSWORD} # MySQL 用户密码
+  database: ${MARIADB_DATABASE} # iam 系统所用的数据库名
   max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
   max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
@@ -48,7 +48,7 @@ redis:
   host: ${REDIS_HOST} # redis 地址，默认 127.0.0.1:6379
   port: ${REDIS_PORT} # redis 端口，默认 6379
   password: ${REDIS_PASSWORD} # redis 密码
-  #addrs: 
+  #addrs:
   #master-name: # redis 集群 master 名称
   #username: # redis 登陆用户名
   #database: # redis 数据库

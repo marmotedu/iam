@@ -1,5 +1,5 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 SHELL := /bin/bash
@@ -68,6 +68,7 @@ endif
 
 # Copy githook scripts when execute makefile
 COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/)
+
 COMMA := ,
 SPACE :=
 SPACE +=

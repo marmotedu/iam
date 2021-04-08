@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
-# Build a IAM release.  This will build the binaries, create the Docker    
-# images and other build artifacts.    
+# Build a IAM release.  This will build the binaries, create the Docker
+# images and other build artifacts.
 
 set -o errexit
 set -o nounset
@@ -17,7 +17,7 @@ source "${IAM_ROOT}/scripts/lib/release.sh"
 
 IAM_RELEASE_RUN_TESTS=${IAM_RELEASE_RUN_TESTS-y}
 
-iam::golang::setup_env    
+iam::golang::setup_env
 iam::build::verify_prereqs
 iam::release::verify_prereqs
 #iam::build::build_image

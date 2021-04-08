@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 # 允许登录SSH节点的来源IP，可以是固定IP(例如10.0.4.2)，也可以是个网段，0.0.0.0/0代表不限制来源IP
-ssh-source: 10.0.4.0/24 
+ssh-source: 10.0.4.0/24
 
 # IAM应用节点列表（来源IP）
 hosts:

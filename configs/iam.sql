@@ -159,7 +159,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (29,'admin','admin','$2a$10$KqZhl5WStpa2K.ddEyzyf.zXllEXP4gIG8xQUgMhU1ZvMUn/Ta5um','admin@foxmail.com','1812884xxxx',1,'2020-07-11 10:04:11','2020-07-11 10:04:11');
+INSERT INTO `user` VALUES (29,'admin','admin','$2a$10$WnQD2DCfWVhlGmkQ8pdLkesIGPf9KJB7N1mhSOqulbgN7ZMo44Mv2','admin@foxmail.com','1812884xxxx',1,'2021-05-05 21:13:14','2021-05-05 21:13:14');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -199,4 +199,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-21  9:53:39
+-- Dump completed on 2021-05-05  9:53:39

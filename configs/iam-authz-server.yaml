@@ -38,7 +38,7 @@ redis:
   port: ${REDIS_PORT} # redis 端口，默认 6379
   password: ${REDIS_PASSWORD} # redis 密码
   database: 0 # redis 数据库
-  #addrs: 
+  #addrs:
   #master-name: # redis 集群 master 名称
   #username: # redis 登陆用户名
   #optimisation-max-idle:  # redis 连接池中的最大空闲连接数

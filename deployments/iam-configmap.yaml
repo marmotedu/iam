@@ -39,7 +39,7 @@ data:
     mysql:
       host: 39.108.6.234:3306                                   # mysql 机器 ip 和端口
       username: iam                                         # mysql 用户名(建议授权最小权限集)
-      password: iam1234                                         # mysql 用户密码
+      password: iam59!z$ # mysql 用户密码
       database: iam                                                       # iam 系统所用的数据库名
       max-idle-connections: 100
       max-open-connections: 100

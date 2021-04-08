@@ -1,5 +1,5 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # ==============================================================================
@@ -79,7 +79,7 @@ image.build.%: go.build.%
 image.push: image.verify go.build.verify $(addprefix image.push., $(addprefix $(IMAGE_PLAT)., $(IMAGES)))
 
 .PHONY: image.push.multiarch
-image.push.multiarch: image.verify go.build.verify $(foreach p,$(PLATFORMS),$(addprefix image.push., $(addprefix $(p)., $(IMAGES)))) 
+image.push.multiarch: image.verify go.build.verify $(foreach p,$(PLATFORMS),$(addprefix image.push., $(addprefix $(p)., $(IMAGES))))
 
 .PHONY: image.push.%
 image.push.%: image.build.%
@@ -116,4 +116,4 @@ image.manifest.push.multiarch: image.push.multiarch $(addprefix image.manifest.p
 image.manifest.push.multiarch.%:
 	@echo "===========> Pushing manifest $* $(VERSION) to $(REGISTRY_PREFIX) and then remove the local manifest list"
 	REGISTRY_PREFIX=$(REGISTRY_PREFIX) PLATFROMS="$(PLATFORMS)" IMAGE=$* VERSION=$(VERSION) DOCKER_CLI_EXPERIMENTAL=enabled \
-	  $(ROOT_DIR)/build/lib/create-manifest.sh 
+	  $(ROOT_DIR)/build/lib/create-manifest.sh

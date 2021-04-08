@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # This file creates release artifacts (tar files, container images) that are
@@ -24,7 +24,7 @@ readonly RELEASE_TARS="${LOCAL_OUTPUT_ROOT}/release-tars"
 readonly RELEASE_IMAGES="${LOCAL_OUTPUT_ROOT}/release-images"
 
 # IAM github account info
-readonly IAM_GITHUB_ORG=marmotedu                         
+readonly IAM_GITHUB_ORG=marmotedu
 readonly IAM_GITHUB_REPO=iam
 
 readonly ARTIFACT=iam.tar.gz
@@ -104,7 +104,7 @@ function iam::release::updload_tarballs() {
   iam::log::info "upload ${RELEASE_TARS}/* to cos bucket ${BUCKET}."
   for file in $(ls ${RELEASE_TARS}/*)
   do
-    coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/" 
+    coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
   done
 }
 
@@ -417,8 +417,8 @@ EOF
   cat <<EOF > "${release_stage}/release/get-iam-binaries.sh"
 #!/usr/bin/env bash
 
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # This file download iam client and server binaries from tencent cos bucket.

@@ -16,7 +16,7 @@ redis:
   optimisation-max-idle: 100  # redis 连接池中的最大空闲连接数
   optimisation-max-active: 0 # 最大活跃连接数
   enable-cluster: false # 是否开启集群模式
-  #addrs: 
+  #addrs:
   #master-name: # redis 集群 master 名称
   #username: # redis 登陆用户名
   #timeout: # 连接 redis 时的超时时间
