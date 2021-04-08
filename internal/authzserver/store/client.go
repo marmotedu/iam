@@ -80,7 +80,7 @@ func (c *GRPCClient) GetSecrets() (map[string]*pb.SecretInfo, error) {
 	log.Infof("Secrets found (%d total):", len(resp.Items))
 
 	for _, v := range resp.Items {
-		log.Infof(" - %s", v.SecretId)
+		log.Infof(" - %s:%s", v.Username, v.SecretId)
 		secrets[v.SecretId] = v
 	}
 
