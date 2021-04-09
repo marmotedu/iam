@@ -26,10 +26,9 @@ require (
 	github.com/jinzhu/now v1.1.2
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
-	github.com/marmotedu/addlicense v1.0.0 // indirect
 	github.com/marmotedu/api v0.0.1
 	github.com/marmotedu/component-base v0.0.2
-	github.com/marmotedu/errors v1.0.0
+	github.com/marmotedu/errors v0.0.1
 	github.com/marmotedu/marmotedu-sdk-go v0.0.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -53,7 +52,6 @@ require (
 	github.com/vmihailenco/msgpack v3.3.3+incompatible
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.uber.org/zap v1.16.0
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	golang.org/x/tools v0.1.0
 	google.golang.org/grpc v1.36.0

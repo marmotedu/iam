@@ -390,16 +390,12 @@ github.com/magiconair/properties v1.8.1 h1:ZC2Vc7/ZFkGmsVC9KvOjumD+G5lXy2RtTKyzR
 github.com/magiconair/properties v1.8.1/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
 github.com/mailru/easyjson v0.7.6 h1:8yTIVnZgCoiM1TgqoeTl+LfU5Jg6/xL3QhGQnimLYnA=
 github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
-github.com/marmotedu/addlicense v1.0.0 h1:FriofPAVf88UBgDb8qujUSY0zVJEPEFjnGLZv4OozzA=
-github.com/marmotedu/addlicense v1.0.0/go.mod h1:AfDmXw7BaKJ4X8scTE4SO0SNTLnBc0krPiS29GR1KRc=
 github.com/marmotedu/api v0.0.1 h1:UAY9yvzAOP+5UpVQYPdou1QyBpICU5PkUhNhgL9j2IE=
 github.com/marmotedu/api v0.0.1/go.mod h1:4w2ICoye5vFAG0oiSja/NnCG2ev8z8J9F82sdScUE2I=
 github.com/marmotedu/component-base v0.0.2 h1:+RTF7CGWzsKOBU7hoiOlWxVRSpZjHCr4T/s40FK6Vdg=
 github.com/marmotedu/component-base v0.0.2/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
 github.com/marmotedu/errors v0.0.1 h1:G0UzjyIk7mi6P+VjofWWOGvhA8D35zSqpbI3wBppR5Y=
 github.com/marmotedu/errors v0.0.1/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
-github.com/marmotedu/errors v1.0.0 h1:PZv0TNK7X5ZmPnAWDp4llYykMN2rzCHSyBnJPAJY9L8=
-github.com/marmotedu/errors v1.0.0/go.mod h1:oaEcuVHk/wgLApWtFfdXzIWsNe+RzwWF4980oblV8Kc=
 github.com/marmotedu/log v0.0.1 h1:3jSFCRM3LW46vAd8t/fu5+S4wPXwvesdhj+iXU3OKVQ=
 github.com/marmotedu/log v0.0.1/go.mod h1:EsU1dxbgXmzan4NXzYhnYZ7H/soLrBZrTXlfN6svSNM=
 github.com/marmotedu/marmotedu-sdk-go v0.0.1 h1:rElqcQDWn1OveEMfqtTcWpfu903jITAtGprices0J+s=
@@ -760,7 +756,6 @@ golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJ
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20201207232520-09787c993a3a/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
-golang.org/x/sync v0.0.0-20210220032951-036812b2e83c h1:5KslGYwFpkhGh+Q16bwMP3cOontH8FOep7tGV86Y7SQ=
 golang.org/x/sync v0.0.0-20210220032951-036812b2e83c/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180823144017-11551d06cbcc/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
