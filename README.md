@@ -1,19 +1,23 @@
 # IAM - 身份识别与访问管理(Identity and Access Management)
 
-该项目旨在用一个完整的项目，来展示如何用go语言做企业级的后端服务开发。项目涵盖开发的各个流程和比较重要的功能点实现方式。
-具体涵盖如下流程：设计 -> 开发环境配置 -> 开发 -> 单元测试 -> 功能测试 -> 部署
+IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于对资源访问进行授权。同时也具有如下能力：
+1. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
+2. 配合极客时间专栏 [企业级 Go 项目实战 54 讲](http://www.baidu.com)，展示如何用 Go 做企业级应用的开发。
+
 
 ## Features
 
-请参考：[marmotedu/gocollect](https://github.com/marmotedu/gocollect)
+本项目用到了Go企业开发的大部分核心技能点，见下图：
+
+![技术思维导图](./docs/images/技术思维导图.png)
+
+更多请参考：[marmotedu/gocollect](https://github.com/marmotedu/gocollect)
 
 ## Architecture
 
-分为V1、V2、V3 3个版本：
+![IAM架构](./docs/images/IAM架构.png)
 
-- V1：经典构建方式:![](https://github.com/marmotedu/gocollect/raw/master/docs/image/architecture_v1.png)
-- V2：微服务化:![](https://github.com/marmotedu/gocollect/blob/master/docs/image/architecture_v2.png)
-- V3：架构升级:![](https://github.com/marmotedu/gocollect/blob/master/docs/image/architecture_v3.png)
+架构解析见：[IAM 架构 & 能力说明](docs/guide/zh-CN/installation/installation-architecture.md)
 
 ## Getting Started 
 
@@ -22,23 +26,35 @@
 **Minimum Requirements**
 
 - Hardware
-  - 1 vCPU
   - 2 GB of Memory
   - 50 GB of Disk Space
-
-- Operating Systems
-  - CentOS Linux 7.6 (64-bit)
+- 操作系统：CentOS Linux 8.2 (64-bit)
+- 正常访问外网
 
  **需求检查 & 依赖安装** 
+
  请参考：[](docs/guide/zh-CN/installation/requirement.md)
 
 ### Building
 
-请参考：[安装步骤](docs/guide/zh-CN/installation/procedures.md)
+1. 代码包下载
+
+```
+$ git clone https://github.com/marmotedu/iam
+```
+
+2. 编译
+
+```bash
+$ cd iam
+$ make
+```
 
 ### Running
 
-<!-- Describe how to run this project -->
+```bash
+./scripts/install/install.sh iam::install::install_iam    
+```
 
 ## Using
 

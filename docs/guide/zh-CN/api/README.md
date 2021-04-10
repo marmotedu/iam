@@ -3,6 +3,7 @@
 IAM API 接口文档，相关参考文档如下：
 
 - [更新历史](./CHANGELOG.md)
+- [API 接口文档规范](./api_specification.md)
 - [通用说明](./generic.md)
 - API接口：
     - [用户相关接口](./user.md)
