@@ -89,3 +89,31 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 
 	return ret, d.Error
 }
+
+// ListOptional show a more graceful query method.
+func (u *users) ListOptional(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+	ret := &v1.UserList{}
+	ol := gormutil.Unpointer(opts.Offset, opts.Limit)
+
+	where := v1.User{}
+	whereNot := v1.User{
+		IsAdmin: 0,
+	}
+	selector, _ := fields.ParseSelector(opts.FieldSelector)
+	username, found := selector.RequiresExactMatch("name")
+	if found {
+		where.Name = username
+	}
+
+	d := u.db.Where(where).
+		Not(whereNot).
+		Offset(ol.Offset).
+		Limit(ol.Limit).
+		Order("id desc").
+		Find(&ret.Items).
+		Offset(-1).
+		Limit(-1).
+		Count(&ret.TotalCount)
+
+	return ret, d.Error
+}
