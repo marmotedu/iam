@@ -10,7 +10,7 @@ KUBECTL := kubectl
 NAMESPACE ?= iam
 CONTEXT ?= marmotedu.dev
 
-DEPLOYS=iam-apiserver iam-authz-server
+DEPLOYS=iam-apiserver iam-authz-server iam-pump
 
 .PHONY: deploy.run.all
 deploy.run.all:
