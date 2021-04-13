@@ -104,7 +104,7 @@ type listUserRequestParamsWrapper struct {
 // swagger:response listUserResponse
 type listUserResponseWrapper struct {
 	// in:body
-	Body v1.UserListV2
+	Body v1.UserList
 }
 
 // User response.

@@ -81,9 +81,9 @@ func (s *Suite) Test_userService_List() {
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(limit),
 	}
-	items := make([]*v1.UserV2, 0, limit)
+	items := make([]*v1.User, 0, limit)
 	for _, user := range fake.FakeUsers(3) {
-		userv2 := &v1.UserV2{
+		userv2 := &v1.User{
 			User: &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
 					ID:        user.ID,
@@ -99,7 +99,7 @@ func (s *Suite) Test_userService_List() {
 		}
 		items = append(items, userv2)
 	}
-	wantUserList := &v1.UserListV2{
+	wantUserList := &v1.UserList{
 		ListMeta: metav1.ListMeta{
 			TotalCount: fake.ResourceCount,
 		},
@@ -117,7 +117,7 @@ func (s *Suite) Test_userService_List() {
 		name    string
 		fields  fields
 		args    args
-		want    *v1.UserListV2
+		want    *v1.UserList
 		wantErr bool
 	}{
 		{
@@ -158,9 +158,9 @@ func (s *Suite) Test_userService_ListWithBadPerformance() {
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(limit),
 	}
-	items := make([]*v1.UserV2, 0, limit)
+	items := make([]*v1.User, 0, limit)
 	for _, user := range fake.FakeUsers(3) {
-		userv2 := &v1.UserV2{
+		userv2 := &v1.User{
 			User: &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
 					ID:        user.ID,
@@ -176,7 +176,7 @@ func (s *Suite) Test_userService_ListWithBadPerformance() {
 		}
 		items = append(items, userv2)
 	}
-	wantUserList := &v1.UserListV2{
+	wantUserList := &v1.UserList{
 		ListMeta: metav1.ListMeta{
 			TotalCount: fake.ResourceCount,
 		},
@@ -194,7 +194,7 @@ func (s *Suite) Test_userService_ListWithBadPerformance() {
 		name    string
 		fields  fields
 		args    args
-		want    *v1.UserListV2
+		want    *v1.UserList
 		wantErr bool
 	}{
 		{
