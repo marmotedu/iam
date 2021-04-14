@@ -40,7 +40,7 @@ require (
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/marmotedu/api v0.0.1
+	github.com/marmotedu/api v0.0.2
 	github.com/marmotedu/component-base v0.0.2
 	github.com/marmotedu/errors v0.0.1
 	github.com/marmotedu/marmotedu-sdk-go v0.0.1
