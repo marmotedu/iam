@@ -115,7 +115,7 @@ release:
 
 ## format: Gofmt (reformat) package sources (exclude vendor dir if existed).
 .PHONY: format
-format: tools.verify.golines
+format: tools.verify.golines tools.verify.goimports
 	@echo "===========> Formating codes"
 	@$(FIND) -type f -name '*.go' | $(XARGS) gofmt -s -w
 	@$(FIND) -type f -name '*.go' | $(XARGS) goimports -w -local $(ROOT_PACKAGE)

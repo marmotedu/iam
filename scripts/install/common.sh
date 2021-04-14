@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+
 # Common utilities, variables and checks for all build scripts.
 set -o errexit
 set +o nounset

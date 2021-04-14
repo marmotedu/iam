@@ -6,7 +6,7 @@
 # Makefile helper functions for tools
 #
 
-DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense
+DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense goimports
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS))
 
@@ -72,3 +72,7 @@ install.cfssl:
 .PHONY: install.addlicense
 install.addlicense:
 	@$(GO) get -u github.com/marmotedu/addlicense
+
+.PHONY: install.goimports
+install.goimports:
+	@$(GO) get -u golang.org/x/tools/cmd/goimports
