@@ -1,3 +1,7 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
 name: Iam
 
 on:
@@ -18,8 +22,5 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Build
-      run: make build BINS=iam-apiserver
-
-    - name: Test
-      run: make test
+    - name: all
+      run: make
