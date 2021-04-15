@@ -8,11 +8,11 @@ package store
 
 import (
 	"context"
-	"encoding/json"
 	"sync"
 
 	"github.com/AlekSi/pointer"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
 	"google.golang.org/grpc"
@@ -110,7 +110,7 @@ func (c *GRPCClient) GetPolicies() (map[string][]*ladon.DefaultPolicy, error) {
 
 		var policy ladon.DefaultPolicy
 
-		if err := json.Unmarshal([]byte(v.PolicyStr), &policy); err != nil {
+		if err := json.Unmarshal([]byte(v.PolicyShadow), &policy); err != nil {
 			log.Warnf("failed to load policy for %s, error: %s", v.Name, err.Error())
 
 			continue

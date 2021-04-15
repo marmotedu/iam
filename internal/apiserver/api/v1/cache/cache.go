@@ -94,7 +94,7 @@ func (c *Cache) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*p
 		items = append(items, &pb.PolicyInfo{
 			Name:      pol.Name,
 			Username:  pol.Username,
-			PolicyStr: pol.PolicyStr,
+			PolicyShadow: pol.PolicyShadow,
 			CreatedAt: pol.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}

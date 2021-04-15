@@ -35,6 +35,7 @@ func (p *PolicyHandler) Update(c *gin.Context) {
 
 	// only update policy string
 	pol.Policy = r.Policy
+	pol.Extend = r.Extend
 
 	if errs := pol.Validate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)

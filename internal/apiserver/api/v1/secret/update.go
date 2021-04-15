@@ -39,6 +39,7 @@ func (s *SecretHandler) Update(c *gin.Context) {
 	// only update expires and description
 	secret.Expires = r.Expires
 	secret.Description = r.Description
+	secret.Extend = r.Extend
 
 	if errs := secret.Validate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)

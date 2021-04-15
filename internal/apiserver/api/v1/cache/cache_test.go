@@ -155,7 +155,7 @@ func TestCache_ListPolicies(t *testing.T) {
 		wantItems = append(wantItems, &pb.PolicyInfo{
 			Name:      pol.Name,
 			Username:  pol.Username,
-			PolicyStr: pol.PolicyStr,
+			PolicyShadow: pol.PolicyShadow,
 			CreatedAt: pol.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}

@@ -72,6 +72,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 				ObjectMeta: metav1.ObjectMeta{
 					ID:        user.ID,
 					Name:      user.Name,
+					Extend:    user.Extend,
 					CreatedAt: user.CreatedAt,
 					UpdatedAt: user.UpdatedAt,
 				},

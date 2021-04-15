@@ -5,12 +5,12 @@
 package store
 
 import (
-	"encoding/json"
 	"reflect"
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/ory/ladon"
 	"github.com/stretchr/testify/assert"
 )
@@ -94,13 +94,13 @@ func TestGRPCClient_GetPolicies(t *testing.T) {
 	policy1 := &pb.PolicyInfo{
 		Name:      "policy1",
 		Username:  "colin",
-		PolicyStr: policyStr,
+		PolicyShadow: policyStr,
 		CreatedAt: "2020-08-27 13:55:16",
 	}
 	policy2 := &pb.PolicyInfo{
 		Name:      "policy2",
 		Username:  "peter",
-		PolicyStr: policyStr,
+		PolicyShadow: policyStr,
 		CreatedAt: "2020-08-27 13:55:16",
 	}
 	mockCacheClient.EXPECT().ListPolicies(gomock.Any(), gomock.Any()).Return(&pb.ListPoliciesResponse{

@@ -37,6 +37,7 @@ func (u *UserHandler) Update(c *gin.Context) {
 	user.Nickname = r.Nickname
 	user.Email = r.Email
 	user.Phone = r.Phone
+	user.Extend = r.Extend
 
 	if errs := user.ValidateUpdate(); len(errs) != 0 {
 		core.WriteResponse(c, errors.WithCode(code.ErrValidation, errs.ToAggregate().Error()), nil)

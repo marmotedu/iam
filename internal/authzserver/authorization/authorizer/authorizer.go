@@ -5,11 +5,11 @@
 package authorizer
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
 
+	"github.com/marmotedu/component-base/pkg/json"
 	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
