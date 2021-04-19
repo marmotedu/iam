@@ -83,7 +83,7 @@ EOF
 }
 
 # 初始化新申请的Linux服务器，使其成为一个友好的开发机
-function iam::install::init_to_go_development_machine()
+function iam::install::init_into_go_env()
 {
   # 1. Linux 服务器基本配置
   iam::install::prepare_linux || return 1
@@ -94,7 +94,7 @@ function iam::install::init_to_go_development_machine()
   # 3. Go 开发 IDE 安装和配置
   iam::install::vim_ide || return 1
 
-  iam::log::info "the Linux development machine is initialized successfully"
+  iam::log::info "initialize linux to go development machine  successfully"
 }
 
 # Go 编译环境安装和配置
@@ -340,10 +340,20 @@ function iam::install::uninstall_iam()
   iam::install::uninstall_storage|| return 1
 }
 
+function iam::install::init_into_vim_env(){
+  # 1. Linux 服务器基本配置
+  iam::install::prepare_linux || return 1
+
+  # 2. Go 开发 IDE 安装和配置
+  iam::install::vim_ide || return 1
+
+  iam::log::info "initialize linux with SpaceVim successfully"
+}
+
 function iam::install::install()
 {
   # 1. 配置 Linux 使其成为一个友好的 Go 开发机
-  iam::install::init_to_go_development_machine || return 1
+  iam::install::init_into_go_env || return 1
 
   # 2. 安装 IAM 应用
   iam::install::install_iam || return 1
