@@ -24,6 +24,8 @@ install.swagger:
 .PHONY: install.golangci-lint
 install.golangci-lint:
 	@$(GO) get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	@golangci-lint completion bash > $(HOME)/.golangci-lint.bash
+	@if ! grep -q .golangci-lint.bash $(HOME)/.bashrc; then echo "source \$$HOME/.golangci-lint.bash" >> $(HOME)/.bashrc; fi
 
 .PHONY: install.go-junit-report
 install.go-junit-report:
