@@ -35,6 +35,11 @@ ifeq (, $(shell git status --porcelain 2>/dev/null))
 endif
 GIT_COMMIT:=$(shell git rev-parse HEAD)
 
+# Minimum test coverage
+ifeq ($(origin COVERAGE_RATIO),undefined)
+COVERAGE_RATIO := 60
+endif
+
 # The OS must be linux when building docker images
 PLATFORMS ?= linux_amd64 linux_arm64
 # The OS can be linux/windows/darwin when building binaries
