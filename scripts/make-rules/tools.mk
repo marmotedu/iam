@@ -7,9 +7,9 @@
 #
 
 DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense goimports
+OTHER_TOOLS ?= depth go-callvis gothanks richgo rts
 
-tools.install: $(addprefix tools.install., $(DEP_TOOLS))
-
+tools.install: $(addprefix tools.install., $(DEP_TOOLS), ${OTHER_TOOLS})
 tools.install.%:
 	@echo "===========> Installing $*"
 	@$(MAKE) install.$*
@@ -78,3 +78,23 @@ install.addlicense:
 .PHONY: install.goimports
 install.goimports:
 	@$(GO) get -u golang.org/x/tools/cmd/goimports
+
+.PHONY: install.depth
+install.depth:
+	@$(GO) get -u github.com/KyleBanks/depth/cmd/depth
+
+.PHONY: install.go-callvis
+install.go-callvis:
+	@$(GO) get -u github.com/ofabry/go-callvis
+
+.PHONY: install.gothanks
+install.gothanks:
+	@$(GO) get -u github.com/psampaz/gothanks
+
+.PHONY: install.richgo
+install.richgo:
+	@$(GO) get -u github.com/kyoh86/richgo
+
+.PHONY: install.rts
+install.rts:
+	@$(GO) get -u github.com/galeone/rts/cmd/rts
