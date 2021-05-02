@@ -83,10 +83,8 @@ go.test: tools.verify.go-junit-report
 
 .PHONY: go.test.cover
 go.test.cover: go.test
-	#@egrep -v 'mock_.*.go' $(OUTPUT_DIR)/coverage.out > $(OUTPUT_DIR)/coverage.out.nomock
-	#@rm -f $(OUTPUT_DIR)/coverage.out.nomock
 	@$(GO) tool cover -func=$(OUTPUT_DIR)/coverage.out | \
-		awk -v target=$(COVERAGE_RATIO) -f $(ROOT_DIR)/scripts/coverage.awk
+		awk -v target=$(COVERAGE) -f $(ROOT_DIR)/scripts/coverage.awk
 
 .PHONY: go.updates
 go.updates: tools.verify.go-mod-outdated

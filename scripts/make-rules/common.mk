@@ -36,8 +36,8 @@ endif
 GIT_COMMIT:=$(shell git rev-parse HEAD)
 
 # Minimum test coverage
-ifeq ($(origin COVERAGE_RATIO),undefined)
-COVERAGE_RATIO := 60
+ifeq ($(origin COVERAGE),undefined)
+COVERAGE := 60
 endif
 
 # The OS must be linux when building docker images

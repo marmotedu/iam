@@ -104,6 +104,11 @@ lint: format
 test:
 	@$(MAKE) go.test
 
+## cover: Run unit test and get test coverage.
+.PHONY: cover 
+cover:
+	@$(MAKE) go.test.cover
+
 .PHONY: release.build
 release.build:
 	@$(MAKE) push.multiarch
