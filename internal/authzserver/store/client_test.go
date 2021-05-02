@@ -92,16 +92,16 @@ func TestGRPCClient_GetPolicies(t *testing.T) {
 	_ = json.Unmarshal([]byte(policyStr), &policy)
 
 	policy1 := &pb.PolicyInfo{
-		Name:      "policy1",
-		Username:  "colin",
+		Name:         "policy1",
+		Username:     "colin",
 		PolicyShadow: policyStr,
-		CreatedAt: "2020-08-27 13:55:16",
+		CreatedAt:    "2020-08-27 13:55:16",
 	}
 	policy2 := &pb.PolicyInfo{
-		Name:      "policy2",
-		Username:  "peter",
+		Name:         "policy2",
+		Username:     "peter",
 		PolicyShadow: policyStr,
-		CreatedAt: "2020-08-27 13:55:16",
+		CreatedAt:    "2020-08-27 13:55:16",
 	}
 	mockCacheClient.EXPECT().ListPolicies(gomock.Any(), gomock.Any()).Return(&pb.ListPoliciesResponse{
 		TotalCount: 2,

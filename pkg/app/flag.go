@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
+//nolint: deadcode,unused,varcheck
 func initFlag() {
 	pflag.CommandLine.SetNormalizeFunc(WordSepNormalizeFunc)
 }

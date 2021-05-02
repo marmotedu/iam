@@ -38,7 +38,7 @@ func (p *PrometheusPump) New() Pump {
 	newPump := PrometheusPump{}
 	newPump.TotalStatusMetrics = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "iam_user_authorization_status",
+			Name: "iam_user_authorization_status_total",
 			Help: "authorization effect per user",
 		},
 		[]string{"code", "username"},

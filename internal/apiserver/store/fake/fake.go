@@ -111,7 +111,7 @@ func FakePolicies(count int) []*v1.Policy {
 				ID:   uint64(i),
 			},
 			Username: fmt.Sprintf("user%d", i),
-			Policy:   ladon.DefaultPolicy{},
+			Policy:   v1.AuthzPolicy(ladon.DefaultPolicy{}),
 		})
 	}
 

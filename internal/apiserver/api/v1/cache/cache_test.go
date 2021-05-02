@@ -153,10 +153,10 @@ func TestCache_ListPolicies(t *testing.T) {
 	wantItems := make([]*pb.PolicyInfo, 0)
 	for _, pol := range policies.Items {
 		wantItems = append(wantItems, &pb.PolicyInfo{
-			Name:      pol.Name,
-			Username:  pol.Username,
+			Name:         pol.Name,
+			Username:     pol.Username,
 			PolicyShadow: pol.PolicyShadow,
-			CreatedAt: pol.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:    pol.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 

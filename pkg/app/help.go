@@ -40,6 +40,7 @@ Simply type ` + name + ` help [path to command] for full details.`,
 
 // addHelpFlag adds flags for a specific application to the specified FlagSet
 // object.
+//nolint: deadcode,unused,varcheck
 func addHelpFlag(name string, fs *pflag.FlagSet) {
 	fs.BoolP(flagHelp, flagHelpShorthand, false, fmt.Sprintf("Help for %s.", name))
 }

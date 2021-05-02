@@ -56,6 +56,7 @@ func addConfigFlag(basename string, fs *pflag.FlagSet) {
 	})
 }
 
+//nolint: deadcode,unused
 func printConfig() {
 	keys := viper.AllKeys()
 	if len(keys) > 0 {
@@ -67,7 +68,7 @@ func printConfig() {
 		for _, k := range keys {
 			table.AddRow(fmt.Sprintf("%s:", k), viper.Get(k))
 		}
-		fmt.Println(table)
+		fmt.Printf("%v", table)
 	}
 }
 

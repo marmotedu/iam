@@ -88,7 +88,7 @@ func (o *CreateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 		ObjectMeta: metav1.ObjectMeta{
 			Name: args[0],
 		},
-		Policy: pol,
+		Policy: v1.AuthzPolicy(pol),
 	}
 
 	clientConfig, err := f.ToRESTConfig()

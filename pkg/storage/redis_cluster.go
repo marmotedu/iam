@@ -13,7 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	redis "github.com/go-redis/redis/v7"
 	"github.com/marmotedu/errors"
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
@@ -71,8 +71,7 @@ func shouldConnect() bool {
 
 // Connected returns true if we are connected to redis.
 func Connected() bool {
-	v := redisUp.Load()
-	if v != nil {
+	if v := redisUp.Load(); v != nil {
 		return v.(bool)
 	}
 
@@ -88,8 +87,7 @@ func singleton(cache bool) redis.UniversalClient {
 
 		return nil
 	}
-	v := singlePool.Load()
-	if v != nil {
+	if v := singlePool.Load(); v != nil {
 		return v.(redis.UniversalClient)
 	}
 

@@ -70,11 +70,12 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 
 			m.Store(user.ID, &v1.User{
 				ObjectMeta: metav1.ObjectMeta{
-					ID:        user.ID,
-					Name:      user.Name,
-					Extend:    user.Extend,
-					CreatedAt: user.CreatedAt,
-					UpdatedAt: user.UpdatedAt,
+					ID:         user.ID,
+					InstanceID: user.InstanceID,
+					Name:       user.Name,
+					Extend:     user.Extend,
+					CreatedAt:  user.CreatedAt,
+					UpdatedAt:  user.UpdatedAt,
 				},
 				Nickname:    user.Nickname,
 				Email:       user.Email,
