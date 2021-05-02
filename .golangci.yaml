@@ -279,6 +279,21 @@ linters-settings:
         # ignored-numbers: 1000
         # ignored-files: magic_.*.go
         # ignored-functions: math.*
+  gomoddirectives:
+    # Allow local `replace` directives. Default is false.
+    replace-local: true
+    # List of allowed `replace` directives. Default is empty.
+    replace-allow-list:
+      - github.com/coreos/etcd
+      - google.golang.org/grpc
+      - github.com/marmotedu/api
+      - github.com/marmotedu/component-base
+      - github.com/marmotedu/marmotedu-sdk-go
+
+    # Allow to not explain why the version has been retracted in the `retract` directives. Default is false.
+    retract-allow-no-explanation: false
+    # Forbid the use of the `exclude` directives. Default is false.
+    exclude-forbidden: false
   gomodguard:
     allowed:
       modules:                                                        # List of allowed modules
@@ -391,6 +406,29 @@ linters-settings:
     rules:
       - name: indent-error-flow
         severity: warning
+  staticcheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.16"
+
+  stylecheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.16"
+
+  tagliatelle:
+    # check the struck tag name case
+    case:
+      # use the struct field name to check the name of the struct tag
+      use-field-name: true
+      rules:
+        # any struct tag type can be used.
+        # support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        json: camel
+        yaml: camel
+        xml: camel
+        bson: camel
+        avro: snake
+        mapstructure: kebab
+
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (id|export|internal)_test\.go
@@ -459,7 +497,7 @@ linters-settings:
     # Forbid the following identifiers
     forbid:
       #- fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
-      - fmt.Print.* # too much log noise
+      - fmt.Println.* # too much log noise
       - ginkgo\\.F.* # these are used just for local development
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
@@ -484,89 +522,22 @@ linters-settings:
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
-  disable-all: true
+  enable-all: true
   fast: false
-  presets:
-    - bugs
-    - unused
-  enable:
-    - megacheck
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - funlen
-    - gochecknoinits
-    - goconst
-      #- gocritic
-    - gocyclo
-    - gofmt
-    - goimports
-    - golint
-    - importas
-    - wastedassign
-    - nilerr
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - lll
-    - misspell
-    - nakedret
-    - nolintlint
-    - rowserrcheck
+  disable:
+    - tagliatelle
+    - wrapcheck
+    - forcetypeassert
+    - goerr113
+    - gomnd
+    - wsl
+    - testpackage
+    - gochecknoglobals
+    - interfacer
+    - maligned
     - scopelint
-    - staticcheck
-    - structcheck
-    - stylecheck
+    - gocritic
     - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - varcheck
-    - whitespace
-    - asciicheck
-    - gocognit
-    - godot
-    - godox
-    - nestif
-    - prealloc
-    - gomodguard
-    - exhaustive
-    - revive
-    - ifshort
-    - forbidigo
-    - makezero
-    - thelper
-    - predeclared
-    - cyclop
-    - durationcheck
-    - paralleltest
-    - errorlint
-    - exhaustivestruct
-    - exportloopref
-    - gci
-    - gofumpt
-    - goheader
-    - vetshadow
-    - nlreturn
-    - noctx
-    - sqlclosecheck
-    - tparallel
-
-  # don't enable:
-    #- wrapcheck
-    #- forcetypeassert
-    #- goerr113
-    #- gomnd
-    #- wsl
-    #- testpackage
-    #- gochecknoglobals
-    #- interfacer
-    #- maligned
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default.
