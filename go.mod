@@ -37,8 +37,8 @@ require (
 	github.com/lib/pq v1.9.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/marmotedu/api v0.0.1
-	github.com/marmotedu/component-base v0.0.2
+	github.com/marmotedu/api v0.0.3
+	github.com/marmotedu/component-base v0.0.3
 	github.com/marmotedu/errors v0.0.1
 	github.com/marmotedu/marmotedu-sdk-go v0.0.1
 	github.com/mattn/go-isatty v0.0.12
@@ -97,10 +97,4 @@ require (
 replace (
 	github.com/coreos/etcd => github.com/ozonru/etcd v3.3.20-grpc1.27-origmodule+incompatible
 	google.golang.org/grpc => google.golang.org/grpc v1.27.0
-)
-
-replace (
-	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
-	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
-	github.com/marmotedu/marmotedu-sdk-go => /home/colin/workspace/golang/src/github.com/marmotedu/marmotedu-sdk-go
 )

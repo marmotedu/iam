@@ -10,6 +10,7 @@
 CAS=iam-apiserver iam-authz-server admin
 
 .PHONY: gen.run
+#gen.run: gen.errcode gen.docgo
 gen.run: gen.clean gen.errcode gen.docgo
 
 .PHONY: gen.errcode

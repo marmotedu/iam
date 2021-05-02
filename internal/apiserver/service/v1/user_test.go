@@ -82,22 +82,20 @@ func (s *Suite) Test_userService_List() {
 		Limit:  pointer.ToInt64(limit),
 	}
 	items := make([]*v1.User, 0, limit)
-	for _, user := range fake.FakeUsers(3) {
-		userv2 := &v1.User{
-			User: &v1.User{
-				ObjectMeta: metav1.ObjectMeta{
-					ID:        user.ID,
-					Name:      user.Name,
-					CreatedAt: user.CreatedAt,
-					UpdatedAt: user.UpdatedAt,
-				},
-				Nickname: user.Nickname,
-				Email:    user.Email,
-				Phone:    user.Phone,
+	for _, u := range fake.FakeUsers(3) {
+		user := &v1.User{
+			ObjectMeta: metav1.ObjectMeta{
+				ID:        u.ID,
+				Name:      u.Name,
+				CreatedAt: u.CreatedAt,
+				UpdatedAt: u.UpdatedAt,
 			},
+			Nickname:    u.Nickname,
+			Email:       u.Email,
+			Phone:       u.Phone,
 			TotalPolicy: fake.ResourceCount,
 		}
-		items = append(items, userv2)
+		items = append(items, user)
 	}
 	wantUserList := &v1.UserList{
 		ListMeta: metav1.ListMeta{
@@ -159,22 +157,20 @@ func (s *Suite) Test_userService_ListWithBadPerformance() {
 		Limit:  pointer.ToInt64(limit),
 	}
 	items := make([]*v1.User, 0, limit)
-	for _, user := range fake.FakeUsers(3) {
-		userv2 := &v1.User{
-			User: &v1.User{
-				ObjectMeta: metav1.ObjectMeta{
-					ID:        user.ID,
-					Name:      user.Name,
-					CreatedAt: user.CreatedAt,
-					UpdatedAt: user.UpdatedAt,
-				},
-				Nickname: user.Nickname,
-				Email:    user.Email,
-				Phone:    user.Phone,
+	for _, u := range fake.FakeUsers(3) {
+		user := &v1.User{
+			ObjectMeta: metav1.ObjectMeta{
+				ID:        u.ID,
+				Name:      u.Name,
+				CreatedAt: u.CreatedAt,
+				UpdatedAt: u.UpdatedAt,
 			},
+			Nickname:    u.Nickname,
+			Email:       u.Email,
+			Phone:       u.Phone,
 			TotalPolicy: fake.ResourceCount,
 		}
-		items = append(items, userv2)
+		items = append(items, user)
 	}
 	wantUserList := &v1.UserList{
 		ListMeta: metav1.ListMeta{

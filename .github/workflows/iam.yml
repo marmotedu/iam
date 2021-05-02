@@ -6,12 +6,11 @@ name: Iam
 
 on:
   push:
-    branches: [ master ]
+    branches: [master,develop]
   pull_request:
-    branches: [ master ]
+    branches: [master,develop]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:

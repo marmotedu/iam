@@ -186,6 +186,7 @@ func (o *{{.CommandFunctionName}}Options) Run(args []string) error {
 
 	fmt.Fprintf(o.Out, "\nThe following is args values:\n")
 	fmt.Fprintf(o.Out, "==> username: %v\n==> password: %v\n", o.Username, o.Password)
+
 	return nil
 }
 `

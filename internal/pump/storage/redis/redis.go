@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	redis "github.com/go-redis/redis/v7"
 	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
 
