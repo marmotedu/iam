@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	helloworldUsageStr    = "helloworld USERNAME PASSWORD"
-	maxStringLength = 17
+	helloworldUsageStr = "helloworld USERNAME PASSWORD"
+	maxStringLength    = 17
 )
 
 // HelloworldOptions is an options struct to support 'helloworld' sub command.
@@ -46,7 +46,10 @@ to quickly create a Cobra application.`)
 		# Print all option values for helloworld 
 		iamctl helloworld marmotedu marmotedupass`)
 
-	helloworldUsageErrStr = fmt.Sprintf("expected '%s'.\nUSERNAME and PASSWORD are required arguments for the helloworld command", helloworldUsageStr)
+	helloworldUsageErrStr = fmt.Sprintf(
+		"expected '%s'.\nUSERNAME and PASSWORD are required arguments for the helloworld command",
+		helloworldUsageStr,
+	)
 )
 
 // NewHelloworldOptions returns an initialized HelloworldOptions instance.
@@ -135,6 +138,7 @@ func (o *HelloworldOptions) Run(args []string) error {
 
 	fmt.Fprintf(o.Out, "\nThe following is args values:\n")
 	fmt.Fprintf(o.Out, "==> username: %v\n==> password: %v\n", o.Username, o.Password)
+	fmt.Fprintf(o.Out, "hello world")
 
 	return nil
 }
