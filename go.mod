@@ -29,12 +29,10 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/influxdata/influxdb v1.8.4
 	github.com/jinzhu/gorm v1.9.16
-	github.com/jinzhu/now v1.1.2
+	github.com/jinzhu/now v1.1.1
 	github.com/jonboulle/clockwork v0.2.0 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/klauspost/compress v1.11.0 // indirect
-	github.com/kr/text v0.2.0 // indirect
-	github.com/lib/pq v1.9.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/marmotedu/api v0.0.3
