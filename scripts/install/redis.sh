@@ -23,17 +23,24 @@ function iam::redis::install()
   iam::common::sudo "yum -y install redis"
 
   # 2. 配置 Redis
+  # 2.1 修改`/etc/redis.conf`文件，将daemonize由no改成yes，表示允许redis在后台启动
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/^daemonize/{s/no/yes/}' /etc/redis.conf
+
+  # 2.2 在`bind 127.0.0.1`前面添加 `#` 将其注释掉，默认情况下只允许本地连接，注释掉后外网可以连接Redis
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/^# bind 127.0.0.1/{s/# //}' /etc/redis.conf
+
+  # 2.3 修改requirepass配置，设置Redis密码
   echo ${LINUX_PASSWORD} | sudo -S sed -i 's/^# requirepass.*$/requirepass '"${REDIS_PASSWORD}"'/' /etc/redis.conf
+
+  # 2.4 因为我们上面配置了密码登陆，需要将protected-mode设置为no，关闭保护模式
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/^protected-mode/{s/yes/no/}' /etc/redis.conf
 
-  # 3. 启动 Redis
-  iam::common::sudo "redis-server /etc/redis.conf"
-
-  # 4. 禁用防火墙
+  # 3. 为了能够远程连上Redis，需要执行以下命令关闭防火墙，并禁止防火墙开机启动（如果不需要远程连接，可忽略此步骤）
   iam::common::sudo "systemctl stop firewalld.service"
   iam::common::sudo "systemctl disable firewalld.service"
+
+  # 4. 启动 Redis
+  iam::common::sudo "redis-server /etc/redis.conf"
 
   iam::redis::status || return 1
   iam::redis::info

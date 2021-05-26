@@ -9,6 +9,7 @@ IAM API 接口文档，相关参考文档如下：
     - [用户相关接口](./user.md)
     - [密钥相关接口](./secret.md)
     - [授权策略相关接口](./policy.md)
+ - [错误码设计规范](./code_specification.md)
  - [错误码](./error_code.md)
 
 ## API 概览

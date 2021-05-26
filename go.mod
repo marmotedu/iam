@@ -35,16 +35,15 @@ require (
 	github.com/klauspost/compress v1.11.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/marmotedu/api v0.0.3
-	github.com/marmotedu/component-base v0.0.3
-	github.com/marmotedu/errors v0.0.1
-	github.com/marmotedu/marmotedu-sdk-go v0.0.1
+	github.com/marmotedu/api v1.0.0
+	github.com/marmotedu/component-base v1.0.0
+	github.com/marmotedu/errors v1.0.0
+	github.com/marmotedu/marmotedu-sdk-go v1.0.0
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/novalagung/gubrak v1.0.0
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
@@ -81,7 +80,6 @@ require (
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/genproto v0.0.0-20200707001353-8e8330bf89df // indirect
 	google.golang.org/grpc v1.36.0
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/vmihailenco/msgpack.v2 v2.9.1

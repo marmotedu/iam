@@ -1,7 +1,7 @@
 # IAM - 身份识别与访问管理(Identity and Access Management)
 
 IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于对资源访问进行授权。同时也具有如下能力：
-1. 配合极客时间专栏 **[企业级 Go 项目实战 54 讲](http://www.baidu.com)**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程。
+1. 配合极客时间专栏 **[Go 语言项目开发实战](http://www.baidu.com)**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程。
 2. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
 
 IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing**
@@ -63,7 +63,7 @@ $ make
 
 ## Contributing
 
-For the full story, head over to the [developer's documentation](docs/devel/development.md).
+欢迎贡献代码，贡献流程可以参考 [developer's documentation](docs/devel/zh-CN/development.md)。
 
 ## Community
 
@@ -73,9 +73,7 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 
 - Lingfei Kong <colin404@foxmail.com>
 
-1. 关注公众号
-2. 扫码入群
-3. 访问土拨鼠教育官网
+为了方便交流，我建了微信群，可以加我微信：marmotedu，我拉你入群，方便交流。
 
 ## 谁在用
 

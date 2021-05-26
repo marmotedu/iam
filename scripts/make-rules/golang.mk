@@ -41,6 +41,8 @@ ifeq (${BINS},)
   $(error Could not determine BINS, set ROOT_DIR or run in source dir)
 endif
 
+EXCLUDE_TESTS=github.com/marmotedu/iam/test github.com/marmotedu/iam/pkg/log github.com/marmotedu/iam/third_party github.com/marmotedu/iam/internal/pump/storage github.com/marmotedu/iam/internal/pump github.com/marmotedu/iam/internal/pkg/logger
+
 .PHONY: go.build.verify
 go.build.verify:
 ifneq ($(shell $(GO) version | grep -q -E '\bgo($(GO_SUPPORTED_VERSIONS))\b' && echo 0 || echo 1), 0)
@@ -78,7 +80,8 @@ go.test: tools.verify.go-junit-report
 	@echo "===========> Run unit test"
 	@set -o pipefail;$(GO) test -race -cover -coverprofile=$(OUTPUT_DIR)/coverage.out \
 		-timeout=10m -short -v `go list ./...|\
-		egrep -v 'github.com/marmotedu/iam/test|github.com/marmotedu/iam/pkg/log|github.com/marmotedu/iam/third_party|github.com/marmotedu/iam/internal/pump/storage|github.com/marmotedu/iam/internal/pump|github.com/marmotedu/iam/internal/pkg/logger'` 2>&1 | tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
+		egrep -v $(subst $(SPACE),'|',$(sort $(EXCLUDE_TESTS)))` 2>&1 | \
+		tee >(go-junit-report --set-exit-code >$(OUTPUT_DIR)/report.xml)
 	@sed -i '/mock_.*.go/d' $(OUTPUT_DIR)/coverage.out # remove mock_.*.go files from test coverage
 	@$(GO) tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 

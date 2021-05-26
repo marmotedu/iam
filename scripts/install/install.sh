@@ -192,7 +192,7 @@ EOF
 
 function iam::install::prepare_iam()
 {
-  # 1. 下载源码
+  # 1. 下载iam项目代码
   if [[ ! -d $WORKSPACE/golang/src/github.com/marmotedu/iam ]];then
     mkdir -p $WORKSPACE/golang/src/github.com/marmotedu
     cd $WORKSPACE/golang/src/github.com/marmotedu
@@ -213,13 +213,16 @@ alias i="cd $GOWORK/github.com/marmotedu/iam"
 EOF
   fi
 
-  # 3. 创建 iam 数据库
+  # 3. 初始化MariaDB数据库，创建iam数据库
+
+  # 3.1 登陆数据库并创建iam用户
   mysql -h127.0.0.1 -P3306 -u"${MARIADB_ADMIN_USERNAME}" -p"${MARIADB_ADMIN_PASSWORD}" << EOF
 grant all on iam.* TO ${MARIADB_USERNAME}@127.0.0.1 identified by "${MARIADB_PASSWORD}";
 flush privileges;
 EOF
 
-mysql -h127.0.0.1 -P3306 -u${MARIADB_USERNAME} -p"${MARIADB_PASSWORD}" << EOF
+  # 3.2 用iam用户登陆mysql，执行iam.sql文件，创建iam数据库
+  mysql -h127.0.0.1 -P3306 -u${MARIADB_USERNAME} -p"${MARIADB_PASSWORD}" << EOF
 source configs/iam.sql;
 show databases;
 EOF
