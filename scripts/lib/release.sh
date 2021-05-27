@@ -533,6 +533,15 @@ EOF
 # NOTICE: Must export 'GITHUB_TOKEN' env in the shell, details:
 # https://github.com/github-release/github-release
 function iam::release::github_release() {
+  # try to delete target github release if exist to avoid create error
+  iam::log::info "delete github release with tag ${IAM_GIT_VERSION} if exist"
+  set +o errexit
+  github-release delete \
+    --user ${IAM_GITHUB_ORG} \
+    --repo ${IAM_GITHUB_REPO} \
+    --tag ${IAM_GIT_VERSION} &>/dev/null
+  set -o errexit
+
   # create a github release
   iam::log::info "create a new github release with tag ${IAM_GIT_VERSION}"
   github-release release \
