@@ -38,7 +38,7 @@ require (
 	github.com/marmotedu/api v1.0.0
 	github.com/marmotedu/component-base v1.0.0
 	github.com/marmotedu/errors v1.0.0
-	github.com/marmotedu/marmotedu-sdk-go v1.0.0
+	github.com/marmotedu/marmotedu-sdk-go v1.0.1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1

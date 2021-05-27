@@ -107,7 +107,7 @@ func cleanDatabase(db *gorm.DB) error {
 
 // migrateDatabase run auto migration for given models, will only add missing fields,
 // won't delete/change current data.
-// nolint:unused,revive // may be reused in the feature, or just show a migrate usage.
+// nolint:unused // may be reused in the feature, or just show a migrate usage.
 func migrateDatabase(db *gorm.DB) error {
 	if err := db.AutoMigrate(&v1.User{}); err != nil {
 		return errors.Wrap(err, "migrate user model failed")
@@ -123,7 +123,7 @@ func migrateDatabase(db *gorm.DB) error {
 }
 
 // resetDatabase resets the database tables.
-// nolint:unused,deadcode,revive // may be reused in the feature, or just show a migrate usage.
+// nolint:unused,deadcode // may be reused in the feature, or just show a migrate usage.
 func resetDatabase(db *gorm.DB) error {
 	if err := cleanDatabase(db); err != nil {
 		return err

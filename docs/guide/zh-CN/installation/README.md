@@ -2,10 +2,14 @@
 
 为了让您更快的部署 iam，本文档提供清晰的：
 
-- [架构说明](installation-architecture.md)
-- [部署环境要求](installation-requirement.md)
-- [具体安装步骤](installation-procedures.md)
 
+## 架构说明
+
+安装前可以先了解下 IAM 系统的软件架构：[架构说明](installation-architecture.md)
+
+## 安装前检查
+
+进行安装前检查：[部署环境要求](installation-requirement.md)
 
 ## 快速部署
 
@@ -43,13 +47,17 @@ root用户的密码一般是由系统管理员维护，并定期更改。但普�
 用新的用户名和密码，参考iam xshell session创建一个新的xshell session，并登陆Linux服务器。执行如下命令：
 
 ```bash
-$ version=v0.7.1 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
+$ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 ```
 
-## 快速卸载
+### 3. 快速卸载
 
 ```bash
-$ version=v0.7.1 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
+$ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::uninstall
 ```
+
+## 更详细的安装方法
+
+上面提供了一个快速部署方法，我还提供了一种更详细的安装方法，请参考：[具体安装步骤](installation-procedures.md)

@@ -196,7 +196,7 @@ function iam::install::prepare_iam()
   if [[ ! -d $WORKSPACE/golang/src/github.com/marmotedu/iam ]];then
     mkdir -p $WORKSPACE/golang/src/github.com/marmotedu
     cd $WORKSPACE/golang/src/github.com/marmotedu
-    git clone --depth 1 https://github.com/marmotedu/iam
+    git clone --depth=1 https://github.com/marmotedu/iam
   fi
   # NOTICE: 这里要重新赋值IAM_ROOT
   IAM_ROOT=$WORKSPACE/golang/src/github.com/marmotedu/iam

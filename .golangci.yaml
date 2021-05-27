@@ -526,8 +526,8 @@ linters:
   fast: false
   disable:
     #- tagliatelle
-    - wrapcheck
-    - forcetypeassert
+    #- wrapcheck
+    #- forcetypeassert
     - goerr113
     - gomnd
     - wsl

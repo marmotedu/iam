@@ -381,7 +381,6 @@ func (r *RedisCluster) cleanKey(keyName string) string {
 
 func (r *RedisCluster) up() error {
 	if !Connected() {
-		//nolint: wrapcheck
 		return ErrRedisIsDown
 	}
 

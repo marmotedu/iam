@@ -76,7 +76,6 @@ func GetStoreInsOr(cli StoreClient) (*Store, error) {
 		})
 	}
 
-	//nolint: wrapcheck
 	return storeIns, err
 }
 
@@ -87,7 +86,6 @@ func (s *Store) GetSecret(key string) (*pb.SecretInfo, error) {
 
 	value, ok := s.secrets.Get(key)
 	if !ok {
-		//nolint: wrapcheck
 		return nil, ErrSecretNotFound
 	}
 
@@ -101,7 +99,6 @@ func (s *Store) GetPolicy(key string) ([]*ladon.DefaultPolicy, error) {
 
 	value, ok := s.policies.Get(key)
 	if !ok {
-		//nolint: wrapcheck
 		return nil, ErrPolicyNotFound
 	}
 

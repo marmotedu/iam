@@ -463,10 +463,8 @@ github.com/magiconair/properties v1.8.5/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPK
 github.com/mailru/easyjson v0.7.6 h1:8yTIVnZgCoiM1TgqoeTl+LfU5Jg6/xL3QhGQnimLYnA=
 github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/maratori/testpackage v1.0.1/go.mod h1:ddKdw+XG0Phzhx8BFDTKgpWP4i7MpApTE5fXSKAqwDU=
-github.com/marmotedu/api v0.0.1/go.mod h1:4w2ICoye5vFAG0oiSja/NnCG2ev8z8J9F82sdScUE2I=
 github.com/marmotedu/api v1.0.0 h1:W77JpWcyOolLypTzDqsF9k30BtYv8nx4MdO38TPkhVE=
 github.com/marmotedu/api v1.0.0/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
-github.com/marmotedu/component-base v0.0.2/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
 github.com/marmotedu/component-base v1.0.0 h1:Whd4lW3XlfDhLvF46drvLb+r8rBXGKep5LL1O5qZGRU=
 github.com/marmotedu/component-base v1.0.0/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
 github.com/marmotedu/errors v0.0.1/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
@@ -474,8 +472,8 @@ github.com/marmotedu/errors v1.0.0 h1:8EqO1/765WZt24mM2AzYGrPpQpVf5DQ1RPwADRJZOV
 github.com/marmotedu/errors v1.0.0/go.mod h1:zgwS+bbF64tcQljm0QU6ydDTwiSvsEqe+NTLjvoG8wU=
 github.com/marmotedu/log v0.0.1 h1:3jSFCRM3LW46vAd8t/fu5+S4wPXwvesdhj+iXU3OKVQ=
 github.com/marmotedu/log v0.0.1/go.mod h1:EsU1dxbgXmzan4NXzYhnYZ7H/soLrBZrTXlfN6svSNM=
-github.com/marmotedu/marmotedu-sdk-go v1.0.0 h1:v46j57slBdQjI6gYIkyVD5zim/blUH6ch4387U1IWvE=
-github.com/marmotedu/marmotedu-sdk-go v1.0.0/go.mod h1:314QsW/6+tVtngSxPzipgFJNCQMPFtDQQiXC7O66BwM=
+github.com/marmotedu/marmotedu-sdk-go v1.0.1 h1:hCG5y7bdk+ZpWjq7gDHxieuDhf9R2hbVkQ3Xrbuk7Ik=
+github.com/marmotedu/marmotedu-sdk-go v1.0.1/go.mod h1:QAuHe4YwnwlHYcktAFodwYyzxp2lqRDIi0yh1WbLtOM=
 github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb/go.mod h1:1BELzlh859Sh1c6+90blK8lbYy0kwQf1bYlBhBysy1s=
 github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
