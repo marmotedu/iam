@@ -402,8 +402,8 @@ github.com/magiconair/properties v1.8.5 h1:b6kJs+EmPFMYGkow9GiUyCyOvIwYetYJ3fSaW
 github.com/magiconair/properties v1.8.5/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPKd5NZ3oSwXrF60=
 github.com/mailru/easyjson v0.7.6 h1:8yTIVnZgCoiM1TgqoeTl+LfU5Jg6/xL3QhGQnimLYnA=
 github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
-github.com/marmotedu/api v1.0.0 h1:W77JpWcyOolLypTzDqsF9k30BtYv8nx4MdO38TPkhVE=
-github.com/marmotedu/api v1.0.0/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
+github.com/marmotedu/api v1.0.1 h1:3ke2YJxhJgujgRoOfaM5AIf7wfX25SpLphghEvxMx0k=
+github.com/marmotedu/api v1.0.1/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
 github.com/marmotedu/component-base v1.0.0 h1:Whd4lW3XlfDhLvF46drvLb+r8rBXGKep5LL1O5qZGRU=
 github.com/marmotedu/component-base v1.0.0/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
 github.com/marmotedu/errors v0.0.1/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
@@ -411,8 +411,8 @@ github.com/marmotedu/errors v1.0.1 h1:0Zdd6LyqUbDrrh2kvAsAvX1YADTHwAn8wnlHeL0qgI
 github.com/marmotedu/errors v1.0.1/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
 github.com/marmotedu/log v0.0.1 h1:3jSFCRM3LW46vAd8t/fu5+S4wPXwvesdhj+iXU3OKVQ=
 github.com/marmotedu/log v0.0.1/go.mod h1:EsU1dxbgXmzan4NXzYhnYZ7H/soLrBZrTXlfN6svSNM=
-github.com/marmotedu/marmotedu-sdk-go v1.0.1 h1:hCG5y7bdk+ZpWjq7gDHxieuDhf9R2hbVkQ3Xrbuk7Ik=
-github.com/marmotedu/marmotedu-sdk-go v1.0.1/go.mod h1:QAuHe4YwnwlHYcktAFodwYyzxp2lqRDIi0yh1WbLtOM=
+github.com/marmotedu/marmotedu-sdk-go v1.0.2-0.20210528170801-2c91b80cb4cf h1:dkLnBD2/ajHMnd+Wq7ycfTFefrK2UgisiWrr9Jo4ZMQ=
+github.com/marmotedu/marmotedu-sdk-go v1.0.2-0.20210528170801-2c91b80cb4cf/go.mod h1:Cx/91oivFhqHnbwqB8RvMWNkaBtWmxkjuYi9t6wWA3A=
 github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-colorable v0.1.8 h1:c1ghPdyEDarC70ftn0y+A/Ee++9zz8ljHG1b13eJ0s8=
 github.com/mattn/go-colorable v0.1.8/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
