@@ -2,7 +2,6 @@
 
 为了让您更快的部署 iam，本文档提供清晰的：
 
-
 ## 架构说明
 
 安装前可以先了解下 IAM 系统的软件架构：[架构说明](installation-architecture.md)
@@ -33,6 +32,8 @@ Retype new password:
 passwd: all authentication tokens updated successfully.
 ```
 
+这里假设我们设置 `going` 的密码是：`iam59!z$`
+
 2. 添加sudoers
 
 root用户的密码一般是由系统管理员维护，并定期更改。但普通用户可能要用到root的一些权限，不可能每次都向管理员询问密码。最常用的方法是，将普通用户加入到sudoers中，这样普通用户就可���通过sudo命令来暂时获取root的权限。执行如下命令添加：
@@ -41,19 +42,24 @@ root用户的密码一般是由系统管理员维护，并定期更改。但普�
 # sed -i '/^root.*ALL=(ALL).*ALL/a\going\tALL=(ALL) \tALL' /etc/sudoers
 ```
 
-
 ### 2. 一键部署 IAM 应用
 
 用新的用户名和密码，参考iam xshell session创建一个新的xshell session，并登陆Linux服务器。执行如下命令：
 
 ```bash
+$ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码
 $ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 ```
+通过以上方式安装好系统后，以下组件的密码均默认为 `iam59!z$`：
+- MariaDB
+- Redis
+- MongoDB
 
 ### 3. 快速卸载
 
 ```bash
+$ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码
 $ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::uninstall
 ```
