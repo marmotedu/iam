@@ -35,10 +35,10 @@ require (
 	github.com/klauspost/compress v1.11.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/marmotedu/api v1.0.0
+	github.com/marmotedu/api v1.0.1
 	github.com/marmotedu/component-base v1.0.0
 	github.com/marmotedu/errors v1.0.1
-	github.com/marmotedu/marmotedu-sdk-go v1.0.1
+	github.com/marmotedu/marmotedu-sdk-go v1.0.1+1
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1
