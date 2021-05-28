@@ -157,7 +157,7 @@ func (u *userService) DeleteCollection(ctx context.Context, usernames []string, 
 
 func (u *userService) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
 	if err := u.store.Users().Delete(ctx, username, opts); err != nil {
-		return errors.WithCode(code.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil

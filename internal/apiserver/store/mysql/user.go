@@ -47,7 +47,12 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 		u.db = u.db.Unscoped()
 	}
 
-	return u.db.Where("name = ?", username).Delete(&v1.User{}).Error
+	err := u.db.Where("name = ?", username).Delete(&v1.User{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 // DeleteCollection batch deletes the users.
@@ -68,13 +73,13 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 // Get return an user by the user identifier.
 func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	user := &v1.User{}
-	d := u.db.Where("name = ?", username).First(&user)
-	if d.Error != nil {
-		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrUserNotFound, d.Error.Error())
+	err := u.db.Where("name = ?", username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return user, nil

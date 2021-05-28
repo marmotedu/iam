@@ -54,7 +54,7 @@ func (s *policyService) Update(ctx context.Context, policy *v1.Policy, opts meta
 
 func (s *policyService) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	if err := s.store.Policies().Delete(ctx, username, name, opts); err != nil {
-		return errors.WithCode(code.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil

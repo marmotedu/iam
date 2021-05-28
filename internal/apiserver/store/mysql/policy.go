@@ -41,7 +41,12 @@ func (p *policies) Delete(ctx context.Context, username, name string, opts metav
 		p.db = p.db.Unscoped()
 	}
 
-	return p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
+	err := p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 // DeleteByUser deletes policies by username.
@@ -79,13 +84,13 @@ func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []strin
 // Get return policy by the policy identifier.
 func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
 	policy := &v1.Policy{}
-	d := p.db.Where("username = ? and name = ?", username, name).First(&policy)
-	if d.Error != nil {
-		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrPolicyNotFound, d.Error.Error())
+	err := p.db.Where("username = ? and name = ?", username, name).First(&policy).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrPolicyNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return policy, nil

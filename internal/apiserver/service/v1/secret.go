@@ -54,7 +54,7 @@ func (s *secretService) Update(ctx context.Context, secret *v1.Secret, opts meta
 
 func (s *secretService) Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error {
 	if err := s.store.Secrets().Delete(ctx, username, secretID, opts); err != nil {
-		return errors.WithCode(code.ErrDatabase, err.Error())
+		return err
 	}
 
 	return nil

@@ -41,7 +41,12 @@ func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1
 		s.db = s.db.Unscoped()
 	}
 
-	return s.db.Where("username = ? and name = ?", username, name).Delete(&v1.Secret{}).Error
+	err := s.db.Where("username = ? and name = ?", username, name).Delete(&v1.Secret{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 // DeleteCollection batch deletes the secrets.
@@ -61,13 +66,13 @@ func (s *secrets) DeleteCollection(
 // Get return an secret by the secret identifier.
 func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
 	secret := &v1.Secret{}
-	d := s.db.Where("username = ? and name= ?", username, name).First(&secret)
-	if d.Error != nil {
-		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrSecretNotFound, d.Error.Error())
+	err := s.db.Where("username = ? and name= ?", username, name).First(&secret).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrSecretNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return secret, nil
