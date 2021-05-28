@@ -1,10 +1,13 @@
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-05-28)
+## v1.0.0 (2021-05-29)
 
 ### Bug Fixes
 
 * fix jwt verfiy bug
+* fix create policy bug
+* add missing file: code_generated.go
+* fix swagger makefile dependence error
 * fix helloworld print bug
 * add missing generated go file
 * fix 'import cycle not allowed' bug caused by mockgen
@@ -18,7 +21,7 @@
 * fix the wrong information link in command long description
 * fix default ConfigFlags
 * fix compile error
-* fix swagger makefile dependence error
+* fix compile error
 * **apiserver:** set check url to 127.0.0.1 when bind-address is 0.0.0.0
 * **apiserver:** fix compile error
 * **authzserver:** fix context bug, cancel context in Run function
@@ -79,6 +82,7 @@
 ### Features
 
 * add etcd storage for future use
+* add new iamctl command 'helloworld'
 * add support for extend and extend shadow
 * graceful query method: ListOptional
 * add automatic installation scripts
@@ -89,7 +93,7 @@
 * add graceful shutdown
 * add --outdir option for iamctl new command
 * add CURD method for etcd datastore
-* add new iamctl command 'helloworld'
+* update coimpiler
 * init commit
 * **apiserver:** change gorm v1 to v2
 * **iamctl:** add nbf for iamctl jwt sign
