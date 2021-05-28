@@ -138,7 +138,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 					Resource: "resources:articles:ladon-introduction",
 					Context: ladon.Context{
 						"remoteIPAddressAddress": "192.168.0.5",
-						"username":        "colin",
+						"username":               "colin",
 					},
 				},
 			},
