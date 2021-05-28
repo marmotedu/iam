@@ -76,7 +76,7 @@ func (s *policyService) DeleteCollection(
 func (s *policyService) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
 	policy, err := s.store.Policies().Get(ctx, username, name, opts)
 	if err != nil {
-		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, err
 	}
 
 	return policy, nil

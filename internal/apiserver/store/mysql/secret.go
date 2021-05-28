@@ -10,8 +10,10 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
+	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 )
 
@@ -60,8 +62,15 @@ func (s *secrets) DeleteCollection(
 func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
 	secret := &v1.Secret{}
 	d := s.db.Where("username = ? and name= ?", username, name).First(&secret)
+	if d.Error != nil {
+		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrSecretNotFound, d.Error.Error())
+		}
 
-	return secret, d.Error
+		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+	}
+
+	return secret, nil
 }
 
 // List return all secrets.

@@ -47,5 +47,5 @@ IAM 系统支持的错误码列表如下：
 | ErrUserAlreadyExist | 110002 | 400 | User already exist |
 | ErrReachMaxCount | 110101 | 400 | Secret reach the max count |
 | ErrSecretNotFound | 110102 | 404 | Secret not found |
-| ErrPolicyNotFound | 110201 | 404 | User not found |
+| ErrPolicyNotFound | 110201 | 404 | Policy not found |
 

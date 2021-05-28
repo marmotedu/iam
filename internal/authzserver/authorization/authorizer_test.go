@@ -66,7 +66,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 			Resources:   []string{"resources:articles:<.*>", "resources:printer"},
 			Actions:     []string{"delete", "<create|update>"},
 			Effect:      ladon.AllowAccess,
-			Conditions:  ladon.Conditions{"remoteIPAddress": &ladon.CIDRCondition{CIDR: "192.168.0.1/16"}},
+			Conditions:  ladon.Conditions{"remoteIPAddressAddress": &ladon.CIDRCondition{CIDR: "192.168.0.1/16"}},
 		}}, nil),
 		mockAuthz.EXPECT().List(gomock.Eq("colin")).Return([]*ladon.DefaultPolicy{}, nil),
 	)
@@ -87,7 +87,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 					Action:   "delete",
 					Resource: "resources:articles:ladon-introduction",
 					Context: ladon.Context{
-						"remoteIP": "192.168.0.5",
+						"remoteIPAddress": "192.168.0.5",
 					},
 				},
 			},
@@ -104,7 +104,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 					Action:   "delete",
 					Resource: "resources:articles:ladon-introduction",
 					Context: ladon.Context{
-						"remoteIPAddress": "192.168.0.5",
+						"remoteIPAddressAddress": "192.168.0.5",
 					},
 				},
 			},
@@ -120,7 +120,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 					Action:   "delete",
 					Resource: "resources:articles:ladon-introduction",
 					Context: ladon.Context{
-						"remoteIPAddress": "192.168.0.5",
+						"remoteIPAddressAddress": "192.168.0.5",
 					},
 				},
 			},
@@ -137,7 +137,7 @@ func TestAuthorizer_Authorize(t *testing.T) {
 					Action:   "delete",
 					Resource: "resources:articles:ladon-introduction",
 					Context: ladon.Context{
-						"remoteIPAddress": "192.168.0.5",
+						"remoteIPAddressAddress": "192.168.0.5",
 						"username":        "colin",
 					},
 				},

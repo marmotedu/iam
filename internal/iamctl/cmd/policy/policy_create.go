@@ -35,7 +35,7 @@ type CreateOptions struct {
 var (
 	createExample = templates.Examples(`
 		# Create a authorization policy
-		iamctl policy create foo "{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIP":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}"`)
+		iamctl policy create foo '{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddressAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}'`)
 
 	createUsageErrStr = fmt.Sprintf(
 		"expected '%s'.\nPOLICY_NAME and POLICY are required arguments for the create command",
@@ -88,7 +88,7 @@ func (o *CreateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 		ObjectMeta: metav1.ObjectMeta{
 			Name: args[0],
 		},
-		Policy: v1.AuthzPolicy(pol),
+		Policy: v1.AuthzPolicy{pol},
 	}
 
 	clientConfig, err := f.ToRESTConfig()

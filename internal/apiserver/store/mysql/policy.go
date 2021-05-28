@@ -10,8 +10,10 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
+	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 )
 
@@ -78,8 +80,15 @@ func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []strin
 func (p *policies) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Policy, error) {
 	policy := &v1.Policy{}
 	d := p.db.Where("username = ? and name = ?", username, name).First(&policy)
+	if d.Error != nil {
+		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrPolicyNotFound, d.Error.Error())
+		}
 
-	return policy, d.Error
+		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+	}
+
+	return policy, nil
 }
 
 // List return all policies.

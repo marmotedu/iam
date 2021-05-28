@@ -90,7 +90,7 @@ func (o *UpdateOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 		ObjectMeta: metav1.ObjectMeta{
 			Name: args[0],
 		},
-		Policy: v1.AuthzPolicy(pol),
+		Policy: v1.AuthzPolicy{pol},
 	}
 
 	o.iamclient, err = f.IAMClient()

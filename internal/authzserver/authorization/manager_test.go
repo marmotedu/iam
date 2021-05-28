@@ -55,7 +55,7 @@ func TestPolicyManager_FindRequestCandidates(t *testing.T) {
 		Resources:   []string{"resources:articles:<.*>", "resources:printer"},
 		Actions:     []string{"delete", "<create|update>"},
 		Effect:      ladon.AllowAccess,
-		Conditions:  ladon.Conditions{"remoteIPAddress": &ladon.CIDRCondition{CIDR: "192.168.0.1/16"}},
+		Conditions:  ladon.Conditions{"remoteIPAddressAddress": &ladon.CIDRCondition{CIDR: "192.168.0.1/16"}},
 	}
 	mockAuthz.EXPECT().List(gomock.Any()).Return([]*ladon.DefaultPolicy{&policy}, nil)
 

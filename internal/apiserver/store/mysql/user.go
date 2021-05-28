@@ -10,8 +10,10 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/marmotedu/errors"
 	gorm "gorm.io/gorm"
 
+	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 )
 
@@ -67,8 +69,15 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	user := &v1.User{}
 	d := u.db.Where("name = ?", username).First(&user)
+	if d.Error != nil {
+		if errors.Is(d.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrUserNotFound, d.Error.Error())
+		}
 
-	return user, d.Error
+		return nil, errors.WithCode(code.ErrDatabase, d.Error.Error())
+	}
+
+	return user, nil
 }
 
 // List return all users.

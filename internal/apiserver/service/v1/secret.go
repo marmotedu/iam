@@ -80,7 +80,7 @@ func (s *secretService) Get(
 ) (*v1.Secret, error) {
 	secret, err := s.store.Secrets().Get(ctx, username, secretID, opts)
 	if err != nil {
-		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, err
 	}
 
 	return secret, nil

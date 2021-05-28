@@ -26,7 +26,7 @@ const (
 
 // iam: policy errors
 const (
-	// ErrPolicyNotFound - 404: User not found.
+	// ErrPolicyNotFound - 404: Policy not found.
 	ErrPolicyNotFound int = iota + 110201
 )
 

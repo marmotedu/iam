@@ -166,7 +166,7 @@ func (u *userService) Delete(ctx context.Context, username string, opts metav1.D
 func (u *userService) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	user, err := u.store.Users().Get(ctx, username, opts)
 	if err != nil {
-		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, err
 	}
 
 	return user, nil
