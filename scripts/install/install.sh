@@ -17,6 +17,7 @@ source ${IAM_ROOT}/scripts/install/iam-authz-server.sh
 source ${IAM_ROOT}/scripts/install/iam-pump.sh
 source ${IAM_ROOT}/scripts/install/iamctl.sh
 source ${IAM_ROOT}/scripts/install/man.sh
+source ${IAM_ROOT}/scripts/install/test.sh
 
 # 申请服务器，登录 going 用户后，配置 $HOME/.bashrc 文件
 iam::install::prepare_linux()
@@ -198,8 +199,9 @@ function iam::install::prepare_iam()
     cd $WORKSPACE/golang/src/github.com/marmotedu
     git clone --depth=1 https://github.com/marmotedu/iam
   fi
-  # NOTICE: 这里要重新赋值IAM_ROOT
+  # NOTICE: 因为切换编译路径，所以这里要重新赋值 IAM_ROOT 和 LOCAL_OUTPUT_ROOT
   IAM_ROOT=$WORKSPACE/golang/src/github.com/marmotedu/iam
+  LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
 
   pushd ${IAM_ROOT}
   # 2. 配置 $HOME/.bashrc 添加一些便捷入口

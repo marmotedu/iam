@@ -4,7 +4,11 @@
 
 #!/usr/bin/bash
 
+# IAM 项目源码根目录
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
+
+# 生成文件存放目录
+LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
 
 # 设置统一的密码，方便记忆
 readonly PASSWORD=${PASSWORD:-'iam59!z$'}
@@ -13,8 +17,6 @@ readonly PASSWORD=${PASSWORD:-'iam59!z$'}
 readonly LINUX_USERNAME=${LINUX_USERNAME:-going}
 # Linux root & going 用户密码
 readonly LINUX_PASSWORD=${LINUX_PASSWORD:-${PASSWORD}}
-
-readonly LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
 
 # 设置安装目录
 readonly INSTALL_DIR=${INSTALL_DIR:-/tmp/installation}

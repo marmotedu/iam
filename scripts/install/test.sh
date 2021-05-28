@@ -7,7 +7,7 @@
 
 # The root of the build/dist directory
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
-source "${IAM_ROOT}/scripts/install/common.sh"
+[[ -z ${COMMON_SOURCED} ]] && source ${IAM_ROOT}/scripts/install/common.sh
 
 INSECURE_APISERVER=${IAM_APISERVER_HOST}:${IAM_APISERVER_INSECURE_BIND_POR}
 INSECURE_AUTHZSERVER=${IAM_AUTHZ_SERVER_HOST}:${IAM_AUTHZ_SERVER_INSECURE_BIND_PORT}
@@ -157,4 +157,6 @@ iam::test::test()
   iam::log::info "congratulations, all test passed!"
 }
 
-$*
+if [[ "$*" =~ iam::test:: ]];then
+  eval $*  
+fi
