@@ -228,7 +228,7 @@ show databases;
 EOF
 
   # 4. 创建必要的目录
-  echo ${LINUX_PASSWORD} | sudo -S mkdir -p ${IAM_DATA_DIR}/{iam-apiserver,iam-authz-server,iam-pump}
+  echo "${LINUX_PASSWORD}" | sudo -S mkdir -p ${IAM_DATA_DIR}/{iam-apiserver,iam-authz-server,iam-pump}
   iam::common::sudo "mkdir -p ${IAM_INSTALL_DIR}/bin"
   iam::common::sudo "mkdir -p ${IAM_CONFIG_DIR}/cert"
   iam::common::sudo "mkdir -p ${IAM_LOG_DIR}"
@@ -240,7 +240,7 @@ EOF
 
   # 6. 配置hosts
   if ! egrep -q 'iam.*marmotedu.com' /etc/hosts;then
-    echo ${LINUX_PASSWORD} | sudo -S bash -c "cat << 'EOF' >> /etc/hosts
+    echo "${LINUX_PASSWORD}" | sudo -S bash -c "cat << 'EOF' >> /etc/hosts
 127.0.0.1 iam.api.marmotedu.com
 127.0.0.1 iam.authz.marmotedu.com
 EOF"
@@ -267,8 +267,8 @@ EOF
   iam::common::sudo "rm -rf ${IAM_LOG_DIR}"
 
   # 3. 删除配置hosts
-  echo ${LINUX_PASSWORD} | sudo -S sed -i '/iam.api.marmotedu.com/d' /etc/hosts
-  echo ${LINUX_PASSWORD} | sudo -S sed -i '/iam.authz.marmotedu.com/d' /etc/hosts
+  echo "${LINUX_PASSWORD}" | sudo -S sed -i '/iam.api.marmotedu.com/d' /etc/hosts
+  echo "${LINUX_PASSWORD}" | sudo -S sed -i '/iam.authz.marmotedu.com/d' /etc/hosts
 
   iam::log::info "unprepare for iam installation successfully"
   popd

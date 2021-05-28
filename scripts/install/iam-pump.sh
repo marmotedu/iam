@@ -26,11 +26,11 @@ function iam::pump::install()
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-pump ${IAM_INSTALL_DIR}/bin"
 
   # 2.  生成并安装iam-pump的配置文件（iam-pump.yaml）
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-pump.yaml > ${IAM_CONFIG_DIR}/iam-pump.yaml"
 
   # 3. 创建并安装iam-pump systemd unit文件
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-pump.service > /etc/systemd/system/iam-pump.service"
 
   # 4. 启动iam-pump服务

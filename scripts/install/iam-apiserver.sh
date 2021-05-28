@@ -34,11 +34,11 @@ function iam::apiserver::install()
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-apiserver ${IAM_INSTALL_DIR}/bin"
 
   # 3.  生成并安装iam-apiserver的配置文件（iam-apiserver.yaml）
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-apiserver.yaml > ${IAM_CONFIG_DIR}/iam-apiserver.yaml"
 
   # 4. 创建并安装iam-apiserver systemd unit文件
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-apiserver.service > /etc/systemd/system/iam-apiserver.service"
 
   # 5. 启动iam-apiserver服务

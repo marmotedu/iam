@@ -34,11 +34,11 @@ function iam::authzserver::install()
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-authz-server ${IAM_INSTALL_DIR}/bin"
 
   # 3.  生成并安装iam-authz-server的配置文件（iam-authz-server.yaml）
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-authz-server.yaml > ${IAM_CONFIG_DIR}/iam-authz-server.yaml"
 
   # 4. 创建并安装iam-authz-server systemd unit文件
-  echo ${LINUX_PASSWORD} | sudo -S bash -c \
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-authz-server.service > /etc/systemd/system/iam-authz-server.service"
 
   # 5. 启动iam-authz-server服务

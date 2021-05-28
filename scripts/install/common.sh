@@ -20,5 +20,5 @@ source "${IAM_ROOT}/scripts/install/environment.sh"
 
 # 不输入密码执行需要root权限的命令
 function iam::common::sudo {
-  echo ${LINUX_PASSWORD} | sudo -S $1
+  echo "${LINUX_PASSWORD}" | sudo -S $1
 }

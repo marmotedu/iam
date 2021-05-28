@@ -21,7 +21,7 @@ EOF
 function iam::mariadb::install()
 {
   # 1. 配置 MariaDB 10.5 Yum 源
-  echo ${LINUX_PASSWORD} | sudo -S bash -c "cat << 'EOF' > /etc/yum.repos.d/mariadb-10.5.repo
+  echo "${LINUX_PASSWORD}" | sudo -S bash -c "cat << 'EOF' > /etc/yum.repos.d/mariadb-10.5.repo
 # MariaDB 10.5 CentOS repository list - created 2020-10-23 01:54 UTC
 # http://downloads.mariadb.org/mariadb/repositories/
 [mariadb]
@@ -40,7 +40,7 @@ EOF"
   iam::common::sudo "systemctl start mariadb"
 
   # 4. 设置root初始密码
-  iam::common::sudo "mysqladmin -u${MARIADB_ADMIN_USERNAME} password ${MARIADB_ADMIN_PASSWORD}"
+  iam::common::sudo "mysqladmin -u${MARIADB_ADMIN_USERNAME} password '${MARIADB_ADMIN_PASSWORD}'"
 
   iam::mariadb::status || return 1
   iam::mariadb::info
@@ -69,7 +69,7 @@ function iam::mariadb::status()
     return 1
   }
 
-  mysql -u${MARIADB_ADMIN_USERNAME} -p${MARIADB_ADMIN_PASSWORD} -e quit &>/dev/null || {
+  mysql -u"${MARIADB_ADMIN_USERNAME}" -p"${MARIADB_ADMIN_PASSWORD}" -e quit &>/dev/null || {
     iam::log::error "can not login with root, mariadb maybe not initialized properly"
     return 1
   }

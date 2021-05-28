@@ -7,12 +7,12 @@
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
 
 # 设置统一的密码，方便记忆
-readonly PASSWORD=${PASSWORD:-'iam59!z$'}
+readonly PASSWORD="${PASSWORD:-'iam59!z$'}"
 
 # Linux系统 going 用户
 readonly LINUX_USERNAME=${LINUX_USERNAME:-going}
 # Linux root & going 用户密码
-readonly LINUX_PASSWORD=${LINUX_PASSWORD:-${PASSWORD}}
+readonly LINUX_PASSWORD="${LINUX_PASSWORD:-"${PASSWORD}"}"
 
 readonly LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
 
@@ -23,25 +23,25 @@ readonly ENV_FILE=${IAM_ROOT}/scripts/install/environment.sh
 
 # MariaDB 配置信息
 readonly MARIADB_ADMIN_USERNAME=${MARIADB_ADMIN_USERNAME:-root} # MariaDB root 用户
-readonly MARIADB_ADMIN_PASSWORD=${MARIADB_ADMIN_PASSWORD:-${PASSWORD}} # MariaDB root 用户密码
+readonly MARIADB_ADMIN_PASSWORD="${MARIADB_ADMIN_PASSWORD:-"${PASSWORD}"}" # MariaDB root 用户密码
 readonly MARIADB_HOST=${MARIADB_HOST:-127.0.0.1:3306} # MariaDB 主机地址
 readonly MARIADB_DATABASE=${MARIADB_DATABASE:-iam} # MariaDB iam 应用使用的数据库名
 readonly MARIADB_USERNAME=${MARIADB_USERNAME:-iam} # iam 数据库用户名
-readonly MARIADB_PASSWORD=${MARIADB_PASSWORD:-${PASSWORD}} # iam 数据库密码
+readonly MARIADB_PASSWORD="${MARIADB_PASSWORD:-"${PASSWORD}"}" # iam 数据库密码
 
 # Redis 配置信息
 readonly REDIS_HOST=${REDIS_HOST:-127.0.0.1} # Redis 主机地址
 readonly REDIS_PORT=${REDIS_PORT:-6379} # Redis 监听端口
 readonly REDIS_USERNAME=${REDIS_USERNAME:-''} # Redis 用户名
-readonly REDIS_PASSWORD=${REDIS_PASSWORD:-${PASSWORD}} # Redis 密码
+readonly REDIS_PASSWORD="${REDIS_PASSWORD:-"${PASSWORD}"}" # Redis 密码
 
 # MongoDB 配置
 readonly MONGO_ADMIN_USERNAME=${MONGO_ADMIN_USERNAME:-root} # MongoDB root 用户
-readonly MONGO_ADMIN_PASSWORD=${MONGO_ADMIN_PASSWORD:-${PASSWORD}} # MongoDB root用户密码
+readonly MONGO_ADMIN_PASSWORD="${MONGO_ADMIN_PASSWORD:-"${PASSWORD}"}" # MongoDB root用户密码
 readonly MONGO_HOST=${MONGO_HOST:-127.0.0.1} # MongoDB 地址
 readonly MONGO_PORT=${MONGO_PORT:-27017} # MongoDB 端口
 readonly MONGO_USERNAME=${MONGO_USERNAME:-iam} # MongoDB 用户名
-readonly MONGO_PASSWORD=${MONGO_PASSWORD:-${PASSWORD}} # MongoDB 密码
+readonly MONGO_PASSWORD="${MONGO_PASSWORD:-"${PASSWORD}"}" # MongoDB 密码
 
 # iam 配置
 readonly IAM_DATA_DIR=${IAM_DATA_DIR:-/data/iam} # iam 各组件数据目录
@@ -75,11 +75,11 @@ readonly IAM_AUTHZ_SERVER_RPCSERVER=${IAM_AUTHZ_SERVER_RPCSERVER:-${IAM_APISERVE
 # iam-pump 配置
 readonly IAM_PUMP_HOST=${IAM_PUMP_HOST:-127.0.0.1} # iam-pump 部署机器 IP 地址
 readonly IAM_PUMP_COLLECTION_NAME=${IAM_PUMP_COLLECTION_NAME:-iam_analytics}
-readonly IAM_PUMP_MONGO_URL=${IAM_PUMP_MONGO_URL:-mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${IAM_PUMP_COLLECTION_NAME}?authSource=admin}
+readonly IAM_PUMP_MONGO_URL="${IAM_PUMP_MONGO_URL:-mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${IAM_PUMP_COLLECTION_NAME}?authSource=admin}"
 
 # iamctl 配置
 readonly CONFIG_USER_USERNAME=${CONFIG_USER_USERNAME:-admin}
-readonly CONFIG_USER_PASSWORD=${CONFIG_USER_PASSWORD:-Admin@2021}
+readonly CONFIG_USER_PASSWORD="${CONFIG_USER_PASSWORD:-Admin@2021}"
 readonly CONFIG_USER_CLIENT_CERTIFICATE=${CONFIG_USER_CLIENT_CERTIFICATE:-${HOME}/.iam/cert/admin.pem}
 readonly CONFIG_USER_CLIENT_KEY=${CONFIG_USER_CLIENT_KEY:-${HOME}/.iam/cert/admin-key.pem}
 readonly CONFIG_SERVER_ADDRESS=${CONFIG_SERVER_ADDRESS:-${IAM_APISERVER_HOST}:${IAM_APISERVER_SECURE_BIND_PORT}}
