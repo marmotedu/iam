@@ -1,3 +1,7 @@
+-- Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+-- Use of this source code is governed by a MIT style
+-- license that can be found in the LICENSE file.
+
 CREATE DATABASE  IF NOT EXISTS `iam` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `iam`;
 -- MySQL dump 10.13  Distrib 5.7.29, for Win64 (x86_64)
