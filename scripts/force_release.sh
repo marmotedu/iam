@@ -20,4 +20,5 @@ git push origin master
 git push origin ${version}
 
 # 3. release the new release
+pushd ${IAM_ROOT}
 make release
