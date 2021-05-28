@@ -9,7 +9,7 @@
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
 [[ -z ${COMMON_SOURCED} ]] && source ${IAM_ROOT}/scripts/install/common.sh
 
-INSECURE_APISERVER=${IAM_APISERVER_HOST}:${IAM_APISERVER_INSECURE_BIND_POR}
+INSECURE_APISERVER=${IAM_APISERVER_HOST}:${IAM_APISERVER_INSECURE_BIND_PORT}
 INSECURE_AUTHZSERVER=${IAM_AUTHZ_SERVER_HOST}:${IAM_AUTHZ_SERVER_INSECURE_BIND_PORT}
 CCURL="curl -s -XPOST -H'Content-Type: application/json'" # Create
 UCURL="curl -s -XPUT -H'Content-Type: application/json'" # Update
@@ -115,7 +115,7 @@ iam::test::authz()
 
 iam::test::authzserver()
 {
-  iam::test::authz || return 1
+  iam::test::authz
   iam::log::info "congratulations, iam-authz-server test passed!"
 }
 
@@ -148,11 +148,11 @@ function iam::test::man()
 
 iam::test::test()
 {
-  iam::test::apiserver || return 1
-  iam::test::authzserver || return 1
-  iam::test::pump || return 1
-  iam::test::iamctl || return 1
-  iam::test::man || return 1
+  iam::test::apiserver
+  iam::test::authzserver
+  iam::test::pump
+  iam::test::iamctl
+  iam::test::man
 
   iam::log::info "congratulations, all test passed!"
 }
