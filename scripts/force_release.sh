@@ -14,7 +14,6 @@ set +o errexit
 # 1. delete old version
 git tag -d ${version}
 git push origin --delete ${version}
-set -o errexit
 
 # 2. create a new tag
 git tag -a ${version} -m "release ${version}"
