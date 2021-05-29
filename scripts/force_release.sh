@@ -26,4 +26,11 @@ git push origin ${version}
 
 # 3. release the new release
 pushd ${IAM_ROOT}
+# try to delete target github release if exist to avoid create error    
+iam::log::info "delete github release with tag ${IAM_GIT_VERSION} if exist"    
+github-release delete \    
+  --user marmotedu \    
+  --repo iam \    
+  --tag ${version} &>/dev/null    
+
 make release
