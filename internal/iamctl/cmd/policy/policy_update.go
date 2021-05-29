@@ -35,7 +35,7 @@ type UpdateOptions struct {
 var (
 	updateExample = templates.Examples(`
 		# Update a authorization policy with new policy.
-		iamctl policy update foo "{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIP":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}"`)
+		iamctl policy update foo "{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}"`)
 
 	updateUsageErrStr = fmt.Sprintf(
 		"expected '%s'.\nPOLICY_NAME and POLICY is required arguments for the update command",

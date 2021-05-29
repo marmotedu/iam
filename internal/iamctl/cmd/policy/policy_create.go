@@ -35,7 +35,7 @@ type CreateOptions struct {
 var (
 	createExample = templates.Examples(`
 		# Create a authorization policy
-		iamctl policy create foo '{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddressAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}'`)
+		iamctl policy create foo '{"description":"This is a updated policy","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}'`)
 
 	createUsageErrStr = fmt.Sprintf(
 		"expected '%s'.\nPOLICY_NAME and POLICY are required arguments for the create command",
