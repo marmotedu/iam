@@ -48,7 +48,7 @@ root用户的密码一般是由系统管理员维护，并定期更改。但普�
 
 ```bash
 $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码
-$ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
+$ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 ```
 通过以上方式安装好系统后，以下组件的密码均默认为 `iam59!z$`：
@@ -60,7 +60,7 @@ $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 
 ```bash
 $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码
-$ version=v1.0.0 && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
+$ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::uninstall
 ```
 

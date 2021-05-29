@@ -105,6 +105,7 @@ function iam::release::updload_tarballs() {
   for file in $(ls ${RELEASE_TARS}/*)
   do
     coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
+    coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/latest/"
   done
 }
 
