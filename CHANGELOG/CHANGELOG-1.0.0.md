@@ -31,6 +31,7 @@
 ### Code Refactoring
 
 * improve code, like log format and sinkers directory
+* also print username when sync secret from iam-apiserver
 * optimize the output of secret list
 * remove shorthand `c` to avoid conflict
 * add code comment line
@@ -47,20 +48,20 @@
 * add missing doc.go and the generate file
 * add context.Context parameter to some functions
 * optimize log output
-* remove redundant code
+* iamctl code match marmotedu-sdk-go sdk changes
 * optimize variable name
 * change encoding/json to jsoniter
 * create mysql/etcd storage in singleton mode
 * fix golangci-lint error
 * change datastore.go to fake.go
-* iamctl code match marmotedu-sdk-go sdk changes
+* update gopkg.in/yaml version
 * remove short flag `s` in generated demo command
 * change application init flow
 * re-add pkg/log package
 * change getClient function to Client method
 * update log package and iam code to adjust requestID feature
-* update gopkg.in/yaml version
-* also print username when sync secret from iam-apiserver
+* remove redundant code
+* optimize DELETE api response error code
 * **apiserver:** remove middleware and add more header to cors
 * **apiserver:** change gorm logger
 * **apiserver:** add context sample
