@@ -4,7 +4,7 @@ IAM = Identity and Access Management
 
 IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于对资源访问进行授权。同时也具有如下能力：
 
-1. 配合极客时间专栏 **[Go 语言项目开发实战](https://time.geekbang.org/column/intro/100079601)**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程，包含了项目各个知识点和构建思路的讲解，中间也会包含我的一线研发经验和建议。
+1. 配合极客时间专栏 **《[Go 语言项目开发实战](https://time.geekbang.org/column/intro/100079601)》**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程，包含了项目各个知识点和构建思路的讲解，也会包含我的一线研发经验和建议。
 
 2. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
 
@@ -77,7 +77,7 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 
 - Lingfei Kong <colin404@foxmail.com>
 
-为了方便交流，我建了微信群，可以加我**微信：marmotedu**，我拉你入群，方便交流。
+为了方便交流，我建了微信群，可以加我 **微信：marmotedu**，我拉你入群，方便交流。
 
 ## 谁在用
 

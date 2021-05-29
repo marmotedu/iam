@@ -6,7 +6,7 @@ Github Forking 工作流详细步骤如下：
 
 1) Fork 远程仓库到自己的账号下
 
-访问 https://github.com/marmotedu/iam，点击 ![fork 按钮](https://images-public-1254073058.cos.ap-guangzhou.myqcloud.com/fork%E6%8C%89%E9%92%AE.png)按钮。fork 后的仓库地址为：https://github.com/colin404fork/iam。
+访问 https://github.com/marmotedu/iam，点击右上角 **Fork** 按钮。fork 后的仓库地址为：https://github.com/colin404fork/iam。
 
 2) 克隆 fork 的仓库到本地
 

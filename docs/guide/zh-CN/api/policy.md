@@ -52,7 +52,7 @@ POST /v1/policies
       "resources:printer"
     ],
     "conditions": {
-      "remoteIP": {
+      "remoteIPAddress": {
         "type": "CIDRCondition",
         "options": {
           "cidr": "192.168.0.1/16"
@@ -91,7 +91,7 @@ POST /v1/policies
       "<create|update>"
     ],
     "conditions": {
-      "remoteIP": {
+      "remoteIPAddress": {
         "type": "CIDRCondition",
         "options": {
           "cidr": "192.168.0.1/16"
@@ -227,7 +227,7 @@ PUT /v1/policies/:name
       "resources:printer"
     ],
     "conditions": {
-      "remoteIP": {
+      "remoteIPAddress": {
         "type": "CIDRCondition",
         "options": {
           "cidr": "192.168.0.1/16"
@@ -266,7 +266,7 @@ PUT /v1/policies/:name
       "<create|update>"
     ],
     "conditions": {
-      "remoteIP": {
+      "remoteIPAddress": {
         "type": "CIDRCondition",
         "options": {
           "cidr": "192.168.0.1/16"
@@ -340,7 +340,7 @@ curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -
       "<create|update>"
     ],
     "conditions": {
-      "remoteIP": {
+      "remoteIPAddress": {
         "type": "CIDRCondition",
         "options": {
           "cidr": "192.168.0.1/16"
@@ -417,7 +417,7 @@ curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' 
           "<create|update>"
         ],
         "conditions": {
-          "remoteIP": {
+          "remoteIPAddress": {
             "type": "CIDRCondition",
             "options": {
               "cidr": "192.168.0.1/16"
