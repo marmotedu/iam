@@ -6,11 +6,14 @@ IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于
 
 1. 配合极客时间专栏 **《[Go 语言项目开发实战](https://time.geekbang.org/column/intro/100079601)》**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程，包含了项目各个知识点和构建思路的讲解，也会包含我的一线研发经验和建议。
 
+   目录请参考：[《Go 语言项目开发实战》课程目录](./docs/guide/zh-CN/geekbang/geekbang_course_catalog.md)
+
+
 2. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
 
 IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing**
 
-## Features
+## 功能特性
 
 本项目用到了Go企业开发的大部分核心技能点，见下图：
 
@@ -18,15 +21,15 @@ IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing
 
 更多请参考：[marmotedu/gocollect](https://github.com/marmotedu/gocollect)
 
-## Architecture
+## 软件架构
 
 ![IAM架构](./docs/images/IAM架构.png)
 
 架构解析见：[IAM 架构 & 能力说明](docs/guide/zh-CN/installation/installation-architecture.md)
 
-## Getting Started 
+## 快速开始
 
-### Prerequisites
+### 依赖检查
 
 **Minimum Requirements**
 
@@ -40,7 +43,7 @@ IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing
 
  请参考：[](docs/guide/zh-CN/installation/installation-requirement.md)
 
-### Building
+### 构建
 
 1. 代码包下载
 
@@ -55,34 +58,34 @@ $ cd iam
 $ make
 ```
 
-### Running
+### 运行
 
 ```bash
 ./scripts/install/install.sh iam::install::install_iam    
 ```
 
-## Using
+## 使用指南
 
 [IAM Documentation](docs/guide/zh-CN)
 
-## Contributing
+## 如何贡献
 
 欢迎贡献代码，贡献流程可以参考 [developer's documentation](docs/devel/zh-CN/development.md)。
 
-## Community
+## 社区
 
 You are encouraged to communicate most things via [GitHub issues](https://github.com/marmotedu/iam/issues/new/choose) or pull requests.
 
-## Authors
+## 关于作者
 
 - Lingfei Kong <colin404@foxmail.com>
 
-为了方便交流，我建了微信群，可以加我 **微信：marmotedu**，我拉你入群，方便交流。
+为了方便交流，我建了微信群，可以加我 **微信：marmotedu**，拉你入群，方便交流。
 
 ## 谁在用
 
 如果你有项目在使用iam系统模板，也欢迎联系作者，加入使用案例。
 
-## License
+## 许可证
 
 IAM is licensed under the MIT. See [LICENSE](LICENSE) for the full license text.
