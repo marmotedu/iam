@@ -7,39 +7,6 @@ consumes:
 - application/json
 definitions:
   AuthzPolicy:
-    $ref: '#/definitions/DefaultPolicy'
-    title: AuthzPolicy defines iam policy type.
-  ChangePasswordRequest:
-    properties:
-      newPassword:
-        description: New password.
-        type: string
-        x-go-name: NewPassword
-      oldPassword:
-        description: Old password.
-        type: string
-        x-go-name: OldPassword
-    required:
-    - oldPassword
-    - newPassword
-    title: ChangePasswordRequest defines the ChangePasswordRequest data format.
-    type: object
-    x-go-package: github.com/marmotedu/iam/internal/apiserver/api/v1/user
-  Condition:
-    properties:
-      GetName:
-        description: GetName returns the condition's name.
-        type: string
-    title: Condition either do or do not fulfill an access request.
-    type: object
-    x-go-package: github.com/ory/ladon
-  Conditions:
-    additionalProperties:
-      $ref: '#/definitions/Condition'
-    title: Conditions is a collection of conditions.
-    type: object
-    x-go-package: github.com/ory/ladon
-  DefaultPolicy:
     properties:
       actions:
         items:
@@ -73,7 +40,37 @@ definitions:
           type: string
         type: array
         x-go-name: Subjects
-    title: DefaultPolicy is the default implementation of the policy interface.
+    title: AuthzPolicy defines iam policy type.
+    type: object
+    x-go-package: github.com/marmotedu/api/apiserver/v1
+  ChangePasswordRequest:
+    properties:
+      newPassword:
+        description: New password.
+        type: string
+        x-go-name: NewPassword
+      oldPassword:
+        description: Old password.
+        type: string
+        x-go-name: OldPassword
+    required:
+    - oldPassword
+    - newPassword
+    title: ChangePasswordRequest defines the ChangePasswordRequest data format.
+    type: object
+    x-go-package: github.com/marmotedu/iam/internal/apiserver/api/v1/user
+  Condition:
+    properties:
+      GetName:
+        description: GetName returns the condition's name.
+        type: string
+    title: Condition either do or do not fulfill an access request.
+    type: object
+    x-go-package: github.com/ory/ladon
+  Conditions:
+    additionalProperties:
+      $ref: '#/definitions/Condition'
+    title: Conditions is a collection of conditions.
     type: object
     x-go-package: github.com/ory/ladon
   ErrResponse:
