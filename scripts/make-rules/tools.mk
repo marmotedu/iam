@@ -6,7 +6,7 @@
 # Makefile helper functions for tools
 #
 
-DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense goimports
+DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense goimports codegen
 OTHER_TOOLS ?= depth go-callvis gothanks richgo rts
 
 tools.install: $(addprefix tools.install., $(DEP_TOOLS), ${OTHER_TOOLS})
@@ -98,3 +98,7 @@ install.richgo:
 .PHONY: install.rts
 install.rts:
 	@$(GO) get -u github.com/galeone/rts/cmd/rts
+
+.PHONY: install.codegen
+install.codegen:
+	@$(GO) install ${ROOT_DIR}/tools/codegen/codegen.go

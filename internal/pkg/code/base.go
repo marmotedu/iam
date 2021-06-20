@@ -7,7 +7,7 @@ package code
 //go:generate codegen -type=int
 //go:generate codegen -type=int -doc -output ../../../docs/guide/zh-CN/api/error_code.md
 
-// common: basic errors.
+// Common: basic errors.
 // Code must start with 1xxxxx.
 const (
 	// ErrSuccess - 200: OK.
