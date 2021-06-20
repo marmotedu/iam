@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := all
 
 .PHONY: all
-all: gen verify-copyright format lint cover build
+all: gen add-copyright format lint cover build
 
 # ==============================================================================
 # Build options
