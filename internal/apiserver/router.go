@@ -64,7 +64,7 @@ func installAPI(g *gin.Engine) *gin.Engine {
 			// v1.PUT("/find_password", userHandler.FindPassword)
 			userv1.DELETE("", userHandler.DeleteCollection) // admin api
 			userv1.DELETE(":name", userHandler.Delete)      // admin api
-			userv1.PUT(":name/change_password", userHandler.ChangePassword)
+			userv1.PUT(":name/change-password", userHandler.ChangePassword)
 			userv1.PUT(":name", userHandler.Update)
 			userv1.GET("", userHandler.List)
 			userv1.GET(":name", userHandler.Get) // admin api
