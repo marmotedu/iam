@@ -6,9 +6,6 @@
 # Makefile helper functions for generate necessary files
 #
 
-
-CAS=iam-apiserver iam-authz-server admin
-
 .PHONY: gen.run
 #gen.run: gen.errcode gen.docgo
 gen.run: gen.clean gen.errcode gen.docgo
@@ -34,7 +31,7 @@ gen.ca.%:
 	@${ROOT_DIR}/scripts/gencerts.sh generate-iam-cert $(OUTPUT_DIR)/cert $(CA)
 
 .PHONY: gen.ca
-gen.ca: $(addprefix gen.ca., $(CAS))
+gen.ca: $(addprefix gen.ca., $(CERTIFICATES))
 
 .PHONY: gen.docgo
 gen.docgo:

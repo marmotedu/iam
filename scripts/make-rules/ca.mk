@@ -6,8 +6,6 @@
 # Makefile helper functions for create CA files
 #
 
-CAS=iam-apiserver iam-authz-server admin
-
 .PHONY: ca.gen.%
 ca.gen.%:
 	$(eval CA := $(word 1,$(subst ., ,$*)))
@@ -15,4 +13,4 @@ ca.gen.%:
 	@${ROOT_DIR}/scripts/gencerts.sh generate-iam-cert $(OUTPUT_DIR)/cert $(CA)
 
 .PHONY: ca.gen
-ca.gen: $(addprefix ca.gen., $(CAS))
+ca.gen: $(addprefix ca.gen., $(CERTIFICATES))
