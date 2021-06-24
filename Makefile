@@ -17,7 +17,7 @@ VERSION_PACKAGE=github.com/marmotedu/component-base/pkg/version
 # ==============================================================================
 # Includes
 
-include scripts/make-rules/common.mk
+include scripts/make-rules/common.mk # make sure include common.mk at the first include line
 include scripts/make-rules/golang.mk
 include scripts/make-rules/image.mk
 include scripts/make-rules/deploy.mk
@@ -92,7 +92,8 @@ deploy:
 ## clean: Remove all files that are created by building.
 .PHONY: clean
 clean:
-	@$(MAKE) go.clean
+	@echo "===========> Cleaning all build output"
+	@-rm -vrf $(OUTPUT_DIR)
 
 ## lint: Check syntax and styling of go sources.
 .PHONY: lint

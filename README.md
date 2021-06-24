@@ -80,7 +80,7 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 
 - Lingfei Kong <colin404@foxmail.com>
 
-为了方便交流，我建了微信群，可以加我 **微信：marmotedu**，拉你入群，方便交流。
+为了方便交流，我建了微信群，可以加我 **微信：nightskong**，拉你入群，方便交流。
 
 ## 谁在用
 
