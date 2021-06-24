@@ -131,17 +131,20 @@ func (auth *jwtAuth) MaxRefresh() time.Duration {
 func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 	return func(c *gin.Context) (interface{}, error) {
 		var login basicAuth
-		if err := c.ShouldBindJSON(&login); err != nil {
-			log.Errorf("parse login parameters: %s", err.Error())
+		var err error
 
-			return "", jwt.ErrMissingLoginValues
+		// support header and body both
+		if c.Request.Header.Get("Authorization") != "" {
+			login, err = parseWithHeader(c)
+		} else {
+			login, err = parseWithBody(c)
+		}
+		if err != nil {
+			return "", jwt.ErrFailedAuthentication
 		}
 
-		username := login.Username
-		password := login.Password
-
 		// Get the user information by the login username.
-		user, err := store.Client().Users().Get(c, username, metav1.GetOptions{})
+		user, err := store.Client().Users().Get(c, login.Username, metav1.GetOptions{})
 		if err != nil {
 			log.Errorf("get user information failed: %s", err.Error())
 
@@ -149,12 +152,48 @@ func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 		}
 
 		// Compare the login password with the user password.
-		if err := user.Compare(password); err != nil {
+		if err := user.Compare(login.Password); err != nil {
 			return "", jwt.ErrFailedAuthentication
 		}
 
 		return user, nil
 	}
+}
+
+func parseWithHeader(c *gin.Context) (basicAuth, error) {
+	auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
+	if len(auth) != 2 || auth[0] != "Basic" {
+		log.Errorf("get basic string from Authorization header failed")
+		return basicAuth{}, jwt.ErrFailedAuthentication
+	}
+
+	payload, err := base64.StdEncoding.DecodeString(auth[1])
+	if err != nil {
+		log.Errorf("decode basic string: %s", err.Error())
+		return basicAuth{}, jwt.ErrFailedAuthentication
+	}
+
+	pair := strings.SplitN(string(payload), ":", 2)
+	if len(pair) != 2 {
+		log.Errorf("parse payload failed")
+		return basicAuth{}, jwt.ErrFailedAuthentication
+	}
+
+	return basicAuth{
+		Username: pair[0],
+		Password: pair[1],
+	}, nil
+}
+
+func parseWithBody(c *gin.Context) (basicAuth, error) {
+	var login basicAuth
+	if err := c.ShouldBindJSON(&login); err != nil {
+		log.Errorf("parse login parameters: %s", err.Error())
+
+		return basicAuth{}, jwt.ErrFailedAuthentication
+	}
+
+	return login, nil
 }
 
 func (auth *jwtAuth) LoginResponse() func(c *gin.Context, code int, token string, expire time.Time) {
