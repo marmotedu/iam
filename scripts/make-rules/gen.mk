@@ -33,10 +33,23 @@ gen.ca.%:
 .PHONY: gen.ca
 gen.ca: $(addprefix gen.ca., $(CERTIFICATES))
 
-.PHONY: gen.docgo
-gen.docgo:
+.PHONY: gen.docgo.doc
+gen.docgo.doc:
 	@echo "===========> Generating missing doc.go for go packages"
 	@${ROOT_DIR}/scripts/gendoc.sh
+
+.PHONY: gen.docgo.check
+gen.docgo.check: gen.docgo.doc
+	@n="$$(git ls-files --others '*/doc.go' | wc -l)"; \
+	if test "$$n" -gt 0; then \
+		git ls-files --others '*/doc.go' | sed -e 's/^/  /'; \
+		echo "$@: untracked doc.go file(s) exist in working directory" >&2 ; \
+		false ; \
+	fi
+
+.PHONY: gen.docgo.add
+gen.docgo.add:
+	@git ls-files --others '*/doc.go' | xargs $(XARGS) -- git add
 
 .PHONY: gen.clean
 gen.clean:

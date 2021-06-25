@@ -2,7 +2,7 @@
 # Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
-for top in pkg
+for top in pkg internal/pkg
 do
     for d in $(find $top -type d)
     do
