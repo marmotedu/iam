@@ -8,7 +8,7 @@
 
 .PHONY: gen.run
 #gen.run: gen.errcode gen.docgo
-gen.run: gen.clean gen.errcode gen.docgo
+gen.run: gen.clean gen.errcode gen.docgo.doc
 
 .PHONY: gen.errcode
 gen.errcode: gen.errcode.code gen.errcode.doc
@@ -49,7 +49,7 @@ gen.docgo.check: gen.docgo.doc
 
 .PHONY: gen.docgo.add
 gen.docgo.add:
-	@git ls-files --others '*/doc.go' | xargs $(XARGS) -- git add
+	@git ls-files --others '*/doc.go' | $(XARGS) -- git add
 
 .PHONY: gen.clean
 gen.clean:
