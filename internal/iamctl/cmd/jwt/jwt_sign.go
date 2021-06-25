@@ -14,7 +14,7 @@ import (
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
-	"github.com/marmotedu/iam/internal/pkg/middleware"
+	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 	"github.com/marmotedu/iam/pkg/cli/genericclioptions"
 )
 
@@ -57,7 +57,7 @@ func NewSignOptions(ioStreams genericclioptions.IOStreams) *SignOptions {
 	return &SignOptions{
 		Timeout:   2 * time.Hour,
 		Algorithm: "HS256",
-		Audience:  middleware.AuthzAudience,
+		Audience:  auth.AuthzAudience,
 		Issuer:    "iamctl",
 		Claims:    make(ArgList),
 		Head:      make(ArgList),

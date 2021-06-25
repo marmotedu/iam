@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
-	"github.com/spf13/viper"
 
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/policy"
 	"github.com/marmotedu/iam/internal/apiserver/api/v1/secret"
@@ -16,6 +15,7 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
+	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 
 	// custom gin validators.
 	_ "github.com/marmotedu/iam/pkg/validator"
@@ -31,22 +31,14 @@ func installMiddleware(g *gin.Engine) {
 
 func installAPI(g *gin.Engine) *gin.Engine {
 	// Middlewares.
-	// the jwt middleware
-	apiServerAuth := newAPIServerAuth(
-		viper.GetString("jwt.Realm"),
-		[]byte(viper.GetString("jwt.key")),
-		viper.GetDuration("jwt.timeout"),
-		viper.GetDuration("jwt.max-refresh"),
-	)
-
-	authMiddleware, _ := middleware.NewAuthMiddleware(apiServerAuth, nil)
-
-	g.POST("/login", authMiddleware.JWT.LoginHandler)
-	g.POST("/logout", authMiddleware.JWT.LogoutHandler)
+	jwtStrategy := newJWTAuth().(auth.JWTStrategy)
+	g.POST("/login", jwtStrategy.LoginHandler)
+	g.POST("/logout", jwtStrategy.LogoutHandler)
 	// Refresh time can be longer than token timeout
-	g.POST("/refresh", authMiddleware.JWT.RefreshHandler)
+	g.POST("/refresh", jwtStrategy.RefreshHandler)
 
-	g.NoRoute(authMiddleware.AuthMiddlewareFunc(), func(c *gin.Context) {
+	auto := newAutoAuth()
+	g.NoRoute(auto.AuthFunc(), func(c *gin.Context) {
 		core.WriteResponse(c, errors.WithCode(code.ErrPageNotFound, "Page not found."), nil)
 	})
 
@@ -60,7 +52,7 @@ func installAPI(g *gin.Engine) *gin.Engine {
 			userHandler := user.NewUserHandler(storeIns)
 
 			userv1.POST("", userHandler.Create)
-			userv1.Use(authMiddleware.AuthMiddlewareFunc(), middleware.Validation())
+			userv1.Use(auto.AuthFunc(), middleware.Validation())
 			// v1.PUT("/find_password", userHandler.FindPassword)
 			userv1.DELETE("", userHandler.DeleteCollection) // admin api
 			userv1.DELETE(":name", userHandler.Delete)      // admin api
@@ -70,7 +62,7 @@ func installAPI(g *gin.Engine) *gin.Engine {
 			userv1.GET(":name", userHandler.Get) // admin api
 		}
 
-		v1.Use(authMiddleware.AuthMiddlewareFunc())
+		v1.Use(auto.AuthFunc())
 
 		// policy RESTful resource
 		policyv1 := v1.Group("/policies", middleware.Publish())

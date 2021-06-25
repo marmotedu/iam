@@ -14,13 +14,12 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	v1 "github.com/marmotedu/api/apiserver/v1"
-	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
-	"github.com/marmotedu/errors"
+	"github.com/spf13/viper"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
-	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
+	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -35,102 +34,69 @@ const (
 	CtxUsername = "username"
 )
 
-type auth struct {
-	realm      string
-	key        []byte
-	timeout    time.Duration
-	maxRefresh time.Duration
-}
-
-type jwtAuth struct {
-	realm      string
-	key        []byte
-	timeout    time.Duration
-	maxRefresh time.Duration
-}
-
-func newAPIServerAuth(realm string, key []byte, timeout, maxRefresh time.Duration) middleware.AuthInterface {
-	return &auth{
-		realm:      realm,
-		key:        key,
-		timeout:    timeout,
-		maxRefresh: maxRefresh,
-	}
-}
-
-func (a *auth) JWTAuth() middleware.JWTAuthInterface {
-	return newAuthMiddleware(a.realm, a.key, a.timeout, a.maxRefresh)
-}
-
-func (a *auth) BasicAuth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
-
-		if len(auth) != 2 || auth[0] != "Basic" {
-			core.WriteResponse(
-				c,
-				errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."),
-				nil,
-			)
-			c.Abort()
-
-			return
-		}
-
-		payload, _ := base64.StdEncoding.DecodeString(auth[1])
-		pair := strings.SplitN(string(payload), ":", 2)
-
-		if len(pair) != 2 || !authenticateUser(pair[0], pair[1]) {
-			core.WriteResponse(
-				c,
-				errors.WithCode(code.ErrSignatureInvalid, "Authorization header format is wrong."),
-				nil,
-			)
-			c.Abort()
-
-			return
-		}
-
-		c.Set(CtxUsername, pair[0])
-
-		c.Next()
-	}
-}
-
-// Use gin binding feature to validate the input.
-type basicAuth struct {
+type loginInfo struct {
 	Username string `form:"username" json:"username" binding:"required,username"`
 	Password string `form:"password" json:"password" binding:"required,password"`
 }
 
-func newAuthMiddleware(realm string, key []byte, timeout, maxRefresh time.Duration) middleware.JWTAuthInterface {
-	return &jwtAuth{
-		realm:      realm,
-		key:        key,
-		timeout:    timeout,
-		maxRefresh: maxRefresh,
-	}
+func newBasicAuth() middleware.AuthStrategy {
+	return auth.NewBasicStrategy(func(username string, password string) bool {
+		// fetch user from database
+		user, err := store.Client().Users().Get(context.TODO(), username, metav1.GetOptions{})
+		if err != nil {
+			return false
+		}
+
+		// Compare the login password with the user password.
+		if err := user.Compare(password); err != nil {
+			return false
+		}
+
+		return true
+	})
 }
 
-func (auth *jwtAuth) Realm() string {
-	return auth.realm
+func newJWTAuth() middleware.AuthStrategy {
+	ginjwt, _ := jwt.New(&jwt.GinJWTMiddleware{
+		Realm:            viper.GetString("jwt.Realm"),
+		SigningAlgorithm: "HS256",
+		Key:              []byte(viper.GetString("jwt.key")),
+		Timeout:          viper.GetDuration("jwt.timeout"),
+		MaxRefresh:       viper.GetDuration("jwt.max-refresh"),
+		Authenticator:    authenticator(),
+		LoginResponse:    loginResponse(),
+		LogoutResponse: func(c *gin.Context, code int) {
+			c.JSON(http.StatusOK, nil)
+		},
+		PayloadFunc: payloadFunc(),
+		IdentityHandler: func(c *gin.Context) interface{} {
+			claims := jwt.ExtractClaims(c)
+
+			return claims[jwt.IdentityKey]
+		},
+		Authorizator: authorizator(),
+		Unauthorized: func(c *gin.Context, code int, message string) {
+			c.JSON(code, gin.H{
+				"message": message,
+			})
+		},
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
+		TokenHeadName: "Bearer",
+		SendCookie:    true,
+		TimeFunc:      time.Now,
+		// TODO: HTTPStatusMessageFunc:
+	})
+
+	return auth.NewJWTStrategy(*ginjwt)
 }
 
-func (auth *jwtAuth) Key() []byte {
-	return auth.key
+func newAutoAuth() middleware.AuthStrategy {
+	return auth.NewAutoStrategy(newBasicAuth().(auth.BasicStrategy), newJWTAuth().(auth.JWTStrategy))
 }
 
-func (auth *jwtAuth) Timeout() time.Duration {
-	return auth.timeout
-}
-
-func (auth *jwtAuth) MaxRefresh() time.Duration {
-	return auth.maxRefresh
-}
-
-func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
+func authenticator() func(c *gin.Context) (interface{}, error) {
 	return func(c *gin.Context) (interface{}, error) {
-		var login basicAuth
+		var login loginInfo
 		var err error
 
 		// support header and body both
@@ -160,43 +126,43 @@ func (auth *jwtAuth) Authenticator() func(c *gin.Context) (interface{}, error) {
 	}
 }
 
-func parseWithHeader(c *gin.Context) (basicAuth, error) {
+func parseWithHeader(c *gin.Context) (loginInfo, error) {
 	auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
 		log.Errorf("get basic string from Authorization header failed")
-		return basicAuth{}, jwt.ErrFailedAuthentication
+		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
 	payload, err := base64.StdEncoding.DecodeString(auth[1])
 	if err != nil {
 		log.Errorf("decode basic string: %s", err.Error())
-		return basicAuth{}, jwt.ErrFailedAuthentication
+		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
 	pair := strings.SplitN(string(payload), ":", 2)
 	if len(pair) != 2 {
 		log.Errorf("parse payload failed")
-		return basicAuth{}, jwt.ErrFailedAuthentication
+		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
-	return basicAuth{
+	return loginInfo{
 		Username: pair[0],
 		Password: pair[1],
 	}, nil
 }
 
-func parseWithBody(c *gin.Context) (basicAuth, error) {
-	var login basicAuth
+func parseWithBody(c *gin.Context) (loginInfo, error) {
+	var login loginInfo
 	if err := c.ShouldBindJSON(&login); err != nil {
 		log.Errorf("parse login parameters: %s", err.Error())
 
-		return basicAuth{}, jwt.ErrFailedAuthentication
+		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
 	return login, nil
 }
 
-func (auth *jwtAuth) LoginResponse() func(c *gin.Context, code int, token string, expire time.Time) {
+func loginResponse() func(c *gin.Context, code int, token string, expire time.Time) {
 	return func(c *gin.Context, code int, token string, expire time.Time) {
 		c.JSON(http.StatusOK, gin.H{
 			"token":  token,
@@ -205,13 +171,7 @@ func (auth *jwtAuth) LoginResponse() func(c *gin.Context, code int, token string
 	}
 }
 
-func (auth *jwtAuth) LogoutResponse() func(c *gin.Context, code int) {
-	return func(c *gin.Context, code int) {
-		c.JSON(http.StatusOK, nil)
-	}
-}
-
-func (auth *jwtAuth) PayloadFunc() func(data interface{}) jwt.MapClaims {
+func payloadFunc() func(data interface{}) jwt.MapClaims {
 	return func(data interface{}) jwt.MapClaims {
 		claims := jwt.MapClaims{
 			"iss": APIServerIssuer,
@@ -226,15 +186,7 @@ func (auth *jwtAuth) PayloadFunc() func(data interface{}) jwt.MapClaims {
 	}
 }
 
-func (auth *jwtAuth) IdentityHandler() func(c *gin.Context) interface{} {
-	return func(c *gin.Context) interface{} {
-		claims := jwt.ExtractClaims(c)
-
-		return claims[jwt.IdentityKey]
-	}
-}
-
-func (auth *jwtAuth) Authorizator() func(data interface{}, c *gin.Context) bool {
+func authorizator() func(data interface{}, c *gin.Context) bool {
 	return func(data interface{}, c *gin.Context) bool {
 		// add username to header
 		if v, ok := data.(string); ok {
@@ -246,27 +198,4 @@ func (auth *jwtAuth) Authorizator() func(data interface{}, c *gin.Context) bool 
 
 		return false
 	}
-}
-
-func (auth *jwtAuth) Unauthorized() func(c *gin.Context, code int, message string) {
-	return func(c *gin.Context, code int, message string) {
-		c.JSON(code, gin.H{
-			"message": message,
-		})
-	}
-}
-
-func authenticateUser(username, password string) bool {
-	// fetch user from database
-	user, err := store.Client().Users().Get(context.TODO(), username, metav1.GetOptions{})
-	if err != nil {
-		return false
-	}
-
-	// Compare the login password with the user password.
-	if err := user.Compare(password); err != nil {
-		return false
-	}
-
-	return true
 }

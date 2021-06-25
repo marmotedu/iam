@@ -5,26 +5,34 @@
 package authzserver
 
 import (
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
+	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 )
 
-type authzAuth struct{}
-
-var _ middleware.CacheAuthInterface = &authzAuth{}
-
-func newAuthzServerJwt() middleware.CacheAuthInterface {
-	return &authzAuth{}
+func newCacheAuth() middleware.AuthStrategy {
+	return auth.NewCacheStrategy(getSecret())
 }
 
-func (a *authzAuth) GetSecret(secretID string) (*pb.SecretInfo, error) {
-	cli, err := store.GetStoreInsOr(nil)
-	if err != nil {
-		return nil, errors.Wrap(err, "get store instance failed")
-	}
+func getSecret() func(string) (auth.Secret, error) {
+	return func(kid string) (auth.Secret, error) {
+		cli, err := store.GetStoreInsOr(nil)
+		if err != nil {
+			return auth.Secret{}, errors.Wrap(err, "get store instance failed")
+		}
 
-	return cli.GetSecret(secretID)
+		secret, err := cli.GetSecret(kid)
+		if err != nil {
+			return auth.Secret{}, err
+		}
+
+		return auth.Secret{
+			Username: secret.Username,
+			ID:       secret.SecretId,
+			Key:      secret.SecretKey,
+			Expires:  secret.Expires,
+		}, nil
+	}
 }
