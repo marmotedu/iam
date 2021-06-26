@@ -1,10 +1,11 @@
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-05-29)
+## v1.0.0 (2021-06-26)
 
 ### Bug Fixes
 
-* fix jwt verfiy bug
+* ignore the .idea directory
+* fix compile error
 * fix create policy bug
 * add missing file: code_generated.go
 * fix swagger makefile dependence error
@@ -15,13 +16,13 @@
 * fix iamctl version wrong url bug
 * fix generate iamctl docs error
 * fix name bug, have Analytics struct and function at the same time
-* fix initialization sequence bug
+* fix compile error
 * fix uuid.Must compile error
 * fix compile error
 * fix the wrong information link in command long description
 * fix default ConfigFlags
-* fix compile error
-* fix compile error
+* fix initialization sequence bug
+* fix jwt verfiy bug
 * **apiserver:** set check url to 127.0.0.1 when bind-address is 0.0.0.0
 * **apiserver:** fix compile error
 * **authzserver:** fix context bug, cancel context in Run function
@@ -31,6 +32,11 @@
 ### Code Refactoring
 
 * improve code, like log format and sinkers directory
+* basic authorization support `Authorization: Basic xxxx`
+* add missing code_generated.go
+* change API name, from server_address to server-address
+* use codegen command to generate error code and doc
+* optimize DELETE api response error code
 * also print username when sync secret from iam-apiserver
 * optimize the output of secret list
 * remove shorthand `c` to avoid conflict
@@ -48,20 +54,20 @@
 * add missing doc.go and the generate file
 * add context.Context parameter to some functions
 * optimize log output
-* iamctl code match marmotedu-sdk-go sdk changes
+* remove redundant code
 * optimize variable name
 * change encoding/json to jsoniter
 * create mysql/etcd storage in singleton mode
 * fix golangci-lint error
 * change datastore.go to fake.go
-* update gopkg.in/yaml version
+* iamctl code match marmotedu-sdk-go sdk changes
 * remove short flag `s` in generated demo command
 * change application init flow
 * re-add pkg/log package
 * change getClient function to Client method
 * update log package and iam code to adjust requestID feature
-* remove redundant code
-* optimize DELETE api response error code
+* update gopkg.in/yaml version
+* modify authn logic, authenticate through authn strategy now
 * **apiserver:** remove middleware and add more header to cors
 * **apiserver:** change gorm logger
 * **apiserver:** add context sample
