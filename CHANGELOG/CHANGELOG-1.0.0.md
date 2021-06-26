@@ -36,6 +36,9 @@
 * add missing code_generated.go
 * change API name, from server_address to server-address
 * use codegen command to generate error code and doc
+* add missing code_generated.go
+* change API name, from server_address to server-address
+* use codegen command to generate error code and doc
 * optimize DELETE api response error code
 * also print username when sync secret from iam-apiserver
 * optimize the output of secret list
@@ -44,17 +47,17 @@
 * change struct name `RedisAnalyticsHandler` to `Analytics`
 * optimize RedisAnalyticsHandler struct field order
 * optimize code generated file name
-* update jwt sign and verify logic
+* remove redundant code
 * let recordsBufferFlushInterval configurable
 * optimize variable name Store to store
 * change code architecture according to go  clean arch
 * change log level for some log
 * change the way to create mysql db instance
-* fix golangci-lint errors
+* update jwt sign and verify logic
 * add missing doc.go and the generate file
 * add context.Context parameter to some functions
 * optimize log output
-* remove redundant code
+* fix golangci-lint errors
 * optimize variable name
 * change encoding/json to jsoniter
 * create mysql/etcd storage in singleton mode
@@ -69,16 +72,16 @@
 * update gopkg.in/yaml version
 * modify authn logic, authenticate through authn strategy now
 * **apiserver:** remove middleware and add more header to cors
-* **apiserver:** change gorm logger
-* **apiserver:** add context sample
 * **apiserver:** change to cobra functions which Run with error
+* **apiserver:** change gorm logger
 * **apiserver:** change the position of fs := cmd.Flags()
+* **apiserver:** add context sample
 * **authzserver:** improve secret/policy reload logic
+* **authzserver:** refactor authzserver storage code
 * **authzserver:** change variable name `client` to `grpcClient`
 * **authzserver:** log error message
-* **authzserver:** refactor authzserver storage code
-* **authzserver:** optimize log output
 * **authzserver:** optimize variable name thisPmp to pmpIns
+* **authzserver:** optimize log output
 * **iam-pump:** change health check endpoint option name
 * **makefile:** change tools install method
 * **middleware:** add requestid to logger
