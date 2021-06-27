@@ -6,10 +6,9 @@
 # Makefile helper functions for tools
 #
 
-DEP_TOOLS ?= swagger mockgen gotests gsemver golines go-junit-report git-chglog github-release coscmd go-mod-outdated golangci-lint protoc-gen-go cfssl addlicense goimports codegen
-OTHER_TOOLS ?= depth go-callvis gothanks richgo rts
+TOOLS ?=$(BLOCKER_TOOLS) $(CRITICAL_TOOLS) $(TRIVIAL_TOOLS))
 
-tools.install: $(addprefix tools.install., $(DEP_TOOLS), ${OTHER_TOOLS})
+tools.install: $(addprefix tools.install., $(TOOLS))
 tools.install.%:
 	@echo "===========> Installing $*"
 	@$(MAKE) install.$*
