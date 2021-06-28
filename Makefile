@@ -97,7 +97,7 @@ clean:
 
 ## lint: Check syntax and styling of go sources.
 .PHONY: lint
-lint: format
+lint:
 	@$(MAKE) go.lint
 
 ## test: Run unit test.
