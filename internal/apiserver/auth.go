@@ -130,18 +130,21 @@ func parseWithHeader(c *gin.Context) (loginInfo, error) {
 	auth := strings.SplitN(c.Request.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
 		log.Errorf("get basic string from Authorization header failed")
+
 		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
 	payload, err := base64.StdEncoding.DecodeString(auth[1])
 	if err != nil {
 		log.Errorf("decode basic string: %s", err.Error())
+
 		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
 	pair := strings.SplitN(string(payload), ":", 2)
 	if len(pair) != 2 {
 		log.Errorf("parse payload failed")
+
 		return loginInfo{}, jwt.ErrFailedAuthentication
 	}
 
