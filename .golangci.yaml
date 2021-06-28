@@ -525,9 +525,11 @@ linters:
   enable-all: true
   fast: false
   disable:
-    #- tagliatelle
-    #- wrapcheck
-    #- forcetypeassert
+    - golint
+    - typecheck
+    - tagliatelle
+    - wrapcheck
+    - forcetypeassert
     - goerr113
     - gomnd
     - wsl
