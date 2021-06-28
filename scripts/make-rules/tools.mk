@@ -22,7 +22,7 @@ install.swagger:
 
 .PHONY: install.golangci-lint
 install.golangci-lint:
-	@$(GO) get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	@$(GO) get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
 	@golangci-lint completion bash > $(HOME)/.golangci-lint.bash
 	@if ! grep -q .golangci-lint.bash $(HOME)/.bashrc; then echo "source \$$HOME/.golangci-lint.bash" >> $(HOME)/.bashrc; fi
 
