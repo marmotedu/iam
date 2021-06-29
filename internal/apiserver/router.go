@@ -31,7 +31,7 @@ func installMiddleware(g *gin.Engine) {
 
 func installAPI(g *gin.Engine) *gin.Engine {
 	// Middlewares.
-	jwtStrategy := newJWTAuth().(auth.JWTStrategy)
+	jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
 	g.POST("/login", jwtStrategy.LoginHandler)
 	g.POST("/logout", jwtStrategy.LogoutHandler)
 	// Refresh time can be longer than token timeout

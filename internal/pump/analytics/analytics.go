@@ -52,13 +52,13 @@ func (a *AnalyticsRecord) GetLineValues() []string {
 		case "int64":
 			thisVal = strconv.Itoa(int(valueField.Int()))
 		case "[]string":
-			tmpVal := valueField.Interface().([]string)
+			tmpVal, _ := valueField.Interface().([]string)
 			thisVal = strings.Join(tmpVal, ";")
 		case "time.Time":
-			tmpVal := valueField.Interface().(time.Time)
+			tmpVal, _ := valueField.Interface().(time.Time)
 			thisVal = tmpVal.String()
 		case "time.Month":
-			tmpVal := valueField.Interface().(time.Month)
+			tmpVal, _ := valueField.Interface().(time.Month)
 			thisVal = tmpVal.String()
 		default:
 			thisVal = valueField.String()

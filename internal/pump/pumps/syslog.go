@@ -115,7 +115,7 @@ func (s *SyslogPump) WriteData(ctx context.Context, data []interface{}) error {
 			return nil
 		default:
 			// Decode the raw analytics into Form
-			decoded := v.(analytics.AnalyticsRecord)
+			decoded, _ := v.(analytics.AnalyticsRecord)
 			message := Message{
 				"timestamp":  decoded.TimeStamp,
 				"username":   decoded.Username,

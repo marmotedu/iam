@@ -101,7 +101,7 @@ func (c *CSVPump) WriteData(ctx context.Context, data []interface{}) error {
 	}
 
 	for _, v := range data {
-		decoded := v.(analytics.AnalyticsRecord)
+		decoded, _ := v.(analytics.AnalyticsRecord)
 
 		toWrite := decoded.GetLineValues()
 		err := writer.Write(toWrite)

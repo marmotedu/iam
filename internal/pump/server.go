@@ -146,7 +146,7 @@ func filterData(pump pumps.Pump, keys []interface{}) []interface{} {
 	newLenght := 0
 
 	for _, key := range filteredKeys {
-		decoded := key.(analytics.AnalyticsRecord)
+		decoded, _ := key.(analytics.AnalyticsRecord)
 		if pump.GetOmitDetailedRecording() {
 			decoded.Policies = ""
 			decoded.Deciders = ""

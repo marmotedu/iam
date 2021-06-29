@@ -93,7 +93,7 @@ func (i *InfluxPump) WriteData(ctx context.Context, data []interface{}) error {
 	//	 Create a point and add to batch
 	for _, v := range data {
 		// Convert to AnalyticsRecord
-		decoded := v.(analytics.AnalyticsRecord)
+		decoded, _ := v.(analytics.AnalyticsRecord)
 		mapping := map[string]interface{}{
 			"timestamp":  decoded.TimeStamp,
 			"username":   decoded.Username,

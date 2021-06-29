@@ -356,7 +356,7 @@ func (f *File) genDecl(node ast.Node) bool {
 	// If the type and value are both missing, we carry down the type (and value,
 	// but the "go/types" package takes care of that).
 	for _, spec := range decl.Specs {
-		vspec := spec.(*ast.ValueSpec) // Guaranteed to succeed as this is CONST.
+		vspec, _ := spec.(*ast.ValueSpec) // Guaranteed to succeed as this is CONST.
 		if vspec.Type == nil && len(vspec.Values) > 0 {
 			// "X = 1". With no type but a value. If the constant is untyped,
 			// skip this vspec and reset the remembered type.

@@ -461,7 +461,7 @@ func (m *MongoPump) AccumulateSet(data []interface{}) [][]interface{} {
 	thisResultSet := make([]interface{}, 0)
 
 	for i, item := range data {
-		thisItem := item.(analytics.AnalyticsRecord)
+		thisItem, _ := item.(analytics.AnalyticsRecord)
 
 		// Add 1 KB for metadata as average
 		sizeBytes := len(thisItem.Policies) + len(thisItem.Deciders) + 1024

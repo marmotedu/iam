@@ -86,7 +86,7 @@ func (p *PrometheusPump) WriteData(ctx context.Context, data []interface{}) erro
 	log.Debugf("Writing %d records", len(data))
 
 	for _, item := range data {
-		record := item.(analytics.AnalyticsRecord)
+		record, _ := item.(analytics.AnalyticsRecord)
 		code := "0"
 		if record.Effect != ladon.AllowAccess {
 			code = "1"

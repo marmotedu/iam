@@ -152,7 +152,7 @@ func (k *KafkaPump) WriteData(ctx context.Context, data []interface{}) error {
 	kafkaMessages := make([]kafka.Message, len(data))
 	for i, v := range data {
 		// Build message format
-		decoded := v.(analytics.AnalyticsRecord)
+		decoded, _ := v.(analytics.AnalyticsRecord)
 		message := Message{
 			"timestamp":  decoded.TimeStamp,
 			"username":   decoded.Username,
