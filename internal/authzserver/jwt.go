@@ -13,10 +13,10 @@ import (
 )
 
 func newCacheAuth() middleware.AuthStrategy {
-	return auth.NewCacheStrategy(getSecret())
+	return auth.NewCacheStrategy(listSecretsFunc())
 }
 
-func getSecret() func(string) (auth.Secret, error) {
+func listSecretsFunc() func(string) (auth.Secret, error) {
 	return func(kid string) (auth.Secret, error) {
 		cli, err := store.GetStoreInsOr(nil)
 		if err != nil {
