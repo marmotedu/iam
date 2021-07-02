@@ -568,6 +568,6 @@ function iam::release::generate_changelog() {
 
   (set +o errexit git add ${IAM_ROOT}/CHANGELOG/CHANGELOG-${IAM_GIT_VERSION#v}.md)
   git commit -a -m "docs(changelog): add CHANGELOG-${IAM_GIT_VERSION#v}.md"
-  git push origin master # 最后将 CHANGELOG 也 push 上去
+  git push -f origin master # 最后将 CHANGELOG 也 push 上去
 }
 
