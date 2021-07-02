@@ -1,6 +1,6 @@
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-07-01)
+## v1.0.0 (2021-07-03)
 
 ### Bug Fixes
 
@@ -32,10 +32,11 @@
 ### Code Refactoring
 
 * improve code, like log format and sinkers directory
-* basic authorization support `Authorization: Basic xxxx`
+* optimize getSecret function name to `listSecretsFunc`
 * add missing code_generated.go
-* change API name, from server_address to server-address
 * use codegen command to generate error code and doc
+* modify authn logic, authenticate through authn strategy now
+* basic authorization support `Authorization: Basic xxxx`
 * add missing code_generated.go
 * change API name, from server_address to server-address
 * use codegen command to generate error code and doc
@@ -70,7 +71,7 @@
 * change getClient function to Client method
 * update log package and iam code to adjust requestID feature
 * update gopkg.in/yaml version
-* modify authn logic, authenticate through authn strategy now
+* optimize funtion name from listSecretsFunc to getSecretFunc
 * **apiserver:** remove middleware and add more header to cors
 * **apiserver:** change to cobra functions which Run with error
 * **apiserver:** change gorm logger
