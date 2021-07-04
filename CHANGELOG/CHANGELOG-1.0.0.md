@@ -1,6 +1,6 @@
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-07-03)
+## v1.0.0 (2021-07-05)
 
 ### Bug Fixes
 
@@ -32,6 +32,7 @@
 ### Code Refactoring
 
 * improve code, like log format and sinkers directory
+* optimize funtion name from listSecretsFunc to getSecretFunc
 * optimize getSecret function name to `listSecretsFunc`
 * add missing code_generated.go
 * use codegen command to generate error code and doc
@@ -52,37 +53,37 @@
 * let recordsBufferFlushInterval configurable
 * optimize variable name Store to store
 * change code architecture according to go  clean arch
-* change log level for some log
+* optimize variable name
 * change the way to create mysql db instance
-* update jwt sign and verify logic
+* change log level for some log
 * add missing doc.go and the generate file
 * add context.Context parameter to some functions
 * optimize log output
-* fix golangci-lint errors
-* optimize variable name
+* update jwt sign and verify logic
+* change application init flow
 * change encoding/json to jsoniter
 * create mysql/etcd storage in singleton mode
 * fix golangci-lint error
 * change datastore.go to fake.go
 * iamctl code match marmotedu-sdk-go sdk changes
 * remove short flag `s` in generated demo command
-* change application init flow
+* fix golangci-lint errors
 * re-add pkg/log package
 * change getClient function to Client method
 * update log package and iam code to adjust requestID feature
 * update gopkg.in/yaml version
-* optimize funtion name from listSecretsFunc to getSecretFunc
+* optimize iam error codes and filenmae
 * **apiserver:** remove middleware and add more header to cors
 * **apiserver:** change to cobra functions which Run with error
-* **apiserver:** change gorm logger
 * **apiserver:** change the position of fs := cmd.Flags()
+* **apiserver:** change gorm logger
 * **apiserver:** add context sample
 * **authzserver:** improve secret/policy reload logic
-* **authzserver:** refactor authzserver storage code
+* **authzserver:** optimize log output
 * **authzserver:** change variable name `client` to `grpcClient`
 * **authzserver:** log error message
 * **authzserver:** optimize variable name thisPmp to pmpIns
-* **authzserver:** optimize log output
+* **authzserver:** refactor authzserver storage code
 * **iam-pump:** change health check endpoint option name
 * **makefile:** change tools install method
 * **middleware:** add requestid to logger
@@ -92,19 +93,26 @@
 
 ### Features
 
-* add etcd storage for future use
+* 1111
+* cc
+* daf
+* 111
+* 22
+* af
+* 111111
+* update coimpiler
 * add new iamctl command 'helloworld'
 * add support for extend and extend shadow
 * graceful query method: ListOptional
 * add automatic installation scripts
-* optimize gencerts.sh to allow generate common ca files
+* add CURD method for etcd datastore
 * switch components to use application framework
 * support logger name
 * support graceful shutdown
 * add graceful shutdown
 * add --outdir option for iamctl new command
-* add CURD method for etcd datastore
-* update coimpiler
+* optimize gencerts.sh to allow generate common ca files
+* add etcd storage for future use
 * init commit
 * **apiserver:** change gorm v1 to v2
 * **iamctl:** add nbf for iamctl jwt sign
