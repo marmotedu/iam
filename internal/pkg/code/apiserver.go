@@ -6,7 +6,7 @@ package code
 
 //go:generate codegen -type=int
 
-// iam: user errors.
+// iam-apiserver: user errors.
 const (
 	// ErrUserNotFound - 404: User not found.
 	ErrUserNotFound int = iota + 110001
@@ -15,7 +15,7 @@ const (
 	ErrUserAlreadyExist
 )
 
-// iam: secret errors.
+// iam-apiserver: secret errors.
 const (
 	// ErrEncrypt - 400: Secret reach the max count.
 	ErrReachMaxCount int = iota + 110101
@@ -24,11 +24,8 @@ const (
 	ErrSecretNotFound
 )
 
-// iam: policy errors
+// iam-apiserver: policy errors
 const (
 	// ErrPolicyNotFound - 404: Policy not found.
 	ErrPolicyNotFound int = iota + 110201
 )
-
-// iam: authorize errors
-const ()

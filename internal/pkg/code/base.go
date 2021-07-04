@@ -5,7 +5,7 @@
 package code
 
 //go:generate codegen -type=int
-//go:generate codegen -type=int -doc -output ../../../docs/guide/zh-CN/api/error_code.md
+//go:generate codegen -type=int -doc -output ../../../docs/guide/zh-CN/api/error_code_generated.md
 
 // Common: basic errors.
 // Code must start with 1xxxxx.

@@ -21,6 +21,11 @@ IAM 系统支持的错误码列表如下：
 
 | Identifier | Code | HTTP Code | Description |
 | ---------- | ---- | --------- | ----------- |
+| ErrUserNotFound | 110001 | 404 | User not found |
+| ErrUserAlreadyExist | 110002 | 400 | User already exist |
+| ErrReachMaxCount | 110101 | 400 | Secret reach the max count |
+| ErrSecretNotFound | 110102 | 404 | Secret not found |
+| ErrPolicyNotFound | 110201 | 404 | Policy not found |
 | ErrSuccess | 100001 | 200 | OK |
 | ErrUnknown | 100002 | 500 | Internal server error |
 | ErrBind | 100003 | 400 | Error occurred while binding the request body to the struct |
@@ -43,9 +48,4 @@ IAM 系统支持的错误码列表如下：
 | ErrInvalidYaml | 100306 | 500 | Data is not valid Yaml |
 | ErrEncodingYaml | 100307 | 500 | Yaml data could not be encoded |
 | ErrDecodingYaml | 100308 | 500 | Yaml data could not be decoded |
-| ErrUserNotFound | 110001 | 404 | User not found |
-| ErrUserAlreadyExist | 110002 | 400 | User already exist |
-| ErrReachMaxCount | 110101 | 400 | Secret reach the max count |
-| ErrSecretNotFound | 110102 | 404 | Secret not found |
-| ErrPolicyNotFound | 110201 | 404 | Policy not found |
 
