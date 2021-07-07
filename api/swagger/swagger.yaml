@@ -58,7 +58,7 @@ definitions:
     - newPassword
     title: ChangePasswordRequest defines the ChangePasswordRequest data format.
     type: object
-    x-go-package: github.com/marmotedu/iam/internal/apiserver/api/v1/user
+    x-go-package: github.com/marmotedu/iam/internal/apiserver/controller/v1/user
   Condition:
     properties:
       GetName:

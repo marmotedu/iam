@@ -9,9 +9,9 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/apiserver/api/v1/policy"
-	"github.com/marmotedu/iam/internal/apiserver/api/v1/secret"
-	"github.com/marmotedu/iam/internal/apiserver/api/v1/user"
+	"github.com/marmotedu/iam/internal/apiserver/controller/v1/policy"
+	"github.com/marmotedu/iam/internal/apiserver/controller/v1/secret"
+	"github.com/marmotedu/iam/internal/apiserver/controller/v1/user"
 	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
