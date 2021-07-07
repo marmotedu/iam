@@ -1,9 +1,10 @@
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-07-05)
+## v1.0.0 (2021-07-07)
 
 ### Bug Fixes
 
+* fix `make tools` error
 * ignore the .idea directory
 * fix compile error
 * fix create policy bug
@@ -15,13 +16,13 @@
 * fix the wrong data directory name
 * fix iamctl version wrong url bug
 * fix generate iamctl docs error
-* fix name bug, have Analytics struct and function at the same time
 * fix compile error
+* fix initialization sequence bug
 * fix uuid.Must compile error
 * fix compile error
 * fix the wrong information link in command long description
 * fix default ConfigFlags
-* fix initialization sequence bug
+* fix name bug, have Analytics struct and function at the same time
 * fix jwt verfiy bug
 * **apiserver:** set check url to 127.0.0.1 when bind-address is 0.0.0.0
 * **apiserver:** fix compile error
@@ -32,6 +33,7 @@
 ### Code Refactoring
 
 * improve code, like log format and sinkers directory
+* optimize iam error codes and filenmae
 * optimize funtion name from listSecretsFunc to getSecretFunc
 * optimize getSecret function name to `listSecretsFunc`
 * add missing code_generated.go
@@ -72,7 +74,7 @@
 * change getClient function to Client method
 * update log package and iam code to adjust requestID feature
 * update gopkg.in/yaml version
-* optimize iam error codes and filenmae
+* optimize codes
 * **apiserver:** remove middleware and add more header to cors
 * **apiserver:** change to cobra functions which Run with error
 * **apiserver:** change the position of fs := cmd.Flags()
@@ -93,26 +95,19 @@
 
 ### Features
 
-* 1111
-* cc
-* daf
-* 111
-* 22
-* af
-* 111111
-* update coimpiler
+* add etcd storage for future use
 * add new iamctl command 'helloworld'
 * add support for extend and extend shadow
 * graceful query method: ListOptional
 * add automatic installation scripts
-* add CURD method for etcd datastore
+* optimize gencerts.sh to allow generate common ca files
 * switch components to use application framework
 * support logger name
 * support graceful shutdown
 * add graceful shutdown
 * add --outdir option for iamctl new command
-* optimize gencerts.sh to allow generate common ca files
-* add etcd storage for future use
+* add CURD method for etcd datastore
+* update coimpiler
 * init commit
 * **apiserver:** change gorm v1 to v2
 * **iamctl:** add nbf for iamctl jwt sign
