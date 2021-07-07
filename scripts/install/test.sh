@@ -30,30 +30,30 @@ iam::test::user()
   token="-HAuthorization: Bearer $(iam::test::login)"
 
   # 1. 如果有colin、mark、john用户先清空
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/mark
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/john
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo 
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/mark; echo 
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/john; echo 
 
   # 2. 创建colin、mark、john用户
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/users \
-    -d'{"password":"User@2021","metadata":{"name":"colin"},"nickname":"colin","email":"colin@foxmail.com","phone":"1812884xxxx"}'
+    -d'{"password":"User@2021","metadata":{"name":"colin"},"nickname":"colin","email":"colin@foxmail.com","phone":"1812884xxxx"}'; echo 
 
   # 3. 列出所有用户
-  ${RCURL} "${token}" "http://${INSECURE_APISERVER}/v1/users?offset=0&limit=10"
+  ${RCURL} "${token}" "http://${INSECURE_APISERVER}/v1/users?offset=0&limit=10"; echo 
 
   # 4. 获取colin用户的详细信息
-  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin
+  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo 
 
   # 5. 修改colin用户
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/users/colin \
-    -d'{"nickname":"colin","email":"colin_modified@foxmail.com","phone":"1812884xxxx"}'
+    -d'{"nickname":"colin","email":"colin_modified@foxmail.com","phone":"1812884xxxx"}'; echo 
 
   # 6. 删除colin用户
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo 
 
   # 7. 批量删除用户
-  ${DCURL} "${token}" "http://${INSECURE_APISERVER}/v1/users?name=mark&name=john"
-  iam::log::info "congratulations, /v1/user test passed!"
+  ${DCURL} "${token}" "http://${INSECURE_APISERVER}/v1/users?name=mark&name=john"; echo 
+  iam::log::info "$(echo -e '\033[32mcongratulations, /v1/user test passed!\033[0m')"
 }
 
 iam::test::secret()
@@ -61,11 +61,11 @@ iam::test::secret()
   token="-HAuthorization: Bearer $(iam::test::login)"
 
   # 1. 如果有secret0密钥先清空
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo 
 
   # 2. 创建secret0密钥
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/secrets \
-    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'
+    -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo 
 
   # 3. 列出所有密钥
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets
@@ -79,7 +79,7 @@ iam::test::secret()
 
   # 6. 删除secret0密钥
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0
-  iam::log::info "congratulations, /v1/secret test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, /v1/secret test passed!\033[0m')"
 }
 
 iam::test::policy()
@@ -105,7 +105,7 @@ iam::test::policy()
 
   # 6. 删除policy0策略
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0
-  iam::log::info "congratulations, /v1/policy test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, /v1/policy test passed!\033[0m')"
 }
 
 iam::test::apiserver()
@@ -113,7 +113,7 @@ iam::test::apiserver()
   iam::test::user
   iam::test::secret
   iam::test::policy
-  iam::log::info "congratulations, iam-apiserver test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, iam-apiserver test passed!\033[0m')"
 }
 
 iam::test::authz()
@@ -154,7 +154,7 @@ iam::test::authz()
 iam::test::authzserver()
 {
   iam::test::authz
-  iam::log::info "congratulations, iam-authz-server test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, iam-authz-server test passed!\033[0m')"
 }
 
 iam::test::pump()
@@ -163,7 +163,7 @@ iam::test::pump()
     iam::log::error "cannot access iam-pump healthz api, iam-pump maybe down"
     return 1
   }
-  iam::log::info "congratulations, iam-pump test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, iam-pump test passed!\033[0m')"
 }
 
 iam::test::iamctl()
@@ -172,16 +172,16 @@ iam::test::iamctl()
     iam::log::error "iamctl cannot list users from iam-apiserver"
     return 1
   }
-  iam::log::info "congratulations, iamctl test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, iamctl test passed!\033[0m')"
 }
 
-function iam::test::man()
+iam::test::man()
 {
   man iam-apiserver | grep -q 'IAM API Server' || {
     iam::log::error "iam man page not installed or may not installed properly"
     return 1
   }
-  iam::log::info "congratulations, man test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, man test passed!\033[0m')"
 }
 
 iam::test::test()
@@ -192,7 +192,7 @@ iam::test::test()
   iam::test::iamctl
   iam::test::man
 
-  iam::log::info "congratulations, all test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, all test passed!\033[0m')"
 }
 
 if [[ "$*" =~ iam::test:: ]];then
