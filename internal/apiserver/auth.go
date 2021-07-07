@@ -29,9 +29,6 @@ const (
 
 	// APIServerIssuer defines the value of jwt issuer field.
 	APIServerIssuer = "iam-apiserver"
-
-	// CtxUsername defines username context key.
-	CtxUsername = "username"
 )
 
 type loginInfo struct {
@@ -68,12 +65,14 @@ func newJWTAuth() middleware.AuthStrategy {
 		LogoutResponse: func(c *gin.Context, code int) {
 			c.JSON(http.StatusOK, nil)
 		},
-		PayloadFunc: payloadFunc(),
+		RefreshResponse: refreshResponse(),
+		PayloadFunc:     payloadFunc(),
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 
 			return claims[jwt.IdentityKey]
 		},
+		IdentityKey:  middleware.UsernameKey,
 		Authorizator: authorizator(),
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
@@ -165,6 +164,15 @@ func parseWithBody(c *gin.Context) (loginInfo, error) {
 	return login, nil
 }
 
+func refreshResponse() func(c *gin.Context, code int, token string, expire time.Time) {
+	return func(c *gin.Context, code int, token string, expire time.Time) {
+		c.JSON(http.StatusOK, gin.H{
+			"token":  token,
+			"expire": expire.Format(time.RFC3339),
+		})
+	}
+}
+
 func loginResponse() func(c *gin.Context, code int, token string, expire time.Time) {
 	return func(c *gin.Context, code int, token string, expire time.Time) {
 		c.JSON(http.StatusOK, gin.H{
@@ -191,10 +199,10 @@ func payloadFunc() func(data interface{}) jwt.MapClaims {
 
 func authorizator() func(data interface{}, c *gin.Context) bool {
 	return func(data interface{}, c *gin.Context) bool {
-		// add username to header
 		if v, ok := data.(string); ok {
-			// c.Request.Header.Add(log.KeyUsername, v)
-			c.Set(CtxUsername, v)
+			// c.Set(log.KeyUsername, v)
+			// c.Set(log.KeyRequestID, v)
+			log.L(c).Infof("user `%s` is authenticated.", v)
 
 			return true
 		}

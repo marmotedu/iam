@@ -11,6 +11,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -24,7 +25,7 @@ func (s *SecretHandler) List(c *gin.Context) {
 		return
 	}
 
-	secrets, err := s.srv.Secrets().List(c, c.GetString("username"), r)
+	secrets, err := s.srv.Secrets().List(c, c.GetString(middleware.UsernameKey), r)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
 

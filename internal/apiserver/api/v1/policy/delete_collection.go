@@ -9,6 +9,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -16,7 +17,8 @@ import (
 func (p *PolicyHandler) DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
-	if err := p.srv.Policies().DeleteCollection(c, c.GetString("username"), c.QueryArray("name"), metav1.DeleteOptions{}); err != nil {
+	if err := p.srv.Policies().DeleteCollection(c, c.GetString(middleware.UsernameKey),
+		c.QueryArray("name"), metav1.DeleteOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
 
 		return

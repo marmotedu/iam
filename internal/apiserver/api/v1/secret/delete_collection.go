@@ -9,6 +9,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -18,7 +19,7 @@ func (s *SecretHandler) DeleteCollection(c *gin.Context) {
 
 	if err := s.srv.Policies().DeleteCollection(
 		c,
-		c.GetString("username"),
+		c.GetString(middleware.UsernameKey),
 		c.QueryArray("name"),
 		metav1.DeleteOptions{},
 	); err != nil {

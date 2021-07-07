@@ -98,7 +98,7 @@ func (cache CacheStrategy) AuthFunc() gin.HandlerFunc {
 			return
 		}
 
-		c.Set(CtxUsername, secret.Username)
+		c.Set(middleware.UsernameKey, secret.Username)
 		c.Next()
 	}
 }

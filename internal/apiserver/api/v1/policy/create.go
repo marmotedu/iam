@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -33,7 +34,7 @@ func (p *PolicyHandler) Create(c *gin.Context) {
 		return
 	}
 
-	r.Username = c.GetString("username")
+	r.Username = c.GetString(middleware.UsernameKey)
 
 	if err := p.srv.Policies().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)

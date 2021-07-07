@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -26,7 +27,7 @@ func (p *PolicyHandler) Update(c *gin.Context) {
 		return
 	}
 
-	pol, err := p.store.Policies().Get(c, c.GetString("username"), c.Param("name"), metav1.GetOptions{})
+	pol, err := p.store.Policies().Get(c, c.GetString(middleware.UsernameKey), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
 

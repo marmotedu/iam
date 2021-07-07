@@ -2,9 +2,4 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-package code
-
-//go:generate codegen -type=int
-
-// iam-authz-server: authorize errors.
-const ()
+package main // import "github.com/marmotedu/iam/pkg/log/example/context"

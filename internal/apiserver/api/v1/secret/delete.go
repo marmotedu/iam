@@ -9,6 +9,7 @@ import (
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -16,7 +17,7 @@ import (
 func (s *SecretHandler) Delete(c *gin.Context) {
 	log.L(c).Info("delete secret function called.")
 	opts := metav1.DeleteOptions{Unscoped: true}
-	if err := s.srv.Secrets().Delete(c, c.GetString("username"), c.Param("name"), opts); err != nil {
+	if err := s.srv.Secrets().Delete(c, c.GetString(middleware.UsernameKey), c.Param("name"), opts); err != nil {
 		core.WriteResponse(c, err, nil)
 
 		return

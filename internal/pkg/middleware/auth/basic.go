@@ -16,9 +16,6 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 )
 
-// CtxUsername defines the key in gin context which represents the owner of the secret.
-const CtxUsername = "username"
-
 // BasicStrategy defines Basic authentication strategy.
 type BasicStrategy struct {
 	compare func(username string, password string) bool
@@ -63,7 +60,7 @@ func (b BasicStrategy) AuthFunc() gin.HandlerFunc {
 			return
 		}
 
-		c.Set(CtxUsername, pair[0])
+		c.Set(middleware.UsernameKey, pair[0])
 
 		c.Next()
 	}

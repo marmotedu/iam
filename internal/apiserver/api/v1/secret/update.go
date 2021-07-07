@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -26,7 +27,7 @@ func (s *SecretHandler) Update(c *gin.Context) {
 		return
 	}
 
-	username := c.GetString("username")
+	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
 
 	secret, err := s.srv.Secrets().Get(c, username, name, metav1.GetOptions{})

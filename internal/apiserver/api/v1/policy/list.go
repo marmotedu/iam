@@ -11,6 +11,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/pkg/log"
 )
 
@@ -25,7 +26,7 @@ func (p *PolicyHandler) List(c *gin.Context) {
 		return
 	}
 
-	policies, err := p.srv.Policies().List(c, c.GetString("username"), r)
+	policies, err := p.srv.Policies().List(c, c.GetString(middleware.UsernameKey), r)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
 
