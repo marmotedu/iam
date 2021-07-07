@@ -6,6 +6,7 @@ IAM API 接口文档，相关参考文档如下：
 - [API 接口文档规范](./api_specification.md)
 - [通用说明](./generic.md)
 - API接口：
+    - [认证相关接口](./authentication.md)
     - [用户相关接口](./user.md)
     - [密钥相关接口](./secret.md)
     - [授权策略相关接口](./policy.md)
@@ -13,6 +14,15 @@ IAM API 接口文档，相关参考文档如下：
  - [错误码](./error_code.md)
 
 ## API 概览
+
+## 认证相关接口
+
+| 接口名称                                         | 接口功能  |
+| ------------------------------------------------ | --------- |
+| [POST /login](./authentication.md#1-用户登录)    | 用户登录  |
+| [POST /logout](./authentication.md#2-用户登出)   | 用户登出  |
+| [POST /refresh](./authentication.md#2-刷新Token) | 刷新Token |
+
 ### 用户相关接口
 
 | 接口名称                                                      | 接口功能     |
