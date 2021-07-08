@@ -9,16 +9,14 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-// PolicyHandler create a policy handler used to handle request for policy resource.
-type PolicyHandler struct {
-	srv   srvv1.Service
-	store store.Factory
+// PolicyController create a policy handler used to handle request for policy resource.
+type PolicyController struct {
+	srv srvv1.Service
 }
 
-// NewPolicyHandler creates a policy handler.
-func NewPolicyHandler(store store.Factory) *PolicyHandler {
-	return &PolicyHandler{
-		srv:   srvv1.NewService(store),
-		store: store,
+// NewPolicyController creates a policy handler.
+func NewPolicyController(store store.Factory) *PolicyController {
+	return &PolicyController{
+		srv: srvv1.NewService(store),
 	}
 }

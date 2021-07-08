@@ -9,16 +9,14 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-// SecretHandler create a secret handler used to handle request for secret resource.
-type SecretHandler struct {
-	srv   srvv1.Service
-	store store.Factory
+// SecretController create a secret handler used to handle request for secret resource.
+type SecretController struct {
+	srv srvv1.Service
 }
 
-// NewSecretHandler creates a secret handler.
-func NewSecretHandler(store store.Factory) *SecretHandler {
-	return &SecretHandler{
-		srv:   srvv1.NewService(store),
-		store: store,
+// NewSecretController creates a secret handler.
+func NewSecretController(store store.Factory) *SecretController {
+	return &SecretController{
+		srv: srvv1.NewService(store),
 	}
 }

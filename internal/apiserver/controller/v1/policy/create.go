@@ -18,7 +18,7 @@ import (
 
 // Create creates a new ladon policy.
 // It will convert the policy to string and store it in the storage.
-func (p *PolicyHandler) Create(c *gin.Context) {
+func (p *PolicyController) Create(c *gin.Context) {
 	log.L(c).Info("create policy function called.")
 
 	var r v1.Policy

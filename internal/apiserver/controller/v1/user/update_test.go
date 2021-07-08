@@ -16,10 +16,9 @@ import (
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-func TestUserHandler_Update(t *testing.T) {
+func TestUserController_Update(t *testing.T) {
 	user := &v1.User{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: "admin",
@@ -37,17 +36,6 @@ func TestUserHandler_Update(t *testing.T) {
 	c.Params = []gin.Param{{Key: "name", Value: "admin"}}
 	c.Request.Header.Set("Content-Type", "application/json")
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockFactory := store.NewMockFactory(ctrl)
-	mockUserStore := store.NewMockUserStore(ctrl)
-	mockUserStore.EXPECT().Get(gomock.Any(), gomock.Eq("admin"), gomock.Any()).Return(user, nil)
-	mockFactory.EXPECT().Users().Return(mockUserStore)
-
-	mockService := srvv1.NewMockService(ctrl)
-	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
-
 	// deep copy
 	user2 := new(v1.User)
 	*user2 = *user
@@ -55,12 +43,17 @@ func TestUserHandler_Update(t *testing.T) {
 	user2.Email = "admin2@foxmail.com"
 	user2.Phone = "1812885xxx"
 
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockService := srvv1.NewMockService(ctrl)
+	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
+	mockUserSrv.EXPECT().Get(gomock.Any(), gomock.Eq("admin"), gomock.Any()).Return(user, nil)
 	mockUserSrv.EXPECT().Update(gomock.Any(), gomock.Eq(user2), gomock.Any()).Return(nil)
-	mockService.EXPECT().Users().Return(mockUserSrv)
+	mockService.EXPECT().Users().Return(mockUserSrv).Times(2)
 
 	type fields struct {
-		srv   srvv1.Service
-		store store.Factory
+		srv srvv1.Service
 	}
 	type args struct {
 		c *gin.Context
@@ -73,8 +66,7 @@ func TestUserHandler_Update(t *testing.T) {
 		{
 			name: "default",
 			fields: fields{
-				srv:   mockService,
-				store: mockFactory,
+				srv: mockService,
 			},
 			args: args{
 				c: c,
@@ -83,9 +75,8 @@ func TestUserHandler_Update(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := &UserHandler{
-				srv:   tt.fields.srv,
-				store: tt.fields.store,
+			u := &UserController{
+				srv: tt.fields.srv,
 			}
 			u.Update(tt.args.c)
 		})

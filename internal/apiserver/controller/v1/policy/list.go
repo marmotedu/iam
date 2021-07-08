@@ -16,7 +16,7 @@ import (
 )
 
 // List return all policies.
-func (p *PolicyHandler) List(c *gin.Context) {
+func (p *PolicyController) List(c *gin.Context) {
 	log.L(c).Info("list policy function called.")
 
 	var r metav1.ListOptions

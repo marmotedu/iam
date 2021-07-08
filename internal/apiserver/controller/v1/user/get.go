@@ -13,7 +13,7 @@ import (
 )
 
 // Get get an user by the user identifier.
-func (u *UserHandler) Get(c *gin.Context) {
+func (u *UserController) Get(c *gin.Context) {
 	log.L(c).Info("get user function called.")
 
 	user, err := u.srv.Users().Get(c, c.Param("name"), metav1.GetOptions{})

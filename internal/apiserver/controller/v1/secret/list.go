@@ -16,7 +16,7 @@ import (
 )
 
 // List list all the secrets.
-func (s *SecretHandler) List(c *gin.Context) {
+func (s *SecretController) List(c *gin.Context) {
 	log.L(c).Info("list secret function called.")
 	var r metav1.ListOptions
 	if err := c.ShouldBindQuery(&r); err != nil {

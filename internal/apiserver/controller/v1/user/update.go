@@ -16,7 +16,7 @@ import (
 )
 
 // Update update a user info by the user identifier.
-func (u *UserHandler) Update(c *gin.Context) {
+func (u *UserController) Update(c *gin.Context) {
 	log.L(c).Info("update user function called.")
 
 	var r v1.User
@@ -27,9 +27,9 @@ func (u *UserHandler) Update(c *gin.Context) {
 		return
 	}
 
-	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
+	user, err := u.srv.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 
 		return
 	}

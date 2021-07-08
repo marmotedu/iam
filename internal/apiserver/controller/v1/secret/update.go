@@ -17,7 +17,7 @@ import (
 )
 
 // Update update a key by the secret key identifier.
-func (s *SecretHandler) Update(c *gin.Context) {
+func (s *SecretController) Update(c *gin.Context) {
 	log.L(c).Info("update secret function called.")
 
 	var r v1.Secret

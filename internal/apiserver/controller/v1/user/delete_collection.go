@@ -14,7 +14,7 @@ import (
 
 // DeleteCollection batch delete users by multiple usernames.
 // Only administrator can call this function.
-func (u *UserHandler) DeleteCollection(c *gin.Context) {
+func (u *UserController) DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete user function called.")
 
 	usernames := c.QueryArray("name")

@@ -20,7 +20,7 @@ import (
 const maxSecretCount = 10
 
 // Create add new secret key pairs to the storage.
-func (s *SecretHandler) Create(c *gin.Context) {
+func (s *SecretController) Create(c *gin.Context) {
 	log.L(c).Info("create secret function called.")
 
 	var r v1.Secret
@@ -39,18 +39,18 @@ func (s *SecretHandler) Create(c *gin.Context) {
 
 	username := c.GetString(middleware.UsernameKey)
 
-	sec, err := s.store.Secrets().List(c, username, metav1.ListOptions{
+	secrets, err := s.srv.Secrets().List(c, username, metav1.ListOptions{
 		Offset: pointer.ToInt64(0),
 		Limit:  pointer.ToInt64(-1),
 	})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 
 		return
 	}
 
-	if sec.TotalCount >= maxSecretCount {
-		core.WriteResponse(c, errors.WithCode(code.ErrReachMaxCount, "secret count: %d", sec.TotalCount), nil)
+	if secrets.TotalCount >= maxSecretCount {
+		core.WriteResponse(c, errors.WithCode(code.ErrReachMaxCount, "secret count: %d", secrets.TotalCount), nil)
 
 		return
 	}

@@ -14,7 +14,7 @@ import (
 
 // Delete delete an user by the user identifier.
 // Only administrator can call this function.
-func (u *UserHandler) Delete(c *gin.Context) {
+func (u *UserController) Delete(c *gin.Context) {
 	log.L(c).Info("delete user function called.")
 
 	if err := u.srv.Users().Delete(c, c.Param("name"), metav1.DeleteOptions{Unscoped: true}); err != nil {

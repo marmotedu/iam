@@ -14,7 +14,7 @@ import (
 )
 
 // DeleteCollection delete secrets by secret names.
-func (s *SecretHandler) DeleteCollection(c *gin.Context) {
+func (s *SecretController) DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
 	if err := s.srv.Policies().DeleteCollection(

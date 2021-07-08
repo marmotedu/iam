@@ -26,7 +26,7 @@ type ChangePasswordRequest struct {
 }
 
 // ChangePassword change the user's password by the user identifier.
-func (u *UserHandler) ChangePassword(c *gin.Context) {
+func (u *UserController) ChangePassword(c *gin.Context) {
 	log.L(c).Info("change password function called.")
 
 	var r ChangePasswordRequest
@@ -37,9 +37,9 @@ func (u *UserHandler) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	user, err := u.store.Users().Get(c, c.Param("name"), metav1.GetOptions{})
+	user, err := u.srv.Users().Get(c, c.Param("name"), metav1.GetOptions{})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 
 		return
 	}

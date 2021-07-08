@@ -14,7 +14,7 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-func TestNewUserHandler(t *testing.T) {
+func TestNewUserController(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -26,23 +26,22 @@ func TestNewUserHandler(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *UserHandler
+		want *UserController
 	}{
 		{
 			name: "default",
 			args: args{
 				store: mockFactory,
 			},
-			want: &UserHandler{
-				srv:   srvv1.NewService(mockFactory),
-				store: mockFactory,
+			want: &UserController{
+				srv: srvv1.NewService(mockFactory),
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewUserHandler(tt.args.store); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewUserHandler() = %v, want %v", got, tt.want)
+			if got := NewUserController(tt.args.store); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewUserController() = %v, want %v", got, tt.want)
 			}
 		})
 	}

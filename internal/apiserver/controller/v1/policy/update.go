@@ -17,7 +17,7 @@ import (
 )
 
 // Update updates policy by the policy identifier.
-func (p *PolicyHandler) Update(c *gin.Context) {
+func (p *PolicyController) Update(c *gin.Context) {
 	log.L(c).Info("update policy function called.")
 
 	var r v1.Policy
@@ -27,9 +27,9 @@ func (p *PolicyHandler) Update(c *gin.Context) {
 		return
 	}
 
-	pol, err := p.store.Policies().Get(c, c.GetString(middleware.UsernameKey), c.Param("name"), metav1.GetOptions{})
+	pol, err := p.srv.Policies().Get(c, c.GetString(middleware.UsernameKey), c.Param("name"), metav1.GetOptions{})
 	if err != nil {
-		core.WriteResponse(c, errors.WithCode(code.ErrDatabase, err.Error()), nil)
+		core.WriteResponse(c, err, nil)
 
 		return
 	}

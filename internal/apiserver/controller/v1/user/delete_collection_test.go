@@ -13,14 +13,11 @@ import (
 	"github.com/golang/mock/gomock"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-func TestUserHandler_DeleteCollection(t *testing.T) {
+func TestUserController_DeleteCollection(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-
-	mockFactory := store.NewMockFactory(ctrl)
 
 	mockService := srvv1.NewMockService(ctrl)
 	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
@@ -31,8 +28,7 @@ func TestUserHandler_DeleteCollection(t *testing.T) {
 	c.Request, _ = http.NewRequest("DELETE", "/v1/users?name=colin&name=john", nil)
 
 	type fields struct {
-		srv   srvv1.Service
-		store store.Factory
+		srv srvv1.Service
 	}
 	type args struct {
 		c *gin.Context
@@ -45,8 +41,7 @@ func TestUserHandler_DeleteCollection(t *testing.T) {
 		{
 			name: "default",
 			fields: fields{
-				srv:   mockService,
-				store: mockFactory,
+				srv: mockService,
 			},
 			args: args{
 				c: c,
@@ -55,9 +50,8 @@ func TestUserHandler_DeleteCollection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := &UserHandler{
-				srv:   tt.fields.srv,
-				store: tt.fields.store,
+			u := &UserController{
+				srv: tt.fields.srv,
 			}
 			u.DeleteCollection(tt.args.c)
 		})

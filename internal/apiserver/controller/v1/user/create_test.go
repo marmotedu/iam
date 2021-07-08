@@ -14,10 +14,9 @@ import (
 	"github.com/golang/mock/gomock"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-func TestUserHandler_Create(t *testing.T) {
+func TestUserController_Create(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -25,7 +24,6 @@ func TestUserHandler_Create(t *testing.T) {
 	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
 	mockUserSrv.EXPECT().Create(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	mockService.EXPECT().Users().Return(mockUserSrv)
-	mockFactory := store.NewMockFactory(ctrl)
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	body := bytes.NewBufferString(
 		`{"metadata":{"name":"admin"},"nickname":"admin","email":"aaa@qq.com","password":"Admin@2020","phone":"1812884xxx"}`,
@@ -34,8 +32,7 @@ func TestUserHandler_Create(t *testing.T) {
 	c.Request.Header.Set("Content-Type", "application/json")
 
 	type fields struct {
-		srv   srvv1.Service
-		store store.Factory
+		srv srvv1.Service
 	}
 	type args struct {
 		c *gin.Context
@@ -48,8 +45,7 @@ func TestUserHandler_Create(t *testing.T) {
 		{
 			name: "default",
 			fields: fields{
-				srv:   mockService,
-				store: mockFactory,
+				srv: mockService,
 			},
 			args: args{
 				c: c,
@@ -58,9 +54,8 @@ func TestUserHandler_Create(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := &UserHandler{
-				srv:   tt.fields.srv,
-				store: tt.fields.store,
+			u := &UserController{
+				srv: tt.fields.srv,
 			}
 			u.Create(tt.args.c)
 		})

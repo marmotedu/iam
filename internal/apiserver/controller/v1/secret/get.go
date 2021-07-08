@@ -14,7 +14,7 @@ import (
 )
 
 // Get get an policy by the secret identifier.
-func (s *SecretHandler) Get(c *gin.Context) {
+func (s *SecretController) Get(c *gin.Context) {
 	log.L(c).Info("get secret function called.")
 
 	secret, err := s.srv.Secrets().Get(c, c.GetString(middleware.UsernameKey), c.Param("name"), metav1.GetOptions{})

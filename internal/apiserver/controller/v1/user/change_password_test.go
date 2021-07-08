@@ -15,26 +15,22 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
-	"github.com/marmotedu/iam/internal/apiserver/store"
 	_ "github.com/marmotedu/iam/pkg/validator"
 )
 
-func TestUserHandler_ChangePassword(t *testing.T) {
+func TestUserController_ChangePassword(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	user := &v1.User{
 		Password: "$2a$10$KqZhl5WStpa2K.ddEyzyf.zXllEXP4gIG8xQUgMhU1ZvMUn/Ta5um",
 	}
-	mockFactory := store.NewMockFactory(ctrl)
-	mockUserStore := store.NewMockUserStore(ctrl)
-	mockUserStore.EXPECT().Get(gomock.Any(), gomock.Eq("colin"), gomock.Any()).Return(user, nil)
-	mockFactory.EXPECT().Users().Return(mockUserStore)
 
 	mockService := srvv1.NewMockService(ctrl)
 	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
+	mockUserSrv.EXPECT().Get(gomock.Any(), gomock.Eq("colin"), gomock.Any()).Return(user, nil)
 	mockUserSrv.EXPECT().ChangePassword(gomock.Any(), gomock.Any()).Return(nil)
-	mockService.EXPECT().Users().Return(mockUserSrv)
+	mockService.EXPECT().Users().Return(mockUserSrv).Times(2)
 
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	body := bytes.NewBufferString(`{"oldPassword":"Admin@2020","newPassword":"Colin@2021"}`)
@@ -43,8 +39,7 @@ func TestUserHandler_ChangePassword(t *testing.T) {
 	c.Request.Header.Set("Content-Type", "application/json")
 
 	type fields struct {
-		srv   srvv1.Service
-		store store.Factory
+		srv srvv1.Service
 	}
 	type args struct {
 		c *gin.Context
@@ -57,8 +52,7 @@ func TestUserHandler_ChangePassword(t *testing.T) {
 		{
 			name: "default",
 			fields: fields{
-				srv:   mockService,
-				store: mockFactory,
+				srv: mockService,
 			},
 			args: args{
 				c: c,
@@ -67,9 +61,8 @@ func TestUserHandler_ChangePassword(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := &UserHandler{
-				srv:   tt.fields.srv,
-				store: tt.fields.store,
+			u := &UserController{
+				srv: tt.fields.srv,
 			}
 			u.ChangePassword(tt.args.c)
 		})

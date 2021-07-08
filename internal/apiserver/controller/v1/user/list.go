@@ -16,7 +16,7 @@ import (
 
 // List list the users in the storage.
 // Only administrator can call this function.
-func (u *UserHandler) List(c *gin.Context) {
+func (u *UserController) List(c *gin.Context) {
 	log.L(c).Info("list user function called.")
 
 	var r metav1.ListOptions

@@ -9,16 +9,14 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/store"
 )
 
-// UserHandler create a user handler used to handle request for user resource.
-type UserHandler struct {
-	srv   srvv1.Service
-	store store.Factory
+// UserController create a user handler used to handle request for user resource.
+type UserController struct {
+	srv srvv1.Service
 }
 
-// NewUserHandler creates a user handler.
-func NewUserHandler(store store.Factory) *UserHandler {
-	return &UserHandler{
-		srv:   srvv1.NewService(store),
-		store: store,
+// NewUserController creates a user handler.
+func NewUserController(store store.Factory) *UserController {
+	return &UserController{
+		srv: srvv1.NewService(store),
 	}
 }

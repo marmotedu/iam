@@ -14,7 +14,7 @@ import (
 )
 
 // DeleteCollection delete policies by policy names.
-func (p *PolicyHandler) DeleteCollection(c *gin.Context) {
+func (p *PolicyController) DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
 	if err := p.srv.Policies().DeleteCollection(c, c.GetString(middleware.UsernameKey),
