@@ -16,21 +16,21 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
-// AuthzHandler create a authorize handler used to handle authorize request.
-type AuthzHandler struct {
+// AuthzController create a authorize handler used to handle authorize request.
+type AuthzController struct {
 	store authorizer.PolicyGetter
 }
 
-// NewAuthzHandler creates a authorize handler.
-func NewAuthzHandler(store authorizer.PolicyGetter) *AuthzHandler {
-	return &AuthzHandler{
+// NewAuthzController creates a authorize handler.
+func NewAuthzController(store authorizer.PolicyGetter) *AuthzController {
+	return &AuthzController{
 		store: store,
 	}
 }
 
 // Authorize returns whether a request is allow or deny to access a resource and do some action
 // under specified condition.
-func (a *AuthzHandler) Authorize(c *gin.Context) {
+func (a *AuthzController) Authorize(c *gin.Context) {
 	var r ladon.Request
 	if err := c.ShouldBind(&r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)

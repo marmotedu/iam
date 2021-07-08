@@ -67,7 +67,7 @@ func createAuthzServer(cfg *config.Config) (*authzServer, error) {
 func (s *authzServer) PrepareRun() preparedAuthzServer {
 	_ = s.initialize()
 
-	installHandler(s.genericAPIServer.Engine)
+	installController(s.genericAPIServer.Engine)
 
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		s.genericAPIServer.Close()
