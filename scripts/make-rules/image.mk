@@ -10,7 +10,7 @@ DOCKER := docker
 DOCKER_SUPPORTED_API_VERSION ?= 1.32
 
 REGISTRY_PREFIX ?= marmotedu
-BASE_IMAGE = alpine:3.10
+BASE_IMAGE = centos:centos8
 
 EXTRA_ARGS ?= --no-cache
 _DOCKER_BUILD_EXTRA_ARGS :=
