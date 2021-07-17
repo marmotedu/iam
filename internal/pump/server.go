@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/vmihailenco/msgpack"
+	"github.com/vmihailenco/msgpack/v5"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 	"github.com/marmotedu/iam/internal/pump/config"
