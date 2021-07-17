@@ -14,14 +14,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/marmotedu/errors"
+	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
+	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 	"github.com/olekukonko/tablewriter"
 	"github.com/parnurzeal/gorequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"github.com/marmotedu/errors"
-	"github.com/marmotedu/marmotedu-sdk-go/marmotedu"
-	restclient "github.com/marmotedu/marmotedu-sdk-go/rest"
 
 	"github.com/marmotedu/iam/pkg/log"
 )

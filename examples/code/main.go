@@ -10,7 +10,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
 
