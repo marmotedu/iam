@@ -8,21 +8,21 @@ metadata:
   labels:
     app: iam-apiserver
   name: iam-apiserver
-  namespace: tyk
+  namespace: iam
 spec:
   ports:
   - name: https
-    nodePort: 8443 
-    port: 8443 
+    nodePort: 30443 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
+    port: 8443 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
     protocol: TCP
-    targetPort: 8443 
+    targetPort: 8443 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
   - name: http
-    nodePort: 8080
+    nodePort: 30080
     port: 8080
     protocol: TCP
     targetPort: 8080
   - name: grpc
-    nodePort: 8081
+    nodePort: 30081
     port: 8081
     protocol: TCP
     targetPort: 8081

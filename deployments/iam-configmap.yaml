@@ -37,9 +37,9 @@ data:
 
     # Mysql数据库相关配置
     mysql:
-      host: 39.108.6.234:3306                                   # mysql 机器 ip 和端口
+      host: 106.52.30.200:3306                                   # mysql 机器 ip 和端口
       username: iam                                         # mysql 用户名(建议授权最小权限集)
-      password: iam59!z$ # mysql 用户密码
+      password: z5ev6oMQ% # mysql 用户密码
       database: iam                                                       # iam 系统所用的数据库名
       max-idle-connections: 100
       max-open-connections: 100
@@ -48,9 +48,9 @@ data:
 
     # Redis配置
     redis:
-      host: 39.108.6.234                                                 # redis 地址
+      host: 106.52.30.200                                                 # redis 地址
       port: 6379                                                 # redis 端口
-      password: redis                                         # redis 密码
+      password: z5ev6oMQ%  # redis 密码
       #master-name:
       #username:
       #database:
@@ -82,7 +82,7 @@ data:
     # iam-authz-server 全配置
 
     # IAM rpc 服务地址
-    rpcserver: 127.0.0.1:8081
+    rpcserver: iam-apiserver:8081
 
     # RESTful服务配置
     server:
@@ -109,9 +109,9 @@ data:
 
     # Redis配置
     redis:
-      host: 39.108.6.234                                                 # redis地址
+      host: 106.52.30.200                                                 # redis地址
       port: 6379                                                 # redis端口
-      password: redis                                         # redis密码
+      password: z5ev6oMQ% # redis密码
       #master-name:
       #username:
       #database:
@@ -134,9 +134,5 @@ data:
       profiling: true                                                     # 开启 profiling, router 'host:port/debug/pprof/'
 kind: ConfigMap
 metadata:
-  creationTimestamp: "2020-07-14T06:24:03Z"
   name: iam
   namespace: iam
-  resourceVersion: "13017840"
-  selfLink: /api/v1/namespaces/iam/configmaps/iam
-  uid: de5d9df4-628f-43cc-9576-37a7a0fc884a

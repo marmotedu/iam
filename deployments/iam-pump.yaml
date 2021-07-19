@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: iam-apiserver
-  name: iam-apiserver
+    app: iam-pump
+  name: iam-pump
   namespace: iam
 spec:
   progressDeadlineSeconds: 10
@@ -11,7 +11,7 @@ spec:
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: iam-apiserver
+      app: iam-pump
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,7 +21,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: iam-apiserver
+        app: iam-pump
     spec:
       affinity:
         podAntiAffinity:
@@ -32,14 +32,14 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - iam-apiserver
+                  - iam-pump
               topologyKey: kubernetes.io/hostname
             weight: 100
       containers:
       - command:
-        - /opt/iam/bin/iam-apiserver
-        - --config=/etc/iam/iam-apiserver.yaml
-        image: ccr.ccs.tencentyun.com/lkccc/iam-apiserver-amd64:v1.0.5
+        - /opt/iam/bin/iam-pump
+        - --config=/etc/iam/iam-pump.yaml
+        image: ccr.ccs.tencentyun.com/lkccc/iam-pump-amd64:v1.0.5
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 1
@@ -51,16 +51,15 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 3
-        name: iam-apiserver
+        name: iam-pump
         ports:
         - containerPort: 8443
+          hostPort: 38443
           name: secure
           protocol: TCP
         - containerPort: 8080
+          hostPort: 38080
           name: insecure
-          protocol: TCP
-        - containerPort: 8081
-          name: grpc 
           protocol: TCP
         readinessProbe:
           failureThreshold: 1
@@ -92,9 +91,9 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /etc/iam/iam-apiserver.yaml
+        - mountPath: /etc/iam/iam-pump.yaml
           name: iam
-          subPath: iam-apiserver.yaml
+          subPath: iam-pump.yaml
         - mountPath: /etc/iam/cert
           name: iam-cert
       dnsPolicy: ClusterFirst
@@ -106,8 +105,8 @@ spec:
       - configMap:
           defaultMode: 420
           items:
-          - key: iam-apiserver.yaml
-            path: iam-apiserver.yaml
+          - key: iam-pump.yaml
+            path: iam-pump.yaml
           name: iam
         name: iam
       - configMap:
