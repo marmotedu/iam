@@ -12,7 +12,6 @@ import (
 	"strings"
 	"time"
 
-	// limits "github.com/gin-contrib/size".
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/component-base/pkg/core"
@@ -94,6 +93,8 @@ func (s *GenericAPIServer) Setup() {
 func (s *GenericAPIServer) InstallMiddlewares() {
 	// necessary middlewares
 	s.Use(middleware.RequestID())
+	s.Use(middleware.Context())
+	//s.Use(limits.RequestSizeLimiter(10))
 
 	// install custom middlewares
 	for _, m := range s.middlewares {
@@ -107,11 +108,6 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 		log.Infof("install middleware: %s", m)
 		s.Use(mw)
 	}
-
-	s.Use(middleware.Context())
-	// s.Use(gin.Logger())
-	// s.Use(limits.RequestSizeLimiter(10))
-	// s.GET("/debug/vars", expvar.Handler())
 }
 
 /*

@@ -61,6 +61,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 		go func(user *v1.User) {
 			defer wg.Done()
 
+			// some cost time process
 			policies, err := u.store.Policies().List(ctx, user.Name, metav1.ListOptions{})
 			if err != nil {
 				errChan <- errors.WithCode(code.ErrDatabase, err.Error())
