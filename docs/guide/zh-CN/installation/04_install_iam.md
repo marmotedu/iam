@@ -35,13 +35,13 @@ cd /tmp/iam && ./scripts/install/iam-pump.sh iam::pump::install
 ### 4. 安装并配置 iamctl
 
 ```bash
-cd /tmp/iam && ./scripts/install/iamctl.sh iam::iamctl::uninstall
+cd /tmp/iam && ./scripts/install/iamctl.sh iam::iamctl::install
 ```
 
 ### 5. 安装 man 文件
 
 ```bash
-cd /tmp/iam && ./scripts/install/man.sh iam::man::uninstall
+cd /tmp/iam && ./scripts/install/man.sh iam::man::install
 ```
 
 ### 6. 测试

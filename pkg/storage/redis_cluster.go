@@ -120,7 +120,7 @@ type RedisCluster struct {
 
 func clusterConnectionIsOpen(cluster RedisCluster) bool {
 	c := singleton(cluster.IsCache)
-	testKey := "redis-test-" + uuid.NewV4().String()
+	testKey := "redis-test-" + uuid.Must(uuid.NewV4()).String()
 	if err := c.Set(testKey, "test", time.Second).Err(); err != nil {
 		log.Warnf("Error trying to set test key: %s", err.Error())
 
