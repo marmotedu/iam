@@ -75,7 +75,7 @@ const defaultHashAlgorithm = "murmur64"
 // GenerateToken generate token, if hashing algorithm is empty, use legacy key generation.
 func GenerateToken(orgID, keyID, hashAlgorithm string) (string, error) {
 	if keyID == "" {
-		keyID = strings.ReplaceAll(uuid.NewV4().String(), "-", "")
+		keyID = strings.ReplaceAll(uuid.Must(uuid.NewV4()).String(), "-", "")
 	}
 
 	if hashAlgorithm != "" {

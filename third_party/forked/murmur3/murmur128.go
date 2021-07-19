@@ -1,7 +1,6 @@
 package murmur3
 
 import (
-	//"encoding/binary"
 	"hash"
 	"unsafe"
 )

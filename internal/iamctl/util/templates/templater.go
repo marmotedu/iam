@@ -11,10 +11,10 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/marmotedu/iam/internal/iamctl/util/term"
-
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
+
+	"github.com/marmotedu/iam/internal/iamctl/util/term"
 )
 
 type FlagExposer interface {
