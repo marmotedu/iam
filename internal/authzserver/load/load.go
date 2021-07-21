@@ -12,24 +12,24 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// Store defines function to reload storage.
-type Store interface {
+// Loader defines function to reload storage.
+type Loader interface {
 	Reload() error
 }
 
 // Load is used to reload given storage.
 type Load struct {
-	ctx   context.Context
-	lock  *sync.RWMutex
-	store Store
+	ctx    context.Context
+	lock   *sync.RWMutex
+	loader Loader
 }
 
-// NewLoader return a loader.
-func NewLoader(ctx context.Context, store Store) *Load {
+// NewLoader return a loader with a loader implement.
+func NewLoader(ctx context.Context, loader Loader) *Load {
 	return &Load{
-		ctx:   ctx,
-		lock:  new(sync.RWMutex),
-		store: store,
+		ctx:    ctx,
+		lock:   new(sync.RWMutex),
+		loader: loader,
 	}
 }
 
@@ -120,7 +120,7 @@ func (l *Load) DoReload() {
 	l.lock.Lock()
 	defer l.lock.Unlock()
 
-	if err := l.store.Reload(); err != nil {
+	if err := l.loader.Reload(); err != nil {
 		log.Errorf("faild to refresh target storage: %s", err.Error())
 	}
 

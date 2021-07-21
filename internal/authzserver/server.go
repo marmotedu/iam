@@ -11,8 +11,9 @@ import (
 
 	"github.com/marmotedu/iam/internal/authzserver/analytics"
 	"github.com/marmotedu/iam/internal/authzserver/config"
-	"github.com/marmotedu/iam/internal/authzserver/store"
-	"github.com/marmotedu/iam/internal/authzserver/store/load"
+	"github.com/marmotedu/iam/internal/authzserver/load"
+	"github.com/marmotedu/iam/internal/authzserver/load/cache"
+	"github.com/marmotedu/iam/internal/authzserver/store/apiserver"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/log"
@@ -134,12 +135,13 @@ func (s *authzServer) initialize() error {
 	// keep redis connected
 	go storage.ConnectToRedis(ctx, s.buildStorageConfig())
 
-	storeIns, err := store.GetStoreInsOr(store.GetGRPCClientOrDie(s.rpcServer, s.clientCA))
-	if err != nil {
-		return errors.Wrap(err, "get store instance failed")
-	}
 	// cron to reload all secrets and policies from iam-apiserver
-	load.NewLoader(ctx, storeIns).Start()
+	cacheIns, err := cache.GetCacheInsOr(apiserver.GetAPIServerFactoryOrDie(s.rpcServer, s.clientCA))
+	if err != nil {
+		return errors.Wrap(err, "get cache instance failed")
+	}
+
+	load.NewLoader(ctx, cacheIns).Start()
 
 	// start analytics service
 	if s.analyticsOptions.Enable {

@@ -10,7 +10,7 @@ import (
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/authzserver/controller/v1/authorize"
-	"github.com/marmotedu/iam/internal/authzserver/store"
+	"github.com/marmotedu/iam/internal/authzserver/load/cache"
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
@@ -20,10 +20,10 @@ func installController(g *gin.Engine) *gin.Engine {
 		core.WriteResponse(c, errors.WithCode(code.ErrPageNotFound, "page not found."), nil)
 	})
 
-	storeIns, _ := store.GetStoreInsOr(nil)
+	cacheIns, _ := cache.GetCacheInsOr(nil)
 	apiv1 := g.Group("/v1", auth.AuthFunc())
 	{
-		authzController := authorize.NewAuthzController(storeIns)
+		authzController := authorize.NewAuthzController(cacheIns)
 
 		// Router for authorization
 		apiv1.POST("/authz", authzController.Authorize)

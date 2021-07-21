@@ -24,6 +24,8 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jinzhu/now v1.1.2
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/klauspost/compress v1.11.0 // indirect
+	github.com/lib/pq v1.9.0 // indirect
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
 	github.com/marmotedu/api v1.0.1
 	github.com/marmotedu/component-base v1.0.0
@@ -36,6 +38,8 @@ require (
 	github.com/novalagung/gubrak v1.0.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/olivere/elastic/v7 v7.0.26
+	github.com/onsi/ginkgo v1.16.1 // indirect
+	github.com/onsi/gomega v1.11.0 // indirect
 	github.com/ory/ladon v1.2.0
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/prometheus/client_golang v1.11.0

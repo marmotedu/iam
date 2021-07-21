@@ -7,7 +7,7 @@ package authzserver
 import (
 	"github.com/marmotedu/errors"
 
-	"github.com/marmotedu/iam/internal/authzserver/store"
+	"github.com/marmotedu/iam/internal/authzserver/load/cache"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 )
@@ -18,9 +18,9 @@ func newCacheAuth() middleware.AuthStrategy {
 
 func getSecretFunc() func(string) (auth.Secret, error) {
 	return func(kid string) (auth.Secret, error) {
-		cli, err := store.GetStoreInsOr(nil)
+		cli, err := cache.GetCacheInsOr(nil)
 		if err != nil {
-			return auth.Secret{}, errors.Wrap(err, "get store instance failed")
+			return auth.Secret{}, errors.Wrap(err, "get cache instance failed")
 		}
 
 		secret, err := cli.GetSecret(kid)
