@@ -306,6 +306,7 @@ linters-settings:
         - golang.org
         - github.com
         - go.uber.org
+        - go.etcd.io
     blocked:
       modules:
         - github.com/pkg/errors:
