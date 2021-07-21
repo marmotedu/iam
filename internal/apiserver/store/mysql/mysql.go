@@ -59,9 +59,6 @@ func GetMySQLFactoryOr(opts *genericoptions.MySQLOptions) (store.Factory, error)
 
 	var err error
 	var dbIns *gorm.DB
-	if err != nil {
-		return nil, err
-	}
 	once.Do(func() {
 		options := &db.Options{
 			Host:                  opts.Host,
