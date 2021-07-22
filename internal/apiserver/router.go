@@ -23,13 +23,13 @@ import (
 
 func initRouter(g *gin.Engine) {
 	installMiddleware(g)
-	installAPI(g)
+	installController(g)
 }
 
 func installMiddleware(g *gin.Engine) {
 }
 
-func installAPI(g *gin.Engine) *gin.Engine {
+func installController(g *gin.Engine) *gin.Engine {
 	// Middlewares.
 	jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
 	g.POST("/login", jwtStrategy.LoginHandler)

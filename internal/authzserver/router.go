@@ -14,6 +14,14 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/code"
 )
 
+func initRouter(g *gin.Engine) {
+	installMiddleware(g)
+	installController(g)
+}
+
+func installMiddleware(g *gin.Engine) {
+}
+
 func installController(g *gin.Engine) *gin.Engine {
 	auth := newCacheAuth()
 	g.NoRoute(auth.AuthFunc(), func(c *gin.Context) {
