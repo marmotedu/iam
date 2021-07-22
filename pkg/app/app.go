@@ -170,8 +170,6 @@ func NewApp(name string, basename string, opts ...Option) *App {
 }
 
 func (a *App) buildCommand() {
-	cliflag.InitFlags()
-
 	cmd := cobra.Command{
 		Use:   FormatBaseName(a.basename),
 		Short: a.name,
@@ -185,6 +183,8 @@ func (a *App) buildCommand() {
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
+	cliflag.InitFlags(cmd.Flags())
+
 	if len(a.commands) > 0 {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
