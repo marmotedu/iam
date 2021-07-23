@@ -12,7 +12,7 @@ IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
 # 安装后打印必要的信息
 function iam::mongodb::info() {
 cat << EOF
-MongoDB Login: mongo mongodb://${MONGO_USERNAME}:'${MONGO_PASSWORD}'@${MONGO_HOST}:${MONGO_PORT}/tyk_analytics?authSource=iam_analytics
+MongoDB Login: mongo mongodb://${MONGO_USERNAME}:'${MONGO_PASSWORD}'@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=iam_analytics
 EOF
 }
 
@@ -52,7 +52,7 @@ db.auth("${MONGO_ADMIN_USERNAME}", "${MONGO_ADMIN_PASSWORD}")
 EOF
 
 	# 6. 创建 ${MONGO_USERNAME} 用户
-	mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/tyk_analytics?authSource=admin << EOF
+	mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin << EOF
 use iam_analytics
 db.createUser({user:"${MONGO_USERNAME}",pwd:"${MONGO_PASSWORD}",roles:["dbOwner"]})
 db.auth("${MONGO_USERNAME}", "${MONGO_PASSWORD}")
@@ -94,13 +94,13 @@ function iam::mongodb::status()
   }
 
 	echo "show dbs" | \
-		mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/tyk_analytics?authSource=admin &>/dev/null || {
+		mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin &>/dev/null || {
     iam::log::error "can not login with ${MONGO_ADMIN_USERNAME}, mongo maybe not initialized properly"
     return 1
   }
 
 	echo "show dbs" | \
-		mongo --quiet mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/tyk_analytics?authSource=iam_analytics &>/dev/null|| {
+		mongo --quiet mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=iam_analytics &>/dev/null|| {
     iam::log::error "can not login with ${MONGO_USERNAME}, mongo maybe not initialized properly"
     return 1
   }
