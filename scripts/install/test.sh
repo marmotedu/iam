@@ -68,17 +68,17 @@ iam::test::secret()
     -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo 
 
   # 3. 列出所有密钥
-  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets
+  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets; echo
 
   # 4. 获取secret0密钥的详细信息
-  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0
+  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo
 
   # 5. 修改secret0密钥
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0 \
-    -d'{"expires":0,"description":"admin secret(modified)"}'
+    -d'{"expires":0,"description":"admin secret(modified)"}'; echo
 
   # 6. 删除secret0密钥
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo
   iam::log::info "$(echo -e '\033[32mcongratulations, /v1/secret test passed!\033[0m')"
 }
 
@@ -87,24 +87,24 @@ iam::test::policy()
   token="-HAuthorization: Bearer $(iam::test::login)"
 
   # 1. 如果有policy0策略先清空
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
 
   # 2. 创建policy0策略
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/policies \
-    -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'
+    -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 3. 列出所有策略
-  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies
+  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies; echo
 
   # 4. 获取policy0策略的详细信息
-  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0
+  ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
 
   # 5. 修改policy0策略
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0 \
-    -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'
+    -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 6. 删除policy0策略
-  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0
+  ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
   iam::log::info "$(echo -e '\033[32mcongratulations, /v1/policy test passed!\033[0m')"
 }
 
