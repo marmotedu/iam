@@ -1,0 +1,144 @@
+# Default values for iam.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+apiServer:
+  name: iam-apiserver
+  image:
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-apiserver-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  insecure:
+    bindPort: 8080
+  service:
+    http:
+      nodePort: 30080 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
+      port: 8080 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 8080 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+    https:
+      nodePort: 30443
+      port: 8443
+      targetPort: 8443
+    rpc:
+      nodePort: 30081
+      port: 8081
+      targetPort: 8081
+
+authzServer:
+  name: iam-authz-server
+  image:
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-authz-server-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  insecure:
+    bindPort: 9090
+  service:
+    http:
+      nodePort: 31090 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
+      port: 9090 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 9090 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+    https:
+      nodePort: 31443
+      port: 9443
+      targetPort: 9443
+pump:
+  name: iam-pump
+  image:
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-pump-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  healthPort: 7070
+  service:
+    http:
+      nodePort: 30070 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
+      port: 7070 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 7070 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+
+image:
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 500Mi
+
+livenessProbe:
+  failureThreshold: 1
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+readinessProbe:
+  failureThreshold: 1
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+startupProbe:
+  failureThreshold: 10
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

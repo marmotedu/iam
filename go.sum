@@ -680,8 +680,9 @@ github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2/go.mod h1:Ld9puTsI
 github.com/markbates/safe v1.0.1/go.mod h1:nAqgmRi7cY2nqMc92/bSEeQA+R4OheNU2T1kNSCBdG0=
 github.com/marmotedu/api v1.0.1 h1:3ke2YJxhJgujgRoOfaM5AIf7wfX25SpLphghEvxMx0k=
 github.com/marmotedu/api v1.0.1/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
-github.com/marmotedu/component-base v1.0.0 h1:Whd4lW3XlfDhLvF46drvLb+r8rBXGKep5LL1O5qZGRU=
 github.com/marmotedu/component-base v1.0.0/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
+github.com/marmotedu/component-base v1.0.1 h1:pkGSOz8thxEGduRjHv/EO50skKviyCPDbOfGH2e/d7M=
+github.com/marmotedu/component-base v1.0.1/go.mod h1:YqFsxJS6hQvN7YKRRz4cDnt5h3DbikuAfs7dYMRuWg8=
 github.com/marmotedu/errors v0.0.1/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
 github.com/marmotedu/errors v1.0.2 h1:qx9GtOljmAL+wLuemahe3WSWdXyEpJvLBlpXK8y2rdI=
 github.com/marmotedu/errors v1.0.2/go.mod h1:xNqbJJRD50/RGSjbfqF01CTLegWK+gtRgeJ6ExVzQQ8=
