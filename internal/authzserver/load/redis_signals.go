@@ -9,7 +9,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"time"
 
 	redis "github.com/go-redis/redis/v7"
 	"github.com/marmotedu/component-base/pkg/json"
@@ -41,25 +40,6 @@ func (n *Notification) Sign() {
 	n.SignatureAlgo = crypto.SHA256
 	hash := sha256.Sum256([]byte(string(n.Command) + n.Payload))
 	n.Signature = hex.EncodeToString(hash[:])
-}
-
-func startPubSubLoop() {
-	cacheStore := storage.RedisCluster{}
-	cacheStore.Connect()
-	// On message, synchronize
-	for {
-		err := cacheStore.StartPubSubHandler(RedisPubSubChannel, func(v interface{}) {
-			handleRedisEvent(v, nil, nil)
-		})
-		if err != nil {
-			if !errors.Is(err, storage.ErrRedisIsDown) {
-				log.Errorf("Connection to Redis failed, reconnect in 10s: %s", err.Error())
-			}
-
-			time.Sleep(10 * time.Second)
-			log.Warnf("Reconnecting: %s", err.Error())
-		}
-	}
 }
 
 func handleRedisEvent(v interface{}, handled func(NotificationCommand), reloaded func()) {

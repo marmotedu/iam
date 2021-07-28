@@ -6,10 +6,12 @@ package load
 
 import (
 	"context"
+	"errors"
 	"sync"
 	"time"
 
 	"github.com/marmotedu/iam/pkg/log"
+	"github.com/marmotedu/iam/pkg/storage"
 )
 
 // Loader defines function to reload storage.
@@ -36,11 +38,30 @@ func NewLoader(ctx context.Context, loader Loader) *Load {
 // Start start a loop service.
 func (l *Load) Start() {
 	go startPubSubLoop()
+	go l.reloadQueueLoop()
 	// 1s is the minimum amount of time between hot reloads. The
 	// interval counts from the start of one reload to the next.
 	go l.reloadLoop()
-	go l.reloadQueueLoop()
 	l.DoReload()
+}
+
+func startPubSubLoop() {
+	cacheStore := storage.RedisCluster{}
+	cacheStore.Connect()
+	// On message, synchronize
+	for {
+		err := cacheStore.StartPubSubHandler(RedisPubSubChannel, func(v interface{}) {
+			handleRedisEvent(v, nil, nil)
+		})
+		if err != nil {
+			if !errors.Is(err, storage.ErrRedisIsDown) {
+				log.Errorf("Connection to Redis failed, reconnect in 10s: %s", err.Error())
+			}
+
+			time.Sleep(10 * time.Second)
+			log.Warnf("Reconnecting: %s", err.Error())
+		}
+	}
 }
 
 // shouldReload returns true if we should perform any reload. Reloads happens if
