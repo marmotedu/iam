@@ -52,9 +52,7 @@ func installController(g *gin.Engine) *gin.Engine {
 			userController := user.NewUserController(storeIns)
 
 			userv1.POST("", userController.Create)
-
-			v1.Use(auto.AuthFunc())
-			userv1.Use(middleware.Validation())
+			userv1.Use(auto.AuthFunc(), middleware.Validation())
 			// v1.PUT("/find_password", userController.FindPassword)
 			userv1.DELETE("", userController.DeleteCollection) // admin api
 			userv1.DELETE(":name", userController.Delete)      // admin api
@@ -63,6 +61,8 @@ func installController(g *gin.Engine) *gin.Engine {
 			userv1.GET("", userController.List)
 			userv1.GET(":name", userController.Get) // admin api
 		}
+
+		v1.Use(auto.AuthFunc())
 
 		// policy RESTful resource
 		policyv1 := v1.Group("/policies", middleware.Publish())
