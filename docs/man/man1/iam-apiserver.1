@@ -26,6 +26,10 @@ Find more iam\-apiserver information at:
 
 .SH OPTIONS
 .PP
+\fB\-\-alsologtostderr\fP=false
+	log to standard error as well as files
+
+.PP
 \fB\-c\fP, \fB\-\-config\fP=""
 	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
 
@@ -74,6 +78,14 @@ Find more iam\-apiserver information at:
 	JWT token timeout.
 
 .PP
+\fB\-\-log\-backtrace\-at\fP=:0
+	when logging hits line file:N, emit a stack trace
+
+.PP
+\fB\-\-log\-dir\fP=""
+	If non\-empty, write log files in this directory
+
+.PP
 \fB\-\-log.development\fP=false
 	Development puts the logger in development mode, which changes the behavior of DPanicLevel and takes stacktraces more liberally.
 
@@ -108,6 +120,10 @@ Find more iam\-apiserver information at:
 .PP
 \fB\-\-log.output\-paths\fP=[stdout]
 	Output paths of log.
+
+.PP
+\fB\-\-logtostderr\fP=false
+	log to standard error instead of files
 
 .PP
 \fB\-\-mysql.database\fP=""
@@ -230,8 +246,20 @@ Find more iam\-apiserver information at:
 	Start the server in a specified server mode. Supported server mode: debug, test, release.
 
 .PP
+\fB\-\-stderrthreshold\fP=2
+	logs at or above this threshold go to stderr
+
+.PP
+\fB\-v\fP, \fB\-\-v\fP=0
+	log level for V logs
+
+.PP
 \fB\-\-version\fP=false
 	Print version information and quit.
+
+.PP
+\fB\-\-vmodule\fP=
+	comma\-separated list of pattern=N settings for file\-filtered logging
 
 
 .SH HISTORY

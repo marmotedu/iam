@@ -29,6 +29,10 @@ Find more ladon information at:
 
 .SH OPTIONS
 .PP
+\fB\-\-alsologtostderr\fP=false
+	log to standard error as well as files
+
+.PP
 \fB\-\-analytics.enable\fP=true
 	This sets the iam\-authz\-server to record analytics data.
 
@@ -73,6 +77,14 @@ Find more ladon information at:
 	The port on which to serve unsecured, unauthenticated access. It is assumed that firewall rules are set up such that this port is not reachable from outside of the deployed machine and that port 443 on the iam public address is proxied to this port. This is performed by nginx in the default setup. Set to zero to disable.
 
 .PP
+\fB\-\-log\-backtrace\-at\fP=:0
+	when logging hits line file:N, emit a stack trace
+
+.PP
+\fB\-\-log\-dir\fP=""
+	If non\-empty, write log files in this directory
+
+.PP
 \fB\-\-log.development\fP=false
 	Development puts the logger in development mode, which changes the behavior of DPanicLevel and takes stacktraces more liberally.
 
@@ -107,6 +119,10 @@ Find more ladon information at:
 .PP
 \fB\-\-log.output\-paths\fP=[stdout]
 	Output paths of log.
+
+.PP
+\fB\-\-logtostderr\fP=false
+	log to standard error instead of files
 
 .PP
 \fB\-\-redis.addrs\fP=[]
@@ -201,8 +217,20 @@ Find more ladon information at:
 	Start the server in a specified server mode. Supported server mode: debug, test, release.
 
 .PP
+\fB\-\-stderrthreshold\fP=2
+	logs at or above this threshold go to stderr
+
+.PP
+\fB\-v\fP, \fB\-\-v\fP=0
+	log level for V logs
+
+.PP
 \fB\-\-version\fP=false
 	Print version information and quit.
+
+.PP
+\fB\-\-vmodule\fP=
+	comma\-separated list of pattern=N settings for file\-filtered logging
 
 
 .SH HISTORY
