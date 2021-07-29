@@ -225,7 +225,7 @@ iam::util::gen-docs() {
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-apiserver"
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-authz-server"
   "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iam-pump"
-  "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/" "iamctl"
+  "${geniamdocs}" "${dest}/docs/guide/en-US/cmd/iamctl" "iamctl"
 
   mkdir -p "${dest}/docs/man/man1/"
   "${genman}" "${dest}/docs/man/man1/" "iam-apiserver"
