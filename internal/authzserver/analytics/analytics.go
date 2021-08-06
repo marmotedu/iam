@@ -94,9 +94,6 @@ func (r *Analytics) Start() {
 		r.poolWg.Add(1)
 		go r.recordWorker()
 	}
-
-	// stop analytics workers
-	go r.Stop()
 }
 
 // Stop stop the analytics service.
