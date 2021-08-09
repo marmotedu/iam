@@ -19,7 +19,7 @@ func newCacheAuth() middleware.AuthStrategy {
 func getSecretFunc() func(string) (auth.Secret, error) {
 	return func(kid string) (auth.Secret, error) {
 		cli, err := cache.GetCacheInsOr(nil)
-		if err != nil {
+		if err != nil || cli == nil {
 			return auth.Secret{}, errors.Wrap(err, "get cache instance failed")
 		}
 

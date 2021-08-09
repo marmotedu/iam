@@ -12,6 +12,7 @@ import (
 	"github.com/marmotedu/iam/internal/authzserver/controller/v1/authorize"
 	"github.com/marmotedu/iam/internal/authzserver/load/cache"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	"github.com/marmotedu/iam/pkg/log"
 )
 
 func initRouter(g *gin.Engine) {
@@ -29,6 +30,10 @@ func installController(g *gin.Engine) *gin.Engine {
 	})
 
 	cacheIns, _ := cache.GetCacheInsOr(nil)
+	if cacheIns == nil {
+		log.Panicf("get nil cache instance")
+	}
+
 	apiv1 := g.Group("/v1", auth.AuthFunc())
 	{
 		authzController := authorize.NewAuthzController(cacheIns)
