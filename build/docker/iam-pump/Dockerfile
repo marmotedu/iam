@@ -5,10 +5,12 @@
 FROM BASE_IMAGE
 MAINTAINER Lingfei Kong <colin404@foxmail.com>
 
+WORKDIR /opt/iam
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime     
 RUN echo "Asia/Shanghai" > /etc/timezone 
 
-WORKDIR /opt/iam
 COPY iam-pump /opt/iam/bin/
 
 ENTRYPOINT ["/opt/iam/bin/iam-pump"]
+CMD ["-c", "/etc/iam/iam-pump.yaml"]
