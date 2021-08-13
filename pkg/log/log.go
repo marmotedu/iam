@@ -215,6 +215,7 @@ func Init(opts *Options) {
 	mu.Lock()
 	defer mu.Unlock()
 	std = New(opts)
+	zap.RedirectStdLog(std.zapLogger)
 }
 
 // New create logger by opts which can custmoized by command arguments.
@@ -275,7 +276,6 @@ func New(opts *Options) *zapLogger {
 		},
 	}
 	klog.InitLogger(l)
-	zap.RedirectStdLog(l)
 
 	return logger
 }
