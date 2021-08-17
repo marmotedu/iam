@@ -183,7 +183,7 @@ func (a *App) buildCommand() {
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
-	cliflag.InitFlags(cmd.Flags())
+	cliflag.InitFlags()
 
 	if len(a.commands) > 0 {
 		for _, command := range a.commands {
