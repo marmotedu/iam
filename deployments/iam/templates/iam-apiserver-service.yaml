@@ -22,4 +22,4 @@ spec:
   selector:
     app: {{ .Values.apiServer.name }}
   sessionAffinity: None
-  type: NodePort
+  type: {{ .Values.serviceType }}

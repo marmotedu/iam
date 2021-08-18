@@ -59,6 +59,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 	ticker := time.NewTicker(time.Duration(s.secInterval) * time.Second)
 	defer ticker.Stop()
 
+	log.Info("Now run loop to clean data from redis")
 	for {
 		select {
 		case <-ticker.C:

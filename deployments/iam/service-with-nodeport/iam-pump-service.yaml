@@ -16,4 +16,4 @@ spec:
   selector:
     app: {{ .Values.pump.name }}
   sessionAffinity: None
-  type: {{ .Values.serviceType }}
+  type: NodePort

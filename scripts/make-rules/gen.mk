@@ -51,6 +51,10 @@ gen.docgo.check: gen.docgo.doc
 gen.docgo.add:
 	@git ls-files --others '*/doc.go' | $(XARGS) -- git add
 
+.PHONY: gen.defaultconfigs
+gen.defaultconfigs:
+	@${ROOT_DIR}/scripts/gen_default_config.sh
+
 .PHONY: gen.clean
 gen.clean:
 	@rm -rf ./api/client/{clientset,informers,listers}

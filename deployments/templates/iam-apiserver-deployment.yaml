@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: iam-apiserver # 资源标签
+  name: iam-apiserver # 资源名称
+spec:
+  replicas: 1 # 副本数
+  progressDeadlineSeconds: 10
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: iam-apiserver
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: iam-apiserver
+    spec:
+      imagePullSecrets:
+        - name: ccr-registry
+      securityContext:
+        {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - iam-apiserver
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - command:
+        - /opt/iam/bin/iam-apiserver
+        - --config=/etc/iam/iam-apiserver.yaml
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.0.10"
+        name: iam-apiserver
+        ports:
+        - containerPort: 8443
+          name: secure
+          protocol: TCP
+        - containerPort: 8080
+          name: insecure
+          protocol: TCP
+        - containerPort: 8081
+          name: rpc 
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 1
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 1
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          failureThreshold: 10
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+            limits:
+              cpu: 250m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+        imagePullPolicy: Always
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/iam/iam-apiserver.yaml
+          name: iam
+          subPath: iam-apiserver.yaml
+        - mountPath: /etc/iam/cert
+          name: iam-cert
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+            {}
+      terminationGracePeriodSeconds: 5
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: iam-apiserver.yaml
+            path: iam-apiserver.yaml
+          name: iam
+        name: iam
+      - configMap:
+          defaultMode: 420
+          name: iam-cert
+        name: iam-cert

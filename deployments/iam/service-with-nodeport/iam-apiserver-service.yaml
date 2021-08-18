@@ -6,17 +6,20 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ .Values.authzServer.name }}
-  name: {{ .Values.authzServer.name }}
+    app: {{ .Values.apiServer.name }}
+  name: {{ .Values.apiServer.name }}
 spec:
   ports:
   - name: https
     protocol: TCP
-    {{- toYaml .Values.authzServer.service.https| nindent 4 }}
+    {{- toYaml .Values.apiServer.service.https| nindent 4 }}
   - name: http
     protocol: TCP
-    {{- toYaml .Values.authzServer.service.http| nindent 4 }}
+    {{- toYaml .Values.apiServer.service.http| nindent 4 }}
+  - name: rpc
+    protocol: TCP
+    {{- toYaml .Values.apiServer.service.rpc| nindent 4 }}
   selector:
-    app: {{ .Values.authzServer.name }}
+    app: {{ .Values.apiServer.name }}
   sessionAffinity: None
-  type: {{ .Values.serviceType }}
+  type: NodePort

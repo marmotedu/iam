@@ -11,53 +11,59 @@ replicaCount: 1
 apiServer:
   name: iam-apiserver
   image:
-    repository: ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-apiserver-amd64
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v1.0.10"
   insecure:
     bindPort: 8080
   service:
     http:
+      nodePort: 30080 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
       port: 8080 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
       targetPort: 8080 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
     https:
+      nodePort: 30443
       port: 8443
       targetPort: 8443
     rpc:
+      nodePort: 30081
       port: 8081
       targetPort: 8081
 
 authzServer:
   name: iam-authz-server
   image:
-    repository: ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-authz-server-amd64
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v1.0.10"
   insecure:
     bindPort: 9090
   service:
     http:
+      nodePort: 31090 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
       port: 9090 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
       targetPort: 9090 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
     https:
+      nodePort: 31443
       port: 9443
       targetPort: 9443
 pump:
   name: iam-pump
   image:
-    repository: ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-pump-amd64
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v1.0.10"
   healthPort: 7070
   service:
     http:
+      nodePort: 30070 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
       port: 7070 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
       targetPort: 7070 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
 
 iamctl:
   name: iamctl
   image:
-    repository: ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64
+    repository: ccr.ccs.tencentyun.com/lkccc/iamctl-amd64
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v1.0.10"
 
@@ -108,7 +114,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-serviceType: ClusterIP
+serviceType: NodePort
 
 resources: 
   limits:

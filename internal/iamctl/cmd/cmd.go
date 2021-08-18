@@ -75,7 +75,7 @@ func NewIAMCtlCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 
 	_ = viper.BindPFlags(cmds.PersistentFlags())
 	cobra.OnInitialize(func() {
-		genericapiserver.LoadConfig(viper.GetString(genericclioptions.FlagIAMConfig), "config")
+		genericapiserver.LoadConfig(viper.GetString(genericclioptions.FlagIAMConfig), "iamctl")
 	})
 	cmds.PersistentFlags().AddGoFlagSet(flag.CommandLine)
 

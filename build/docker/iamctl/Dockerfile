@@ -5,13 +5,12 @@
 FROM BASE_IMAGE
 MAINTAINER Lingfei Kong <colin404@foxmail.com>
 
-WORKDIR /opt/iam
+WORKDIR /opt/iam/scripts/install
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-      echo "Asia/Shanghai" > /etc/timezone && \
-      mkdir -p /var/log/iam
+      echo "Asia/Shanghai" > /etc/timezone
 
-COPY iam-apiserver /opt/iam/bin/
+COPY iamctl /usr/bin/
+COPY scripts /opt/iam/scripts
 
-ENTRYPOINT ["/opt/iam/bin/iam-apiserver"]
-CMD ["-c", "/etc/iam/iam-apiserver.yaml"]
+ENTRYPOINT ["sleep", "3600"]

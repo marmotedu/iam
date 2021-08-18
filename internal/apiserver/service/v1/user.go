@@ -39,7 +39,7 @@ func newUsers(srv *service) *userService {
 	return &userService{store: srv.store}
 }
 
-// ListUser returns user list in the storage. This function has a good performance.
+// List returns user list in the storage. This function has a good performance.
 func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {

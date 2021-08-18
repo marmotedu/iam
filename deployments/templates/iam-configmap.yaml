@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iam
+data:
+  iam-: ""
+  iam-apiserver.yaml: |
+    # Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+    # Use of this source code is governed by a MIT style
+    # license that can be found in the LICENSE file.
+  
+    # iam-apiserver 全配置
+  
+    # RESTful 服务配置
+    server:
+        mode: debug # server mode: release, debug, test，默认 release
+        healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
+        middlewares: recovery,logger,secure,nocache,cors,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
+        max-ping-count: 3 # http 服务启动后，自检尝试次数，默认 3
+  
+    # GRPC 服务配置
+    grpc:
+      bind-address: 0.0.0.0 # grpc 安全模式的 IP 地址，默认 0.0.0.0
+      bind-port: 8081 # grpc 安全模式的端口号，默认 8081
+  
+    # HTTP 配置
+    insecure:
+        bind-address: 0.0.0.0 # 绑定的不安全 IP 地址，设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
+        bind-port: 8080 # 提供非安全认证的监听端口，默认为 8080
+  
+    # HTTPS 配置
+    secure:
+        bind-address: 0.0.0.0 # HTTPS 安全模式的 IP 地址，默认为 0.0.0.0
+        bind-port: 8443 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
+        tls:
+            #cert-dir: .iam/cert # TLS 证书所在的目录，默认值为 /var/run/iam
+            #pair-name: iam # TLS 私钥对名称，默认 iam
+            cert-key:
+                cert-file: /etc/iam/cert/iam-apiserver.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+                private-key-file: /etc/iam/cert/iam-apiserver-key.pem # TLS 私钥
+  
+    # MySQL 数据库相关配置
+    mysql:
+      host: 127.0.0.1:3306 # MySQL 机器 ip 和端口，默认 127.0.0.1:3306
+      username: iam # MySQL 用户名(建议授权最小权限集)
+      password: iam59!z$ # MySQL 用户密码
+      database: iam # iam 系统所用的数据库名
+      max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
+      max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
+      max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
+      log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+  
+    # Redis 配置
+    redis:
+      host: 127.0.0.1 # redis 地址，默认 127.0.0.1:6379
+      port: 6379 # redis 端口，默认 6379
+      password: iam59!z$ # redis 密码
+      #addrs:
+      #master-name: # redis 集群 master 名称
+      #username: # redis 登陆用户名
+      #database: # redis 数据库
+      #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
+      #optimisation-max-active: # 最大活跃连接数
+      #timeout: # 连接 redis 时的超时时间
+      #enable-cluster: # 是否开启集群模式
+      #use-ssl: # 是否启用 TLS
+      #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
+  
+    # JWT 配置
+    jwt:
+      realm: JWT # jwt 标识
+      key: dfVpOK8LZeJLZHYmHdb1VdyRrACKpqoo # 服务端密钥
+      timeout: 24h # token 过期时间(小时)
+      max-refresh: 24h # token 更新时间(小时)
+  
+    log:
+        name: apiserver # Logger的名字
+        development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
+        level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
+        format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
+        enable-color: true # 是否开启颜色输出，true:是，false:否
+        disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
+        disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息
+        output-paths: /var/log/iam/iam-apiserver.log,stdout # 支持输出到多个输出，逗号分开。支持输出到标准输出（stdout）和文件。
+        error-output-paths: /var/log/iam/iam-apiserver.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
+  
+    feature:
+      enable-metrics: true # 开启 metrics, router:  /metrics
+      profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
+  iam-authz-server.yaml: |
+    # Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+    # Use of this source code is governed by a MIT style
+    # license that can be found in the LICENSE file.
+  
+    # iam-authz-server 全配置
+  
+    # IAM rpc 服务地址
+    rpcserver: 127.0.0.1:8081 # iam-apiserver grpc 服务器地址和端口
+  
+    # TLS客户端证书文件
+    client-ca-file: /etc/iam/cert/ca.pem # TLS 客户端证书，如果指定，则该客户端证书将被用于认证
+  
+    # RESTful 服务配置
+    server:
+        mode: debug # server mode: release, debug, test，默认release
+        healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
+        middlewares: recovery,logger,secure,nocache,cors,dump # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
+  
+    # HTTP 配置
+    insecure:
+        bind-address: 0.0.0.0 # 绑定的不安全 IP 地址，设置为 0.0.0.0 表示使用全部网络接口，默认为 127.0.0.1
+        bind-port: 9090 # 提供非安全认证的监听端口，默认为 8080
+  
+    # HTTPS 配置
+    secure:
+        bind-address: 0.0.0.0 # HTTPS 安全模式的 IP 地址，默认为 0.0.0.0
+        bind-port: 9443 # 使用 HTTPS 安全模式的端口号，设置为 0 表示不启用 HTTPS，默认为 8443
+        tls:
+            #cert-dir: .iam/cert # TLS 证书所在的目录，默认值为 /var/run/iam
+            #pair-name: iam # TLS 私钥对名称，默认 iam
+            cert-key:
+                cert-file: /etc/iam/cert/iam-authz-server.pem # 包含 x509 证书的文件路径，用 HTTPS 认证
+                private-key-file: /etc/iam/cert/iam-authz-server-key.pem # TLS 私钥
+  
+    # Redis 配置
+    redis:
+      host: 127.0.0.1 # redis 地址，默认 127.0.0.1:6379
+      port: 6379 # redis 端口，默认 6379
+      password: iam59!z$ # redis 密码
+      database: 0 # redis 数据库
+      #addrs:
+      #master-name: # redis 集群 master 名称
+      #username: # redis 登陆用户名
+      #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
+      #optimisation-max-active: # 最大活跃连接数
+      #timeout: # 连接 redis 时的超时时间
+      #enable-cluster: # 是否开启集群模式
+      #use-ssl: # 是否启用 TLS
+      #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
+  
+    log:
+        name: authzserver # Logger的名字
+        development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
+        level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
+        format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
+        enable-color: true # 是否开启颜色输出，true:是，false:否
+        disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
+        disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息
+        output-paths: /var/log/iam/iam-authz-server.log,stdout # 多个输出，逗号分开。stdout：标准输出，
+        error-output-paths: /var/log/iam/iam-authz-server.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
+  
+    analytics:
+        enable: true # 设置为 true 后 iam-authz-server 会记录授权审计日志
+        pool-size: 50 # 指定 worker 的个数，默认 50
+        records-buffer-size:  2000 # 缓存的授权日志消息数
+        flush-interval: 200 # 超时投递时间，单位：毫秒，0 < flush-interval <= 1000。
+        enable-detailed-recording: true # 开启记录详情，详细记录的功能
+        storage-expiration-time: 24h0m0s # key 过期时间
+  
+    feature:
+      enable-metrics: true # 开启 metrics, router:  /metrics
+      profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
+  iam-pump.yaml: |
+    # Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+    # Use of this source code is governed by a MIT style
+    # license that can be found in the LICENSE file.
+  
+    purge-delay: 10 # 审计日志清理时间间隔，默认 10s
+    health-check-path: healthz # 健康检查路由，默认为 /healthz
+    health-check-address: 0.0.0.0:7070 # 健康检查绑定端口，默认为 0.0.0.0:7070
+    omit-detailed-recording: true # 设置为 true 会记录详细的授权审计日志，默认为 false
+  
+    # Redis 配置
+    redis:
+      host: 127.0.0.1 # redis 地址，默认 127.0.0.1:6379
+      port: 6379 # redis 端口，默认 6379
+      password: iam59!z$ # redis 密码
+      database: 0 # redis 数据库
+      optimisation-max-idle: 100  # redis 连接池中的最大空闲连接数
+      optimisation-max-active: 0 # 最大活跃连接数
+      enable-cluster: false # 是否开启集群模式
+      #addrs:
+      #master-name: # redis 集群 master 名称
+      #username: # redis 登陆用户名
+      #timeout: # 连接 redis 时的超时时间
+      #use-ssl: # 是否启用 TLS
+      #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
+  
+    # pump 配置
+    pumps:
+      mongo:
+        type: mongo # pump 类型
+        meta:
+          collection_name: iam_analytics # mongodb collection name
+          mongo_url: mongodb://iam:iam59!z$@127.0.0.1:27017/iam_analytics?authSource=iam_analytics # mongodb url
+          collection_cap_max_size_bytes: 1048576 # 设置最大的capped collection
+          collection_cap_enable: true
+  
+    log:
+        name: apiserver # Logger的名字
+        development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
+        level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
+        format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
+        enable-color: true # 是否开启颜色输出，true:是，false:否
+        disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
+        disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息
+        output-paths: /var/log/iam/iam-pump.log,stdout # 多个输出，逗号分开。stdout：标准输出，
+        error-output-paths: /var/log/iam/iam-pump.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
+  iamctl.yaml: |
+    apiVersion: v1
+    user:
+      #token: # JWT Token
+      username: admin # iam 用户名
+      password: Admin@2021 # iam 密码
+      #secret-id: # 密钥 ID
+      #secret-key: # 密钥 Key
+      client-certificate: /home/colin/.iam/cert/admin.pem # 用于 TLS 的客户端证书文件路径
+      client-key: /home/colin/.iam/cert/admin-key.pem # 用于 TLS 的客户端 key 文件路径
+      #client-certificate-data:
+      #client-key-data:
+  
+    server:
+      address: 127.0.0.1:8443 # iam api-server 地址
+      timeout: 10s # 请求 api-server 超时时间
+      #max-retries: # 最大重试次数，默认为 0
+      #retry-interval: # 重试间隔，默认为 1s
+      #tls-server-name: # TLS 服务器名称
+      #insecure-skip-tls-verify: # 设置为 true 表示跳过 TLS 安全验证模式，将使得 HTTPS 连接不安全
+      certificate-authority: /etc/iam/cert/ca.pem # 用于 CA 授权的 cert 文件路径
+      #certificate-authority-data:
+---
