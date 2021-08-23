@@ -31,7 +31,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Run go modules Tidy
+      - name: Run go modules tidy
         run: |
           make tidy
 
@@ -50,10 +50,6 @@ jobs:
       - name: Build source code for host platform
         run: |
           make build
-
-      - name: Build docker images for host arch and push images to registry
-        run: |
-          make push
 
       - name: Collect Test Coverage File
         uses: actions/upload-artifact@v1.0.0
