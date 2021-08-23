@@ -1,0 +1,153 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+# Default values for iam.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+apiServer:
+  name: iam-apiserver
+  image:
+    repository: ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.0.10"
+  insecure:
+    bindPort: 8080
+  service:
+    http:
+      port: 8080 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 8080 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+    https:
+      port: 8443
+      targetPort: 8443
+    rpc:
+      port: 8081
+      targetPort: 8081
+
+authzServer:
+  name: iam-authz-server
+  image:
+    repository: ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.0.10"
+  insecure:
+    bindPort: 9090
+  service:
+    http:
+      port: 9090 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 9090 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+    https:
+      port: 9443
+      targetPort: 9443
+pump:
+  name: iam-pump
+  image:
+    repository: ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.0.10"
+  healthPort: 7070
+  service:
+    http:
+      port: 7070 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 7070 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+
+iamctl:
+  name: iamctl
+  image:
+    repository: ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.0.10"
+
+image:
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: "ccr-registry"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+serviceType: ClusterIP
+
+resources: 
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+livenessProbe:
+  failureThreshold: 1
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+readinessProbe:
+  failureThreshold: 1
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+startupProbe:
+  failureThreshold: 10
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
