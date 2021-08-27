@@ -98,7 +98,7 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 12 }}
+        {{- toYaml .Values.securityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:
