@@ -104,3 +104,7 @@ install.rts:
 .PHONY: install.codegen
 install.codegen:
 	@$(GO) install ${ROOT_DIR}/tools/codegen/codegen.go
+
+.PHONY: install.kube-score
+install.kube-score:
+	@$(GO) get github.com/zegl/kube-score/cmd/kube-score
