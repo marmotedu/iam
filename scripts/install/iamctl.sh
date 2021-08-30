@@ -40,6 +40,7 @@ function iam::iamctl::install()
   # 3.  生成并安装iamctl的配置文件（config）
   mkdir -p $HOME/.iam
   ./scripts/genconfig.sh ${ENV_FILE} configs/iamctl.yaml > $HOME/.iam/config
+  cp $HOME/.iam/config $HOME/.iam/iamctl
   iam::iamctl::status || return 1
   iam::iamctl::info
 
