@@ -28,7 +28,7 @@ type Options struct {
 
 // New create a new gorm db instance with the given options.
 func New(opts *Options) (*gorm.DB, error) {
-	dns := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
+	dsn := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s`,
 		opts.Username,
 		opts.Password,
 		opts.Host,
@@ -36,7 +36,7 @@ func New(opts *Options) (*gorm.DB, error) {
 		true,
 		"Local")
 
-	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.New(opts.LogLevel),
 	})
 	if err != nil {

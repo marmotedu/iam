@@ -113,10 +113,10 @@ func (o *DBOptions) Run() error {
 		return err
 	}
 
-	dns := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
 		o.username, o.password, o.host, o.Database, true, "Local")
 
-	db, err := gorm.Open("mysql", dns)
+	db, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		return err
 	}
@@ -151,9 +151,9 @@ func (o *DBOptions) Run() error {
 }
 
 func (o *DBOptions) ensureSchema() error {
-	dns := fmt.Sprintf("%s:%s@tcp(%s)/?charset=utf8", o.username, o.password, o.host)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/?charset=utf8", o.username, o.password, o.host)
 
-	db, err := gorm.Open("mysql", dns)
+	db, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		return err
 	}

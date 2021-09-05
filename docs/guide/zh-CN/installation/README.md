@@ -36,7 +36,7 @@ passwd: all authentication tokens updated successfully.
 
 2. 添加sudoers
 
-root用户的密码一般是由系统管理员维护，并定期更改。但普通用户可能要用到root的一些权限，不可能每次都向管理员询问密码。最常用的方法是，将普通用户加入到sudoers中，这样普通用户就可���通过sudo命令来暂时获取root的权限。执行如下命令添加：
+root用户的密码一般是由系统管理员维护，并定期更改。但普通用户可能要用到root的一些权限，不可能每次都向管理员询问密码。最常用的方法是，将普通用户加入到sudoers中，这样普通用户就可以通过sudo命令来暂时获取root的权限。执行如下命令添加：
 
 ```bash
 # sed -i '/^root.*ALL=(ALL).*ALL/a\going\tALL=(ALL) \tALL' /etc/sudoers
