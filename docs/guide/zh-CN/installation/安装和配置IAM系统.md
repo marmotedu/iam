@@ -969,12 +969,12 @@ $ make build BINS=iamctl
 $ cp _output/platforms/linux/amd64/iamctl $HOME/bin
 ```
 
-2) 生成并安装iamctl的配置文件（config）
+2) 生成并安装iamctl的配置文件（iamctl.yaml）
 
 ```bash
-$ ./scripts/genconfig.sh scripts/install/environment.sh configs/config > config
+$ ./scripts/genconfig.sh scripts/install/environment.sh configs/iamctl.yaml > iamctl.yaml 
 $ mkdir -p $HOME/.iam
-$ mv config $HOME/.iam
+$ mv iamctl.yaml $HOME/.iam
 ```
 
 因为iamctl是一个客户端工具，我们可能会在多台机器上运行，为了简化部署iamctl工具的复杂度，我们可以把config配置文件中跟CA认证相关的CA文件内容，用base64加密后，放置在config配置文件中，config文件中的配置项client-certificate、client-key、certificate-authority分别可用如下配置项替换client-certificate-data、client-key-data、certificate-authority-data，这些配置项的值，可以通过将CA文件使用base64加密获得。
