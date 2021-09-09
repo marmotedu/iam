@@ -21,8 +21,8 @@ iam::golang::setup_env
 iam::build::verify_prereqs
 iam::release::verify_prereqs
 #iam::build::build_image
-#iam::build::build_command
-#iam::release::package_tarballs
-#iam::release::updload_tarballs
-#iam::release::github_release
+iam::build::build_command
+iam::release::package_tarballs
+iam::release::updload_tarballs
+iam::release::github_release
 iam::release::generate_changelog
