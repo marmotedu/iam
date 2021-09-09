@@ -378,7 +378,7 @@ function iam::release::package_iam_manifests_tarball() {
 
   local dst_dir="${release_stage}"
   mkdir -p "${dst_dir}"
-  cp ${src_dir}/* "${dst_dir}"
+  cp -r ${src_dir}/* "${dst_dir}"
   #cp "${src_dir}/iam-apiserver.yaml" "${dst_dir}"
   #cp "${src_dir}/iam-authz-server.yaml" "${dst_dir}"
   #cp "${src_dir}/iam-pump.yaml" "${dst_dir}"

@@ -37,9 +37,9 @@ function iam::iamctl::install()
   make build BINS=iamctl
   cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iamctl $HOME/bin/
 
-  # 3.  生成并安装iamctl的配置文件（config）
+  # 3.  生成并安装iamctl的配置文件（iamctl.yaml）
   mkdir -p $HOME/.iam
-  ./scripts/genconfig.sh ${ENV_FILE} configs/config > $HOME/.iam/config
+  ./scripts/genconfig.sh ${ENV_FILE} configs/iamctl.yaml > $HOME/.iam/iamctl.yaml
   iam::iamctl::status || return 1
   iam::iamctl::info
 
@@ -52,7 +52,7 @@ function iam::iamctl::uninstall()
 {
   set +o errexit
   rm -f $HOME/bin/iamctl
-  rm -f $HOME/.iam/config
+  rm -f $HOME/.iam/iamctl.yaml
   #iam::common::sudo "rm -f ${IAM_CONFIG_DIR}/cert/admin*pem"
   rm -f ${CONFIG_USER_CLIENT_CERTIFICATE}
   rm -f ${CONFIG_USER_CLIENT_KEY}
