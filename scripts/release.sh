@@ -18,7 +18,7 @@ source "${IAM_ROOT}/scripts/lib/release.sh"
 IAM_RELEASE_RUN_TESTS=${IAM_RELEASE_RUN_TESTS-y}
 
 iam::golang::setup_env
-#iam::build::verify_prereqs
+iam::build::verify_prereqs
 iam::release::verify_prereqs
 #iam::build::build_image
 #iam::build::build_command
