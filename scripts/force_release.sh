@@ -4,12 +4,12 @@
 # Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
-IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/..    
+IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${IAM_ROOT}/scripts/lib/init.sh"
 
 if [ $# -ne 1 ];then
   iam::log::error "Usage: force_release.sh v1.0.0"
-  exit 1  
+  exit 1
 fi
 
 version="$1"
@@ -26,8 +26,8 @@ git push origin ${version}
 
 # 3. release the new release
 pushd ${IAM_ROOT}
-# try to delete target github release if exist to avoid create error    
-iam::log::info "delete github release with tag ${version} if exist"    
+# try to delete target github release if exist to avoid create error
+iam::log::info "delete github release with tag ${version} if exist"
 github-release delete  \
   --user marmotedu\
   --repo iam  \

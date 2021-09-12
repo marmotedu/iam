@@ -120,7 +120,7 @@ export GOROOT=$GO_INSTALL_DIR/$GOVERSION # GOROOT 设置
 export GOPATH=$WORKSPACE/golang # GOPATH 设置
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH # 将 Go 语言自带的和通过 go install 安装的二进制文件加入到 PATH 路径中
 export GO111MODULE="on" # 开启 Go moudles 特性
-export GOPROXY=https://goproxy.cn,direct # 安装 Go 模块时，代理服务器设置
+export GOPROXY=https://mirrors.aliyun.com/goproxy,https://goproxy.cn,direct # 安装 Go 模块时，代理服务器设置
 export GOPRIVATE=github.com # 指定不走代理的 Go 包域名
 export GOSUMDB=off # 关闭校验 Go 依赖包的哈希值
 EOF
@@ -279,12 +279,12 @@ EOF
 function iam::install::install_cfssl()
 {
   mkdir -p $HOME/bin/
-  #wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64 -O $HOME/bin/cfssl
-  #wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64 -O $HOME/bin/cfssljson
-  #wget https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl-certinfo_1.4.1_linux_amd64 -O $HOME/bin/cfssl-certinfo
-  wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -O $HOME/bin/cfssl
-  wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -O $HOME/bin/cfssljson
-  wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -O $HOME/bin/cfssl-certinfo
+  wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl_1.6.1_linux_amd64 -O $HOME/bin/cfssl
+  wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssljson_1.6.1_linux_amd64 -O $HOME/bin/cfssljson
+  wget https://github.com/cloudflare/cfssl/releases/download/v1.6.1/cfssl-certinfo_1.6.1_linux_amd64 -O $HOME/bin/cfssl-certinfo
+  #wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -O $HOME/bin/cfssl
+  #wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -O $HOME/bin/cfssljson
+  #wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -O $HOME/bin/cfssl-certinfo
   chmod +x $HOME/bin/{cfssl,cfssljson,cfssl-certinfo}
   iam::log::info "install cfssl tools successfully"
 }

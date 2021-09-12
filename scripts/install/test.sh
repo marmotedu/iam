@@ -194,10 +194,7 @@ iam::test::smoke()
 
 iam::test::test()
 {
-  iam::test::apiserver
-  iam::test::authzserver
-  iam::test::pump
-  iam::test::iamctl
+  iam::test::smoke
   iam::test::man
 
   iam::log::info "$(echo -e '\033[32mcongratulations, all test passed!\033[0m')"
