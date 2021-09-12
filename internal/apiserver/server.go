@@ -180,7 +180,11 @@ func buildExtraConfig(cfg *config.Config) (*ExtraConfig, error) {
 
 func (s *apiServer) initRedisStore() {
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		cancel()
+
+		return nil
+	}))
 
 	config := &storage.Config{
 		Host:                  s.redisOptions.Host,
