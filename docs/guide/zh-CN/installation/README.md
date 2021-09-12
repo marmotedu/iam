@@ -51,6 +51,9 @@ $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的�
 $ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C /tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 ```
+
+> 你也可以安装指定的版本，只需设置`version=$targetVersion`即可，例如：`version=v1.1.0`
+
 通过以上方式安装好系统后，以下组件的密码均默认为 `iam59!z$`：
 - MariaDB
 - Redis
