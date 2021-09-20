@@ -15,7 +15,7 @@ user:
   #client-key-data:
 
 server:
-  address: ${CONFIG_SERVER_ADDRESS} # iam api-server 地址
+  address: https://${CONFIG_SERVER_ADDRESS} # iam api-server 地址
   timeout: 10s # 请求 api-server 超时时间
   #max-retries: # 最大重试次数，默认为 0
   #retry-interval: # 重试间隔，默认为 1s

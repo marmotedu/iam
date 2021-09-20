@@ -53,6 +53,8 @@ spec:
         - "3600"
         image: "{{ .Values.iamctl.image.repository }}:{{ .Values.iamctl.image.tag | default .Chart.AppVersion }}"
         name: {{ .Values.iamctl.name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
         resources:
           limits: 
             cpu: 250m
@@ -79,8 +81,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:

@@ -125,8 +125,10 @@ spec:
       - command:
         - /opt/iam/bin/iam-apiserver
         - --config=/etc/iam/iam-apiserver.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.0.10"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.1.0"
         name: iam-apiserver
+        securityContext:
+            {}
         ports:
         - containerPort: 8443
           name: secure
@@ -186,14 +188,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext:
-        capabilities:
-          drop:
-          - ALL
-        readOnlyRootFilesystem: true
-        runAsGroup: 10000
-        runAsNonRoot: true
-        runAsUser: 10000
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:
@@ -256,8 +250,10 @@ spec:
       - command:
         - /opt/iam/bin/iam-authz-server
         - --config=/etc/iam/iam-authz-server.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64:v1.0.10"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64:v1.1.0"
         name: iam-authz-server
+        securityContext:
+            {}
         ports:
         - containerPort: 9443
           name: secure
@@ -314,14 +310,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext:
-        capabilities:
-          drop:
-          - ALL
-        readOnlyRootFilesystem: true
-        runAsGroup: 10000
-        runAsNonRoot: true
-        runAsUser: 10000
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:
@@ -384,8 +372,10 @@ spec:
       - command:
         - /opt/iam/bin/iam-pump
         - --config=/etc/iam/iam-pump.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64:v1.0.10"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64:v1.1.0"
         name: iam-pump
+        securityContext:
+            {}
         ports:
         - containerPort: 9443
           name: secure
@@ -442,14 +432,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext:
-        capabilities:
-          drop:
-          - ALL
-        readOnlyRootFilesystem: true
-        runAsGroup: 10000
-        runAsNonRoot: true
-        runAsUser: 10000
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:
@@ -512,8 +494,10 @@ spec:
       - command:
         - sleep
         - "3600"
-        image: "ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64:v1.0.10"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64:v1.1.0"
         name: iamctl
+        securityContext:
+            {}
         resources:
           limits: 
             cpu: 250m
@@ -540,14 +524,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext:
-        capabilities:
-          drop:
-          - ALL
-        readOnlyRootFilesystem: true
-        runAsGroup: 10000
-        runAsNonRoot: true
-        runAsUser: 10000
       terminationGracePeriodSeconds: 5
       volumes:
       - configMap:
