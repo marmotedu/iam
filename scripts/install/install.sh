@@ -38,7 +38,11 @@ alias mv='mv -i'
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
+    . /etc/bashrc
+fi
+
+if [ ! -d $HOME/workspace ]; then
+    mkdir -p $HOME/workspace
 fi
 
 # User specific environment
@@ -47,6 +51,11 @@ export LANG="en_US.UTF-8" # 设置系统语言为 en_US.UTF-8，避免终端出�
 export PS1='[\u@dev \W]\$ ' # 默认的 PS1 设置会展示全部的路径，为了防止过长，这里只展示："用户名@dev 最后的目录名"
 export WORKSPACE="$HOME/workspace" # 设置工作目录
 export PATH=$HOME/bin:$PATH # 将 $HOME/bin 目录加入到 PATH 变量中
+
+# Default entry folder
+cd $WORKSPACE # 登录系统，默认进入 workspace 目录
+
+# User specific aliases and functions
 EOF
 
   # 创建工作目录
@@ -366,7 +375,7 @@ function iam::install::install()
   # 3. 测试安装后的 IAM 系统功能是否正常
   iam::test::test || return 1
 
-  iam::log::info "install iam application from fresh linux successfully"
+  iam::log::info "$(echo -e '\033[32mcongratulations, install iam application successfully!\033[0m')"
 }
 
 # 卸载。卸载只卸载服务，不卸载环境，不会卸载列表如下：

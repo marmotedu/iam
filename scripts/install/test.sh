@@ -147,7 +147,7 @@ iam::test::authz()
     return 1
   fi
 
-  iam::log::info "congratulations, /v1/authz test passed!"
+  iam::log::info "$(echo -e '\033[32mcongratulations, /v1/authz test passed!\033[0m')"
 }
 
 iam::test::authzserver()
