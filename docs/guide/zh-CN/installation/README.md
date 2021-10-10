@@ -8,7 +8,11 @@
 
 ## 安装前检查
 
-进行安装前检查：[部署环境要求](installation-requirement.md)
+1. 服务器能访问外网
+
+2. 操作系统：CentOS Linux 8.x (64-bit)
+
+> 本安装脚本基于 CentOS 8.2 安装，建议你选择 CentOS 8.x 系统。其它Linux发行版、macOS也能安装，不过需要手动安装。
 
 ## 快速部署
 
@@ -59,7 +63,7 @@ $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 - Redis
 - MongoDB
 
-### 3. 快速卸载
+## 快速卸载
 
 ```bash
 $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码

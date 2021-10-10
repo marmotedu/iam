@@ -13,7 +13,7 @@ IAM 同时也具有以下能力：
 
 2. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
 
-IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing**
+IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contribute**
 
 ## 功能特性
 
@@ -33,38 +33,34 @@ IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contributing
 
 ### 依赖检查
 
-**Minimum Requirements**
+1. 服务器能访问外网
 
-- Hardware
-  - 2 GB of Memory
-  - 50 GB of Disk Space
-- 操作系统：CentOS Linux 8.2 (64-bit)
-- 正常访问外网
+2. 操作系统：CentOS Linux 8.x (64-bit)
 
- **需求检查 & 依赖安装** 
+> 本安装脚本基于 CentOS 8.2 安装，建议你选择 CentOS 8.x 系统。其它Linux发行版、macOS也能安装，不过需要手动安装。
 
- 请参考：[](docs/guide/zh-CN/installation/installation-requirement.md)
+### 快速部署
+
+快速部署请参考：[IAM 部署指南](docs/guide/zh-CN/installation/README.md#快速部署)
 
 ### 构建
 
-1. 代码包下载
+如果你需要重新编译IAM项目，可以执行以下 2 步：
 
-```
-$ git clone https://github.com/marmotedu/iam
+1. 克隆源码
+
+```bash
+$ git clone https://github.com/marmotedu/iam $GOPATH/src/github.com/marmotedu/iam
 ```
 
 2. 编译
 
 ```bash
-$ cd iam
+$ cd $GOPATH/src/github.com/marmotedu/iam
 $ make
 ```
 
-### 运行
-
-```bash
-./scripts/install/install.sh iam::install::install_iam    
-```
+构建后的二进制文件保存在 `_output/platforms/linux/amd64/` 目录下。
 
 ## 使用指南
 
@@ -82,7 +78,7 @@ You are encouraged to communicate most things via [GitHub issues](https://github
 
 - Lingfei Kong <colin404@foxmail.com>
 
-为了方便交流，我建了微信群，可以加我 **微信：nightskong**，拉你入群，方便交流。
+为了方便交流，我建了微信群，可以加我 **微信：**`echo bmlnaHRza29uZw==|base64 -d`，拉你入群，方便交流。
 
 ## 谁在用
 

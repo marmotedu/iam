@@ -1023,7 +1023,7 @@ clientVersion:
   gitCommit: 1d682b0317396347b568a3ef366c1c54b3b0186b
   gitTreeState: dirty
   gitVersion: v0.6.1-5-g1d682b0
-  goVersion: go1.16.2
+  goVersion: go1.17
   platform: linux/amd64
 serverVersion:
   buildDate: "2021-04-07T22:30:53Z"
@@ -1031,7 +1031,7 @@ serverVersion:
   gitCommit: bde163964b8c004ebb20ca4abd8a2ac0cd1f71ad
   gitTreeState: dirty
   gitVersion: bde1639
-  goVersion: go1.16.2
+  goVersion: go1.17
   platform: linux/amd64
 ```
 
