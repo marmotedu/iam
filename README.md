@@ -8,9 +8,6 @@ IAM 同时也具有以下能力：
 
 1. 配合极客时间专栏 **《[Go 语言项目开发实战](https://time.geekbang.org/column/intro/100079601)》**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程，包含了项目各个知识点和构建思路的讲解，也会包含我的一线研发经验和建议。
 
-   目录请参考：[《Go 语言项目开发实战》课程目录](./docs/guide/zh-CN/geekbang/geekbang_course_catalog.md)
-
-
 2. 作为一个开发脚手架，供开发者克隆后二次开发，快速构建自己的应用。
 
 IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contribute**
