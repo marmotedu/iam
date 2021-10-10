@@ -63,6 +63,19 @@ $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 - Redis
 - MongoDB
 
+### 3. 测试
+
+
+通过步骤1、2你已经成功安装了IAM应用。接下来，你可以执行以下命令来测试IAM应用是否安装成功：
+
+```bash
+$ cd /tmp/iam/ && ./scripts/install/test.sh iam::test::test
+```
+
+如果运行结果如下图，则说明安装成功：
+
+![测试结果](../../../images/iamtest运行结果.png)
+
 ## 快速卸载
 
 ```bash
