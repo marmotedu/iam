@@ -113,17 +113,18 @@ function iam::install::go_command()
   # 检查 go 是否安装
   #command -v go &>/dev/null && return 0
 
-  # 1. 下载 go1.16.2版本的Go安装包
-  wget -P /tmp/ https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/go1.16.2.linux-amd64.tar.gz
+  # 1. 下载 go1.17.2 版本的Go安装包
+  wget -P /tmp/ https://golang.google.cn/dl/go1.17.2.linux-amd64.tar.gz
+
   # 2. 安装Go
   mkdir -p $HOME/go
-  tar -xvzf /tmp/go1.16.2.linux-amd64.tar.gz -C $HOME/go
-  mv $HOME/go/go $HOME/go/go1.16.2
+  tar -xvzf /tmp/go1.17.2.linux-amd64.tar.gz -C $HOME/go
+  mv $HOME/go/go $HOME/go/go1.17.2
 
   # 3. 配置Go环境变量
   cat << 'EOF' >> $HOME/.bashrc
 # Go envs
-export GOVERSION=go1.16.2 # Go 版本设置
+export GOVERSION=go1.17.2 # Go 版本设置
 export GO_INSTALL_DIR=$HOME/go # Go 安装目录
 export GOROOT=$GO_INSTALL_DIR/$GOVERSION # GOROOT 设置
 export GOPATH=$WORKSPACE/golang # GOPATH 设置
@@ -156,7 +157,7 @@ function iam::install::protobuf()
 
   # 2. 安装 protoc-gen-go
   echo $GO111MODULE
-  go get -u github.com/golang/protobuf/protoc-gen-go
+  go install github.com/golang/protobuf/protoc-gen-go@latest
   iam::log::info "install protoc-gen-go plugin successfully"
 }
 
