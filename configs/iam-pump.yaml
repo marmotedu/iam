@@ -18,7 +18,7 @@ redis:
   enable-cluster: false # 是否开启集群模式
   #addrs:
   #master-name: # redis 集群 master 名称
-  #username: # redis 登陆用户名
+  #username: # redis 登录用户名
   #timeout: # 连接 redis 时的超时时间
   #use-ssl: # 是否启用 TLS
   #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书

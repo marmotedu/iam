@@ -227,13 +227,13 @@ EOF
 
   # 3. 初始化MariaDB数据库，创建iam数据库
 
-  # 3.1 登陆数据库并创建iam用户
+  # 3.1 登录数据库并创建iam用户
   mysql -h127.0.0.1 -P3306 -u"${MARIADB_ADMIN_USERNAME}" -p"${MARIADB_ADMIN_PASSWORD}" << EOF
 grant all on iam.* TO ${MARIADB_USERNAME}@127.0.0.1 identified by "${MARIADB_PASSWORD}";
 flush privileges;
 EOF
 
-  # 3.2 用iam用户登陆mysql，执行iam.sql文件，创建iam数据库
+  # 3.2 用iam用户登录mysql，执行iam.sql文件，创建iam数据库
   mysql -h127.0.0.1 -P3306 -u${MARIADB_USERNAME} -p"${MARIADB_PASSWORD}" << EOF
 source configs/iam.sql;
 show databases;

@@ -200,8 +200,6 @@ func payloadFunc() func(data interface{}) jwt.MapClaims {
 func authorizator() func(data interface{}, c *gin.Context) bool {
 	return func(data interface{}, c *gin.Context) bool {
 		if v, ok := data.(string); ok {
-			// c.Set(log.KeyUsername, v)
-			// c.Set(log.KeyRequestID, v)
 			log.L(c).Infof("user `%s` is authenticated.", v)
 
 			return true

@@ -32,7 +32,7 @@ function iam::redis::install()
   # 2.3 修改requirepass配置，设置Redis密码
   echo ${LINUX_PASSWORD} | sudo -S sed -i 's/^# requirepass.*$/requirepass '"${REDIS_PASSWORD}"'/' /etc/redis.conf
 
-  # 2.4 因为我们上面配置了密码登陆，需要将protected-mode设置为no，关闭保护模式
+  # 2.4 因为我们上面配置了密码登录，需要将protected-mode设置为no，关闭保护模式
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/^protected-mode/{s/yes/no/}' /etc/redis.conf
 
   # 3. 为了能够远程连上Redis，需要执行以下命令关闭防火墙，并禁止防火墙开机启动（如果不需要远程连接，可忽略此步骤）

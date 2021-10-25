@@ -36,7 +36,7 @@ EOF"
 	echo ${LINUX_PASSWORD} | sudo -S setenforce 0 || true
 	echo ${LINUX_PASSWORD} | sudo -S sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config
 
-	# 4. 开启外网访问权限和登陆验证
+	# 4. 开启外网访问权限和登录验证
 	echo ${LINUX_PASSWORD} | sudo -S sed -i '/bindIp/{s/127.0.0.1/0.0.0.0/}' /etc/mongod.conf
 	echo ${LINUX_PASSWORD} | sudo -S sed -i '/^#security/a\security:\n  authorization: enabled' /etc/mongod.conf
 

@@ -1,8 +1,8 @@
 # Linux 服务器基本配置
 
-1. 登陆Linux系统
+1. 登录Linux系统
 
-假设我们使用 **going** 用户作为实战用户，使用Xshell / SecureCRT等工具登陆Linux系统，推荐使用Xshell。
+假设我们使用 **going** 用户作为实战用户，使用Xshell / SecureCRT等工具登录Linux系统，推荐使用Xshell。
 
 2. 配置 `$HOME/.bashrc`
 

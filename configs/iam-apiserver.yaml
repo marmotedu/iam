@@ -50,7 +50,7 @@ redis:
   password: ${REDIS_PASSWORD} # redis 密码
   #addrs:
   #master-name: # redis 集群 master 名称
-  #username: # redis 登陆用户名
+  #username: # redis 登录用户名
   #database: # redis 数据库
   #optimisation-max-idle:  # redis 连接池中的最大空闲连接数
   #optimisation-max-active: # 最大活跃连接数
