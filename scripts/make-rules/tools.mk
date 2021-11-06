@@ -48,7 +48,7 @@ install.github-release:
 
 .PHONY: install.coscmd
 install.coscmd:
-	@pip install coscmd
+	@if which pip &>/dev/null; then pip install coscmd; else pip3 install coscmd; fi
 
 .PHONY: install.golines
 install.golines:

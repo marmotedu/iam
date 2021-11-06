@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 FROM BASE_IMAGE
-MAINTAINER Lingfei Kong <colin404@foxmail.com>
+LABEL maintainer="<colin404@foxmail.com>"
 
 WORKDIR /opt/iam
 

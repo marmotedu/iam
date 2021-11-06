@@ -280,9 +280,9 @@ func New(opts *Options) *zapLogger {
 	return logger
 }
 
-// StdLogger returns global std logger.
-func StdLogger() *zapLogger {
-	return std
+// SugaredLogger returns global sugared logger.
+func SugaredLogger() *zap.SugaredLogger {
+	return std.zapLogger.Sugar()
 }
 
 // StdErrLogger returns logger of standard library which writes to supplied zap
