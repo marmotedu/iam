@@ -198,10 +198,6 @@ func (a *App) buildCommand() {
 	var namedFlagSets cliflag.NamedFlagSets
 	if a.options != nil {
 		namedFlagSets = a.options.Flags()
-		fs := cmd.Flags()
-		for _, f := range namedFlagSets.FlagSets {
-			fs.AddFlagSet(f)
-		}
 
 		usageFmt := "Usage:\n  %s\n"
 		cols, _, _ := term.TerminalSize(cmd.OutOrStdout())
@@ -224,6 +220,11 @@ func (a *App) buildCommand() {
 		addConfigFlag(a.basename, namedFlagSets.FlagSet("global"))
 	}
 	globalflag.AddGlobalFlags(namedFlagSets.FlagSet("global"), cmd.Name())
+
+	fs := cmd.Flags()
+	for _, f := range namedFlagSets.FlagSets {
+		fs.AddFlagSet(f)
+	}
 
 	a.cmd = &cmd
 }
