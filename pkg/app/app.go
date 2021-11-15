@@ -189,7 +189,7 @@ func (a *App) buildCommand() {
 		for _, command := range a.commands {
 			cmd.AddCommand(command.cobraCommand())
 		}
-		cmd.SetHelpCommand(helpCommand(a.basename))
+		cmd.SetHelpCommand(helpCommand(FormatBaseName(a.basename)))
 	}
 	if a.runFunc != nil {
 		cmd.RunE = a.runCommand
