@@ -73,7 +73,7 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 // Get return an user by the user identifier.
 func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	user := &v1.User{}
-	err := u.db.Where("name = ?", username).First(&user).Error
+	err := u.db.Where("name = ? and status = 1", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
@@ -92,7 +92,7 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 
 	selector, _ := fields.ParseSelector(opts.FieldSelector)
 	username, _ := selector.RequiresExactMatch("name")
-	d := u.db.Where("name like ?", "%"+username+"%").
+	d := u.db.Where("name like ? and status = 1", "%"+username+"%").
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").

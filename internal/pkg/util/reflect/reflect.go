@@ -105,7 +105,7 @@ func CopyObj(from interface{}, to interface{}, fields []string) (changed bool, e
 	return true, nil
 }
 
-// CopyObjViaYaml marshal "from" to yaml data, then unMarshal data to "to"
+// CopyObjViaYaml marshal "from" to yaml data, then unMarshal data to "to".
 func CopyObjViaYaml(to interface{}, from interface{}) error {
 	if from == nil || to == nil {
 		return nil
@@ -118,7 +118,7 @@ func CopyObjViaYaml(to interface{}, from interface{}) error {
 	return yaml.Unmarshal(data, to)
 }
 
-// findString return true if target in slice, return false if not
+// findString return true if target in slice, return false if not.
 func findString(slice []string, target string) bool {
 	for _, str := range slice {
 		if str == target {

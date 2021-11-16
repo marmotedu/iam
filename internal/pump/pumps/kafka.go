@@ -85,13 +85,13 @@ func (k *KafkaPump) Init(config interface{}) error {
 			}
 			tlsConfig = &tls.Config{
 				Certificates:       []tls.Certificate{cert},
-				InsecureSkipVerify: k.kafkaConf.SSLInsecureSkipVerify, // nolint: gosec
+				InsecureSkipVerify: k.kafkaConf.SSLInsecureSkipVerify,
 			}
 		} else if k.kafkaConf.SSLCertFile != "" || k.kafkaConf.SSLKeyFile != "" {
 			log.Error("Only one of ssl_cert_file and ssl_cert_key configuration option is setted, you should set both to enable mTLS.")
 		} else {
 			tlsConfig = &tls.Config{
-				InsecureSkipVerify: k.kafkaConf.SSLInsecureSkipVerify, // nolint: gosec
+				InsecureSkipVerify: k.kafkaConf.SSLInsecureSkipVerify,
 			}
 		}
 	} else if k.kafkaConf.SASLMechanism != "" {

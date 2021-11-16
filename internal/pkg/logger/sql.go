@@ -82,6 +82,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 			vars[idx] = escaper + strings.ReplaceAll(v, escaper, "\\"+escaper) + escaper
 		default:
 			rv := reflect.ValueOf(v)
+			//nolint: nestif
 			if v == nil || !rv.IsValid() || rv.Kind() == reflect.Ptr && rv.IsNil() {
 				vars[idx] = NULL
 			} else if valuer, ok := v.(driver.Valuer); ok {
@@ -106,6 +107,7 @@ func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, a
 		convertParams(v, idx)
 	}
 
+	//nolint: nestif
 	if numericPlaceholder == nil {
 		var idx int
 		var newSQL strings.Builder

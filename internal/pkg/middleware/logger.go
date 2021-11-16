@@ -64,7 +64,6 @@ func LoggerWithWriter(out io.Writer, notlogged ...string) gin.HandlerFunc {
 }
 
 // LoggerWithConfig instance a Logger middleware with config.
-//nolint:ifshort
 func LoggerWithConfig(conf gin.LoggerConfig) gin.HandlerFunc {
 	formatter := conf.Formatter
 	if formatter == nil {

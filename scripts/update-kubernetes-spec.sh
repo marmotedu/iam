@@ -15,7 +15,7 @@ set -o pipefail
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${IAM_ROOT}/scripts/lib/init.sh"
 
-COMPONENTS=(iam-pump iam-apiserver iam-authz-server)
+COMPONENTS=(iam-apiserver iam-authz-server iam-pump iam-watcher)
 KINDS=(deployment service)
 
 for component in ${COMPONENTS[@]}

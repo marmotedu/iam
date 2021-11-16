@@ -60,6 +60,19 @@ pump:
       port: 7070 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
       targetPort: 7070 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
 
+watcher:
+  name: iam-watcher
+  image:
+    repository: ccr.ccs.tencentyun.com/lkccc/iam-watcher-amd64
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.1.0"
+  healthPort: 5050
+  service:
+    http:
+      nodePort: 30050 # Node节点的端口，<nodeIP>:nodePort 是提供给集群外部客户访问service的入口
+      port: 5050 # service暴露在cluster ip上的端口，通过<cluster ip>:port访问服务,通过此端口集群内的服务可以相互访问
+      targetPort: 5050 # Pod的外部访问端口，port和nodePort的数据通过这个端口进入到Pod内部，Pod里面的containers的端口映射到这个端口，提供服务
+
 iamctl:
   name: iamctl
   image:

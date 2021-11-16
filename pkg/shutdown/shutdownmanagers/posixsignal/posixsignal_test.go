@@ -19,11 +19,9 @@ func (f startShutdownFunc) StartShutdown(sm shutdown.ShutdownManager) {
 }
 
 func (f startShutdownFunc) ReportError(err error) {
-
 }
 
 func (f startShutdownFunc) AddShutdownCallback(shutdownCallback shutdown.ShutdownCallback) {
-
 }
 
 func waitSig(t *testing.T, c <-chan int) {

@@ -127,5 +127,4 @@ type errResponseWrapper struct {
 
 // Return nil json object.
 // swagger:response okResponse
-type okResponseWrapper struct {
-}
+type okResponseWrapper struct{}

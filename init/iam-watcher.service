@@ -1,0 +1,15 @@
+[Unit]
+Description=IAM Watcher Server
+Documentation=https://github.com/marmotedu/iam/blob/master/init/README.md
+
+[Service]
+WorkingDirectory=${IAM_DATA_DIR}/iam-watcher
+ExecStartPre=/usr/bin/mkdir -p ${IAM_DATA_DIR}/iam-watcher
+ExecStartPre=/usr/bin/mkdir -p ${IAM_LOG_DIR}
+ExecStart=${IAM_INSTALL_DIR}/bin/iam-watcher --config=${IAM_CONFIG_DIR}/iam-watcher.yaml
+Restart=always
+RestartSec=5
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

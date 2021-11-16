@@ -64,28 +64,30 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 		select {
 		case <-ticker.C:
 			analyticsValues := s.analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
-			if len(analyticsValues) > 0 {
-				// Convert to something clean
-				keys := make([]interface{}, len(analyticsValues))
-
-				for i, v := range analyticsValues {
-					decoded := analytics.AnalyticsRecord{}
-					err := msgpack.Unmarshal([]byte(v.(string)), &decoded)
-					log.Debugf("Decoded Record: %v", decoded)
-					if err != nil {
-						log.Errorf("Couldn't unmarshal analytics data: %s", err.Error())
-					} else {
-						if s.omitDetails {
-							decoded.Policies = ""
-							decoded.Deciders = ""
-						}
-						keys[i] = interface{}(decoded)
-					}
-				}
-
-				// Send to pumps
-				writeToPumps(keys, s.secInterval)
+			if len(analyticsValues) == 0 {
+				return nil
 			}
+
+			// Convert to something clean
+			keys := make([]interface{}, len(analyticsValues))
+
+			for i, v := range analyticsValues {
+				decoded := analytics.AnalyticsRecord{}
+				err := msgpack.Unmarshal([]byte(v.(string)), &decoded)
+				log.Debugf("Decoded Record: %v", decoded)
+				if err != nil {
+					log.Errorf("Couldn't unmarshal analytics data: %s", err.Error())
+				} else {
+					if s.omitDetails {
+						decoded.Policies = ""
+						decoded.Deciders = ""
+					}
+					keys[i] = interface{}(decoded)
+				}
+			}
+
+			// Send to pumps
+			writeToPumps(keys, s.secInterval)
 		// exit consumption cycle when receive SIGINT and SIGTERM signal
 		case <-stopCh:
 			log.Info("stop purge loop")

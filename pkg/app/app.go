@@ -23,7 +23,7 @@ import (
 
 var (
 	progressMessage = color.GreenString("==>")
-	//nolint: deadcode,unused,varcheck
+
 	usageTemplate = fmt.Sprintf(`%s{{if .Runnable}}
   %s{{end}}{{if .HasAvailableSubCommands}}
   %s{{end}}{{if gt (len .Aliases) 0}}

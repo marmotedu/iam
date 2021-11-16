@@ -4,8 +4,6 @@
 
 package cache
 
-//go:generate mockgen -destination mock_store.go -package store github.com/marmotedu/iam/internal/authzserver/store Factory
-
 import (
 	"sync"
 

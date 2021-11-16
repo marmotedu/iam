@@ -204,7 +204,7 @@ func NewRedisClusterPool(isCache bool, config *Config) redis.UniversalClient {
 
 	if config.UseSSL {
 		tlsConfig = &tls.Config{
-			InsecureSkipVerify: config.SSLInsecureSkipVerify, // nolint: gosec
+			InsecureSkipVerify: config.SSLInsecureSkipVerify,
 		}
 	}
 

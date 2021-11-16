@@ -68,6 +68,20 @@ func (mr *MockFactoryMockRecorder) Policies() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Policies", reflect.TypeOf((*MockFactory)(nil).Policies))
 }
 
+// PolicyAudits mocks base method.
+func (m *MockFactory) PolicyAudits() PolicyAuditStore {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PolicyAudits")
+	ret0, _ := ret[0].(PolicyAuditStore)
+	return ret0
+}
+
+// PolicyAudits indicates an expected call of PolicyAudits.
+func (mr *MockFactoryMockRecorder) PolicyAudits() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PolicyAudits", reflect.TypeOf((*MockFactory)(nil).PolicyAudits))
+}
+
 // Secrets mocks base method.
 func (m *MockFactory) Secrets() SecretStore {
 	m.ctrl.T.Helper()

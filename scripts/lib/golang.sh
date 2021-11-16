@@ -26,6 +26,7 @@ iam::golang::server_targets() {
     iam-apiserver
     iam-authz-server
     iam-pump
+    iam-watcher
   )
   echo "${targets[@]}"
 }
@@ -41,6 +42,7 @@ iam::golang::server_image_targets() {
     cmd/iam-apiserver
     cmd/iam-authz-server
     cmd/iam-pump
+    cmd/iam-watcher
   )
   echo "${targets[@]}"
 }

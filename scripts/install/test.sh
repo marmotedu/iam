@@ -165,6 +165,15 @@ iam::test::pump()
   iam::log::info "$(echo -e '\033[32mcongratulations, iam-pump test passed!\033[0m')"
 }
 
+iam::test::watcher()
+{
+  ${RCURL} http://${IAM_WATCHER_HOST}:5050/healthz | egrep -q 'status.*ok' || {
+    iam::log::error "cannot access iam-watcher healthz api, iam-watcher maybe down"
+      return 1
+    }
+  iam::log::info "$(echo -e '\033[32mcongratulations, iam-watcher test passed!\033[0m')"
+}
+
 iam::test::iamctl()
 {
   iamctl user list | egrep -q admin || {
@@ -188,6 +197,7 @@ iam::test::smoke()
   iam::test::apiserver
   iam::test::authzserver
   iam::test::pump
+  iam::test::watcher
   iam::test::iamctl
   iam::log::info "$(echo -e '\033[32mcongratulations, smoke test passed!\033[0m')"
 }

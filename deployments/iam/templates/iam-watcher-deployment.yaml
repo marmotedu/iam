@@ -1,0 +1,123 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.watcher.name }}
+  name: {{ .Values.watcher.name }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  progressDeadlineSeconds: 10
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: {{ .Values.watcher.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.watcher.name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Values.watcher.name }}
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - command:
+        - /opt/iam/bin/{{ .Values.watcher.name }}
+        - --config=/etc/iam/{{ .Values.watcher.name }}.yaml
+        image: "{{ .Values.watcher.image.repository }}:{{ .Values.watcher.image.tag | default .Chart.AppVersion }}"
+        name: {{ .Values.watcher.name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        ports:
+        - containerPort: 9443
+          name: secure
+          protocol: TCP
+        - containerPort: 9090
+          name: insecure
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.watcher.healthPort}}
+            scheme: HTTP
+          {{- toYaml .Values.livenessProbe| nindent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.watcher.healthPort}}
+            scheme: HTTP
+          {{- toYaml .Values.readinessProbe| nindent 10 }}
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.watcher.healthPort}}
+            scheme: HTTP
+          {{- toYaml .Values.startupProbe| nindent 10 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/iam/{{ .Values.watcher.name }}.yaml
+          name: iam
+          subPath: {{ .Values.watcher.name }}.yaml
+        - mountPath: /etc/iam/cert
+          name: iam-cert
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: {{ .Values.watcher.name }}.yaml
+            path: {{ .Values.watcher.name }}.yaml
+          name: iam
+        name: iam
+      - configMap:
+          defaultMode: 420
+          name: iam-cert
+        name: iam-cert
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -51,7 +51,7 @@ func (c *CSVPump) Init(conf interface{}) error {
 		log.Fatalf("Failed to decode configuration: %s", err.Error())
 	}
 
-	ferr := os.MkdirAll(c.csvConf.CSVDir, 0777)
+	ferr := os.MkdirAll(c.csvConf.CSVDir, 0o777)
 	if ferr != nil {
 		log.Error(ferr.Error())
 	}
@@ -79,7 +79,7 @@ func (c *CSVPump) WriteData(ctx context.Context, data []interface{}) error {
 		appendHeader = true
 	} else {
 		var appendErr error
-		outfile, appendErr = os.OpenFile(fname, os.O_APPEND|os.O_WRONLY, 0600)
+		outfile, appendErr = os.OpenFile(fname, os.O_APPEND|os.O_WRONLY, 0o600)
 		if appendErr != nil {
 			log.Errorf("Failed to open CSV file: %s", appendErr.Error())
 		}

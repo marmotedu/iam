@@ -1,0 +1,50 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+health-check-path: healthz # 健康检查路由，默认为 /healthz
+health-check-address: 0.0.0.0:5050 # 健康检查绑定地址，默认为 0.0.0.0:5050
+
+watcher:
+  clean:
+    max-reserve-days: 180 # 授权审计日志在MySQL中最多保留的天数，超过该天数后，日志会被删除（默认180天）
+  task:
+    max-inactive-days: 180 # 账户最大不登录天数，超过该天数后账户会被禁止登录（默认不禁止）
+
+# MySQL 数据库相关配置
+mysql:
+  host: ${MARIADB_HOST} # MySQL 机器 ip 和端口，默认 127.0.0.1:3306
+  username: ${MARIADB_USERNAME} # MySQL 用户名(建议授权最小权限集)
+  password: ${MARIADB_PASSWORD} # MySQL 用户密码
+  database: ${MARIADB_DATABASE} # iam 系统所用的数据库名
+  max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
+  max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
+  max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
+  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+
+# Redis 配置
+redis:
+  host: ${REDIS_HOST} # redis 地址，默认 127.0.0.1:6379
+  port: ${REDIS_PORT} # redis 端口，默认 6379
+  password: ${REDIS_PASSWORD} # redis 密码
+  database: 1 # redis 数据库
+  optimisation-max-idle: 100  # redis 连接池中的最大空闲连接数
+  optimisation-max-active: 0 # 最大活跃连接数
+  enable-cluster: false # 是否开启集群模式
+  #addrs: 
+  #master-name: # redis 集群 master 名称
+  #username: # redis 登陆用户名
+  #timeout: # 连接 redis 时的超时时间
+  #use-ssl: # 是否启用 TLS
+  #ssl-insecure-skip-verify: # 当连接 redis 时允许使用自签名证书
+
+log:    
+    name: watcher
+    development: true    
+    level: debug # debug, info, warn, error, dpanic, panic, fatal    
+    format: console # console, json    
+    enable-color: true # 是否开启颜色输出，true:是，false:否    
+    disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号    
+    disable-stacktrace: false # 是否再panic及以上级别禁止打印堆栈信息    
+    output-paths: ${IAM_LOG_DIR}/iam-watcher.log,stdout # 多个输出，逗号分开。stdout：标准输出，    
+    error-output-paths: ${IAM_LOG_DIR}/iam-watcher.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开  

@@ -72,6 +72,8 @@ spec:
             value: iam-apiserver
           - name: IAM_PUMP_HOST
             value: iam-pump
+          - name: IAM_WATCHER_HOST
+            value: iam-watcher
         volumeMounts:
         - mountPath: /etc/iam/{{ .Values.iamctl.name }}.yaml
           name: iam

@@ -6,6 +6,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/marmotedu/component-base/pkg/auth"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
@@ -50,7 +51,7 @@ func (u *UserController) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	user.Password = r.NewPassword
+	user.Password, _ = auth.Encrypt(r.NewPassword)
 	if err := u.srv.Users().ChangePassword(c, user); err != nil {
 		core.WriteResponse(c, err, nil)
 

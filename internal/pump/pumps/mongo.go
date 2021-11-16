@@ -152,7 +152,7 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 	// nolint: nestif
 	if conf.MongoUseSSL {
 		dialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
-			tlsConfig := &tls.Config{} // nolint: gosec
+			tlsConfig := &tls.Config{}
 			if conf.MongoSSLInsecureSkipVerify {
 				tlsConfig.InsecureSkipVerify = true
 			}

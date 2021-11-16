@@ -23,7 +23,6 @@ func newSecrets(ds *datastore) *secrets {
 	return &secrets{ds: ds}
 }
 
-//nolint: gosec
 var keySecret = "/secrets/%v/%v"
 
 func (s *secrets) getKey(username string, secretID string) string {

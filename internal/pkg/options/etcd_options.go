@@ -120,7 +120,6 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 	}
 
 	if o.UseTLS {
-		//nolint: gosec
 		cfg := &tls.Config{
 			RootCAs:            capool,
 			InsecureSkipVerify: false,

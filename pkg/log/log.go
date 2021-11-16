@@ -559,9 +559,15 @@ func L(ctx context.Context) *zapLogger {
 func (l *zapLogger) L(ctx context.Context) *zapLogger {
 	lg := l.clone()
 
-	requestID, _ := ctx.Value(KeyRequestID).(string)
-	username, _ := ctx.Value(KeyUsername).(string)
-	lg.zapLogger = lg.zapLogger.With(zap.String(KeyRequestID, requestID), zap.String(KeyUsername, username))
+	if requestID, ok := ctx.Value(KeyRequestID).(LogContextKey); ok {
+		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyRequestID.String(), requestID))
+	}
+	if username, ok := ctx.Value(KeyUsername).(LogContextKey); ok {
+		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyUsername.String(), username))
+	}
+	if watcherName, ok := ctx.Value(KeyWatcherName).(LogContextKey); ok {
+		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyWatcherName.String(), watcherName))
+	}
 
 	return lg
 }

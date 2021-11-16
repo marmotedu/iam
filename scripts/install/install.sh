@@ -15,6 +15,7 @@ source ${IAM_ROOT}/scripts/install/mongodb.sh
 source ${IAM_ROOT}/scripts/install/iam-apiserver.sh
 source ${IAM_ROOT}/scripts/install/iam-authz-server.sh
 source ${IAM_ROOT}/scripts/install/iam-pump.sh
+source ${IAM_ROOT}/scripts/install/iam-watcher.sh
 source ${IAM_ROOT}/scripts/install/iamctl.sh
 source ${IAM_ROOT}/scripts/install/man.sh
 source ${IAM_ROOT}/scripts/install/test.sh
@@ -240,7 +241,7 @@ show databases;
 EOF
 
   # 4. 创建必要的目录
-  echo ${LINUX_PASSWORD} | sudo -S mkdir -p ${IAM_DATA_DIR}/{iam-apiserver,iam-authz-server,iam-pump}
+  echo ${LINUX_PASSWORD} | sudo -S mkdir -p ${IAM_DATA_DIR}/{iam-apiserver,iam-authz-server,iam-pump,iam-watcher}
   iam::common::sudo "mkdir -p ${IAM_INSTALL_DIR}/bin"
   iam::common::sudo "mkdir -p ${IAM_CONFIG_DIR}/cert"
   iam::common::sudo "mkdir -p ${IAM_LOG_DIR}"
@@ -333,10 +334,13 @@ function iam::install::install_iam()
   # 5. 安装 iam-pump 服务
   iam::pump::install || return 1
 
-  # 6. 安装 iamctl 客户端工具
+  # 6. 安装 iam-watcher 服务
+  iam::watcher::install || return 1
+
+  # 7. 安装 iamctl 客户端工具
   iam::iamctl::install || return 1
 
-  # 7. 安装 man page
+  # 8. 安装 man page
   iam::man::install || return 1
 
   iam::log::info "install iam application successfully"
@@ -347,6 +351,7 @@ function iam::install::uninstall_iam()
   iam::man::uninstall || return 1
   iam::iamctl::uninstall || return 1
   iam::pump::uninstall || return 1
+  iam::watcher::uninstall || return 1
   iam::authzserver::uninstall || return 1
   iam::apiserver::uninstall || return 1
 

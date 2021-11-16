@@ -37,7 +37,6 @@ func TestGetObjFieldsMap(t *testing.T) {
 	}) {
 		t.Fatalf("not equal")
 	}
-
 }
 
 func TestCopyObj(t *testing.T) {
@@ -85,5 +84,4 @@ func TestCopyObj(t *testing.T) {
 	if changed {
 		t.Fatalf("expect not changed")
 	}
-
 }

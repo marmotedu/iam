@@ -301,6 +301,10 @@ definitions:
         format: int64
         type: integer
         x-go-name: IsAdmin
+      loginedAt:
+        format: date-time
+        type: string
+        x-go-name: LoginedAt
       name:
         type: string
         x-go-name: Name
@@ -313,6 +317,10 @@ definitions:
       phone:
         type: string
         x-go-name: Phone
+      status:
+        format: int64
+        type: integer
+        x-go-name: Status
       totalPolicy:
         format: int64
         type: integer

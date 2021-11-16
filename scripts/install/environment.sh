@@ -81,6 +81,9 @@ readonly IAM_PUMP_HOST=${IAM_PUMP_HOST:-127.0.0.1} # iam-pump 部署机器 IP �
 readonly IAM_PUMP_COLLECTION_NAME=${IAM_PUMP_COLLECTION_NAME:-iam_analytics}
 readonly IAM_PUMP_MONGO_URL=${IAM_PUMP_MONGO_URL:-mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${IAM_PUMP_COLLECTION_NAME}?authSource=${IAM_PUMP_COLLECTION_NAME}}
 
+# iam-watcher配置
+readonly IAM_WATCHER_HOST=${IAM_WATCHER_HOST:-127.0.0.1} # iam-watcher 部署机器 IP 地址
+
 # iamctl 配置
 readonly CONFIG_USER_USERNAME=${CONFIG_USER_USERNAME:-admin}
 readonly CONFIG_USER_PASSWORD=${CONFIG_USER_PASSWORD:-Admin@2021}

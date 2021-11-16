@@ -65,7 +65,6 @@ $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 
 ### 3. 测试
 
-
 通过步骤1、2你已经成功安装了IAM应用。接下来，你可以执行以下命令来测试IAM应用是否安装成功：
 
 ```bash

@@ -10,13 +10,14 @@ hosts:
   - 10.0.4.20
   - 10.0.4.21
 
-# 来源IP可以访问的应用端口列表（iam-apiserver, iam-authz-server, iam-pump对外暴露的的端口）
+# 来源IP可以访问的应用端口列表（iam-apiserver, iam-authz-server, iam-pump, iam-watcher对外暴露的的端口）
 ports:
   - 8080
   - 8443
   - 9090
   - 9443
   - 7070
+  - 5050
 
 # 来源IP可以访问的数据库端口列表（Redis, MariaDB, MongoDB）
 dbports:

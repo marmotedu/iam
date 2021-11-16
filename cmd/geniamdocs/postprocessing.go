@@ -13,7 +13,6 @@ import (
 )
 
 // MarkdownPostProcessing goes though the generated files.
-// nolint:unused // may be reused in the feature.
 func MarkdownPostProcessing(cmd *cobra.Command, dir string, processor func(string) string) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
@@ -35,7 +34,7 @@ func MarkdownPostProcessing(cmd *cobra.Command, dir string, processor func(strin
 
 	processedMarkDown := processor(string(markdownBytes))
 
-	return ioutil.WriteFile(filename, []byte(processedMarkDown), 0600)
+	return ioutil.WriteFile(filename, []byte(processedMarkDown), 0o600)
 }
 
 // cleanupForInclude parts of markdown that will make difficult to use it as include in the website:

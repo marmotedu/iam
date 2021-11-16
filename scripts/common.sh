@@ -493,5 +493,5 @@ function iam::build::ensure_data_container() {
 # Build all iam commands.
 function iam::build::build_command() {
   iam::log::status "Running build command..."
-  make -C "${IAM_ROOT}" build.multiarch BINS="iamctl iam-apiserver iam-authz-server iam-pump"
+  make -C "${IAM_ROOT}" build.multiarch BINS="iamctl iam-apiserver iam-authz-server iam-pump iam-watcher"
 }

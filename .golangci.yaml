@@ -20,8 +20,8 @@ run:
   tests: true
 
   # list of build tags, all linters use it. Default is empty list.    
-  build-tags:    
-    - mytag  
+  build-tags:
+    - mytag
 
   # which dirs to skip: issues from them won't be reported;
   # can use regexp here: generated.*, regexp is applied on full path;
@@ -85,6 +85,27 @@ output:
 
 # all available settings of specific linters
 linters-settings:
+  bidichk:
+    # The following configurations check for all mentioned invisible unicode
+    # runes. It can be omitted because all runes are enabled by default.
+    left-to-right-embedding: true
+    right-to-left-embedding: true
+    pop-directional-formatting: true
+    left-to-right-override: true
+    right-to-left-override: true
+    left-to-right-isolate: true
+    right-to-left-isolate: true
+    first-strong-isolate: true
+    pop-directional-isolate: true
+
+  cyclop:
+    # the maximal code complexity to report
+    max-complexity: 10
+    # the maximal average package complexity. If it's higher than 0.0 (float) the check is enabled (default 0.0)
+    package-average: 0.0
+    # should ignore tests (default false)
+    skip-tests: false
+
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
@@ -109,6 +130,15 @@ linters-settings:
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     #exclude: errcheck.txt
+    
+  errorlint:
+    # Check whether fmt.Errorf uses the %w verb for formatting errors. See the readme for caveats
+    errorf: true
+    # Check for plain type assertions and type switches
+    asserts: true
+    # Check for plain error comparisons
+    comparison: true
+
   exhaustive:
     # check switch statements in generated files also
     check-generated: false
@@ -116,12 +146,24 @@ linters-settings:
     # 'default' case is present, even if all enum members aren't listed in the
     # switch
     default-signifies-exhaustive: false
+    # enum members matching the supplied regex do not have to be listed in
+    # switch statements to satisfy exhaustiveness
+    ignore-enum-members: ""
+    # consider enums only in package scopes, not in inner scopes
+    package-scope-only: false
   exhaustivestruct:
     struct-patterns:
       - '*.Test'
       - '*.Test2'
       - '*.Embedded'
       - '*.External'
+  forbidigo:
+    # Forbid the following identifiers (identifiers are written using regexp):
+    forbid:
+      - ^print.*$
+      - 'fmt\.Print.*'
+    # Exclude godoc examples from forbidigo checks.  Default is true.
+    exclude_godoc_examples: false
   funlen:
     lines: 150
     statements: 50
@@ -141,6 +183,19 @@ linters-settings:
     min-len: 3
     # minimal occurrences count to trigger, 3 by default
     min-occurrences: 3
+    # ignore test files, false by default
+    ignore-tests: false
+    # look for existing constants matching the values, true by default
+    match-constant: true
+    # search also for duplicated numbers, false by default
+    numbers: false
+    # minimum value, only works with goconst.numbers, 3 by default
+    min: 3
+    # maximum value, only works with goconst.numbers, 3 by default
+    max: 3
+    # ignore when constant is not used as function argument, true by default
+    ignore-calls: true
+
   gocritic:
     # Which checks should be enabled; can't be combined with 'disabled-checks';
     # See https://go-critic.github.io/overview#checks-overview
@@ -236,6 +291,15 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
+
+  gofumpt:
+    # Select the Go version to target. The default is `1.15`.
+    lang-version: "1.15"
+
+    # Choose whether or not to use the extra rules that are disabled
+    # by default
+    extra-rules: false
+
   goheader:
     values:
       const:
@@ -318,6 +382,43 @@ linters-settings:
             version: "> 2.0.9"
             reason: "use the latest version"
       local_replace_directives: false     # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
+
+  gosec:
+    # To select a subset of rules to run.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    includes:
+      - G401
+      - G306
+      - G101
+    # To specify a set of rules to explicitly exclude.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    excludes:
+      - G204
+    # Exclude generated files
+    exclude-generated: true
+    # Filter out the issues with a lower severity than the given value. Valid options are: low, medium, high.
+    severity: "low"
+    # Filter out the issues with a lower confidence than the given value. Valid options are: low, medium, high.
+    confidence: "low"
+    # To specify the configuration of rules.
+    # The configuration of rules is not fully documented by gosec:
+    # https://github.com/securego/gosec#configuration
+    # https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/rules/rulelist.go#L60-L102
+    config:
+      G306: "0600"
+      G101:
+        pattern: "(?i)example"
+        ignore_entropy: false
+        entropy_threshold: "80.0"
+        per_char_threshold: "3.0"
+        truncate: "32"
+
+  gosimple:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -352,12 +453,58 @@ linters-settings:
     max-decl-lines: 1
     # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
     max-decl-chars: 30
+
+  importas:
+    # if set to `true`, force to use alias.
+    no-unaliased: true
+    # List of aliases
+    alias:
+      # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
+      - pkg: knative.dev/serving/pkg/apis/serving/v1
+        alias: servingv1
+      # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
+      - pkg: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+        alias: autoscalingv1alpha1
+      # You can specify the package path by regular expression,
+      # and alias by regular expression expansion syntax like below.
+      # see https://github.com/julz/importas#use-regular-expression for details
+      - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
+        alias: $1$2
+
+  ireturn:
+    # ireturn allows using `allow` and `reject` settings at the same time.
+    # Both settings are lists of the keywords and regular expressions matched to interface or package names.
+    # keywords:
+    # - `empty` for `interface{}`
+    # - `error` for errors
+    # - `stdlib` for standard library
+    # - `anon` for anonymous interfaces
+
+    # By default, it allows using errors, empty interfaces, anonymous interfaces,
+    # and interfaces provided by the standard library.
+    allow:
+    - anon
+    - error
+    - empty
+    - stdlib
+    # You can specify idiomatic endings for interface
+    - (or|er)$
+
+    # Reject patterns
+    reject:
+    - github.com\/user\/package\/v4\.Type
+
   lll:
     # max line length, lines longer will be reported. Default is 120.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option
     line-length: 240
     # tab width in spaces. Default to 1.
     tab-width: 4
+
+  makezero:
+    # Allow only slices initialized with a length of zero. Default is false.
+    always: false
+
   maligned:
     # print struct with more effective memory layout or not, false by default
     suggest-new: true
@@ -371,6 +518,37 @@ linters-settings:
   nakedret:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
+
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 4
+
+  nilnil:
+    # By default, nilnil checks all returned types below.
+    checked-types:
+      - ptr
+      - func
+      - iface
+      - map
+      - chan
+
+  nlreturn:
+    # size of the block (including return statement that is still "OK")
+    # so no return split required.
+    block-size: 1
+
+  nolintlint:
+    # Disable to ensure that all nolint directives actually have an effect. Default is true.
+    allow-unused: false
+    # Disable to ensure that nolint directives don't have a leading space. Default is true.
+    allow-leading-space: true
+    # Exclude following linters from requiring an explanation.  Default is [].
+    allow-no-explanation: [ ]
+    # Enable to require an explanation of nonzero length after each nolint directive. Default is false.
+    require-explanation: false
+    # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
+    require-specific: true
+
   prealloc:
     # XXX: we don't recommend using this linter before doing performance profiling.
     # For most programs usage of prealloc will be a premature optimization.
@@ -380,22 +558,27 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+
+  promlinter:
+    # Promlinter cannot infer all metrics name in static analysis.
+    # Enable strict mode will also include the errors caused by failing to parse the args.
+    strict: false
+    # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
+    disabled-linters:
+    #  - "Help"
+    #  - "MetricUnits"
+    #  - "Counter"
+    #  - "HistogramSummaryReserved"
+    #  - "MetricTypeInName"
+    #  - "ReservedChars"
+    #  - "CamelCase"
+    #  - "lintUnitAbbreviations"
+    
   predeclared:
     # comma-separated list of predeclared identifiers to not report on
     ignore: ""
     # include method names and field names (i.e., qualified names) in checks
     q: false
-  nolintlint:
-    # Enable to ensure that nolint directives are all used. Default is true.
-    allow-unused: true
-    # Disable to ensure that nolint directives don't have a leading space. Default is true.
-    allow-leading-space: true
-    # Exclude following linters from requiring an explanation.  Default is [].
-    allow-no-explanation: []
-    # Enable to require an explanation of nonzero length after each nolint directive. Default is false.
-    require-explanation: false
-    # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
-    require-specific: true
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
@@ -460,6 +643,12 @@ linters-settings:
       first: true
       name: true
       begin: true
+
+  tenv:
+    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
+    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    all: false
+
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
@@ -475,6 +664,24 @@ linters-settings:
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+
+  wrapcheck:
+    # An array of strings that specify substrings of signatures to ignore.
+    # If this set, it will override the default set of ignored signatures.
+    # See https://github.com/tomarrell/wrapcheck#configuration for more information.
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+    ignorePackageGlobs:
+        - encoding/*
+        - github.com/pkg/*
+
   wsl:
     # If true append is only allowed to be cuddled if appending value is
     # matching variables, fields or types on line above. Default is true.
@@ -601,6 +808,18 @@ linters:
     - varcheck
     - wastedassign
     - whitespace
+    - bidichk
+      #- nilnil
+      #- tenv
+      #- varnamelen
+      #- contextcheck
+      #- errname
+      #- tagliatelle
+    - gomoddirectives
+    - wastedassign
+    - golint
+      #- ForceTypeAssert
+      #- nilassign
   fast: false
 
 issues:
@@ -644,7 +863,7 @@ issues:
       linters:
         - lll
 
-    - path: (validator/.*|code/.*|validator/.*)
+    - path: (validator/.*|code/.*|validator/.*|watcher/watcher/.*)
       linters:
         - gochecknoinits
 

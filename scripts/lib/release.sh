@@ -382,6 +382,7 @@ function iam::release::package_iam_manifests_tarball() {
   #cp "${src_dir}/iam-apiserver.yaml" "${dst_dir}"
   #cp "${src_dir}/iam-authz-server.yaml" "${dst_dir}"
   #cp "${src_dir}/iam-pump.yaml" "${dst_dir}"
+  #cp "${src_dir}/iam-watcher.yaml" "${dst_dir}"
   #cp "${IAM_ROOT}/cluster/gce/gci/health-monitor.sh" "${dst_dir}/health-monitor.sh"
 
   iam::release::clean_cruft

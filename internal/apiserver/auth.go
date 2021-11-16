@@ -49,6 +49,9 @@ func newBasicAuth() middleware.AuthStrategy {
 			return false
 		}
 
+		user.LoginedAt = time.Now()
+		_ = store.Client().Users().Update(context.TODO(), user, metav1.UpdateOptions{})
+
 		return true
 	})
 }
@@ -120,6 +123,9 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 		if err := user.Compare(login.Password); err != nil {
 			return "", jwt.ErrFailedAuthentication
 		}
+
+		user.LoginedAt = time.Now()
+		_ = store.Client().Users().Update(c, user, metav1.UpdateOptions{})
 
 		return user, nil
 	}

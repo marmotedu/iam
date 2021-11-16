@@ -225,7 +225,7 @@ func (s *GenericAPIServer) ping(ctx context.Context) error {
 			return err
 		}
 		// Ping the server by sending a GET request to `/healthz`.
-		// nolint: gosec
+
 		resp, err := http.DefaultClient.Do(req)
 		if err == nil && resp.StatusCode == http.StatusOK {
 			log.Info("The router has been deployed successfully.")
