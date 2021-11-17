@@ -6,6 +6,7 @@ package v1
 
 import (
 	"context"
+	"regexp"
 	"sync"
 
 	v1 "github.com/marmotedu/api/apiserver/v1"
@@ -142,6 +143,10 @@ func (u *userService) ListWithBadPerformance(ctx context.Context, opts metav1.Li
 
 func (u *userService) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
 	if err := u.store.Users().Create(ctx, user, opts); err != nil {
+		if match, _ := regexp.MatchString("Duplicate entry '.*' for key 'idx_name'", err.Error()); match {
+			return errors.WithCode(code.ErrUserAlreadyExist, err.Error())
+		}
+
 		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
