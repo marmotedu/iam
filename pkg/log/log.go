@@ -315,7 +315,7 @@ func StdInfoLogger() *log.Logger {
 func V(level int) InfoLogger { return std.V(level) }
 
 func (l *zapLogger) V(level int) InfoLogger {
-	lvl := zapcore.Level(-1 * level)
+	lvl := zapcore.Level(5 - 1*level)
 	if l.zapLogger.Core().Enabled(lvl) {
 		return &infoLogger{
 			level: lvl,
