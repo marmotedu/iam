@@ -202,14 +202,19 @@ EOF
   iam::log::info "install vim ide successfully"
 }
 
+# 如果是通过脚本安装，需要先尝试获取安装脚本指定的Tag，Tag记录在version文件中
+function iam::install::obtain_branch_flag(){
+  if [ -f "${IAM_ROOT}"/version ];then
+    echo "-b `cat "${IAM_ROOT}"/version`"
+  fi
+}
+
 function iam::install::prepare_iam()
 {
-  # 1. 下载iam项目代码
-  if [[ ! -d $WORKSPACE/golang/src/github.com/marmotedu/iam ]];then
-    mkdir -p $WORKSPACE/golang/src/github.com/marmotedu
-    cd $WORKSPACE/golang/src/github.com/marmotedu
-    git clone --depth=1 https://github.com/marmotedu/iam
-  fi
+  # 1. 下载iam项目代码，先强制删除iam目录，确保iam源码都是最新的指定版本
+  mkdir -p $WORKSPACE/golang/src/github.com/marmotedu && cd $WORKSPACE/golang/src/github.com/marmotedu && rm -rf iam
+  git clone $(iam::install::obtain_branch_flag) --depth=1 https://github.com/marmotedu/iam
+
   # NOTICE: 因为切换编译路径，所以这里要重新赋值 IAM_ROOT 和 LOCAL_OUTPUT_ROOT
   IAM_ROOT=$WORKSPACE/golang/src/github.com/marmotedu/iam
   LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
