@@ -65,7 +65,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 		case <-ticker.C:
 			analyticsValues := s.analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
 			if len(analyticsValues) == 0 {
-				return nil
+				continue
 			}
 
 			// Convert to something clean
