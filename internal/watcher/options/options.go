@@ -62,6 +62,7 @@ func NewOptions() *Options {
 
 // Flags returns flags for a specific APIServer by section name.
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
+	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	o.Log.AddFlags(fss.FlagSet("logs"))
 
@@ -77,15 +78,13 @@ func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
 		&o.WatcherOptions.Clean.MaxReserveDays,
 		"watcher.counter.max-reserve-days",
 		o.WatcherOptions.Clean.MaxReserveDays,
-		""+
-			"Policy audit log maximum retention days.",
+		"Policy audit log maximum retention days.",
 	)
 	fs.IntVar(
 		&o.WatcherOptions.Task.MaxInactiveDays,
 		"watcher.task.max-inactive-days",
 		o.WatcherOptions.Task.MaxInactiveDays,
-		""+
-			"Maximum user inactivity time. Otherwise the account will be disabled.",
+		"Maximum user inactivity time. Otherwise the account will be disabled.",
 	)
 
 	return fss

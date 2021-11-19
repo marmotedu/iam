@@ -5,7 +5,7 @@ Jan 2015
 
 .SH NAME
 .PP
-iamctl new \- Generate demo command code
+iamctl new - Generate demo command code
 
 
 .SH SYNOPSIS
@@ -18,127 +18,127 @@ iamctl new \- Generate demo command code
 Used to generate demo command source code file.
 
 .PP
-Can use this command generate a command template file, and do some modify based on your needs. This can improve your R \&D efficiency.
+Can use this command generate a command template file, and do some modify based on your needs. This can improve your R &D efficiency.
 
 
 .SH OPTIONS
 .PP
-\fB\-g\fP, \fB\-\-group\fP=false
+\fB-g\fP, \fB--group\fP=false
 	Generate two subcommands.
 
 .PP
-\fB\-d\fP, \fB\-\-outdir\fP="."
+\fB-d\fP, \fB--outdir\fP="."
 	Where to create demo command files.
 
 
 .SH OPTIONS INHERITED FROM PARENT COMMANDS
 .PP
-\fB\-\-alsologtostderr\fP=false
+\fB--alsologtostderr\fP=false
 	log to standard error as well as files
 
 .PP
-\fB\-c\fP, \fB\-\-config\fP=""
+\fB-c\fP, \fB--config\fP=""
 	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
 
 .PP
-\fB\-\-iamconfig\fP=""
+\fB--iamconfig\fP=""
 	Path to the iamconfig file to use for CLI requests
 
 .PP
-\fB\-\-log\-backtrace\-at\fP=:0
+\fB--log-backtrace-at\fP=:0
 	when logging hits line file:N, emit a stack trace
 
 .PP
-\fB\-\-log\-dir\fP=""
-	If non\-empty, write log files in this directory
+\fB--log-dir\fP=""
+	If non-empty, write log files in this directory
 
 .PP
-\fB\-\-logtostderr\fP=false
+\fB--logtostderr\fP=false
 	log to standard error instead of files
 
 .PP
-\fB\-\-match\-server\-version\fP=false
+\fB--match-server-version\fP=false
 	Require server version to match client version
 
 .PP
-\fB\-\-profile\fP="none"
+\fB--profile\fP="none"
 	Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)
 
 .PP
-\fB\-\-profile\-output\fP="profile.pprof"
+\fB--profile-output\fP="profile.pprof"
 	Name of the file to write the profile to
 
 .PP
-\fB\-s\fP, \fB\-\-server.address\fP=""
+\fB-s\fP, \fB--server.address\fP=""
 	The address and port of the IAM API server
 
 .PP
-\fB\-\-server.certificate\-authority\fP=""
+\fB--server.certificate-authority\fP=""
 	Path to a cert file for the certificate authority
 
 .PP
-\fB\-\-server.insecure\-skip\-tls\-verify\fP=false
+\fB--server.insecure-skip-tls-verify\fP=false
 	If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
 
 .PP
-\fB\-\-server.max\-retries\fP=0
+\fB--server.max-retries\fP=0
 	Maximum number of retries.
 
 .PP
-\fB\-\-server.retry\-interval\fP=1s
+\fB--server.retry-interval\fP=1s
 	The interval time between each attempt.
 
 .PP
-\fB\-\-server.timeout\fP=30s
-	The length of time to wait before giving up on a single server request. Non\-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+\fB--server.timeout\fP=30s
+	The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
 
 .PP
-\fB\-\-server.tls\-server\-name\fP=""
+\fB--server.tls-server-name\fP=""
 	Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
 
 .PP
-\fB\-\-stderrthreshold\fP=2
+\fB--stderrthreshold\fP=2
 	logs at or above this threshold go to stderr
 
 .PP
-\fB\-\-user.client\-certificate\fP=""
+\fB--user.client-certificate\fP=""
 	Path to a client certificate file for TLS
 
 .PP
-\fB\-\-user.client\-key\fP=""
+\fB--user.client-key\fP=""
 	Path to a client key file for TLS
 
 .PP
-\fB\-\-user.password\fP=""
+\fB--user.password\fP=""
 	Password for basic authentication to the API server
 
 .PP
-\fB\-\-user.secret\-id\fP=""
+\fB--user.secret-id\fP=""
 	SecretID for JWT authentication to the API server
 
 .PP
-\fB\-\-user.secret\-key\fP=""
+\fB--user.secret-key\fP=""
 	SecretKey for jwt authentication to the API server
 
 .PP
-\fB\-\-user.token\fP=""
+\fB--user.token\fP=""
 	Bearer token for authentication to the API server
 
 .PP
-\fB\-\-user.username\fP=""
+\fB--user.username\fP=""
 	Username for basic authentication to the API server
 
 .PP
-\fB\-v\fP, \fB\-\-v\fP=0
+\fB-v\fP, \fB--v\fP=0
 	log level for V logs
 
 .PP
-\fB\-\-version\fP=false
+\fB--version\fP=false
 	Print version information and quit.
 
 .PP
-\fB\-\-vmodule\fP=
-	comma\-separated list of pattern=N settings for file\-filtered logging
+\fB--vmodule\fP=
+	comma-separated list of pattern=N settings for file-filtered logging
 
 
 .SH EXAMPLE
@@ -150,13 +150,13 @@ Can use this command generate a command template file, and do some modify based 
   iamctl new test
   
   # Create a default 'test' command file in /tmp/
-  iamctl new test \-d /tmp/
+  iamctl new test -d /tmp/
   
   # Create a default 'test' command file with a description
   iamctl new test "This is a test command"
   
   # Create command 'test' with two subcommands
-  iamctl new \-g test "This is a test command with two subcommands"
+  iamctl new -g test "This is a test command with two subcommands"
 
 .fi
 .RE

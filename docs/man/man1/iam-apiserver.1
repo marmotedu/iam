@@ -5,12 +5,12 @@ Jan 2015
 
 .SH NAME
 .PP
-iam\-apiserver \- IAM API Server
+iam-apiserver - IAM API Server
 
 
 .SH SYNOPSIS
 .PP
-\fBiam\-apiserver\fP [OPTIONS]
+\fBiam-apiserver\fP [OPTIONS]
 
 
 .SH DESCRIPTION
@@ -20,246 +20,246 @@ for the api objects which include users, policies, secrets, and
 others. The API Server services REST operations to do the api objects management.
 
 .PP
-Find more iam\-apiserver information at:
-    https://github.com/marmotedu/iam/blob/master/docs/guide/en\-US/cmd/iam\-apiserver.md
+Find more iam-apiserver information at:
+    https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-apiserver.md
 
 
 .SH OPTIONS
 .PP
-\fB\-\-alsologtostderr\fP=false
+\fB--alsologtostderr\fP=false
 	log to standard error as well as files
 
 .PP
-\fB\-c\fP, \fB\-\-config\fP=""
+\fB-c\fP, \fB--config\fP=""
 	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
 
 .PP
-\fB\-\-feature.enable\-metrics\fP=true
+\fB--feature.enable-metrics\fP=true
 	Enables metrics on the apiserver at /metrics
 
 .PP
-\fB\-\-feature.profiling\fP=true
+\fB--feature.profiling\fP=true
 	Enable profiling via web interface host:port/debug/pprof/
 
 .PP
-\fB\-\-grpc.bind\-address\fP="0.0.0.0"
-	The IP address on which to serve the \-\-grpc.bind\-port(set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
+\fB--grpc.bind-address\fP="0.0.0.0"
+	The IP address on which to serve the --grpc.bind-port(set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
 
 .PP
-\fB\-\-grpc.bind\-port\fP=8081
+\fB--grpc.bind-port\fP=8081
 	The port on which to serve unsecured, unauthenticated grpc access. It is assumed that firewall rules are set up such that this port is not reachable from outside of the deployed machine and that port 443 on the iam public address is proxied to this port. This is performed by nginx in the default setup. Set to zero to disable.
 
 .PP
-\fB\-\-grpc.max\-msg\-size\fP=4194304
+\fB--grpc.max-msg-size\fP=4194304
 	gRPC max message size.
 
 .PP
-\fB\-\-insecure.bind\-address\fP="127.0.0.1"
-	The IP address on which to serve the \-\-insecure.bind\-port (set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
+\fB--insecure.bind-address\fP="127.0.0.1"
+	The IP address on which to serve the --insecure.bind-port (set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
 
 .PP
-\fB\-\-insecure.bind\-port\fP=8080
+\fB--insecure.bind-port\fP=8080
 	The port on which to serve unsecured, unauthenticated access. It is assumed that firewall rules are set up such that this port is not reachable from outside of the deployed machine and that port 443 on the iam public address is proxied to this port. This is performed by nginx in the default setup. Set to zero to disable.
 
 .PP
-\fB\-\-jwt.key\fP=""
+\fB--jwt.key\fP=""
 	Private key used to sign jwt token.
 
 .PP
-\fB\-\-jwt.max\-refresh\fP=1h0m0s
+\fB--jwt.max-refresh\fP=1h0m0s
 	This field allows clients to refresh their token until MaxRefresh has passed.
 
 .PP
-\fB\-\-jwt.realm\fP="iam jwt"
+\fB--jwt.realm\fP="iam jwt"
 	Realm name to display to the user.
 
 .PP
-\fB\-\-jwt.timeout\fP=1h0m0s
+\fB--jwt.timeout\fP=1h0m0s
 	JWT token timeout.
 
 .PP
-\fB\-\-log\-backtrace\-at\fP=:0
+\fB--log-backtrace-at\fP=:0
 	when logging hits line file:N, emit a stack trace
 
 .PP
-\fB\-\-log\-dir\fP=""
-	If non\-empty, write log files in this directory
+\fB--log-dir\fP=""
+	If non-empty, write log files in this directory
 
 .PP
-\fB\-\-log.development\fP=false
+\fB--log.development\fP=false
 	Development puts the logger in development mode, which changes the behavior of DPanicLevel and takes stacktraces more liberally.
 
 .PP
-\fB\-\-log.disable\-caller\fP=false
+\fB--log.disable-caller\fP=false
 	Disable output of caller information in the log.
 
 .PP
-\fB\-\-log.disable\-stacktrace\fP=false
+\fB--log.disable-stacktrace\fP=false
 	Disable the log to record a stack trace for all messages at or above panic level.
 
 .PP
-\fB\-\-log.enable\-color\fP=false
+\fB--log.enable-color\fP=false
 	Enable output ansi colors in plain format logs.
 
 .PP
-\fB\-\-log.error\-output\-paths\fP=[stderr]
+\fB--log.error-output-paths\fP=[stderr]
 	Error output paths of log.
 
 .PP
-\fB\-\-log.format\fP="console"
+\fB--log.format\fP="console"
 	Log output \fB\fCFORMAT\fR, support plain or json format.
 
 .PP
-\fB\-\-log.level\fP="info"
+\fB--log.level\fP="info"
 	Minimum log output \fB\fCLEVEL\fR\&.
 
 .PP
-\fB\-\-log.name\fP=""
+\fB--log.name\fP=""
 	The name of the logger.
 
 .PP
-\fB\-\-log.output\-paths\fP=[stdout]
+\fB--log.output-paths\fP=[stdout]
 	Output paths of log.
 
 .PP
-\fB\-\-logtostderr\fP=false
+\fB--logtostderr\fP=false
 	log to standard error instead of files
 
 .PP
-\fB\-\-mysql.database\fP=""
+\fB--mysql.database\fP=""
 	Database name for the server to use.
 
 .PP
-\fB\-\-mysql.host\fP="127.0.0.1:3306"
+\fB--mysql.host\fP="127.0.0.1:3306"
 	MySQL service host address. If left blank, the following related mysql options will be ignored.
 
 .PP
-\fB\-\-mysql.log\-mode\fP=1
+\fB--mysql.log-mode\fP=1
 	Specify gorm log level.
 
 .PP
-\fB\-\-mysql.max\-connection\-life\-time\fP=10s
+\fB--mysql.max-connection-life-time\fP=10s
 	Maximum connection life time allowed to connecto to mysql.
 
 .PP
-\fB\-\-mysql.max\-idle\-connections\fP=100
+\fB--mysql.max-idle-connections\fP=100
 	Maximum idle connections allowed to connect to mysql.
 
 .PP
-\fB\-\-mysql.max\-open\-connections\fP=100
+\fB--mysql.max-open-connections\fP=100
 	Maximum open connections allowed to connect to mysql.
 
 .PP
-\fB\-\-mysql.password\fP=""
+\fB--mysql.password\fP=""
 	Password for access to mysql, should be used pair with password.
 
 .PP
-\fB\-\-mysql.username\fP=""
+\fB--mysql.username\fP=""
 	Username for access to mysql service.
 
 .PP
-\fB\-\-redis.addrs\fP=[]
+\fB--redis.addrs\fP=[]
 	A set of redis address(format: 127.0.0.1:6379).
 
 .PP
-\fB\-\-redis.database\fP=0
-	By default, the database is 0. Setting the database is not supported with redis cluster. As such, if you have \-\-redis.enable\-cluster=true, then this value should be omitted or explicitly set to 0.
+\fB--redis.database\fP=0
+	By default, the database is 0. Setting the database is not supported with redis cluster. As such, if you have --redis.enable-cluster=true, then this value should be omitted or explicitly set to 0.
 
 .PP
-\fB\-\-redis.enable\-cluster\fP=false
+\fB--redis.enable-cluster\fP=false
 	If you are using Redis cluster, enable it here to enable the slots mode.
 
 .PP
-\fB\-\-redis.host\fP="127.0.0.1"
+\fB--redis.host\fP="127.0.0.1"
 	Hostname of your Redis server.
 
 .PP
-\fB\-\-redis.master\-name\fP=""
+\fB--redis.master-name\fP=""
 	The name of master redis instance.
 
 .PP
-\fB\-\-redis.optimisation\-max\-active\fP=4000
+\fB--redis.optimisation-max-active\fP=4000
 	In order to not over commit connections to the Redis server, we may limit the total number of active connections to Redis. We recommend for production use to set this to around 4000.
 
 .PP
-\fB\-\-redis.optimisation\-max\-idle\fP=2000
-	This setting will configure how many connections are maintained in the pool when idle (no traffic). Set the \-\-redis.optimisation\-max\-active to something large, we usually leave it at around 2000 for HA deployments.
+\fB--redis.optimisation-max-idle\fP=2000
+	This setting will configure how many connections are maintained in the pool when idle (no traffic). Set the --redis.optimisation-max-active to something large, we usually leave it at around 2000 for HA deployments.
 
 .PP
-\fB\-\-redis.password\fP=""
+\fB--redis.password\fP=""
 	Optional auth password for Redis db.
 
 .PP
-\fB\-\-redis.port\fP=6379
+\fB--redis.port\fP=6379
 	The port the Redis server is listening on.
 
 .PP
-\fB\-\-redis.ssl\-insecure\-skip\-verify\fP=false
-	Allows usage of self\-signed certificates when connecting to an encrypted Redis database.
+\fB--redis.ssl-insecure-skip-verify\fP=false
+	Allows usage of self-signed certificates when connecting to an encrypted Redis database.
 
 .PP
-\fB\-\-redis.timeout\fP=0
+\fB--redis.timeout\fP=0
 	Timeout (in seconds) when connecting to redis service.
 
 .PP
-\fB\-\-redis.use\-ssl\fP=false
-	If set, IAM will assume the connection to Redis is encrypted. (use with Redis providers that support in\-transit encryption).
+\fB--redis.use-ssl\fP=false
+	If set, IAM will assume the connection to Redis is encrypted. (use with Redis providers that support in-transit encryption).
 
 .PP
-\fB\-\-redis.username\fP=""
+\fB--redis.username\fP=""
 	Username for access to redis service.
 
 .PP
-\fB\-\-secure.bind\-address\fP="0.0.0.0"
-	The IP address on which to listen for the \-\-secure.bind\-port port. The associated interface(s) must be reachable by the rest of the engine, and by CLI/web clients. If blank, all interfaces will be used (0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
+\fB--secure.bind-address\fP="0.0.0.0"
+	The IP address on which to listen for the --secure.bind-port port. The associated interface(s) must be reachable by the rest of the engine, and by CLI/web clients. If blank, all interfaces will be used (0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
 
 .PP
-\fB\-\-secure.bind\-port\fP=8443
+\fB--secure.bind-port\fP=8443
 	The port on which to serve HTTPS with authentication and authorization. It cannot be switched off with 0.
 
 .PP
-\fB\-\-secure.tls.cert\-dir\fP="/var/run/iam"
-	The directory where the TLS certs are located. If \-\-secure.tls.cert\-key.cert\-file and \-\-secure.tls.cert\-key.private\-key\-file are provided, this flag will be ignored.
+\fB--secure.tls.cert-dir\fP="/var/run/iam"
+	The directory where the TLS certs are located. If --secure.tls.cert-key.cert-file and --secure.tls.cert-key.private-key-file are provided, this flag will be ignored.
 
 .PP
-\fB\-\-secure.tls.cert\-key.cert\-file\fP=""
+\fB--secure.tls.cert-key.cert-file\fP=""
 	File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert).
 
 .PP
-\fB\-\-secure.tls.cert\-key.private\-key\-file\fP=""
-	File containing the default x509 private key matching \-\-secure.tls.cert\-key.cert\-file.
+\fB--secure.tls.cert-key.private-key-file\fP=""
+	File containing the default x509 private key matching --secure.tls.cert-key.cert-file.
 
 .PP
-\fB\-\-secure.tls.pair\-name\fP="iam"
-	The name which will be used with \-\-secure.tls.cert\-dir to make a cert and key filenames. It becomes /\&.crt and /\&.key
+\fB--secure.tls.pair-name\fP="iam"
+	The name which will be used with --secure.tls.cert-dir to make a cert and key filenames. It becomes /\&.crt and /\&.key
 
 .PP
-\fB\-\-server.healthz\fP=true
+\fB--server.healthz\fP=true
 	Add self readiness check and install /healthz router.
 
 .PP
-\fB\-\-server.middlewares\fP=[]
+\fB--server.middlewares\fP=[]
 	List of allowed middlewares for server, comma separated. If this list is empty default middlewares will be used.
 
 .PP
-\fB\-\-server.mode\fP="release"
+\fB--server.mode\fP="release"
 	Start the server in a specified server mode. Supported server mode: debug, test, release.
 
 .PP
-\fB\-\-stderrthreshold\fP=2
+\fB--stderrthreshold\fP=2
 	logs at or above this threshold go to stderr
 
 .PP
-\fB\-v\fP, \fB\-\-v\fP=0
+\fB-v\fP, \fB--v\fP=0
 	log level for V logs
 
 .PP
-\fB\-\-version\fP=false
+\fB--version\fP=false
 	Print version information and quit.
 
 .PP
-\fB\-\-vmodule\fP=
-	comma\-separated list of pattern=N settings for file\-filtered logging
+\fB--vmodule\fP=
+	comma-separated list of pattern=N settings for file-filtered logging
 
 
 .SH HISTORY

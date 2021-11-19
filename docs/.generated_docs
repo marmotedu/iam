@@ -2,6 +2,7 @@ docs/.generated_docs
 docs/guide/en-US/cmd/iam-apiserver.md
 docs/guide/en-US/cmd/iam-authz-server.md
 docs/guide/en-US/cmd/iam-pump.md
+docs/guide/en-US/cmd/iam-watcher.md
 docs/guide/en-US/cmd/iamctl/iamctl.md
 docs/guide/en-US/cmd/iamctl/iamctl_color.md
 docs/guide/en-US/cmd/iamctl/iamctl_completion.md
@@ -49,6 +50,7 @@ docs/guide/en-US/yaml/iamctl/iamctl_version.yaml
 docs/man/man1/iam-apiserver.1
 docs/man/man1/iam-authz-server.1
 docs/man/man1/iam-pump.1
+docs/man/man1/iam-watcher.1
 docs/man/man1/iamctl-color.1
 docs/man/man1/iamctl-completion.1
 docs/man/man1/iamctl-info.1

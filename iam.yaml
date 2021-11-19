@@ -77,28 +77,6 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 ---
-# Source: iam/templates/iam-watcher-service.yaml
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file.
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: iam-watcher
-  name: iam-watcher
-spec:
-  ports:
-  - name: http
-    protocol: TCP
-    port: 5050
-    targetPort: 5050
-  selector:
-    app: iam-watcher
-  sessionAffinity: None
-  type: ClusterIP
----
 # Source: iam/templates/iam-apiserver-deployment.yaml
 # Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
 # Use of this source code is governed by a MIT style
@@ -468,128 +446,6 @@ spec:
           name: iam-cert
         name: iam-cert
 ---
-# Source: iam/templates/iam-watcher-deployment.yaml
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file.
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: iam-watcher
-  name: iam-watcher
-spec:
-  replicas: 1
-  progressDeadlineSeconds: 10
-  revisionHistoryLimit: 5
-  selector:
-    matchLabels:
-      app: iam-watcher
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app: iam-watcher
-    spec:
-      imagePullSecrets:
-        - name: ccr-registry
-      securityContext:
-        {}
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - iam-watcher
-              topologyKey: kubernetes.io/hostname
-            weight: 100
-      containers:
-      - command:
-        - /opt/iam/bin/iam-watcher
-        - --config=/etc/iam/iam-watcher.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-watcher-amd64:v1.1.0"
-        name: iam-watcher
-        securityContext:
-            {}
-        ports:
-        - containerPort: 9443
-          name: secure
-          protocol: TCP
-        - containerPort: 9090
-          name: insecure
-          protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 5050
-            scheme: HTTP
-          failureThreshold: 1
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 5050
-            scheme: HTTP
-          failureThreshold: 1
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 3
-        startupProbe:
-          httpGet:
-            path: /healthz
-            port: 5050
-            scheme: HTTP
-          failureThreshold: 10
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 3
-        resources:
-            limits:
-              cpu: 250m
-              memory: 512Mi
-            requests:
-              cpu: 250m
-              memory: 512Mi
-        imagePullPolicy: Always
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /etc/iam/iam-watcher.yaml
-          name: iam
-          subPath: iam-watcher.yaml
-        - mountPath: /etc/iam/cert
-          name: iam-cert
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      terminationGracePeriodSeconds: 5
-      volumes:
-      - configMap:
-          defaultMode: 420
-          items:
-          - key: iam-watcher.yaml
-            path: iam-watcher.yaml
-          name: iam
-        name: iam
-      - configMap:
-          defaultMode: 420
-          name: iam-cert
-        name: iam-cert
----
 # Source: iam/templates/iamctl-deployment.yaml
 # Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
 # Use of this source code is governed by a MIT style
@@ -659,8 +515,6 @@ spec:
             value: iam-apiserver
           - name: IAM_PUMP_HOST
             value: iam-pump
-          - name: IAM_WATCHER_HOST
-            value: iam-watcher
         volumeMounts:
         - mountPath: /etc/iam/iamctl.yaml
           name: iam

@@ -739,8 +739,8 @@ github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJ
 github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2/go.mod h1:Ld9puTsIW75CHf65OeIOkyKbteujpZVXDpWK6YGZbxE=
 github.com/markbates/safe v1.0.1/go.mod h1:nAqgmRi7cY2nqMc92/bSEeQA+R4OheNU2T1kNSCBdG0=
 github.com/marmotedu/api v1.0.1/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
-github.com/marmotedu/api v1.0.3 h1:yl4q06Iunha3yIm6IsjzTyHCfDTh6KHM3WIl1/El0Tk=
-github.com/marmotedu/api v1.0.3/go.mod h1:9W9G25bxJGo34V1HQ2VcoPZTyy8WRMCve28zXWcIgl8=
+github.com/marmotedu/api v1.0.5 h1:JZRKoYHy1gg3DZ2fcfwYPBAEDp0uRoVYovVouuec3Jc=
+github.com/marmotedu/api v1.0.5/go.mod h1:wRkEh5yx/zB2/wMtIgdUmWbvftyEGiHIubXilqInjGo=
 github.com/marmotedu/component-base v1.0.0/go.mod h1:uqOvcyTL4uNB3qxiVJXbYDbnVD4DB89/vWwQZfJgxkM=
 github.com/marmotedu/component-base v1.0.1 h1:pkGSOz8thxEGduRjHv/EO50skKviyCPDbOfGH2e/d7M=
 github.com/marmotedu/component-base v1.0.1/go.mod h1:YqFsxJS6hQvN7YKRRz4cDnt5h3DbikuAfs7dYMRuWg8=

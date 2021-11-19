@@ -19,6 +19,7 @@ import (
 	"github.com/marmotedu/iam/internal/authzserver"
 	"github.com/marmotedu/iam/internal/iamctl/cmd"
 	"github.com/marmotedu/iam/internal/pump"
+	"github.com/marmotedu/iam/internal/watcher"
 	"github.com/marmotedu/iam/pkg/util/genutil"
 )
 
@@ -65,6 +66,13 @@ func main() {
 		genMarkdown(pump, "", outDir)
 		for _, c := range pump.Commands() {
 			genMarkdown(c, "iam-pump", outDir)
+		}
+	case "iam-watcher":
+		// generate manpage for iam-watcher
+		watcher := watcher.NewApp("iam-watcher").Command()
+		genMarkdown(watcher, "", outDir)
+		for _, c := range watcher.Commands() {
+			genMarkdown(c, "iam-watcher", outDir)
 		}
 	case "iamctl":
 		// generate manpage for iamctl

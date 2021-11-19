@@ -14,6 +14,7 @@ import (
 	"github.com/marmotedu/iam/internal/authzserver"
 	"github.com/marmotedu/iam/internal/iamctl/cmd"
 	"github.com/marmotedu/iam/internal/pump"
+	"github.com/marmotedu/iam/internal/watcher"
 	"github.com/marmotedu/iam/pkg/util/genutil"
 )
 
@@ -47,6 +48,10 @@ func main() {
 		// generate docs for iam-pump
 		iamPump := pump.NewApp("iam-pump").Command()
 		_ = doc.GenMarkdownTree(iamPump, outDir)
+	case "iam-watcher":
+		// generate docs for iam-watcher
+		iamWatcher := watcher.NewApp("iam-watcher").Command()
+		_ = doc.GenMarkdownTree(iamWatcher, outDir)
 	case "iamctl":
 		// generate docs for iamctl
 		iamctl := cmd.NewDefaultIAMCtlCommand()
