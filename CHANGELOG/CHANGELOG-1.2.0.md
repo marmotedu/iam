@@ -1,6 +1,6 @@
 
 <a name="v1.2.0"></a>
-## [v1.2.0](https://github.com/marmotedu/iam/compare/v1.1.0...v1.2.0) (2021-11-19)
+## [v1.2.0](https://github.com/marmotedu/iam/compare/v1.1.0...v1.2.0) (2021-11-20)
 
 ### Bug Fixes
 
@@ -12,6 +12,7 @@
 
 ### Code Refactoring
 
+* optimize code
 * return `User already exist` instead of `Database error`
 
 ### Features
