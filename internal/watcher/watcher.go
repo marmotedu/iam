@@ -39,13 +39,13 @@ func newWatchJob(redisOptions *genericoptions.RedisOptions, watcherOptions *opti
 		Password: redisOptions.Password,
 	})
 
+	pool := goredis.NewPool(client)
+	rs := redsync.New(pool)
+
 	cron := cron.New(
 		cron.WithSeconds(),
 		cron.WithChain(cron.SkipIfStillRunning(logger), cron.Recover(logger)),
 	)
-
-	pool := goredis.NewPool(client)
-	rs := redsync.New(pool)
 
 	return &watchJob{
 		Cron:   cron,
