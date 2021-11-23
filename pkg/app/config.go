@@ -44,6 +44,7 @@ func addConfigFlag(basename string, fs *pflag.FlagSet) {
 
 			if names := strings.Split(basename, "-"); len(names) > 1 {
 				viper.AddConfigPath(filepath.Join(homedir.HomeDir(), "."+names[0]))
+				viper.AddConfigPath(filepath.Join("/etc", names[0]))
 			}
 
 			viper.SetConfigName(basename)
