@@ -167,7 +167,7 @@ func CreateListener(addr string) (net.Listener, int, error) {
 	// get port
 	tcpAddr, ok := ln.Addr().(*net.TCPAddr)
 	if !ok {
-		ln.Close()
+		_ = ln.Close()
 
 		return nil, 0, fmt.Errorf("invalid listen address: %q", ln.Addr().String())
 	}

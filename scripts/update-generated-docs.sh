@@ -18,10 +18,10 @@ source "${IAM_ROOT}/scripts/lib/init.sh"
 iam::golang::setup_env
 
 BINS=(
-	gendocs
-	geniamdocs
-	genman
-	genyaml
+  gendocs
+  geniamdocs
+  genman
+  genyaml
 )
 make build -C "${IAM_ROOT}" BINS="${BINS[*]}"
 

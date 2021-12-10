@@ -67,7 +67,7 @@ func (o *MySQLOptions) AddFlags(fs *pflag.FlagSet) {
 		"Maximum open connections allowed to connect to mysql.")
 
 	fs.DurationVar(&o.MaxConnectionLifeTime, "mysql.max-connection-life-time", o.MaxConnectionLifeTime, ""+
-		"Maximum connection life time allowed to connecto to mysql.")
+		"Maximum connection life time allowed to connect to mysql.")
 
 	fs.IntVar(&o.LogLevel, "mysql.log-mode", o.LogLevel, ""+
 		"Specify gorm log level.")
