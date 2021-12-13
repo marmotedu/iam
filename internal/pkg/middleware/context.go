@@ -16,8 +16,8 @@ const UsernameKey = "username"
 // Context is a middleware that injects common prefix fields to gin.Context.
 func Context() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set(log.KeyRequestID.String(), c.GetString(XRequestIDKey))
-		c.Set(log.KeyUsername.String(), c.GetString(UsernameKey))
+		c.Set(log.KeyRequestID, c.GetString(XRequestIDKey))
+		c.Set(log.KeyUsername, c.GetString(UsernameKey))
 		c.Next()
 	}
 }
