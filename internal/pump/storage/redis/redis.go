@@ -66,7 +66,6 @@ func NewRedisClusterPool(forceReconnect bool, config genericoptions.RedisOptions
 	var tlsConfig *tls.Config
 	if config.UseSSL {
 		tlsConfig = &tls.Config{
-
 			InsecureSkipVerify: config.SSLInsecureSkipVerify,
 		}
 	}
