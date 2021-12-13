@@ -7,12 +7,12 @@ package apiserver
 import (
 	"sync"
 
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
 	"github.com/marmotedu/iam/internal/authzserver/store"
 	"github.com/marmotedu/iam/pkg/log"
+	pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 type datastore struct {

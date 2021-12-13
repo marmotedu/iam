@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/AlekSi/pointer"
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/pkg/log"
+	pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 type secrets struct {

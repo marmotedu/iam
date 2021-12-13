@@ -10,9 +10,10 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/stretchr/testify/suite"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/apiserver/store/fake"

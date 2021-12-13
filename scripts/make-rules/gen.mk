@@ -6,9 +6,13 @@
 # Makefile helper functions for generate necessary files
 #
 
+PROTOC_INC_PATH=$(dir $(shell which protoc 2>/dev/null))/../include    
+API_DEPS=pkg/model/apiserver/v1/cache.proto             
+API_DEPSRCS=$(API_DEPS:.proto=.pb.go) 
+
 .PHONY: gen.run
 #gen.run: gen.errcode gen.docgo
-gen.run: gen.clean gen.errcode gen.docgo.doc
+gen.run: gen.clean gen.proto gen.errcode gen.docgo.doc
 
 .PHONY: gen.errcode
 gen.errcode: gen.errcode.code gen.errcode.doc
@@ -55,7 +59,22 @@ gen.docgo.add:
 gen.defaultconfigs:
 	@${ROOT_DIR}/scripts/gen_default_config.sh
 
+.PHONY: gen.proto
+gen.proto: $(API_DEPSRCS)
+
+$(API_DEPSRCS): tools.verify.protoc-gen-go $(API_DEPS)
+	@echo "===========> Generate protobuf files"
+	@mkdir -p $(OUTPUT_DIR)
+	@protoc -I $(PROTOC_INC_PATH) -I$(ROOT_DIR) \
+	 --go_out=plugins=grpc:$(OUTPUT_DIR) $(@:.pb.go=.proto)
+	@cp $(OUTPUT_DIR)/$(ROOT_PACKAGE)/$@ $@ || cp $(OUTPUT_DIR)/$@ $@
+	@rm -rf $(OUTPUT_DIR)
+
+.PHONY: gen.proto
+ gen.proto: $(API_DEPSRCS)
+
 .PHONY: gen.clean
 gen.clean:
 	@rm -rf ./api/client/{clientset,informers,listers}
 	@$(FIND) -type f -name '*_generated.go' -delete
+	@rm -f $(API_DEPSRCS)

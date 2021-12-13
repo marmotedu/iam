@@ -8,11 +8,12 @@ import (
 	"context"
 	"fmt"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/json"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/jsonutil"
 	"github.com/marmotedu/errors"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 type policies struct {

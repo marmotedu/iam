@@ -7,12 +7,12 @@ package v1
 import (
 	"context"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // SecretSrv defines functions used to handle secret request.

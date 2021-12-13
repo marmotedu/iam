@@ -6,7 +6,6 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/auth"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // Create add new user to the storage.

@@ -1,0 +1,15 @@
+{
+    "name": "Modern Go Application GraphQL Schema",
+    "schemaPath": "schema.graphql",
+    "extensions": {
+        "endpoints": {
+            "Local": {
+                "url": "http://localhost:8000/graphql",
+                "headers": {
+                    "user-agent": "JS GraphQL"
+                },
+                "introspect": false
+            }
+        }
+    }
+}

@@ -42,7 +42,7 @@ definitions:
         x-go-name: Subjects
     title: AuthzPolicy defines iam policy type.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   ChangePasswordRequest:
     properties:
       newPassword:
@@ -159,7 +159,7 @@ definitions:
     - name
     title: Policy represents a policy restful resource, include a ladon policy.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   PolicyList:
     properties:
       items:
@@ -175,7 +175,7 @@ definitions:
     title: PolicyList is the whole list of all policies which have been stored in
       stroage.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   Secret:
     description: It is also used as gorm model.
     properties:
@@ -245,7 +245,7 @@ definitions:
     - expires
     title: Secret represents a secret restful resource.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   SecretList:
     properties:
       items:
@@ -260,7 +260,7 @@ definitions:
         x-go-name: TotalCount
     title: SecretList is the whole list of all secrets which have been stored in stroage.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   User:
     properties:
       createdAt:
@@ -343,7 +343,7 @@ definitions:
     - email
     title: User represents a user restful resource. It is also used as gorm model.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
   UserList:
     properties:
       items:
@@ -357,7 +357,7 @@ definitions:
         x-go-name: TotalCount
     title: UserList is the whole list of all users which have been stored in stroage.
     type: object
-    x-go-package: github.com/marmotedu/api/apiserver/v1
+    x-go-package: github.com/marmotedu/iam/pkg/model/apiserver/v1
 host: iam.api.marmotedu.com
 info:
   contact:

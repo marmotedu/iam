@@ -13,7 +13,6 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/spf13/viper"
 
@@ -21,6 +20,7 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
 	"github.com/marmotedu/iam/pkg/log"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 const (

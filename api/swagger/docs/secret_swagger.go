@@ -5,9 +5,10 @@
 package docs
 
 import (
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // swagger:route POST /secrets secrets createSecretRequest

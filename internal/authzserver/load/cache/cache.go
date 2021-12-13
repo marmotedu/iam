@@ -8,11 +8,11 @@ import (
 	"sync"
 
 	"github.com/dgraph-io/ristretto"
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/internal/authzserver/store"
+	pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // Cache is used to store secrets and policies.

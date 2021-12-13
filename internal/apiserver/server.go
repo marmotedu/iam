@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
@@ -20,6 +19,7 @@ import (
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	genericapiserver "github.com/marmotedu/iam/internal/pkg/server"
 	"github.com/marmotedu/iam/pkg/log"
+	pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 	"github.com/marmotedu/iam/pkg/shutdown"
 	"github.com/marmotedu/iam/pkg/shutdown/shutdownmanagers/posixsignal"
 	"github.com/marmotedu/iam/pkg/storage"

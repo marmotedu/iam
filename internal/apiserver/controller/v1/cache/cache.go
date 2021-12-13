@@ -10,13 +10,13 @@ import (
 	"fmt"
 	"sync"
 
-	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
+	pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // Cache defines a cache service used to list all secrets and policies.

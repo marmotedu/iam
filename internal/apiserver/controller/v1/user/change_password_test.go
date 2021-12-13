@@ -12,7 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
-	v1 "github.com/marmotedu/api/apiserver/v1"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 	_ "github.com/marmotedu/iam/pkg/validator"

@@ -13,8 +13,9 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	v10 "github.com/marmotedu/component-base/pkg/meta/v1"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // MockService is a mock of Service interface.

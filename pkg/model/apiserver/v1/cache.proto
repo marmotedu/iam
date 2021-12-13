@@ -1,0 +1,62 @@
+// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/marmotedu/iam/pkg/model/apiserver/v1";
+
+//go:generate protoc -I. --go_out=plugins=grpc:.
+
+
+// Cache implements a cache rpc service.
+service Cache{
+	rpc ListSecrets(ListSecretsRequest) returns (ListSecretsResponse) {}
+	rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse) {}
+}
+
+// ListSecretsRequest defines ListSecrets request struct.
+message ListSecretsRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// SecretInfo contains secret details.
+message SecretInfo {
+    string name = 1;
+    string secret_id  = 2;
+    string username   = 3;
+    string secret_key = 4;
+    int64 expires = 5;
+    string description = 6;
+    string created_at = 7;
+    string updated_at = 8;
+}
+
+// ListSecretsResponse defines ListSecrets response struct.
+message ListSecretsResponse {
+    int64 total_count = 1;
+    repeated  SecretInfo items = 2;
+}
+
+// ListPoliciesRequest defines ListPolicies request struct.
+message ListPoliciesRequest {
+    optional int64 offset = 1;
+    optional int64 limit = 2;
+}
+
+// PolicyInfo contains policy details.
+message PolicyInfo {
+    string name= 1;
+    string username   = 2;
+    string policy_str = 3;
+    string policy_shadow = 4;
+    string created_at = 5;
+}
+
+// ListPoliciesResponse defines ListPolicies response struct.
+message ListPoliciesResponse {
+    int64 total_count = 1;
+    repeated  PolicyInfo items = 2;
+}

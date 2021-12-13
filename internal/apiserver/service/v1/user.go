@@ -9,13 +9,13 @@ import (
 	"regexp"
 	"sync"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/pkg/log"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // UserSrv defines functions used to handle user request.

@@ -9,8 +9,9 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
-	authzv1 "github.com/marmotedu/api/authz/v1"
 	"github.com/ory/ladon"
+
+	authzv1 "github.com/marmotedu/iam/pkg/model/authz/v1"
 )
 
 func TestNewAuthorizer(t *testing.T) {

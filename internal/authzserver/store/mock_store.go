@@ -12,8 +12,9 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	v1 "github.com/marmotedu/api/proto/apiserver/v1"
 	ladon "github.com/ory/ladon"
+
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 // MockFactory is a mock of Factory interface.

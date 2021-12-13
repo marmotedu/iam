@@ -5,10 +5,10 @@
 package authorization
 
 import (
-	authzv1 "github.com/marmotedu/api/authz/v1"
 	"github.com/ory/ladon"
 
 	"github.com/marmotedu/iam/pkg/log"
+	authzv1 "github.com/marmotedu/iam/pkg/model/authz/v1"
 )
 
 // Authorizer implement the authorize interface that use local repository to

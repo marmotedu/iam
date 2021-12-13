@@ -349,7 +349,6 @@ linters-settings:
     # List of allowed `replace` directives. Default is empty.
     replace-allow-list:
       - google.golang.org/grpc
-      - github.com/marmotedu/api
       - github.com/marmotedu/component-base
       - github.com/marmotedu/marmotedu-sdk-go
 

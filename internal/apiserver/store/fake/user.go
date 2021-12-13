@@ -8,7 +8,6 @@ import (
 	"context"
 	"strings"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/fields"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
 	"github.com/marmotedu/component-base/pkg/util/stringutil"
@@ -17,6 +16,7 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/util/gormutil"
 	reflectutil "github.com/marmotedu/iam/internal/pkg/util/reflect"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 type users struct {

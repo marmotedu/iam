@@ -4,7 +4,7 @@
 
 package store
 
-import pb "github.com/marmotedu/api/proto/apiserver/v1"
+import pb "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 
 // SecretStore defines the secret storage interface.
 type SecretStore interface {

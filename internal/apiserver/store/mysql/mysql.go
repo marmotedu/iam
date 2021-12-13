@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"sync"
 
-	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
@@ -16,6 +15,7 @@ import (
 	"github.com/marmotedu/iam/internal/pkg/logger"
 	genericoptions "github.com/marmotedu/iam/internal/pkg/options"
 	"github.com/marmotedu/iam/pkg/db"
+	v1 "github.com/marmotedu/iam/pkg/model/apiserver/v1"
 )
 
 type datastore struct {
