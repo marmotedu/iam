@@ -553,13 +553,13 @@ func L(ctx context.Context) *zapLogger {
 func (l *zapLogger) L(ctx context.Context) *zapLogger {
 	lg := l.clone()
 
-	if requestID, ok := ctx.Value(KeyRequestID).(LogContextKey); ok {
+	if requestID := ctx.Value(KeyRequestID); requestID != nil {
 		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyRequestID, requestID))
 	}
-	if username, ok := ctx.Value(KeyUsername).(LogContextKey); ok {
+	if username := ctx.Value(KeyUsername); username != nil {
 		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyUsername, username))
 	}
-	if watcherName, ok := ctx.Value(KeyWatcherName).(LogContextKey); ok {
+	if watcherName := ctx.Value(KeyWatcherName); watcherName != nil {
 		lg.zapLogger = lg.zapLogger.With(zap.Any(KeyWatcherName, watcherName))
 	}
 
