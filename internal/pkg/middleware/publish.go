@@ -5,6 +5,8 @@
 package middleware
 
 import (
+	"context"
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,11 @@ func Publish() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
+		if c.Writer.Status() != http.StatusOK {
+			log.L(c).Debugf("request failed with http status code `%d`, ignore publish message", c.Writer.Status())
+			return
+		}
+
 		var resource string
 
 		pathSplit := strings.Split(c.Request.URL.Path, "/")
@@ -31,24 +38,24 @@ func Publish() gin.HandlerFunc {
 
 		switch resource {
 		case "policies":
-			notify(method, load.NoticePolicyChanged)
+			notify(c, method, load.NoticePolicyChanged)
 		case "secrets":
-			notify(method, load.NoticeSecretChanged)
+			notify(c, method, load.NoticeSecretChanged)
 		default:
 		}
 	}
 }
 
-func notify(method string, command load.NotificationCommand) {
+func notify(ctx context.Context, method string, command load.NotificationCommand) {
 	switch method {
 	case "POST", "PUT", "DELETE", "PATH":
 		redisStore := &storage.RedisCluster{}
 		message, _ := json.Marshal(load.Notification{Command: command})
 
 		if err := redisStore.Publish(load.RedisPubSubChannel, string(message)); err != nil {
-			log.Errorw("publish redis message failed", "error", err.Error())
+			log.L(ctx).Errorw("publish redis message failed", "error", err.Error())
 		}
-		log.Debugw("publish redis message", "method", method, "command", command)
+		log.L(ctx).Debugw("publish redis message", "method", method, "command", command)
 	default:
 	}
 }
