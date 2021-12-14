@@ -7,6 +7,7 @@ require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
+	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/buger/jsonparser v1.1.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.1
 	github.com/dgraph-io/ristretto v0.1.0
@@ -146,4 +147,9 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gotest.tools/v3 v3.0.3 // indirect
 	moul.io/http2curl v1.0.0 // indirect
+)
+
+replace (
+	github.com/marmotedu/api => /home/colin/workspace/golang/src/github.com/marmotedu/api
+	github.com/marmotedu/component-base => /home/colin/workspace/golang/src/github.com/marmotedu/component-base
 )

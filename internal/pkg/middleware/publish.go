@@ -24,6 +24,7 @@ func Publish() gin.HandlerFunc {
 
 		if c.Writer.Status() != http.StatusOK {
 			log.L(c).Debugf("request failed with http status code `%d`, ignore publish message", c.Writer.Status())
+
 			return
 		}
 

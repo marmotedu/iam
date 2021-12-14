@@ -35,6 +35,7 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 
 	r.Password, _ = auth.Encrypt(r.Password)
+	r.Status = 1
 
 	// Insert the user to the storage.
 	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {

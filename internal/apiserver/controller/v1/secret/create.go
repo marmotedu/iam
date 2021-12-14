@@ -10,6 +10,7 @@ import (
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/core"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/marmotedu/component-base/pkg/util/idutil"
 	"github.com/marmotedu/errors"
 
 	"github.com/marmotedu/iam/internal/pkg/code"
@@ -57,6 +58,10 @@ func (s *SecretController) Create(c *gin.Context) {
 
 	// must reassign username
 	r.Username = username
+
+	// generate secret id and secret key
+	r.SecretID = idutil.NewSecretID()
+	r.SecretKey = idutil.NewSecretKey()
 
 	if err := s.srv.Secrets().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
