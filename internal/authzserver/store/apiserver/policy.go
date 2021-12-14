@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 
 	"github.com/AlekSi/pointer"
+	"github.com/avast/retry-go"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/errors"
 	"github.com/ory/ladon"
@@ -35,7 +36,18 @@ func (p *policies) List() (map[string][]*ladon.DefaultPolicy, error) {
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := p.cli.ListPolicies(context.Background(), req)
+	var resp *pb.ListPoliciesResponse
+	err := retry.Do(
+		func() error {
+			var listErr error
+			resp, listErr = p.cli.ListPolicies(context.Background(), req)
+			if listErr != nil {
+				return listErr
+			}
+
+			return nil
+		}, retry.Attempts(3),
+	)
 	if err != nil {
 		return nil, errors.Wrap(err, "list policies failed")
 	}

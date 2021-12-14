@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/AlekSi/pointer"
+	"github.com/avast/retry-go"
 	pb "github.com/marmotedu/api/proto/apiserver/v1"
 	"github.com/marmotedu/errors"
 
@@ -33,7 +34,18 @@ func (s *secrets) List() (map[string]*pb.SecretInfo, error) {
 		Limit:  pointer.ToInt64(-1),
 	}
 
-	resp, err := s.cli.ListSecrets(context.Background(), req)
+	var resp *pb.ListSecretsResponse
+	err := retry.Do(
+		func() error {
+			var listErr error
+			resp, listErr = s.cli.ListSecrets(context.Background(), req)
+			if listErr != nil {
+				return listErr
+			}
+
+			return nil
+		}, retry.Attempts(3),
+	)
 	if err != nil {
 		return nil, errors.Wrap(err, "list secrets failed")
 	}
