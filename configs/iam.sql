@@ -38,7 +38,6 @@ CREATE TABLE `policy` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_name_username` (`name`,`username`),
   UNIQUE KEY `instanceID_UNIQUE` (`instanceID`),
   KEY `fk_policy_user_idx` (`username`),
   CONSTRAINT `fk_policy_user` FOREIGN KEY (`username`) REFERENCES `user` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -123,7 +122,6 @@ CREATE TABLE `secret` (
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_name_username` (`name`,`username`),
   UNIQUE KEY `instanceID_UNIQUE` (`instanceID`),
   KEY `fk_secret_user_idx` (`username`),
   CONSTRAINT `fk_secret_user` FOREIGN KEY (`username`) REFERENCES `user` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION
