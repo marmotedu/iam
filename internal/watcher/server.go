@@ -70,7 +70,6 @@ func (s preparedWatcherServer) Run() error {
 		case <-time.After(3 * time.Minute):
 			log.Error("context was not done after 3 minutes.")
 		}
-		stopCh <- struct{}{}
 
 		return nil
 	}))
