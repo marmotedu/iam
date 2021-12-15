@@ -70,6 +70,7 @@ func (s *authzServer) PrepareRun() preparedAuthzServer {
 	_ = s.initialize()
 
 	initRouter(s.genericAPIServer.Engine)
+
 	return preparedAuthzServer{s}
 }
 
@@ -82,6 +83,7 @@ func (s preparedAuthzServer) Run() error {
 		log.Fatalf("start shutdown manager failed: %s", err.Error())
 	}
 
+	//nolint: errcheck
 	go s.genericAPIServer.Run()
 
 	// in order to ensure that the reported data is not lost,
@@ -141,7 +143,6 @@ func (s *authzServer) buildStorageConfig() *storage.Config {
 	}
 }
 
-//nolint: govet
 func (s *authzServer) initialize() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	s.redisCancelFunc = cancel
