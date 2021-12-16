@@ -15,6 +15,7 @@ IAM 采用前后端分离的软件架构，基于Go语言开发，包含多个�
 - **iam-apiserver**：核心组件，通过 RESTful API 完成用户、密钥和授权策略的增删改查。
 - **iam-authz-server**：授权服务，从 iam-apiserver 拉取密钥和授权策略，并缓存在内存中，用户通过请求 iam-authz-server 提供的 /v1/authz 接口来完成资源的授权。/v1/authz 接口会查询缓存的授权策略，根据这些策略决定授权是否通过。iam-authz-server 也会将授权日志上报的 Redis 中。
 - **iam-pump**：从 redis 中拉取缓存的授权日志，分析后存入 mongo 数据库中。
+- **iam-watcher**：分布式作业服务，间隔一定时间查询MariaDB数据库，执行一些业务逻辑处理，例如：从policy_audit表中删除超过指定天数的授权策略、禁用超过指定天数还没有登录过的用户。
 - **marmotedu-sdk-go**：IAM 的 golang sdk，参考了 kubernetes 的 client-go，封装了 iam-apiserver 和 iam-authz-server 的所有 RESTful API，方便用户调用。
 - **iamctl**：IAM 的客户端，参考了 kubernetes 的客户端工具 kubectl，通过 marmotedu-sdk-go 访问 iam-apiserver 和 iam-authz-server。iamctl 封装了 iam-apiserver 的所有 RESTful API，还封装了其它功能。用户可以通过命令行的方式访问 iam-apiserver。
 - **redis**：缓存数据库，用来缓存密钥和授权策略，降低访问延时。同时也会缓存授权日志，作为运营系统的数据来源。
