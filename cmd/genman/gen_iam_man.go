@@ -43,7 +43,7 @@ func main() {
 
 	// Set environment variables used by command so the output is consistent,
 	// regardless of where we run.
-	os.Setenv("HOME", "/home/username")
+	_ = os.Setenv("HOME", "/home/username")
 
 	switch module {
 	case "iam-apiserver":

@@ -21,19 +21,19 @@ func main() {
 	if len(os.Args) == 2 {
 		path = os.Args[1]
 	} else if len(os.Args) > 2 {
-		fmt.Fprintf(os.Stderr, "usage: %s [output directory]\n", os.Args[0])
+		_, _ = fmt.Fprintf(os.Stderr, "usage: %s [output directory]\n", os.Args[0])
 		os.Exit(1)
 	}
 
 	outDir, err := genutil.OutDir(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to get output directory: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "failed to get output directory: %v\n", err)
 		os.Exit(1)
 	}
 
 	// Set environment variables used by iamctl so the output is consistent,
 	// regardless of where we run.
-	os.Setenv("HOME", "/home/username")
+	_ = os.Setenv("HOME", "/home/username")
 	// TODO os.Stdin should really be something like ioutil.Discard, but a Reader
 	iamctl := cmd.NewIAMCtlCommand(os.Stdin, ioutil.Discard, ioutil.Discard)
 	_ = doc.GenMarkdownTree(iamctl, outDir)
