@@ -104,8 +104,8 @@ function iam::release::updload_tarballs() {
   iam::log::info "upload ${RELEASE_TARS}/* to cos bucket ${BUCKET}."
   for file in $(ls ${RELEASE_TARS}/*)
   do
-    coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
-    coscmd upload  ""${file}"" "${COS_RELEASE_DIR}/latest/"
+    echo coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
+    coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/latest/"
   done
 }
 
@@ -473,7 +473,7 @@ function iam::release::install_github_release(){
 # - github-release
 # - gsemver
 # - git-chglog
-# - coscmd
+# - coscli
 function iam::release::verify_prereqs(){
   if [ -z "$(which github-release 2>/dev/null)" ]; then
     iam::log::info "'github-release' tool not installed, try to install it."
@@ -503,11 +503,11 @@ function iam::release::verify_prereqs(){
   fi
 
 
-  if [ -z "$(which coscmd 2>/dev/null)" ]; then
-    iam::log::info "'coscmd' tool not installed, try to install it."
+  if [ -z "$(which coscli 2>/dev/null)" ]; then
+    iam::log::info "'coscli' tool not installed, try to install it."
 
-    if ! pip install coscmd &>/dev/null; then
-      iam::log::error "failed to install 'coscmd'"
+    if ! make -C "${IAM_ROOT}" tools.install.coscli; then
+      iam::log::error "failed to install 'coscli'"
       return 1
     fi
   fi
@@ -518,15 +518,16 @@ function iam::release::verify_prereqs(){
   fi
 
   if [ ! -f "${HOME}/.cos.conf" ];then
-    cat << EOF > "${HOME}/.cos.conf"
-[common]
-secret_id = ${TENCENT_SECRET_ID}
-secret_key = ${TENCENT_SECRET_KEY}
-bucket = ${BUCKET}
-region =${REGION}
-max_thread = 5
-part_size = 1
-schema = https
+    cat << EOF > "${HOME}/.cos.yaml"
+cos:
+  base:
+    secretid: ${TENCENT_SECRET_ID}
+    secretkey: ${TENCENT_SECRET_KEY}
+    sessiontoken: ""
+  buckets:
+  - name: ${BUCKET}
+    alias: ${BUCKET}
+    region: ${REGION}
 EOF
   fi
 }

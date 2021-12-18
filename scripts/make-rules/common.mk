@@ -84,7 +84,7 @@ endif
 # Missing CRITICAL_TOOLS can lead to some necessary operations failed. i.e. `make release` failed.
 # TRIVIAL_TOOLS are Optional tools, missing these tool have no affect.
 BLOCKER_TOOLS ?= gsemver golines go-junit-report golangci-lint addlicense goimports codegen
-CRITICAL_TOOLS ?= swagger mockgen gotests git-chglog github-release coscmd go-mod-outdated protoc-gen-go cfssl
+CRITICAL_TOOLS ?= swagger mockgen gotests git-chglog github-release coscli go-mod-outdated protoc-gen-go cfssl
 TRIVIAL_TOOLS ?= depth go-callvis gothanks richgo rts kube-score
 
 COMMA := ,

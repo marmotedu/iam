@@ -12,7 +12,7 @@ release.run: release.verify release.ensure-tag
 	@scripts/release.sh
 
 .PHONY: release.verify
-release.verify: tools.verify.git-chglog tools.verify.github-release tools.verify.coscmd
+release.verify: tools.verify.git-chglog tools.verify.github-release tools.verify.coscli
 
 .PHONY: release.tag
 release.tag: tools.verify.gsemver release.ensure-tag
