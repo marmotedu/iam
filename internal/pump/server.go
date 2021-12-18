@@ -6,9 +6,13 @@ package pump
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
+	goredislib "github.com/go-redis/redis/v8"
+	"github.com/go-redsync/redsync/v4"
+	"github.com/go-redsync/redsync/v4/redis/goredis/v8"
 	"github.com/vmihailenco/msgpack/v5"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
@@ -25,6 +29,7 @@ var pmps []pumps.Pump
 type pumpServer struct {
 	secInterval    int
 	omitDetails    bool
+	mutex          *redsync.Mutex
 	analyticsStore storage.AnalyticsStorage
 	pumps          map[string]options.PumpConfig
 }
@@ -35,9 +40,18 @@ type preparedPumpServer struct {
 }
 
 func createPumpServer(cfg *config.Config) (*pumpServer, error) {
+	client := goredislib.NewClient(&goredislib.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.RedisOptions.Host, cfg.RedisOptions.Port),
+		Username: cfg.RedisOptions.Username,
+		Password: cfg.RedisOptions.Password,
+	})
+
+	rs := redsync.New(goredis.NewPool(client))
+
 	server := &pumpServer{
 		secInterval:    cfg.PurgeDelay,
 		omitDetails:    cfg.OmitDetailedRecording,
+		mutex:          rs.NewMutex("iam-pump", redsync.WithExpiry(10*time.Minute)),
 		analyticsStore: &redis.RedisClusterStorageManager{},
 		pumps:          cfg.Pumps,
 	}
@@ -63,31 +77,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 	for {
 		select {
 		case <-ticker.C:
-			analyticsValues := s.analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
-			if len(analyticsValues) == 0 {
-				continue
-			}
-
-			// Convert to something clean
-			keys := make([]interface{}, len(analyticsValues))
-
-			for i, v := range analyticsValues {
-				decoded := analytics.AnalyticsRecord{}
-				err := msgpack.Unmarshal([]byte(v.(string)), &decoded)
-				log.Debugf("Decoded Record: %v", decoded)
-				if err != nil {
-					log.Errorf("Couldn't unmarshal analytics data: %s", err.Error())
-				} else {
-					if s.omitDetails {
-						decoded.Policies = ""
-						decoded.Deciders = ""
-					}
-					keys[i] = interface{}(decoded)
-				}
-			}
-
-			// Send to pumps
-			writeToPumps(keys, s.secInterval)
+			s.runPumps()
 		// exit consumption cycle when receive SIGINT and SIGTERM signal
 		case <-stopCh:
 			log.Info("stop purge loop")
@@ -95,6 +85,45 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 			return nil
 		}
 	}
+}
+
+func (s *pumpServer) runPumps() {
+	if err := s.mutex.Lock(); err != nil {
+		log.Info("there is already an iam-pump instance running.")
+
+		return
+	}
+	defer func() {
+		if _, err := s.mutex.Unlock(); err != nil {
+			log.Errorf("could not release iam-pump lock. err: %v", err)
+		}
+	}()
+
+	analyticsValues := s.analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
+	if len(analyticsValues) == 0 {
+		return
+	}
+
+	// Convert to something clean
+	keys := make([]interface{}, len(analyticsValues))
+
+	for i, v := range analyticsValues {
+		decoded := analytics.AnalyticsRecord{}
+		err := msgpack.Unmarshal([]byte(v.(string)), &decoded)
+		log.Debugf("Decoded Record: %v", decoded)
+		if err != nil {
+			log.Errorf("Couldn't unmarshal analytics data: %s", err.Error())
+		} else {
+			if s.omitDetails {
+				decoded.Policies = ""
+				decoded.Deciders = ""
+			}
+			keys[i] = interface{}(decoded)
+		}
+	}
+
+	// Send to pumps
+	writeToPumps(keys, s.secInterval)
 }
 
 func (s *pumpServer) initialize() {

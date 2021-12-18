@@ -43,7 +43,7 @@ type Options struct {
 func NewOptions() *Options {
 	s := Options{
 		HealthCheckPath:    "healthz",
-		HealthCheckAddress: "0.0.0.0:6060",
+		HealthCheckAddress: "0.0.0.0:5050",
 		MySQLOptions:       genericoptions.NewMySQLOptions(),
 		RedisOptions:       genericoptions.NewRedisOptions(),
 		WatcherOptions: &WatcherOptions{

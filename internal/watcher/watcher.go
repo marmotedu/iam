@@ -39,8 +39,7 @@ func newWatchJob(redisOptions *genericoptions.RedisOptions, watcherOptions *opti
 		Password: redisOptions.Password,
 	})
 
-	pool := goredis.NewPool(client)
-	rs := redsync.New(pool)
+	rs := redsync.New(goredis.NewPool(client))
 
 	cron := cron.New(
 		cron.WithSeconds(),

@@ -42,6 +42,7 @@ ports:
   - 9090
   - 9443
   - 7070
+  - 5050
 
 # 来源IP可以访问的数据库端口列表（Redis, MariaDB, MongoDB）
 dbports:
@@ -104,11 +105,13 @@ iptables -A INPUT -p tcp -s 10.0.4.20 --dport 8443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.20 --dport 9090 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.20 --dport 9443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.20 --dport 7070 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.0.4.20 --dport 5050 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.21 --dport 8080 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.21 --dport 8443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.21 --dport 9090 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.21 --dport 9443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.21 --dport 7070 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.0.4.21 --dport 5050 -j ACCEPT
 
 # Allow two types of ICMP
 iptables -A INPUT -p icmp --icmp-type 8/0 -j LOG --log-level 7 --log-prefix "Accept Ping"
@@ -214,6 +217,7 @@ ports:
   - 9090
   - 9443
   - 7070
+  - 5050
 
 # 来源IP可以访问的数据库端口列表（Redis, MariaDB, MongoDB）
 dbports:
@@ -236,6 +240,7 @@ iptables -A INPUT -p tcp -s 10.0.4.22 --dport 8443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.22 --dport 9090 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.22 --dport 9443 -j ACCEPT
 iptables -A INPUT -p tcp -s 10.0.4.22 --dport 7070 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.0.4.22 --dport 5050 -j ACCEPT
 ```
 
 7. 数据库节点新增iptables规则
