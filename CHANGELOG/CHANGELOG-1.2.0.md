@@ -29,4 +29,5 @@
 
 * add /etc/iam as the configuration file query path
 * add iam-watcher service to do periodic works
+* **pump:** add distributed lock for iam-pump
 
