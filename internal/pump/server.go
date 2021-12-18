@@ -78,7 +78,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 	for {
 		select {
 		case <-ticker.C:
-			s.pump() // writeToPumps
+			s.pump()
 		// exit consumption cycle when receive SIGINT and SIGTERM signal
 		case <-stopCh:
 			log.Info("stop purge loop")
