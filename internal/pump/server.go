@@ -40,6 +40,7 @@ type preparedPumpServer struct {
 }
 
 func createPumpServer(cfg *config.Config) (*pumpServer, error) {
+	// use the same redis database with authorization log history
 	client := goredislib.NewClient(&goredislib.Options{
 		Addr:     fmt.Sprintf("%s:%d", cfg.RedisOptions.Host, cfg.RedisOptions.Port),
 		Username: cfg.RedisOptions.Username,
