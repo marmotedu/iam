@@ -78,7 +78,7 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 	for {
 		select {
 		case <-ticker.C:
-			s.runPumps()
+			s.pump() // writeToPumps
 		// exit consumption cycle when receive SIGINT and SIGTERM signal
 		case <-stopCh:
 			log.Info("stop purge loop")
@@ -88,7 +88,8 @@ func (s preparedPumpServer) Run(stopCh <-chan struct{}) error {
 	}
 }
 
-func (s *pumpServer) runPumps() {
+// pump get authorization log from redis and write to pumps.
+func (s *pumpServer) pump() {
 	if err := s.mutex.Lock(); err != nil {
 		log.Info("there is already an iam-pump instance running.")
 
