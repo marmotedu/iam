@@ -1,8 +1,8 @@
-# 安装和配置 IAM 系统
+# 6. 安装和配置 IAM 系统
 
 要想完成 IAM 系统的安装，你还需要安装和配置 iam-apiserver、iamctl、iam-authz-server、iam-pump、iam-watcher 和man page。下面先来看安装和配置的准备工作。
 
-## 准备工作
+## 6.1 准备工作
 
 在开始安装之前，需要先做一些准备工作，主要有以下 4 步：
 
@@ -191,7 +191,7 @@ $ sudo tee -a /etc/hosts <<EOF
 127.0.0.1 iam.authz.marmotedu.com
 EOF
 ```
-## 安装和配置 iam-apiserver
+## 6.2 安装和配置 iam-apiserver
 
 完成了准备工作之后，就可以安装 IAM 系统的各个组件了，通过以下 3 步来安装 iam-apiserver 服务。
 
@@ -366,7 +366,7 @@ $ curl -s -XPUT -H'Content-Type: application/json' -H"Authorization: Bearer $tok
 $ curl -s -XDELETE -H"Authorization: Bearer $token" http://127.0.0.1:8080/v1/policies/policy0
 ```
 
-## 安装 iamctl
+## 6.3 安装 iamctl
 
 上一小节，我们安装了 IAM 系统的 iam-apiserver 服务。但是想要访问 iam 服务，我们还需要安装客户端工具 iamctl。具体来说，我们可以通过 3 步完成 iamctl 的安装和配置。
 
@@ -441,7 +441,7 @@ $ mv iamctl.yaml $HOME/.iam
 
 ![用户列表](../../../images/iamctl_user_list.png)
 
-## 安装和配置 iam-authz-server
+## 6.4 安装和配置 iam-authz-server
 
 接下来，我们需要安装另外一个核心组件：iam-authz-server，可以通过以下 3 步来安装。
 
@@ -568,7 +568,7 @@ $ curl -s -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer eyJ
 
 如果授权通过会返回：`{"allowed":true}`。
 
-## 安装和配置 iam-pump
+## 6.5 安装和配置 iam-pump
 
 安装 iam-pump 步骤和安装 iam-apiserver、iam-authz-server 步骤基本一样，可以通过5步来安装。
 
@@ -623,7 +623,7 @@ $ curl http://127.0.0.1:7070/healthz
 
 经过以上 5 个步骤，如果返回 `{"status": "ok"}` 就说明 iam-pump 服务健康。
 
-## 安装和配置 iam-watcher
+## 6.6 安装和配置 iam-watcher
 
 安装 iam-watcher步骤和安装 iam-apiserver、iam-authz-server、iam-pump步骤基本一样，可以通过5步来安装。
 
@@ -678,7 +678,7 @@ $ curl http://127.0.0.1:5050/healthz
 
 经过以上 5 个步骤，如果返回 `{"status": "ok"}` 就说明 iam-watcher服务健康。
 
-## 安装 man 文件
+## 6.7 安装 man 文件
 
 IAM 系统通过组合调用包：`github.com/cpuguy83/go-md2man/v2/md2man` 和 `github.com/spf13/cobra` 提供的函数生成了各个组件的 man1 文件，具体来说，需要 3 步实现。
 
@@ -728,7 +728,7 @@ serverVersion:
   platform: linux/amd64
 ```
 
-## 测试IAM系统是否安装成功
+## 6.8 测试IAM系统是否安装成功
 
 最后，我们可以执行以下命令来测试整个IAM系统是否被成功安装：
 
