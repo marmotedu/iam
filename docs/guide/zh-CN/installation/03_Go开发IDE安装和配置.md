@@ -57,10 +57,10 @@ $ ./marmotVimCtl install
 
 SpaceVim 配置文件为：`$HOME/.SpaceVim.d/init.toml`和`$HOME/.SpaceVim.d/autoload/custom_init.vim`，你可以根据需要自行配置（配置文件中有配置说明）：
 
-- **init.toml：**SpaceVim 的配置文件。
-- **custom_init.vim：**用户自定义的配置文件，兼容 vimrc。
+- **init.toml：** SpaceVim 的配置文件。
+- **custom_init.vim：** 用户自定义的配置文件，兼容 vimrc。
 
-> **提示：**如果离线安装遇到问题，你也可以直接参考SpaceVim的官方文档来安装：https://spacevim.org/quick-start-guide/。
+> **提示：** 如果离线安装遇到问题，你也可以直接参考SpaceVim的官方文档来安装：https://spacevim.org/quick-start-guide/。
 
 SpaceVim Go IDE 常用操作的按键映射如下表所示：
 

@@ -44,9 +44,9 @@ MariaDB [iam]> show databases;
 
 上面的命令会创建 `iam` 数据库，也会在`iam`数据库中创建以下资源。
 
-- **表：**`user` 是用户表，用来存放用户信息；`secret` 是密钥表，用来存放密钥信息；`policy` 是策略表，用来存放授权策略信息；`policy_audit` 是策略历史表，被删除的策略会被转存到该表。
-- **admin 用户：**在 `user` 表中，我们需要创建一个管理员用户，用户名是 `admin`，初始密码是 `Admin@2021`。
-- **存储过程：**删除用户时会自动删除该用户所属的密钥和策略信息。
+- **表：** `user` 是用户表，用来存放用户信息；`secret` 是密钥表，用来存放密钥信息；`policy` 是策略表，用来存放授权策略信息；`policy_audit` 是策略历史表，被删除的策略会被转存到该表。
+- **admin 用户：** 在 `user` 表中，我们需要创建一个管理员用户，用户名是 `admin`，初始密码是 `Admin@2021`。
+- **存储过程：** 删除用户时会自动删除该用户所属的密钥和策略信息。
 
 2. 创建需要的目录
 
@@ -73,8 +73,8 @@ $ sudo mkdir -p ${IAM_LOG_DIR} # 创建 IAM 日志文件存放目录
 
 我们可以直接安装 cfssl 已经编译好的二进制文件，cfssl 工具集中包含很多工具，这里我们需要安装 `cfssl`、`cfssljson`、`cfssl-certinfo`，功能如下：
 
-- **cfssl：**证书签发工具。
-- **cfssljson：**将 cfssl 生成的证书（json 格式）变为文件承载式证书。
+- **cfssl：** 证书签发工具。
+- **cfssljson：** 将 cfssl 生成的证书（json 格式）变为文件承载式证书。
 
 可以通过以下命令来安装这2个工具：
 
@@ -112,10 +112,10 @@ EOF
 ```
 
 上面的 JSON 配置中，一些字段的解释如下。
-- **signing：**表示该证书可用于签名其他证书（生成的 `ca.pem` 证书中 `CA=TRUE`）。
-- **server auth：**表示 client 可以用该证书对 server 提供的证书进行验证。
-- **client auth：**表示 server 可以用该证书对 client 提供的证书进行验证。
-- **expiry：**876000h，证书有效期设置为 100 年。
+- **signing：** 表示该证书可用于签名其他证书（生成的 `ca.pem` 证书中 `CA=TRUE`）。
+- **server auth：** 表示 client 可以用该证书对 server 提供的证书进行验证。
+- **client auth：** 表示 server 可以用该证书对 client 提供的证书进行验证。
+- **expiry：** 876000h，证书有效期设置为 100 年。
 
 3) 创建证书签名请求文件。
 
@@ -147,12 +147,12 @@ EOF
 ```
 
 上面的 JSON 配置中，一些字段的解释如下。
-- **C：**Country，国家。
-- **ST：**State，省份。
-- **L：**Locality (L) or City，城市。
-- **CN：**Common Name，iam-apiserver 从证书中提取该字段作为请求的用户名 (User Name)，浏览器使用该字段验证网站是否合法。
-- **O：**Organization，iam-apiserver 从证书中提取该字段作为请求用户所属的组 (Group)。
-- **OU：**Organization Unit (或者 Company division )，部门/单位。
+- **C：** Country，国家。
+- **ST：** State，省份。
+- **L：** Locality (L) or City，城市。
+- **CN：** Common Name，iam-apiserver 从证书中提取该字段作为请求的用户名 (User Name)，浏览器使用该字段验证网站是否合法。
+- **O：** Organization，iam-apiserver 从证书中提取该字段作为请求用户所属的组 (Group)。
+- **OU：** Organization Unit (或者 Company division )，部门/单位。
 
 除此之外，还有两点需要注意：
 
