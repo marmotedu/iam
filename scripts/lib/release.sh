@@ -17,6 +17,7 @@
 readonly BUCKET="marmotedu-1254073058"
 readonly REGION="ap-beijing"
 readonly COS_RELEASE_DIR="iam-release"
+readonly COSTOOL="coscmd"
 
 # This is where the final release artifacts are created locally
 readonly RELEASE_STAGE="${LOCAL_OUTPUT_ROOT}/release-stage"
@@ -104,8 +105,13 @@ function iam::release::updload_tarballs() {
   iam::log::info "upload ${RELEASE_TARS}/* to cos bucket ${BUCKET}."
   for file in $(ls ${RELEASE_TARS}/*)
   do
-    echo coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
-    coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/latest/"
+    if [ "${COSTOOL}" == "coscli" ];then
+      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
+      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/latest/"
+    else
+      coscmd upload  "${file}" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
+      coscmd upload  "${file}" "${COS_RELEASE_DIR}/latest/"
+    fi
   done
 }
 
@@ -473,7 +479,7 @@ function iam::release::install_github_release(){
 # - github-release
 # - gsemver
 # - git-chglog
-# - coscli
+# - coscmd or coscli
 function iam::release::verify_prereqs(){
   if [ -z "$(which github-release 2>/dev/null)" ]; then
     iam::log::info "'github-release' tool not installed, try to install it."
@@ -503,11 +509,11 @@ function iam::release::verify_prereqs(){
   fi
 
 
-  if [ -z "$(which coscli 2>/dev/null)" ]; then
-    iam::log::info "'coscli' tool not installed, try to install it."
+  if [ -z "$(which ${COSTOOL} 2>/dev/null)" ]; then
+    iam::log::info "${COSTOOL} tool not installed, try to install it."
 
-    if ! make -C "${IAM_ROOT}" tools.install.coscli; then
-      iam::log::error "failed to install 'coscli'"
+    if ! make -C "${IAM_ROOT}" tools.install.${COSTOOL}; then
+      iam::log::error "failed to install ${COSTOOL}"
       return 1
     fi
   fi
@@ -517,8 +523,9 @@ function iam::release::verify_prereqs(){
       return 1
   fi
 
-  if [ ! -f "${HOME}/.cos.conf" ];then
-    cat << EOF > "${HOME}/.cos.yaml"
+  if [ "${COSTOOL}" == "coscli" ];then
+    if [ ! -f "${HOME}/.cos.yaml" ];then
+      cat << EOF > "${HOME}/.cos.yaml"
 cos:
   base:
     secretid: ${TENCENT_SECRET_ID}
@@ -529,6 +536,20 @@ cos:
     alias: ${BUCKET}
     region: ${REGION}
 EOF
+    fi
+  else
+    if [ ! -f "${HOME}/.cos.conf" ];then
+      cat << EOF > "${HOME}/.cos.conf"
+[common]
+secret_id = ${TENCENT_SECRET_ID}
+secret_key = ${TENCENT_SECRET_KEY}
+bucket = ${BUCKET}
+region =${REGION}
+max_thread = 5
+part_size = 1
+schema = https
+EOF
+    fi
   fi
 }
 

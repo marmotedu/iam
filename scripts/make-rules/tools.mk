@@ -51,6 +51,10 @@ install.coscli:
 	@wget -q https://github.com/tencentyun/coscli/releases/download/v0.10.2-beta/coscli-linux -O ${HOME}/bin/coscli
 	@chmod +x ${HOME}/bin/coscli
 
+.PHONY: install.coscmd
+install.coscmd:
+	@if which pip &>/dev/null; then pip install coscmd; else pip3 install coscmd; fi
+
 .PHONY: install.golines
 install.golines:
 	@$(GO) install github.com/segmentio/golines@latest
