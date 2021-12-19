@@ -4,5 +4,6 @@
 
 ### Code Refactoring
 
+* support coscmd and coscli tool both
 * optimize func name from `runPumps` to `pump`
 
