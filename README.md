@@ -1,6 +1,6 @@
 # IAM - 身份识别与访问管理系统
 
-IAM = Identity and Access Management
+IAM = **I**dentity and **A**ccess **M**anagement
 
 IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于对资源访问进行授权。**最新稳定版本为：v1.1.0，建议基于稳定版安装测试**。
 
@@ -39,6 +39,8 @@ IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contribute**
 ### 快速部署
 
 快速部署请参考：[IAM 部署指南](docs/guide/zh-CN/installation/README.md#快速部署)
+
+> IAM项目还提供了更详细的部署文档，请参考：[手把手教你部署IAM系统](installation-procedures.md)
 
 ### 构建
 
