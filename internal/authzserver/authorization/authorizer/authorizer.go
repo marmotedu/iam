@@ -59,7 +59,7 @@ func (auth *Authorization) DeleteCollection(idList []string) error {
 // Get returns the policy detail by the given identifier.
 // Return nil because we use mysql storage to store the policy.
 func (auth *Authorization) Get(id string) (*ladon.DefaultPolicy, error) {
-	return nil, nil
+	return &ladon.DefaultPolicy{}, nil
 }
 
 // List returns all the policies under the username.

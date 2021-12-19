@@ -77,7 +77,7 @@ func (t *APIKeyTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 	return http.DefaultTransport.RoundTrip(r)
 }
 
-func getOperator(conf ElasticsearchConf) (ElasticsearchOperator, error) {
+func getOperator(ctx context.Context, conf ElasticsearchConf) (ElasticsearchOperator, error) {
 	var err error
 	urls := strings.Split(conf.ElasticsearchURL, ",")
 	httpClient := http.DefaultClient
@@ -117,7 +117,7 @@ func getOperator(conf ElasticsearchConf) (ElasticsearchOperator, error) {
 		p = p.BulkSize(conf.BulkConfig.BulkSize)
 	}
 
-	e.bulkProcessor, err = p.Do(context.Background())
+	e.bulkProcessor, err = p.Do(ctx)
 
 	return e, errors.Wrap(err, "failed to start bulk processor")
 }
@@ -164,19 +164,19 @@ func (e *ElasticsearchPump) Init(config interface{}) error {
 		log.Infof("Index will have date appended to it in the format %s -YYYY.MM.DD", e.esConf.IndexName)
 	}
 
-	e.connect()
+	e.connect(context.Background())
 
 	return nil
 }
 
-func (e *ElasticsearchPump) connect() {
+func (e *ElasticsearchPump) connect(ctx context.Context) {
 	var err error
 
-	e.operator, err = getOperator(*e.esConf)
+	e.operator, err = getOperator(ctx, *e.esConf)
 	if err != nil {
 		log.Errorf("Elasticsearch connection failed: %s", err.Error())
 		time.Sleep(5 * time.Second)
-		e.connect()
+		e.connect(ctx)
 	}
 }
 
@@ -186,7 +186,7 @@ func (e *ElasticsearchPump) WriteData(ctx context.Context, data []interface{}) e
 
 	if e.operator == nil {
 		log.Debug("Connecting to analytics store")
-		e.connect()
+		e.connect(ctx)
 		_ = e.WriteData(ctx, data)
 	} else if len(data) > 0 {
 		_ = e.operator.processData(ctx, data, e.esConf)

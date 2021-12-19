@@ -20,7 +20,7 @@ import (
 type cmdOption struct {
 	Name         string
 	Shorthand    string `yaml:",omitempty"`
-	DefaultValue string `yaml:"default_value,omitempty"`
+	DefaultValue string `yaml:"defaultValue,omitempty"`
 	Usage        string `yaml:",omitempty"`
 }
 
@@ -29,9 +29,9 @@ type cmdDoc struct {
 	Synopsis         string      `yaml:",omitempty"`
 	Description      string      `yaml:",omitempty"`
 	Options          []cmdOption `yaml:",omitempty"`
-	InheritedOptions []cmdOption `yaml:"inherited_options,omitempty"`
+	InheritedOptions []cmdOption `yaml:"inheritedOptions,omitempty"`
 	Example          string      `yaml:",omitempty"`
-	SeeAlso          []string    `yaml:"see_also,omitempty"`
+	SeeAlso          []string    `yaml:"seeAlso,omitempty"`
 }
 
 func main() {

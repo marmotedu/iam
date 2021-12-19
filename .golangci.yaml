@@ -809,15 +809,15 @@ linters:
     - wastedassign
     - whitespace
     - bidichk
+    - gomoddirectives
+    - wastedassign
+    - golint
+      #- tagliatelle
       #- nilnil
       #- tenv
       #- varnamelen
       #- contextcheck
       #- errname
-      #- tagliatelle
-    - gomoddirectives
-    - wastedassign
-    - golint
       #- ForceTypeAssert
       #- nilassign
   fast: false
@@ -866,6 +866,10 @@ issues:
     - path: (validator/.*|code/.*|validator/.*|watcher/watcher/.*)
       linters:
         - gochecknoinits
+
+    - path: (internal/.*/options|internal/pump|pkg/log/options.go|internal/authzserver|tools/)
+      linters:
+        - tagliatelle
 
     - path: (pkg/app/.*)\.go
       linters:

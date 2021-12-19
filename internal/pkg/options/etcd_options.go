@@ -131,5 +131,5 @@ func (o *EtcdOptions) GetEtcdTLSConfig() (*tls.Config, error) {
 		return cfg, nil
 	}
 
-	return nil, nil
+	return &tls.Config{}, nil
 }

@@ -11,8 +11,8 @@ import (
 	"golang.org/x/time/rate"
 )
 
-// ErrorLimitExceeded defines Limit exceeded error.
-var ErrorLimitExceeded = errors.New("Limit exceeded")
+// ErrLimitExceeded defines Limit exceeded error.
+var ErrLimitExceeded = errors.New("Limit exceeded")
 
 // Limit drops (HTTP status 429) the request if the limit is reached.
 func Limit(maxEventsPerSec float64, maxBurstSize int) gin.HandlerFunc {
@@ -26,7 +26,7 @@ func Limit(maxEventsPerSec float64, maxBurstSize int) gin.HandlerFunc {
 		}
 
 		// Limit reached
-		_ = c.Error(ErrorLimitExceeded)
+		_ = c.Error(ErrLimitExceeded)
 		c.AbortWithStatus(429)
 	}
 }
