@@ -736,6 +736,6 @@ serverVersion:
 $ ./scripts/install/test.sh iam::test::test
 ```
 
-如果安装成功，最后会输出一行：`congratulations, all test passed!`。如下图所示。
+如果安装成功，最后会输出一行：`congratulations, install iam application successfully!`。如下图所示。
 
 ![iam::test::test运行结果](../../../images/iamtest运行结果.png)
