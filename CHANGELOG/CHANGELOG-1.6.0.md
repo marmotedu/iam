@@ -1,6 +1,10 @@
 
 <a name="v1.6.0"></a>
-## [v1.6.0](https://github.com/marmotedu/iam/compare/v1.4.0...v1.6.0) (2021-12-19)
+## [v1.6.0](https://github.com/marmotedu/iam/compare/v1.4.0...v1.6.0) (2021-12-20)
+
+### Bug Fixes
+
+* **apiserver:** do not authenticate when creating a user
 
 ### Code Refactoring
 
