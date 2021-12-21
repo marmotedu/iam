@@ -45,7 +45,7 @@ spec:
       - command:
         - /opt/iam/bin/iam-apiserver
         - --config=/etc/iam/iam-apiserver.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.6.2"
         name: iam-apiserver
         ports:
         - containerPort: 8443

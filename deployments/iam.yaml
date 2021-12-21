@@ -147,7 +147,7 @@ spec:
       - command:
         - /opt/iam/bin/iam-apiserver
         - --config=/etc/iam/iam-apiserver.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-apiserver-amd64:v1.6.2"
         name: iam-apiserver
         securityContext:
             {}
@@ -272,7 +272,7 @@ spec:
       - command:
         - /opt/iam/bin/iam-authz-server
         - --config=/etc/iam/iam-authz-server.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-authz-server-amd64:v1.6.2"
         name: iam-authz-server
         securityContext:
             {}
@@ -394,7 +394,7 @@ spec:
       - command:
         - /opt/iam/bin/iam-pump
         - --config=/etc/iam/iam-pump.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-pump-amd64:v1.6.2"
         name: iam-pump
         securityContext:
             {}
@@ -516,7 +516,7 @@ spec:
       - command:
         - /opt/iam/bin/iam-watcher
         - --config=/etc/iam/iam-watcher.yaml
-        image: "ccr.ccs.tencentyun.com/marmotedu/iam-watcher-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iam-watcher-amd64:v1.6.2"
         name: iam-watcher
         securityContext:
             {}
@@ -638,7 +638,7 @@ spec:
       - command:
         - sleep
         - "3600"
-        image: "ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64:v1.6.0"
+        image: "ccr.ccs.tencentyun.com/marmotedu/iamctl-amd64:v1.6.2"
         name: iamctl
         securityContext:
             {}
