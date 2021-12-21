@@ -25,13 +25,13 @@ require (
 	github.com/gosuri/uitable v0.0.4
 	github.com/influxdata/influxdb v1.9.4
 	github.com/jinzhu/gorm v1.9.16
-	github.com/jinzhu/now v1.1.2
+	github.com/jinzhu/now v1.1.3
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
-	github.com/marmotedu/api v1.0.5
-	github.com/marmotedu/component-base v1.0.1
+	github.com/marmotedu/api v1.6.1
+	github.com/marmotedu/component-base v1.6.1
 	github.com/marmotedu/errors v1.0.2
-	github.com/marmotedu/marmotedu-sdk-go v1.0.3
+	github.com/marmotedu/marmotedu-sdk-go v1.6.1
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.4.2
@@ -65,7 +65,7 @@ require (
 	gopkg.in/vmihailenco/msgpack.v2 v2.9.2
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/mysql v1.1.2
-	gorm.io/gorm v1.21.15
+	gorm.io/gorm v1.22.4
 	k8s.io/klog v1.0.0
 )
 
