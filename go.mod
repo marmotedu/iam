@@ -28,10 +28,10 @@ require (
 	github.com/jinzhu/now v1.1.3
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
-	github.com/marmotedu/api v1.6.1
-	github.com/marmotedu/component-base v1.6.1
+	github.com/marmotedu/api v1.6.2
+	github.com/marmotedu/component-base v1.6.2
 	github.com/marmotedu/errors v1.0.2
-	github.com/marmotedu/marmotedu-sdk-go v1.6.1
+	github.com/marmotedu/marmotedu-sdk-go v1.6.2
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/mitchellh/mapstructure v1.4.2
