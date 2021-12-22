@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `policy`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `policy` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `instanceID` varchar(20) DEFAULT NULL,
+  `instanceID` varchar(32) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `username` varchar(255) NOT NULL,
   `policyShadow` longtext DEFAULT NULL,
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `policy_audit`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `policy_audit` (
   `id` bigint(20) unsigned NOT NULL,
-  `instanceID` varchar(20) DEFAULT NULL,
+  `instanceID` varchar(32) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `username` varchar(255) NOT NULL,
   `policyShadow` longtext DEFAULT NULL,
@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `secret`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `secret` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `instanceID` varchar(20) DEFAULT NULL,
+  `instanceID` varchar(32) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `username` varchar(255) NOT NULL,
   `secretID` varchar(36) NOT NULL,
@@ -146,7 +146,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `instanceID` varchar(20) DEFAULT NULL,
+  `instanceID` varchar(32) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `status` int(1) DEFAULT 1 COMMENT '1:可用，0:不可用',
   `nickname` varchar(30) NOT NULL,

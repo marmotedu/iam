@@ -86,7 +86,7 @@ func (s *apiServer) PrepareRun() preparedAPIServer {
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
 		if mysqlStore != nil {
-			return mysqlStore.Close()
+			_ = mysqlStore.Close()
 		}
 
 		s.gRPCAPIServer.Close()

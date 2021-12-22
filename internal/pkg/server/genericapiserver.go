@@ -94,7 +94,6 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 	// necessary middlewares
 	s.Use(middleware.RequestID())
 	s.Use(middleware.Context())
-	// s.Use(limits.RequestSizeLimiter(10))
 
 	// install custom middlewares
 	for _, m := range s.middlewares {

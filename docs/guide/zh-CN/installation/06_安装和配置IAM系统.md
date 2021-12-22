@@ -715,7 +715,7 @@ clientVersion:
   compiler: gc
   gitCommit: 34444662f5e09449caca1f6b318c7e0896d7d4d5
   gitTreeState: dirty
-  gitVersion: v1.6.0
+  gitVersion: v1.6.2
   goVersion: go1.17.2
   platform: linux/amd64
 serverVersion:
@@ -723,7 +723,7 @@ serverVersion:
   compiler: gc
   gitCommit: 34444662f5e09449caca1f6b318c7e0896d7d4d5
   gitTreeState: dirty
-  gitVersion: v1.6.0
+  gitVersion: v1.6.2
   goVersion: go1.17.2
   platform: linux/amd64
 ```

@@ -5,7 +5,7 @@
 ```bash
 $ mkdir -p $WORKSPACE/golang/src/github.com/marmotedu
 $ cd $WORKSPACE/golang/src/github.com/marmotedu
-$ git clone -b v1.6.0 --depth=1 https://github.com/marmotedu/iam
+$ git clone -b v1.6.2 --depth=1 https://github.com/marmotedu/iam
 ```
 
 其中，`marmotedu` 和 `marmotedu/iam` 目录存放了本实战项目的代码。在学习的过程中，你需要频繁的访问这 2 个目录，为了方便访问，你可以追加以下 2 个环境变量和 2 个 alias 到`$HOME/.bashrc`文件中：
