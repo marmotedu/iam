@@ -17,7 +17,7 @@ import (
 func (s *SecretController) DeleteCollection(c *gin.Context) {
 	log.L(c).Info("batch delete policy function called.")
 
-	if err := s.srv.Policies().DeleteCollection(
+	if err := s.srv.Secrets().DeleteCollection(
 		c,
 		c.GetString(middleware.UsernameKey),
 		c.QueryArray("name"),
