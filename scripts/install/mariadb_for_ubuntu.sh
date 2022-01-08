@@ -48,9 +48,8 @@ function iam::mariadb::uninstall()
   set +o errexit
   iam::common::sudo "systemctl stop mariadb"
   iam::common::sudo "systemctl disable mariadb"
-  iam::common::sudo "yum -y remove MariaDB-server MariaDB-client"
+  iam::common::sudo "apt-get -y remove mariadb-server"
   iam::common::sudo "rm -rf /var/lib/mysql"
-  iam::common::sudo "rm -f /etc/yum.repos.d/mariadb-10.5.repo"
   set -o errexit
   iam::log::info "uninstall MariaDB successfully"
 }
