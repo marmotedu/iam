@@ -74,7 +74,7 @@ type Logger interface {
 	// V returns an InfoLogger value for a specific verbosity level.  A higher
 	// verbosity level means a log message is less important.  It's illegal to
 	// pass a log level less than zero.
-	V(level int) InfoLogger
+	V(level Level) InfoLogger
 	Write(p []byte) (n int, err error)
 
 	// WithValues adds some key-value pairs of context to a logger.
@@ -306,13 +306,12 @@ func StdInfoLogger() *log.Logger {
 }
 
 // V return a leveled InfoLogger.
-func V(level int) InfoLogger { return std.V(level) }
+func V(level Level) InfoLogger { return std.V(level) }
 
-func (l *zapLogger) V(level int) InfoLogger {
-	lvl := zapcore.Level(5 - 1*level)
-	if l.zapLogger.Core().Enabled(lvl) {
+func (l *zapLogger) V(level Level) InfoLogger {
+	if l.zapLogger.Core().Enabled(level) {
 		return &infoLogger{
-			level: lvl,
+			level: level,
 			log:   l.zapLogger,
 		}
 	}

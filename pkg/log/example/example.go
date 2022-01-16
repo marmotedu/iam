@@ -35,7 +35,7 @@ func main() {
 	opts := &log.Options{
 		Level:            "debug",
 		Format:           "console",
-		EnableColor:      true,
+		EnableColor:      true, // if you need output to local path, with EnableColor must be false.
 		DisableCaller:    true,
 		OutputPaths:      []string{"test.log", "stdout"},
 		ErrorOutputPaths: []string{"error.log"},
@@ -64,6 +64,6 @@ func main() {
 	ln.Info("Message printed with [WithName] logger")
 
 	// V level使用
-	log.V(1).Info("This is a V level message")
-	log.V(1).Infow("This is a V level message with fields", "X-Request-ID", "7a7b9f24-4cae-4b2a-9464-69088b45b904")
+	log.V(log.InfoLevel).Info("This is a V level message")
+	log.V(log.ErrorLevel).Infow("This is a V level message with fields", "X-Request-ID", "7a7b9f24-4cae-4b2a-9464-69088b45b904")
 }
