@@ -14,10 +14,20 @@ Vim 可以选择 NeoVim。NeoVim 是基于 Vim 的一个 fork 分支，它主要
 
 你可以直接执行 `pip3` 和 `yum` 命令安装，安装方法如下：
 
+centos:
 ```bash
 $ sudo pip3 install pynvim
 $ sudo yum -y install neovim
 ```
+ubuntu:
+```bash
+$ sudo apt update
+$ sudo apt install -y neovim
+$ sudo apt install python3-pip
+$ sudo pip3 install neovim jedi python-language-server --user
+```
+
+
 
 2) 配置 `$HOME/.bashrc`。
 
@@ -64,7 +74,7 @@ SpaceVim 配置文件为：`$HOME/.SpaceVim.d/init.toml`和`$HOME/.SpaceVim.d/au
 
 SpaceVim Go IDE 常用操作的按键映射如下表所示：
 
-| 按键                | 功能描述                                                                    |
+| 按键                 | 功能描述                                                                    |
 | ------------------- | --------------------------------------------------------------------------- |
 | F2                  | 显示函数、变量、结构体等列表                                                |
 | F3                  | 显示当前目录下文件列表                                                      |

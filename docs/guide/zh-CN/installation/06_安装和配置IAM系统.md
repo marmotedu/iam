@@ -60,6 +60,13 @@ $ sudo mkdir -p ${IAM_INSTALL_DIR}/bin #创建 IAM 系统安装目录
 $ sudo mkdir -p ${IAM_CONFIG_DIR}/cert # 创建 IAM 系统配置文件存放目录
 $ sudo mkdir -p ${IAM_LOG_DIR} # 创建 IAM 日志文件存放目录
 ```
+IAM系统默认情况：
+| 变量               | 默认值       | 作用                          |
+| ------------------ | ------------ | ----------------------------- |
+| ${IAM_DATA_DIR}    | /data/iam    | Systemd WorkingDirectory 目录 |
+| ${IAM_INSTALL_DIR} | /opt/iam     | IAM 系统安装目录              |
+| ${IAM_CONFIG_DIR}  | /etc/iam     | IAM 系统配置文件存放目录      |
+| ${IAM_LOG_DIR}     | /var/log/iam | IAM 日志文件存放目录          |
 
 注意`source scripts/install/environment.sh`时如果遇到`bash: XXXXXX: readonly variable`这类报错，说明变量已经被加载到当前Shell中了，可以忽略这类报错。
 

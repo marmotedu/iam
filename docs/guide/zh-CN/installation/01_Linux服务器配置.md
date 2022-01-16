@@ -22,9 +22,13 @@ passwd: all authentication tokens updated successfully.
 
 我们知道很多时候，普通用户在进行一些操作时也需要root权限，但 `root` 用户的密码一般是由系统管理员维护并定期更改的，每次都向管理员询问密码又很麻烦。因此，我建议你将普通用户加入到 sudoers 中，这样普通用户就可以通过 sudo 命令来暂时获取root权限。具体来说，你可以执行以下命令将`going`用户添加到sudoers中：
 
-
+centos:
 ```bash
 # sed -i '/^root.*ALL=(ALL).*ALL/a\going\tALL=(ALL) \tALL' /etc/sudoers
+```
+ubuntu:
+```bash
+# sed -i '/^root.*ALL=(ALL:ALL).*ALL/a\going\tALL=(ALL) \tALL' /etc/sudoers
 ```
 
 ## 1.2 `going`用户Shell环境设置
@@ -94,6 +98,16 @@ $ sudo yum -y install make autoconf automake cmake perl-CPAN libcurl-devel libto
 ```
 
 如果系统提示 `Package xxx is already installed.`，说明`xxx`包在系统中已经被安装过，你可以忽略该类报错提示。
+
+你可以在Ubuntu 系统上通过 `apt` 命令来安装需要的依赖工具，安装命令如下：
+
+```bash
+$ sudo apt-get update 
+$ sudo apt-get install build-essential
+$ sudo apt-get install dh-autoreconf libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev
+$ sudo apt install libcurl4-openssl-dev
+```
+
 
 2) 安装 Git。
 
