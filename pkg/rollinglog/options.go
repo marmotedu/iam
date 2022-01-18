@@ -21,12 +21,12 @@ const (
 	consoleFormat = "console"
 	jsonFormat    = "json"
 
-	flagRolling           = "log.Rolling"
-	flagRollingMaxSize    = "log.Rolling_max_size"
-	flagRollingMaxAge     = "log.Rolling_max_age"
-	flagRollingMaxBackups = "log.Rolling_max_backups"
-	flagRollingLocalTime  = "log.Rolling_local_time"
-	flagRollingCompress   = "log.Rolling_compress"
+	flagRolling           = "log.rolling"
+	flagRollingMaxSize    = "log.rolling_max_size"
+	flagRollingMaxAge     = "log.rolling_max_age"
+	flagRollingMaxBackups = "log.rolling_max_backups"
+	flagRollingLocalTime  = "log.rolling_local_time"
+	flagRollingCompress   = "log.rolling_compress"
 )
 
 type Options struct {
