@@ -91,7 +91,7 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.IntVar(&o.RollingMaxAge, flagRollingMaxAge, o.RollingMaxAge, "Maximum number of days to retain old log files.")
 	fs.IntVar(&o.RollingMaxSize, flagRollingMaxSize, o.RollingMaxSize, " Maximum size in megabytes of the log file.")
 	fs.IntVar(&o.RollingMaxBackups, flagRollingMaxBackups, o.RollingMaxBackups, "Maximum number of old log files to retain.")
-	fs.BoolVar(&o.Rolling, flagRollingLocalTime, o.Rolling, "Determines if the time used for formatting the timestamps in backup files is the computer's local time. The defaults is to use UTC time.")
+	fs.BoolVar(&o.RollingLocalTime, flagRollingLocalTime, o.Rolling, "Determines if the time used for formatting the timestamps in backup files is the computer's local time. The defaults is to use UTC time.")
 	fs.BoolVar(&o.RollingCompress, flagRollingCompress, o.RollingCompress, "Determines if the rotated log files should be compressed using gzip. The default is not to perform compression.")
 
 }
