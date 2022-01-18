@@ -1,0 +1,66 @@
+/*
+ * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ */
+
+package rollinglog
+
+import (
+	"os"
+
+	"github.com/marmotedu/iam/pkg/rollinglog/rolling"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
+
+// generate zapcore WriteSyncer, The category must be OutputPaths or ErrorOutputPaths.
+func generateWriterSyncer(category string, opts *Options) []zapcore.WriteSyncer {
+
+	var (
+		ws    zapcore.WriteSyncer
+		err   error
+		paths = map[string][]string{
+			"OutputPaths":      opts.OutputPaths,
+			"ErrorOutputPaths": opts.ErrorOutputPaths,
+		}
+	)
+	wss := make([]zapcore.WriteSyncer, 0, len(opts.OutputPaths))
+
+	for _, path := range paths[category] {
+		if path == "stdout" || path == "stderr" {
+			wss = append(wss, zapcore.AddSync(os.Stdout))
+			continue
+		}
+
+		if opts.Rolling {
+			ws = zapcore.AddSync(buildRollingLogger(path, opts))
+			ws = zapcore.AddSync(zapcore.Lock(ws))
+		} else {
+			ws, _, err = zap.Open(path)
+			if err != nil {
+				panic(err.Error())
+			}
+
+		}
+		wss = append(wss, ws)
+	}
+
+	return wss
+}
+
+// generate rotate logger
+func buildRollingLogger(path string, opts *Options) *rolling.Logger {
+	return rolling.NewLogger(
+		path,
+		rolling.WithMaxAge(opts.RollingMaxAge),
+		rolling.WithMaxBackups(opts.RollingMaxBackups),
+		rolling.WithMaxSize(opts.RollingMaxSize),
+		rolling.WithLocaltime(opts.RollingLocalTime),
+		rolling.WithCompress(opts.RollingCompress),
+	)
+}
+
+func multiWriteSyncer(ws ...zapcore.WriteSyncer) zapcore.WriteSyncer {
+	return zapcore.NewMultiWriteSyncer(ws...)
+}
