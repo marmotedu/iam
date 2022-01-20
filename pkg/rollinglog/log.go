@@ -38,7 +38,7 @@ type Logger interface {
 	Fatalf(format string, v ...interface{})
 	Fatalw(msg string, keysAndValues ...interface{})
 
-	LV(level Level) InfoLogger
+	V(level Level) InfoLogger
 
 	Write(p []byte) (n int, err error)
 	WithValues(keysAndValues ...interface{}) Logger
@@ -168,13 +168,7 @@ func New(opts *Options) *zapLogger {
 		multiWriteSyncer(generateWriterSyncer("OutputPaths", opts)...),
 		zap.NewAtomicLevelAt(zapLevel),
 	)
-	l := zap.New(
-		zc,
-		zap.AddStacktrace(zapcore.PanicLevel),
-		zap.AddCallerSkip(1),
-		zap.WithCaller(opts.EnableCaller),
-		zap.ErrorOutput(multiWriteSyncer(generateWriterSyncer("ErrorOutputPaths", opts)...)),
-	)
+	l := zap.New(zc, withZapOptions(opts)...)
 
 	logger := &zapLogger{
 		zapLogger: l.Named(opts.Name),
@@ -220,10 +214,10 @@ func StdInfoLogger() *log.Logger {
 	return nil
 }
 
-// LV return a leveled InfoLogger.
-func LV(level Level) InfoLogger { return std.LV(level) }
+// V return a leveled InfoLogger.
+func V(level Level) InfoLogger { return std.V(level) }
 
-func (l *zapLogger) LV(level Level) InfoLogger {
+func (l *zapLogger) V(level Level) InfoLogger {
 	if l.zapLogger.Core().Enabled(level) {
 		return &infoLogger{
 			level: level,
@@ -518,4 +512,18 @@ func generateEncoder(opts *Options) (encode zapcore.Encoder) {
 		encode = zapcore.NewJSONEncoder(encoderConfig)
 	}
 	return
+}
+
+func withZapOptions(opts *Options) []zap.Option {
+	var zOpts []zap.Option
+	zOpts = append(zOpts, zap.WithCaller(opts.DisableCaller))
+	zOpts = append(zOpts, zap.AddStacktrace(zapcore.PanicLevel))
+	zOpts = append(zOpts, zap.AddCallerSkip(1))
+	zOpts = append(zOpts, zap.ErrorOutput(multiWriteSyncer(generateWriterSyncer("ErrorOutputPaths", opts)...)))
+
+	if opts.Development {
+		zOpts = append(zOpts, zap.Development())
+	}
+
+	return zOpts
 }

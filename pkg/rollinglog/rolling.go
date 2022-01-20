@@ -1,9 +1,3 @@
-/*
- * Copyright 2021 SuperPony <superponyyy@gmail.com>. All rights reserved.
- * Use of this source code is governed by a MIT style
- * license that can be found in the LICENSE file.
- */
-
 package rollinglog
 
 import (
@@ -16,7 +10,6 @@ import (
 
 // generate zapcore WriteSyncer, The category must be OutputPaths or ErrorOutputPaths.
 func generateWriterSyncer(category string, opts *Options) []zapcore.WriteSyncer {
-
 	var (
 		ws    zapcore.WriteSyncer
 		err   error
@@ -25,17 +18,17 @@ func generateWriterSyncer(category string, opts *Options) []zapcore.WriteSyncer 
 			"ErrorOutputPaths": opts.ErrorOutputPaths,
 		}
 	)
-	wss := make([]zapcore.WriteSyncer, 0, len(opts.OutputPaths))
+	wss := make([]zapcore.WriteSyncer, 0, len(paths[category]))
+	osStds := map[string]*os.File{"stdout": os.Stdout, "stderr": os.Stderr}
 
 	for _, path := range paths[category] {
 		if path == "stdout" || path == "stderr" {
-			wss = append(wss, zapcore.AddSync(os.Stdout))
+			wss = append(wss, zapcore.AddSync(osStds[path]))
 			continue
 		}
 
 		if opts.Rolling {
-			ws = zapcore.AddSync(buildRollingLogger(path, opts))
-			ws = zapcore.AddSync(zapcore.Lock(ws))
+			ws = zapcore.Lock(zapcore.AddSync(buildRollingLogger(path, opts)))
 		} else {
 			ws, _, err = zap.Open(path)
 			if err != nil {

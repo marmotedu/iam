@@ -7,8 +7,8 @@ func main() {
 		Level:            "debug",
 		Format:           "json",
 		EnableColor:      false,
-		EnableCaller:     false,
-		OutputPaths:      []string{"test.log"},
+		DisableCaller:    true,
+		OutputPaths:      []string{"test.log", "stdout"},
 		ErrorOutputPaths: []string{"error.log"},
 		Rolling:          true,
 		RollingMaxSize:   1,
@@ -17,8 +17,9 @@ func main() {
 	rollinglog.Init(opts)
 	defer rollinglog.Flush()
 
-	for i := 0; i < 30000; i++ {
+	for i := 0; i < 10000; i++ {
 		// rollinglog.Debug("This is a debug message")
-		rollinglog.Warnf("This is a formatted %s message", "hello")
+		// rollinglog.Warnf("This is a formatted %s message", "hello")
+		rollinglog.V(rollinglog.InfoLevel).Info("nice to meet you.")
 	}
 }
