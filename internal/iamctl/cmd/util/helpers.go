@@ -65,7 +65,7 @@ func fatal(msg string, code int) {
 // status code 1.
 var ErrExit = fmt.Errorf("exit")
 
-// CheckErr prints a user friendly error to STDERR and exits with a non-zero
+// CheckErr prints a user-friendly error to STDERR and exits with a non-zero
 // exit code. Unrecognized errors will be printed with an "error: " prefix.
 //
 // This method is generic to the command in use and may be used by non-IAM
@@ -74,7 +74,7 @@ func CheckErr(err error) {
 	checkErr(err, fatalErrHandler)
 }
 
-// CheckDiffErr prints a user friendly error to STDERR and exits with a
+// CheckDiffErr prints a user-friendly error to STDERR and exits with a
 // non-zero and non-one exit code. Unrecognized errors will be printed
 // with an "error: " prefix.
 //

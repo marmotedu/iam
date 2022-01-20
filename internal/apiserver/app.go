@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// Package apiserver does all of the work necessary to create a iam APIServer.
+// Package apiserver does all the work necessary to create a iam APIServer.
 package apiserver
 
 import (
@@ -19,7 +19,7 @@ others. The API Server services REST operations to do the api objects management
 Find more iam-apiserver information at:
     https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-apiserver.md`
 
-// NewApp creates a App object with default parameters.
+// NewApp creates an App object with default parameters.
 func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp("IAM API Server",

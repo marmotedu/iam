@@ -65,7 +65,7 @@ func NewCmdInfo(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cobra
 	return cmd
 }
 
-// Run executes a info sub command using the specified options.
+// Run executes an info sub command using the specified options.
 func (o *InfoOptions) Run(args []string) error {
 	var info Info
 

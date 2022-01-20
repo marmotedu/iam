@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// Package watcher does all of the work necessary to create a iam watcher server.
+// Package watcher does all the work necessary to create a iam watcher server.
 package watcher
 
 import (
@@ -18,7 +18,7 @@ But the difference with cron job is iam-watcher also support sleep some duration
 Find more iam-pump information at:
     https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-watcher.md`
 
-// NewApp creates a App object with default parameters.
+// NewApp creates an App object with default parameters.
 func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp("IAM watcher server",

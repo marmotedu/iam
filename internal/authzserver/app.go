@@ -21,7 +21,7 @@ Find more iam-authz-server information at:
 Find more ladon information at:
     https://github.com/ory/ladon`
 
-// NewApp creates a App object with default parameters.
+// NewApp creates an App object with default parameters.
 func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp("IAM Authorization Server",

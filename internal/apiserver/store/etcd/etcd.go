@@ -21,13 +21,13 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// EtcdCreateEventFunc defines etcd create event functon handler.
+// EtcdCreateEventFunc defines etcd create event function handler.
 type EtcdCreateEventFunc func(ctx context.Context, key, value []byte)
 
-// EtcdModifyEventFunc defines etcd update event functon handler.
+// EtcdModifyEventFunc defines etcd update event function handler.
 type EtcdModifyEventFunc func(ctx context.Context, key, oldvalue, value []byte)
 
-// EtcdDeleteEventFunc defines etcd delete event functon handler.
+// EtcdDeleteEventFunc defines etcd delete event function handler.
 type EtcdDeleteEventFunc func(ctx context.Context, key []byte)
 
 // EtcdWatcher defines a etcd watcher.
