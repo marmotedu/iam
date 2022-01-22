@@ -23,7 +23,7 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// GenericAPIServer contains state for a iam api server.
+// GenericAPIServer contains state for an iam api server.
 // type GenericAPIServer gin.Engine.
 type GenericAPIServer struct {
 	middlewares []string

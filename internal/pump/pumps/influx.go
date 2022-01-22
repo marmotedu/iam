@@ -17,7 +17,7 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// InfluxPump defines a influx pump whth influx specific options and common options.
+// InfluxPump defines an influx pump with influx specific options and common options.
 type InfluxPump struct {
 	dbConf *InfluxConf
 	CommonPumpConfig
@@ -35,7 +35,7 @@ type InfluxConf struct {
 	Tags         []string `mapstructure:"tags"`
 }
 
-// New create a influx pump instance.
+// New create an influx pump instance.
 func (i *InfluxPump) New() Pump {
 	newPump := InfluxPump{}
 

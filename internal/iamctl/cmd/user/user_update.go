@@ -104,7 +104,7 @@ func (o *UpdateOptions) Validate(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// Run executes a update subcommand using the specified options.
+// Run executes an update subcommand using the specified options.
 func (o *UpdateOptions) Run(args []string) error {
 	user, err := o.iamclient.APIV1().Users().Get(context.TODO(), o.Name, metav1.GetOptions{})
 	if err != nil {

@@ -56,7 +56,7 @@ type Options struct {
 	Name              string   `json:"name"               mapstructure:"name"`
 }
 
-// NewOptions creates a Options object with default parameters.
+// NewOptions creates an Options object with default parameters.
 func NewOptions() *Options {
 	return &Options{
 		Level:             zapcore.InfoLevel.String(),

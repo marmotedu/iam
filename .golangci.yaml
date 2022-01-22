@@ -97,15 +97,6 @@ linters-settings:
     right-to-left-isolate: true
     first-strong-isolate: true
     pop-directional-isolate: true
-
-  cyclop:
-    # the maximal code complexity to report
-    max-complexity: 10
-    # the maximal average package complexity. If it's higher than 0.0 (float) the check is enabled (default 0.0)
-    package-average: 0.0
-    # should ignore tests (default false)
-    skip-tests: false
-
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
@@ -157,11 +148,14 @@ linters-settings:
       - '*.Test2'
       - '*.Embedded'
       - '*.External'
+
   forbidigo:
     # Forbid the following identifiers (identifiers are written using regexp):
     forbid:
       - ^print.*$
       - 'fmt\.Print.*'
+      - fmt.Println.* # too much log noise
+      - ginkgo\\.F.* # these are used just for local development
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
   funlen:
@@ -175,9 +169,6 @@ linters-settings:
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 30
-  nestif:
-    # minimal complexity of if statements to report, 5 by default
-    min-complexity: 5
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
@@ -470,6 +461,10 @@ linters-settings:
       # see https://github.com/julz/importas#use-regular-expression for details
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
+    # using `jwt` alias for `github.com/appleboy/gin-jwt/v2` package
+    jwt: github.com/appleboy/gin-jwt/v2
+    # using `metav1` alias for `github.com/marmotedu/component-base/pkg/meta/v1` package
+    metav1: github.com/marmotedu/component-base/pkg/meta/v1
 
   ireturn:
     # ireturn allows using `allow` and `reject` settings at the same time.
@@ -500,11 +495,6 @@ linters-settings:
     line-length: 240
     # tab width in spaces. Default to 1.
     tab-width: 4
-
-  makezero:
-    # Allow only slices initialized with a length of zero. Default is false.
-    always: false
-
   maligned:
     # print struct with more effective memory layout or not, false by default
     suggest-new: true
@@ -703,29 +693,10 @@ linters-settings:
     force-err-cuddling: false
     # Allow leading comments to be separated with empty liens
     allow-separated-leading-comment: false
-  gofumpt:
-    # Choose whether or not to use the extra rules that are disabled
-    # by default
-    extra-rules: false
-  errorlint:
-    # Report non-wrapping error creation using fmt.Errorf
-    errorf: true
   makezero:
     # Allow only slices initialized with a length of zero. Default is false.
     always: false
-  forbidigo:
-    # Forbid the following identifiers
-    forbid:
-      #- fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
-      - fmt.Println.* # too much log noise
-      - ginkgo\\.F.* # these are used just for local development
-    # Exclude godoc examples from forbidigo checks.  Default is true.
-    exclude_godoc_examples: false
-  importas:
-    # using `jwt` alias for `github.com/appleboy/gin-jwt/v2` package
-    jwt: github.com/appleboy/gin-jwt/v2
-    # using `metav1` alias for `github.com/marmotedu/component-base/pkg/meta/v1` package
-    metav1: github.com/marmotedu/component-base/pkg/meta/v1
+
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

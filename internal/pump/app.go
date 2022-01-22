@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
 
-// Package pump does all of the work necessary to create a iam pump server.
+// Package pump does all the work necessary to create an iam pump server.
 package pump
 
 import (
@@ -18,7 +18,7 @@ const commandDesc = `IAM Pump is a pluggable analytics purger to move Analytics 
 Find more iam-pump information at:
     https://github.com/marmotedu/iam/blob/master/docs/guide/en-US/cmd/iam-pump.md`
 
-// NewApp creates a App object with default parameters.
+// NewApp creates an App object with default parameters.
 func NewApp(basename string) *app.App {
 	opts := options.NewOptions()
 	application := app.NewApp("IAM analytics server",

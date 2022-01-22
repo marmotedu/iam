@@ -15,7 +15,7 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// Options runs a iam api server.
+// Options runs an iam api server.
 type Options struct {
 	GenericServerRunOptions *genericoptions.ServerRunOptions       `json:"server"   mapstructure:"server"`
 	GRPCOptions             *genericoptions.GRPCOptions            `json:"grpc"     mapstructure:"grpc"`

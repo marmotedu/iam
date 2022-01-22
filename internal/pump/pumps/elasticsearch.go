@@ -20,7 +20,7 @@ import (
 	"github.com/marmotedu/iam/pkg/log"
 )
 
-// ElasticsearchPump defines a elasticsearch pump with elasticsearch specific options and common options.
+// ElasticsearchPump defines an elasticsearch pump with elasticsearch specific options and common options.
 type ElasticsearchPump struct {
 	operator ElasticsearchOperator
 	esConf   *ElasticsearchConf
@@ -122,7 +122,7 @@ func getOperator(ctx context.Context, conf ElasticsearchConf) (ElasticsearchOper
 	return e, errors.Wrap(err, "failed to start bulk processor")
 }
 
-// New create a elasticsearch pump instance.
+// New create an elasticsearch pump instance.
 func (e *ElasticsearchPump) New() Pump {
 	newPump := ElasticsearchPump{}
 

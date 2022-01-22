@@ -77,7 +77,7 @@ type MongoConf struct {
 	CollectionCapEnable       bool   `json:"collection_cap_enable"         mapstructure:"collection_cap_enable"`
 }
 
-func loadCertficateAndKeyFromFile(path string) (*tls.Certificate, error) {
+func loadCertificateAndKeyFromFile(path string) (*tls.Certificate, error) {
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to read file")
@@ -209,7 +209,7 @@ func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 
 			if conf.MongoSSLPEMKeyfile != "" {
 				var cert *tls.Certificate
-				cert, err = loadCertficateAndKeyFromFile(conf.MongoSSLPEMKeyfile)
+				cert, err = loadCertificateAndKeyFromFile(conf.MongoSSLPEMKeyfile)
 				if err != nil {
 					log.Fatalf("Can't load mongo client certificate: %s", err.Error())
 				}

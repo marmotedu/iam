@@ -14,10 +14,10 @@ IAM 系统 API 严格遵循 REST 标准进行设计，采用 JSON 格式进行�
 
 IAM API 接口公共参数如下：
 
-| 参数名称      | 位置   | 类型   | 必选 | 描述                                                           |
-| ------------- | ------ | ------ | ---- | --------------------------------------- |
+| 参数名称          | 位置     | 类型     | 必选  | 描述                                          |
+|---------------|--------|--------|-----|---------------------------------------------|
 | Content-Type  | Header | String | 是   | 固定值：application/json，本书示例项目统一使用 JSON 数据传输格式 |
-| Authorization | Header | String | 是   | JWT Token，值以 `Bearer` 开头
+| Authorization | Header | String | 是   | JWT Token，值以 `Bearer` 开头                    |
 
 ## 2. 返回结果
 
