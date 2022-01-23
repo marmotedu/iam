@@ -21,6 +21,6 @@ func NewOptions() *Options {
 }
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
-	fs.StringVar(&o.Language, flagLanguage, o.Language, "Validator language.")
-	fs.StringVar(&o.Tag, flagTag, o.Tag, "Validator error field tag.")
+	fs.StringVar(&o.Language, flagLanguage, o.Language, "Validator use language.")
+	fs.StringVar(&o.Tag, flagTag, o.Tag, "Validator struct field tag.")
 }
