@@ -9,8 +9,8 @@ import (
 type Validator interface {
 	Struct(data interface{}) error
 	StructCtx(ctx context.Context, data interface{}) error
-	Field(f interface{}, rule string) error
-	FieldCtx(ctx context.Context, f interface{}, rule string) error
+	Var(f interface{}, rule string) error
+	VarCtx(ctx context.Context, f interface{}, rule string) error
 	WithTranslator(language string) Validator
 	GetValidate() *validator.Validate
 	RegisterValidation(tag, errMSg string, vf Validation) error

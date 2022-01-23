@@ -52,12 +52,12 @@ func StructCtx(ctx context.Context, data interface{}) error {
 	return v.StructCtx(ctx, data)
 }
 
-func Field(f, rule string) error {
-	return v.Field(f, rule)
+func Var(f interface{}, rule string) error {
+	return v.Var(f, rule)
 }
 
-func FieldCtx(ctx context.Context, f, rule string) error {
-	return v.FieldCtx(ctx, f, rule)
+func VarCtx(ctx context.Context, f interface{}, rule string) error {
+	return v.VarCtx(ctx, f, rule)
 }
 
 // WithTranslator set default translation.
@@ -124,7 +124,7 @@ func (v *validate) StructCtx(ctx context.Context, data interface{}) error {
 	return nil
 }
 
-func (v *validate) Field(f interface{}, rule string) error {
+func (v *validate) Var(f interface{}, rule string) error {
 	if err := v.Validate.Var(f, rule); err != nil {
 		return &ValidationErrors{
 			trans: v.trans,
@@ -135,7 +135,7 @@ func (v *validate) Field(f interface{}, rule string) error {
 	return nil
 }
 
-func (v *validate) FieldCtx(ctx context.Context, f interface{}, rule string) error {
+func (v *validate) VarCtx(ctx context.Context, f interface{}, rule string) error {
 	if err := v.Validate.VarCtx(ctx, f, rule); err != nil {
 		return &ValidationErrors{
 			trans: v.trans,
