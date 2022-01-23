@@ -15,10 +15,17 @@ import (
 )
 
 var (
+	once sync.Once
 	mu   sync.Mutex
-	opts = NewOptions()
-	v    = New(opts.Language, opts.Tag)
+	v    Validator
 )
+
+func init() {
+	once.Do(func() {
+		opts := NewOptions()
+		v = New(opts.Language, opts.Tag)
+	})
+}
 
 func Init(opts *Options) {
 	mu.Lock()
