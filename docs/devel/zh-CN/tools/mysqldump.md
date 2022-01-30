@@ -20,5 +20,5 @@ mysqldump -uroot -proot --databases iam > /tmp/iam.sql
 ## 3. 导出初始化iam数据库的sql语句
 
 ```bash
-mysqldump -hxxx.xx.xx.xxx -uiam --databases iam -p'z5ev6oMQ%' iam --add-drop-database --add-drop-table --add-drop-trigger --add-locks --no-data > /tmp/iam.sql
+mysqldump -hxxx.xx.xx.xxx -uiam --databases iam -p'iam59!z$' iam --add-drop-database --add-drop-table --add-drop-trigger --add-locks --no-data > /tmp/iam.sql
 ```

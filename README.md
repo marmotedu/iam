@@ -8,6 +8,8 @@ IAM 是一个基于 Go 语言开发的身份识别与访问管理系统，用于
 - 如果你是极客时间《Go 语言项目开发实战》专栏的读者，请使用 v1.1.0 版本（tag）
 - 如果你是图书《从零构建企业级 Go 项目》的读者，请使用 v1.6.2 版本（tag）
 
+> 更详细的版本映射请参考：[版本映射](./docs/guide/zh-CN/version_map.md)
+
 IAM 同时也具有以下能力：
 
 1. 配合极客时间专栏 **《[Go 语言项目开发实战](https://time.geekbang.org/column/intro/100079601?tab=intro)》**，讲解如何用 Go 做企业级应用的开发，是该项目的理论课程，包含了项目各个知识点和构建思路的讲解，也会包含我的一线研发经验和建议。
@@ -28,7 +30,7 @@ IAM 项目会长期维护、定期更新，**欢迎兄弟们 Star & Contribute**
 
 ![IAM架构](./docs/images/IAM架构.png)
 
-架构解析见：[IAM 架构 & 能力说明](docs/guide/zh-CN/installation/installation-architecture.md)
+架构解析见：[IAM 架构 & 能力说明](./docs/guide/zh-CN/installation/installation-architecture.md)
 
 ## 快速开始
 
