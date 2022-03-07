@@ -105,10 +105,12 @@ func (c *Config) Complete() CompletedConfig {
 
 // New returns a new instance of GenericAPIServer from the given config.
 func (c CompletedConfig) New() (*GenericAPIServer, error) {
+	// setMode before gin.New()
+	gin.SetMode(c.Mode)
+
 	s := &GenericAPIServer{
 		SecureServingInfo:   c.SecureServing,
 		InsecureServingInfo: c.InsecureServing,
-		mode:                c.Mode,
 		healthz:             c.Healthz,
 		enableMetrics:       c.EnableMetrics,
 		enableProfiling:     c.EnableProfiling,

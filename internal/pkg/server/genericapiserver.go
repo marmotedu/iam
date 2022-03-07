@@ -27,7 +27,6 @@ import (
 // type GenericAPIServer gin.Engine.
 type GenericAPIServer struct {
 	middlewares []string
-	mode        string
 	// SecureServingInfo holds configuration of the TLS server.
 	SecureServingInfo *SecureServingInfo
 
@@ -83,7 +82,6 @@ func (s *GenericAPIServer) InstallAPIs() {
 
 // Setup do some setup work for gin engine.
 func (s *GenericAPIServer) Setup() {
-	gin.SetMode(s.mode)
 	gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
 		log.Infof("%-6s %-s --> %s (%d handlers)", httpMethod, absolutePath, handlerName, nuHandlers)
 	}
