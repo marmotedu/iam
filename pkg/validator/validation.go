@@ -176,6 +176,7 @@ func (v *validate) registerValidationTranslator(tag string, msg string) error {
 		if err := v.trans.Add(tag, msg, false); err != nil {
 			return err
 		}
+
 		return nil
 	}
 
@@ -187,5 +188,6 @@ func translate(trans ut.Translator, fe validator.FieldError) string {
 	if err != nil {
 		panic(fe.(error).Error())
 	}
+
 	return msg
 }

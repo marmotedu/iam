@@ -806,6 +806,9 @@ issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - linters:
+      - errorlint
+      path: (pkg/validator/.*)\.go
+    - linters:
       - revive
       path: (log/.*)\.go
 

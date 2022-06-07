@@ -5,6 +5,7 @@ import (
 	"log"
 
 	go_validator "github.com/go-playground/validator/v10"
+
 	"github.com/marmotedu/iam/pkg/validator"
 )
 
@@ -78,7 +79,6 @@ func customValidation() {
 		fmt.Println(err.(*validator.ValidationErrors).TranslateErrsMap()) // output: map[年龄:年龄真的不能为66]
 		fmt.Println(err.Error())                                          // output: 年龄真的不能为66
 	}
-
 }
 
 func myValidation(fl go_validator.FieldLevel) bool {
