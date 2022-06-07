@@ -83,6 +83,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 				Email:       user.Email,
 				Phone:       user.Phone,
 				TotalPolicy: policies.TotalCount,
+				LoginedAt:   user.LoginedAt,
 			})
 		}(user)
 	}

@@ -5,6 +5,8 @@
 package user
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	"github.com/marmotedu/component-base/pkg/auth"
@@ -36,6 +38,7 @@ func (u *UserController) Create(c *gin.Context) {
 
 	r.Password, _ = auth.Encrypt(r.Password)
 	r.Status = 1
+	r.LoginedAt = time.Now()
 
 	// Insert the user to the storage.
 	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
