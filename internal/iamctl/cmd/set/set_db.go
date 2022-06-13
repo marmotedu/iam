@@ -8,7 +8,6 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
-
 	// import mysql driver.
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	v1 "github.com/marmotedu/api/apiserver/v1"

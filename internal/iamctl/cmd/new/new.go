@@ -15,6 +15,8 @@ import (
 
 	"github.com/marmotedu/component-base/pkg/util/fileutil"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	cmdutil "github.com/marmotedu/iam/internal/iamctl/cmd/util"
 	"github.com/marmotedu/iam/internal/iamctl/util/templates"
@@ -552,7 +554,7 @@ func (o *NewOptions) Complete(cmd *cobra.Command, args []string) error {
 		o.CommandDescription = args[1]
 	}
 
-	o.CommandFunctionName = strings.Title(o.CommandName)
+	o.CommandFunctionName = cases.Title(language.English).String(o.CommandName)
 
 	return nil
 }

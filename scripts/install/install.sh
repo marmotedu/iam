@@ -86,7 +86,6 @@ EOF
   git config --global credential.helper store    # 设置 Git，保存用户名和密码
   git config --global core.longpaths true # 解决 Git 中 'Filename too long' 的错误
   git config --global core.quotepath off
-  git config --global url."https://github.com.cnpmjs.org/".insteadOf "https://github.com/"
   git lfs install --skip-repo
 
   source $HOME/.bashrc

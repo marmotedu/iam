@@ -1,5 +1,5 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.    
-# Use of this source code is governed by a MIT style    
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
 # license that can be found in the LICENSE file.
 
 # This file contains all available configuration options
@@ -19,7 +19,7 @@ run:
   # include test files or not, default is true
   tests: true
 
-  # list of build tags, all linters use it. Default is empty list.    
+  # list of build tags, all linters use it. Default is empty list.
   build-tags:
     - mytag
 
@@ -165,7 +165,7 @@ linters-settings:
     # put imports beginning with prefix after 3rd-party packages;
     # only support one prefix
     # if not set, use goimports.local-prefixes
-    local-prefixes: github.com/marmotedu/iam
+    prefix: github.com/marmotedu/iam
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 30
@@ -728,11 +728,10 @@ linters:
     - errcheck
     - errorlint
     - exhaustive
-    - exhaustivestruct
     - exportloopref
     - forbidigo
     - funlen
-    - gci
+      #- gci
     - gochecknoinits
     - gocognit
     - goconst
@@ -780,10 +779,17 @@ linters:
     - wastedassign
     - whitespace
     - bidichk
-    - gomoddirectives
     - wastedassign
     - golint
+    - execinquery
+    - nosprintfhostport
+    - grouper
+    - decorder
+    - errchkjson
+    - maintidx
+      #- containedctx
       #- tagliatelle
+      #- nonamedreturns
       #- nilnil
       #- tenv
       #- varnamelen
@@ -821,7 +827,7 @@ issues:
         #path: (pkg/storage/.*)\.go
       path: (internal/.*|pkg/.*)\.go
 
-    - path: (cmd/.*|test/.*|tools/.*)\.go
+    - path: (cmd/.*|test/.*|tools/.*|internal/pump/pumps/.*)\.go
       linters:
         - forbidigo
 
@@ -901,22 +907,22 @@ issues:
 
 severity:
   # Default value is empty string.
-  # Set the default severity for issues. If severity rules are defined and the issues 
-  # do not match or no severity is provided to the rule this will be the default 
-  # severity applied. Severities should match the supported severity names of the 
+  # Set the default severity for issues. If severity rules are defined and the issues
+  # do not match or no severity is provided to the rule this will be the default
+  # severity applied. Severities should match the supported severity names of the
   # selected out format.
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
   # -   Checkstyle: https://checkstyle.sourceforge.io/property_types.html#severity
   # -       Github: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   default-severity: error
 
-  # The default value is false. 
+  # The default value is false.
   # If set to true severity-rules regular expressions become case sensitive.
   case-sensitive: false
 
   # Default value is empty list.
   # When a list of severity rules are provided, severity information will be added to lint
-  # issues. Severity rules have the same filtering capability as exclude rules except you 
+  # issues. Severity rules have the same filtering capability as exclude rules except you
   # are allowed to specify one matcher per severity rule.
   # Only affects out formats that support setting severity information.
   rules:
