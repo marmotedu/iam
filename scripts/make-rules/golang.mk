@@ -16,7 +16,7 @@ ifneq ($(DLV),)
 	GO_BUILD_FLAGS += -gcflags "all=-N -l"
 	LDFLAGS = ""
 endif
-GO_BUILD_FLAGS += -tags=jsoniter -ldflags "$(GO_LDFLAGS)"
+GO_BUILD_FLAGS += -ldflags "$(GO_LDFLAGS)"
 
 ifeq ($(GOOS),windows)
 	GO_OUT_EXT := .exe
