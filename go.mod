@@ -28,7 +28,7 @@ require (
 	github.com/jinzhu/now v1.1.3
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/likexian/host-stat-go v0.0.0-20190516151207-c9cf36dd6ce9
-	github.com/marmotedu/api v1.6.2
+	github.com/marmotedu/api v1.6.3
 	github.com/marmotedu/component-base v1.6.2
 	github.com/marmotedu/errors v1.0.2
 	github.com/marmotedu/marmotedu-sdk-go v1.6.2
@@ -52,6 +52,7 @@ require (
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tpkeeper/gin-dump v1.0.1
+	github.com/vinllen/mgo v0.0.0-20220329061231-e5ecea62f194
 	github.com/vmihailenco/msgpack/v5 v5.3.4
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.etcd.io/etcd/api/v3 v3.5.0
@@ -62,8 +63,6 @@ require (
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac
 	golang.org/x/tools v0.1.11
 	google.golang.org/grpc v1.41.0
-	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
-	gopkg.in/vmihailenco/msgpack.v2 v2.9.2
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.22.4
@@ -139,8 +138,6 @@ require (
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
 	golang.org/x/sys v0.0.0-20211020064051-0ec99a608a1b // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20210828152312-66f60bf46e71 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.63.2 // indirect

@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	msgpack "gopkg.in/vmihailenco/msgpack.v2"
+	"github.com/vmihailenco/msgpack/v5"
 
 	"github.com/marmotedu/iam/pkg/log"
 	"github.com/marmotedu/iam/pkg/storage"

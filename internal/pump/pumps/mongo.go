@@ -22,7 +22,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/marmotedu/errors"
 	"github.com/mitchellh/mapstructure"
-	"gopkg.in/mgo.v2"
+	"github.com/vinllen/mgo"
 
 	"github.com/marmotedu/iam/internal/pump/analytics"
 	"github.com/marmotedu/iam/pkg/log"
