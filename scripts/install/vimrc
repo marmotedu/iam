@@ -1,0 +1,97 @@
+" common configure
+"set noswapfile
+set mouse=a " 激活鼠标使用
+set wrap " 自动换行
+set sw=4 " 设置软宽度
+set gdefault " 行内替换
+set showmatch " 高亮显示括号匹配    
+set expandtab " 使用空格来替换 Tab
+set tabstop=4 " 设置 Tab 长度为 4 空格    
+set shiftwidth=4 " 设置自动缩进长度为 4 空格    
+set autoindent " 继承前一行的缩进方式，适用于多行注释" 
+set autowrite " 自动保存
+set nocompatible " 关闭 vi 兼容模式
+set history=1000 " 设置历史记录步数
+set confirm " 在处理未保存或只读文件时，弹出确认
+
+" 搜索逐字符高亮
+set hlsearch
+set incsearch
+
+" 从不备份
+set nobackup
+set noswapfile
+
+let g:indentLine_enabled=0
+
+" golang configure ====> start
+let g:go_highlight_methods = 1                 
+let g:go_highlight_operators = 1    
+let g:go_highlight_build_constraints = 1    
+let g:go_fmt_autosave = 1
+let g:go_version_warning = 1    
+let g:go_autodetect_gopath = 1    
+let g:go_highlight_types = 1    
+let g:go_highlight_fields = 1    
+let g:go_highlight_functions = 1    
+let g:go_highlight_function_calls = 1                                             
+let g:go_highlight_extra_types = 1                                                               
+let g:go_highlight_generate_tags = 1    
+let g:go_def_mode = 'gopls'
+let g:go_gopls_enabled = 1
+let g:go_guru_enabled = 1
+let g:go_fmt_experimental = 1    
+let g:go_def_mapping_enabled = 1    
+let g:go_build_tags = '-v'    
+let g:go_fmt_command = "goimports"                       
+let g:go_list_type = "quickfix"    
+let g:go_def_mapping_enable = 1
+
+map <2-LeftMouse> :GoDef <CR>
+map <RightMouse> :GoDefPop <CR>
+map <C-N> :GoCallers <CR>
+map <C-M> :GoCallees <CR>
+map <ScrollWheelUp> <C-Y>
+map <ScrollWheelDown> <C-E>
+unmap <CR>
+map <CR> :GoDef <CR>
+map <C-I> :GoDefPop <CR>
+map <S-K> :GoDoc<cr>
+map <S-M> :GoInfo<cr>
+map <S-T> :GoDefType<cr>
+map <S-L> :GoAddTag<cr>
+map <S-P> :GoImplements<cr>
+map <S-R> :GoRename<cr>
+map <S-F> :GoFillStruct<cr>
+map <S-C> :GoCallers<cr>
+map <S-H> :GoSameIdsToggle<cr>
+
+augroup go
+  autocmd!
+
+  " Show by default 4 spaces for a tab
+  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+  " :GoDef but opens in a vertical split
+  autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+  " :GoDef but opens in a horizontal split
+  autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+
+  " :GoAlternate  commands :A, :AV, :AS and :AT
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+augroup END
+
+" build_go_files is a custom function that builds or compiles the test file.
+" It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+" golang configure ====> end

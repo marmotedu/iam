@@ -193,7 +193,7 @@ function iam::install::go()
 
 function iam::install::vim_ide()
 {
-  rm -rf $HOME/.vim /tmp/gotools-for-vim.tgz # clean up
+  rm -rf $HOME/.vim $HOME/.vimrc /tmp/gotools-for-vim.tgz # clean up
 
   # 1. 安装 vim-go
   mkdir -p ~/.vim/pack/plugins/start
@@ -203,7 +203,7 @@ function iam::install::vim_ide()
   # 2. Go 工具安装
   wget -P /tmp/ https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/gotools-for-vim.tgz && {
     mkdir -p $GOPATH/bin
-    tar -xvzf /tmp/gotools-for-spacevim.tgz -C $GOPATH/bin
+    tar -xvzf /tmp/gotools-for-vim.tgz -C $GOPATH/bin
   }
 
   source $HOME/.bashrc
