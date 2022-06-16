@@ -69,3 +69,20 @@ func TestUnpointer(t *testing.T) {
 		})
 	}
 }
+
+func FuzzUnpointer(f *testing.F) {
+	testcases := []int64{1, 2, 3, 4, 5}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
+	f.Fuzz(func(t *testing.T, in int64) {
+		out := Unpointer(pointer.ToInt64(0), &in)
+		want := &LimitAndOffset{
+			Offset: 0,
+			Limit:  int(in),
+		}
+		if !reflect.DeepEqual(out, want) {
+			t.Errorf("got: %v, want: %v", out, want)
+		}
+	})
+}
