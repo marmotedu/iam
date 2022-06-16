@@ -198,7 +198,7 @@ function iam::install::vim_ide()
   # 1. 安装 vim-go
   mkdir -p ~/.vim/pack/plugins/start
   git clone --depth=1 https://github.com/fatih/vim-go.git $HOME/.vim/pack/plugins/start/vim-go
-  cp "${IAM_ROOT}/scripts/install/vimrc" $HOME/
+  cp "${IAM_ROOT}/scripts/install/vimrc" $HOME/.vimrc
 
   # 2. Go 工具安装
   wget -P /tmp/ https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/gotools-for-vim.tgz && {

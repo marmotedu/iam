@@ -1,6 +1,6 @@
 # 6. 安装和配置 IAM 系统
 
-要想完成 IAM 系统的安装，你还需要安装和配置 iam-apiserver、iamctl、iam-authz-server、iam-pump、iam-watcher 和man page。下面先来看安装和配置的准备工作。
+要想完成 IAM 系统的安装，你还需要安装和配置 iam-apiserver、iamctl、iam-authz-server、iam-pump、iam-watcher 和 man page。下面先来看安装和配置的准备工作。
 
 ## 6.1 准备工作
 
@@ -13,7 +13,7 @@
 
 1. 初始化 MariaDB 数据库
 
-安装完 MariaDB 数据库之后，还需要在 MariaDB 数据库中创建 IAM 系统需要的数据库、表和存储过程。创建 SQL 语句保存在`configs/iam.sql`文件中。具体的创建步骤如下：
+安装完 MariaDB 数据库之后，还需要在 MariaDB 数据库中创建 IAM 系统需要的数据库、表和存储过程。创建 SQL 语句保存在 `configs/iam.sql` 文件中。具体的创建步骤如下：
 
 1) 登录数据库并创建 `iam` 用户：
 
@@ -26,7 +26,7 @@ MariaDB [(none)]> flush privileges;
 Query OK, 0 rows affected (0.000 sec)
 ```
 
-2) 用 `iam` 用户登录 MariaDB，执行`configs/iam.sql`文件，创建 `iam` 数据库：
+2) 用 `iam` 用户登录 MariaDB，执行 `configs/iam.sql` 文件，创建 `iam` 数据库：
 
 ```bash
 $ mysql -h127.0.0.1 -P3306 -uiam -p'iam59!z$'
@@ -68,7 +68,7 @@ IAM系统默认情况：
 | ${IAM_CONFIG_DIR}  | /etc/iam     | IAM 系统配置文件存放目录      |
 | ${IAM_LOG_DIR}     | /var/log/iam | IAM 日志文件存放目录          |
 
-注意`source scripts/install/environment.sh`时如果遇到`bash: XXXXXX: readonly variable`这类报错，说明变量已经被加载到当前Shell中了，可以忽略这类报错。
+注意 `source scripts/install/environment.sh` 时如果遇到 `bash: XXXXXX: readonly variable` 这类报错，说明变量已经被加载到当前 Shell 中了，可以忽略这类报错。
 
 3. 创建 CA 根证书和密钥
 
@@ -82,8 +82,9 @@ IAM系统默认情况：
 
 - **cfssl：** 证书签发工具。
 - **cfssljson：** 将 cfssl 生成的证书（json 格式）变为文件承载式证书。
+- **cfssl-certinfo：** 可以显示 CSR 或者证书文件的详细信息。
 
-可以通过以下命令来安装这2个工具：
+可以通过以下命令来安装这 3 个工具：
 
 ```bash
 $ cd $IAM_ROOT
@@ -119,6 +120,7 @@ EOF
 ```
 
 上面的 JSON 配置中，一些字段的解释如下。
+
 - **signing：** 表示该证书可用于签名其他证书（生成的 `ca.pem` 证书中 `CA=TRUE`）。
 - **server auth：** 表示 client 可以用该证书对 server 提供的证书进行验证。
 - **client auth：** 表示 server 可以用该证书对 client 提供的证书进行验证。
@@ -154,6 +156,7 @@ EOF
 ```
 
 上面的 JSON 配置中，一些字段的解释如下。
+
 - **C：** Country，国家。
 - **ST：** State，省份。
 - **L：** Locality (L) or City，城市。
@@ -164,7 +167,7 @@ EOF
 除此之外，还有两点需要注意：
 
 - 不同证书 csr 文件的 `CN`、`C`、`ST`、`L`、`O`、`OU` 组合必须不同，否则可能出现 `PEER'S CERTIFICATE HAS AN INVALID SIGNATURE` 错误；
-- 后续创建证书的 csr 文件时，`CN`、`OU`都不相同（`C`、`ST`、`L`、`O`相同），以达到区分的目的。
+- 后续创建证书的 csr 文件时，`CN`、`OU` 都不相同（`C`、`ST`、`L`、`O` 相同），以达到区分的目的。
 
 4) 创建 CA 证书和私钥。
 
@@ -190,7 +193,7 @@ $ cfssl certinfo -csr ${IAM_CONFIG_DIR}/cert/ca.csr # 查看 CSR(证书签名请
 
 4. 配置 hosts
 
-IAM 通过域名访问 API 接口，因为这些域名没有注册过，还不能在互联网上被解析到，所以需要配置 hosts，通过hosts来被解析。配置命令如下：
+IAM 通过域名访问 API 接口，因为这些域名没有注册过，还不能在互联网上被解析到，所以需要配置 hosts，通过 hosts 来被解析。配置命令如下：
 
 ```bash
 $ sudo tee -a /etc/hosts <<EOF
@@ -287,7 +290,7 @@ $ systemctl status iam-apiserver # 查看 iam-apiserver 运行状态，如果输
 
 3. 测试 iam-apiserver 是否成功安装
 
-测试 iam-apiserver 主要是测试用户、密钥、授权策略这3类 REST 资源的增删改查作。
+测试 iam-apiserver 主要是测试用户、密钥、授权策略这 3 类 REST 资源的增删改查作。
 
 首先，我们需要执行以下命令来获取访问 iam-apiserver 的 token：
 
@@ -296,15 +299,15 @@ $ curl -s -XPOST -H'Content-Type: application/json' -d'{"username":"admin","pass
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzA5NDExODMsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MzA4NTQ3ODMsInN1YiI6ImFkbWluIn0.TvraWpcjk2Izp2S98u4Tghrh20Qi2AeblUGhU0BnsTY
 ```
 
-下面的操作都会使用curl命令来发送HTTP请求，在请求时，需要通过`-H'Authorization: Bearer $token'` 指定认证头信息。
+下面的操作都会使用 curl 命令来发送 HTTP 请求，在请求时，需要通过 `-H'Authorization: Bearer $token'` 指定认证头信息。
 
-为了操作方便，可以将获取到的token保存在token变量中：
+为了操作方便，可以将获取到的 token 保存在 token 变量中：
 
 ```bash
-$ export token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzA5NDExODMsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MzA4NTQ3ODMsInN1YiI6ImFkbWluIn0.TvraWpcjk2Izp2S98u4Tghrh20Qi2AeblUGhU0BnsTY'
+$ export token=`curl -s -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"Admin@2021"}' http://127.0.0.1:8080/login | jq -r .token`
 ```
 
-接下来，可以通过以下3步来完成iam-apiserver的测试。
+接下来，可以通过以下 3 步来完成 iam-apiserver 的测试。
 
 1) 用户增删改查。
 
@@ -382,6 +385,7 @@ $ curl -s -XDELETE -H"Authorization: Bearer $token" http://127.0.0.1:8080/v1/pol
 iamctl 使用 HTTPS 协议与 iam-apiserver 进行通信，iam-apiserver 对 iamctl 请求包含的证书进行认证和授权。iamctl还用于对 IAM 系统的访问和管理，所以这里创建具有最高权限的 admin 证书。
 
 1) 创建证书签名请求。
+
 下面创建的该证书只会被 iamctl 当做 client 证书使用，所以 `hosts` 字段为空。创建命令如下：
 
 ```bash
@@ -422,7 +426,7 @@ $ mv admin-key.pem ${CONFIG_USER_CLIENT_KEY} # 安装 TLS 的客户端私钥文�
 
 2. 安装 iamctl
 
-iamctl 是 IAM 系统的客户端工具，其安装位置和 iam-apiserver、iam-authz-server、iam-pump、iam-watcher位置不同，为了能够在 shell 下直接运行 iamctl 命令，我们需要将 iamctl 安装到`$HOME/bin`下，同时将 iamctl 的配置存放到默认加载的$HOME/.iam目录下。具体来说，可以通过以下2步来完成。
+iamctl 是 IAM 系统的客户端工具，其安装位置和 iam-apiserver、iam-authz-server、iam-pump、iam-watcher 位置不同，为了能够在 shell 下直接运行 iamctl 命令，我们需要将 iamctl 安装到 `$HOME/bin` 下，同时将 iamctl 的配置存放到默认加载的 `$HOME/.iam` 目录下。具体来说，可以通过以下 2 步来完成。
 
 1) 安装 iamctl 可执行程序。
 
@@ -440,7 +444,7 @@ $ mkdir -p $HOME/.iam
 $ mv iamctl.yaml $HOME/.iam
 ```
 
-因为 iamctl 是一个客户端工具，可能会在多台机器上运行。为了简化部署 iamctl 工具的复杂度，我们可以把 `iamctl.yaml`配置文件中跟 CA 认证相关的 CA 文件内容用 base64 加密后，放置在 `iamctl.yaml`配置文件中，这样我们就不需要再部署这些CA文件。具体的加密方法为：把 `iamctl.yaml`文件中的配置项`client-certificate`、`client-key`、`certificate-authority` 分别用如下配置项替换 `client-certificate-data`、`client-key-data`、`certificate-authority-data`。这些配置项的值可以通过对 CA 文件使用 base64 加密获得。假如，`certificate-authority` 值为`/etc/iam/cert/ca.pem`，则 `certificate-authority-data` 的值为 `cat "/etc/iam/cert/ca.pem" | base64 | tr -d '\r\n'`，其他`xxx-data`变量的值类似。
+因为 iamctl 是一个客户端工具，可能会在多台机器上运行。为了简化部署 iamctl 工具的复杂度，我们可以把 `iamctl.yaml `配置文件中跟 CA 认证相关的 CA 文件内容用 base64 加密后，放置在  `iamctl.yaml` 配置文件中，这样我们就不需要再部署这些 CA 文件。具体的加密方法为：把 `iamctl.yaml` 文件中的配置项 `client-certificate`、`client-key`、`certificate-authority` 分别用如下配置项替换 `client-certificate-data`、`client-key-data`、`certificate-authority-data`。这些配置项的值可以通过对 CA 文件使用 base64 加密获得。假如 `certificate-authority` 值为 `/etc/iam/cert/ca.pem`，则 `certificate-authority-data` 的值为 `cat "/etc/iam/cert/ca.pem" | base64 | tr -d '\r\n'`，其他 `xxx-data` 变量的值类似。
 
 3. 测试 iamctl 是否成功安装
 
@@ -484,7 +488,7 @@ $ tee iam-authz-server-csr.json <<EOF
 EOF
 ```
 
-iam-authz-server-csr.json配置中的 `hosts` 字段指定授权使用该证书的 IP 和域名列表，上面的hosts列出了 iam-authz-server 服务的 IP 和域名。
+iam-authz-server-csr.json 配置中的 `hosts` 字段指定授权使用该证书的 IP 和域名列表，上面的 hosts 列出了 iam-authz-server 服务的 IP 和域名。
 
 2) 生成证书和私钥。
 
@@ -498,7 +502,7 @@ $ sudo mv iam-authz-server*pem ${IAM_CONFIG_DIR}/cert # 将生成的证书和私
 
 2. 安装并运行 iam-authz-server
 
-安装并运行 iam-authz-server步骤和安装并运行 iam-apiserver 步骤基本一样，也需要 4 步。
+安装并运行 iam-authz-server 步骤和安装并运行 iam-apiserver 步骤基本一样，也需要 4 步。
 
 1) 安装 iam-authz-server 可执行程序。
 
@@ -558,18 +562,17 @@ $ curl -s -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer $to
 iamctl 提供了 `jwt sigin` 命令，可以根据 `secretID` 和 `secretKey` 签发 Token，方便你使用。
 
 ```bash
-$ iamctl jwt sign ZuxvXNfG08BdEMqkTaP41L2DLArlE6Jpqoox 7Sfa5EfAPIwcTLGCfSvqLf0zZGCjF3l8 # iamctl jwt sign $secretID $secretKey
-eyJhbGciOiJIUzI1NiIsImtpZCI6Ilp1eHZYTmZHMDhCZEVNcWtUYVA0MUwyRExBcmxFNkpwcW9veCIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYxNzg0NTE5NSwiaWF0IjoxNjE3ODM3OTk1LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MTc4Mzc5OTV9.za9yLM7lHVabPAlVQLCqXEaf8sTU6sodAsMXnmpXjMQ
+$ authzAccessToken=`iamctl jwt sign EqmMJgOFHyexjNE3q3LbqcfkUp0IQqf2n8F4 Iavj7aSOuekrmuOeoUl21MQ6hD46GzKG` # iamctl jwt sign $secretID $secretKey
 ```
 
-如果你开发过程中有些重复性的操作，为了方便使用，也可以将这些操作以iamctl子命令的方式集成到iamctl命令行中。
+如果你开发过程中有些重复性的操作，为了方便使用，也可以将这些操作以 iamctl 子命令的方式集成到 iamctl 命令行中。
 
 5) 测试资源授权是否通过。
 
-我们可以通过请求 `/v1/authz` API接口来完成资源授权：
+我们可以通过请求 `/v1/authz` API 接口来完成资源授权：
 
 ```bash
-$ curl -s -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Ilp1eHZYTmZHMDhCZEVNcWtUYVA0MUwyRExBcmxFNkpwcW9veCIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYxNzg0NTE5NSwiaWF0IjoxNjE3ODM3OTk1LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MTc4Mzc5OTV9.za9yLM7lHVabPAlVQLCqXEaf8sTU6sodAsMXnmpXjMQ' -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}' http://127.0.0.1:9090/v1/authz
+$ curl -s -XPOST -H'Content-Type: application/json' -H"Authorization: Bearer $authzAccessToken" -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}' http://127.0.0.1:9090/v1/authz
 {"allowed":true}
 ```
 
@@ -577,11 +580,11 @@ $ curl -s -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer eyJ
 
 ## 6.5 安装和配置 iam-pump
 
-安装 iam-pump 步骤和安装 iam-apiserver、iam-authz-server 步骤基本一样，可以通过5步来安装。
+安装 iam-pump 步骤和安装 iam-apiserver、iam-authz-server 步骤基本一样，可以通过 5 步来安装。
 
 1. 安装 iam-pump 可执行程序
 
-可以通过执行以下命令来安装iam-pump可执行程序：
+可以通过执行以下命令来安装 iam-pump 可执行程序：
 
 ```bash
 $ cd $IAM_ROOT
@@ -592,16 +595,16 @@ $ sudo cp _output/platforms/linux/amd64/iam-pump ${IAM_INSTALL_DIR}/bin
 
 2. 生成并安装 iam-pump 的配置文件
 
-iam-pump的配置文件为iam-pump.yaml，生成并安装命令如下：
+iam-pump 的配置文件为 iam-pump.yaml，生成并安装命令如下：
 
 ```bash
 $ ./scripts/genconfig.sh scripts/install/environment.sh configs/iam-pump.yaml > iam-pump.yaml
 $ sudo mv iam-pump.yaml ${IAM_CONFIG_DIR}
 ```
 
-3. 创建并安装systemd unit 文件
+3. 创建并安装 systemd unit 文件
 
-iam-pump的systemd uint文件为iam-pump.service，生成并安装命令如下：
+iam-pump 的 systemd uint 文件为 iam-pump.service，生成并安装命令如下：
 
 ```bash
 $ ./scripts/genconfig.sh scripts/install/environment.sh init/iam-pump.service > iam-pump.service
@@ -610,7 +613,7 @@ $ sudo mv iam-pump.service /etc/systemd/system/
 
 4. 启动 iam-pump 服务
 
-可以通过执行以下命令来启动iam-pump服务：
+可以通过执行以下命令来启动 iam-pump 服务：
 
 ```bash
 $ sudo systemctl daemon-reload
@@ -621,7 +624,7 @@ $ systemctl status iam-pump # 查看 iam-pump 运行状态，如果输出中包�
 
 5. 测试 iam-pump 是否成功安装
 
-可以通过执行以下命令来测试iam-pump服务是否安装成功：
+可以通过执行以下命令来测试 iam-pump 服务是否安装成功：
 
 ```bash
 $ curl http://127.0.0.1:7070/healthz
@@ -630,13 +633,48 @@ $ curl http://127.0.0.1:7070/healthz
 
 经过以上 5 个步骤，如果返回 `{"status": "ok"}` 就说明 iam-pump 服务健康。
 
+当然，你还可以通过一个真实的授权请求，来看 iam-pump 是否成功将授权日志分析后，转存到 MongoDB 中。具体操作如下：
+
+```bash
+# 1. 创建访问 iam-authz-server 需要用到的密钥对
+$ iamctl secret create pumptest 
+secret/pumptest created
+
+# 2. 使用步骤 1 创建的密钥对生成 JWT Token
+$ authzAccessToken=`iamctl jwt sign njcho8gJQArsq7zr5v1YpG5NcvL0aeuZ38Ti if70HgRgp021iq5ex2l7pfy5XvgtZM3q`
+
+# 3. 创建授权策略
+$ iamctl policy create pumptest '{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'
+policy/pumptest created
+
+# 4. 访问 /v1/authz 接口进行资源授权
+$ curl -s -XPOST -H'Content-Type: application/json' -H"Authorization: Bearer $authzAccessToken" -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}' http://127.0.0.1:9090/v1/authz
+
+# 5. 登录 MongoDB，查看经过解析后的授权日志。如果出现以下记录，说明iam-pump正常工作
+$ mongosh --quiet mongodb://iam:'iam59!z$'@127.0.0.1:27017/iam_analytics?authSource=iam_analytics
+iam_analytics> db.iam_analytics.find()
+[
+  {
+    _id: ObjectId("62a9e8b85f395dc7a4ce1767"),
+    timestamp: Long("1655302321"),
+    username: 'admin',
+    effect: 'allow',
+    conclusion: 'policies policy0 allow access',
+    request: '{"resource":"resources:articles:ladon-introduction","action":"delete","subject":"users:maria","context":{"remoteIPAddress":"192.168.0.5","username":"admin"}}',
+    policies: '',
+    deciders: '',
+    expireAt: ISODate("2122-05-22T14:12:01.423Z")
+  }
+]
+```
+
 ## 6.6 安装和配置 iam-watcher
 
-安装 iam-watcher步骤和安装 iam-apiserver、iam-authz-server、iam-pump步骤基本一样，可以通过5步来安装。
+安装 iam-watcher 步骤和安装 iam-apiserver、iam-authz-server、iam-pump 步骤基本一样，可以通过 5 步来安装。
 
-1. 安装 iam-watcher可执行程序
+1. 安装 iam-watcher 可执行程序
 
-可以通过执行以下命令来安装iam-watcher可执行程序：
+可以通过执行以下命令来安装 iam-watcher 可执行程序：
 
 ```bash
 $ cd $IAM_ROOT
@@ -645,27 +683,27 @@ $ make build BINS=iam-watcher
 $ sudo cp _output/platforms/linux/amd64/iam-watcher ${IAM_INSTALL_DIR}/bin
 ```
 
-2. 生成并安装 iam-watcher的配置文件
+2. 生成并安装 iam-watcher 的配置文件
 
-iam-watcher的配置文件为iam-watcher.yaml，生成并安装命令如下：
+iam-watcher 的配置文件为 iam-watcher.yaml，生成并安装命令如下：
 
 ```bash
 $ ./scripts/genconfig.sh scripts/install/environment.sh configs/iam-watcher.yaml > iam-watcher.yaml
 $ sudo mv iam-watcher.yaml ${IAM_CONFIG_DIR}
 ```
 
-3. 创建并安装systemd unit 文件
+3. 创建并安装 systemd unit 文件
 
-iam-watcher的systemd uint文件为iam-watcher.service，生成并安装命令如下：
+iam-watcher 的 systemd uint 文件为 iam-watcher.service，生成并安装命令如下：
 
 ```bash
 $ ./scripts/genconfig.sh scripts/install/environment.sh init/iam-watcher.service > iam-watcher.service
 $ sudo mv iam-watcher.service /etc/systemd/system/
 ```
 
-4. 启动 iam-watcher服务
+4. 启动 iam-watcher 服务
 
-可以通过执行以下命令来启动iam-watcher服务：
+可以通过执行以下命令来启动 iam-watcher 服务：
 
 ```bash
 $ sudo systemctl daemon-reload
@@ -674,16 +712,16 @@ $ sudo systemctl restart iam-watcher
 $ systemctl status iam-watcher # 查看 iam-watcher运行状态，如果输出中包含 active (running)字样说明 iam-watcher成功启动。
 ```
 
-5. 测试 iam-watcher是否成功安装
+5. 测试 iam-watcher 是否成功安装
 
-可以通过执行以下命令来测试iam-watcher服务是否安装成功：
+可以通过执行以下命令来测试 iam-watcher 服务是否安装成功：
 
 ```bash
 $ curl http://127.0.0.1:5050/healthz
 {"status": "ok"}
 ```
 
-经过以上 5 个步骤，如果返回 `{"status": "ok"}` 就说明 iam-watcher服务健康。
+经过以上 5 个步骤，如果返回 `{"status": "ok"}` 就说明 iam-watcher 服务健康。
 
 ## 6.7 安装 man 文件
 
@@ -735,9 +773,9 @@ serverVersion:
   platform: linux/amd64
 ```
 
-## 6.8 测试IAM系统是否安装成功
+## 6.8 测试 IAM 系统是否安装成功
 
-最后，我们可以执行以下命令来测试整个IAM系统是否被成功安装：
+最后，我们可以执行以下命令来测试整个 IAM 系统是否被成功安装：
 
 ```bash
 $ ./scripts/install/test.sh iam::test::test
