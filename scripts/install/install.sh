@@ -27,7 +27,8 @@ iam::install::prepare_linux()
   iam::common::sudo "mv /etc/yum.repos.d /etc/yum.repos.d.$$.bak" # 先备份原有的 Yum 源
   iam::common::sudo "mkdir /etc/yum.repos.d"
   iam::common::sudo "wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo"
-  iam::common::sudo "yum clean all && yum makecache"
+  iam::common::sudo "yum clean all"
+  iam::common::sudo "yum makecache"
 
 
   if [[ -f $HOME/.bashrc ]];then
