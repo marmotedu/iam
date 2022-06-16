@@ -23,11 +23,18 @@ source ${IAM_ROOT}/scripts/install/test.sh
 # 申请服务器，登录 going 用户后，配置 $HOME/.bashrc 文件
 iam::install::prepare_linux()
 {
+  # 1. 替换 Yum 源为阿里的 Yum 源
+  iam::common::sudo "mv /etc/yum.repos.d /etc/yum.repos.d.$$.bak" # 先备份原有的 Yum 源
+  iam::common::sudo "mkdir /etc/yum.repos.d"
+  iam::common::sudo "wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo"
+  iam::common::sudo "yum clean all && yum makecache"
+
+
   if [[ -f $HOME/.bashrc ]];then
     cp $HOME/.bashrc $HOME/bashrc.iam.backup
   fi
 
-  # 1. 配置 $HOME/.bashrc
+  # 2. 配置 $HOME/.bashrc
   cat << 'EOF' > $HOME/.bashrc
 # .bashrc
 
@@ -59,28 +66,30 @@ cd $WORKSPACE # 登录系统，默认进入 workspace 目录
 # User specific aliases and functions
 EOF
 
-  # 创建工作目录
-  mkdir -p $HOME/workspace
-
   # 3. 安装依赖包
-  iam::common::sudo "yum -y install make autoconf automake cmake perl-CPAN libcurl-devel libtool gcc gcc-c++ glibc-headers zlib-devel git-lfs telnet ctags lrzsz jq"
+  iam::common::sudo "yum -y install make autoconf automake cmake perl-CPAN libcurl-devel libtool gcc gcc-c++ glibc-headers zlib-devel git-lfs telnet lrzsz jq expat-devel openssl-devel"
 
   # 4. 安装 Git
+  rm -rf /tmp/git-2.36.1.tar.gz /tmp/git-2.36.1 # clean up
   cd /tmp
-  wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.30.2.tar.gz
-  tar -xvzf git-2.30.2.tar.gz
-  cd git-2.30.2/
+  wget --no-check-certificate https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.36.1.tar.gz
+  tar -xvzf git-2.36.1.tar.gz
+  cd git-2.36.1/
   ./configure
   make
   iam::common::sudo "make install"
-
-  # 5. 配置Git
 
   cat << 'EOF' >> $HOME/.bashrc
 # Configure for git
 export PATH=/usr/local/libexec/git-core:$PATH
 EOF
 
+  git --version | grep -q 'git version 2.36.1' || {
+    iam::log::error "git version is not '2.36.1', maynot install git properly"
+    return 1
+  }
+
+  # 5. 配置 Git
   git config --global user.name "Lingfei Kong"    # 用户名改成自己的
   git config --global user.email "colin404@foxmail.com"    # 邮箱改成自己的
   git config --global credential.helper store    # 设置 Git，保存用户名和密码
@@ -92,7 +101,7 @@ EOF
   iam::log::info "prepare linux basic environment successfully"
 }
 
-# 初始化新申请的Linux服务器，使其成为一个友好的开发机
+# 初始化新申请的 Linux 服务器，使其成为一个友好的开发机
 function iam::install::init_into_go_env()
 {
   # 1. Linux 服务器基本配置
@@ -110,31 +119,35 @@ function iam::install::init_into_go_env()
 # Go 编译环境安装和配置
 function iam::install::go_command()
 {
-  # 检查 go 是否安装
-  #command -v go &>/dev/null && return 0
+  rm -rf /tmp/go1.18.3.linux-amd64.tar.gz $HOME/go/go1.18.3 # clean up
 
-  # 1. 下载 go1.17.2 版本的Go安装包
-  wget -P /tmp/ https://golang.google.cn/dl/go1.17.2.linux-amd64.tar.gz
+  # 1. 下载 go1.18.3 版本的 Go 安装包
+  wget -P /tmp/ https://golang.google.cn/dl/go1.18.3.linux-amd64.tar.gz
 
-  # 2. 安装Go
+  # 2. 安装 Go
   mkdir -p $HOME/go
-  tar -xvzf /tmp/go1.17.2.linux-amd64.tar.gz -C $HOME/go
-  mv $HOME/go/go $HOME/go/go1.17.2
+  tar -xvzf /tmp/go1.18.3.linux-amd64.tar.gz -C $HOME/go
+  mv $HOME/go/go $HOME/go/go1.18.3
 
-  # 3. 配置Go环境变量
+  # 3. 配置 Go 环境变量
   cat << 'EOF' >> $HOME/.bashrc
 # Go envs
-export GOVERSION=go1.17.2 # Go 版本设置
+export GOVERSION=go1.18.3 # Go 版本设置
 export GO_INSTALL_DIR=$HOME/go # Go 安装目录
 export GOROOT=$GO_INSTALL_DIR/$GOVERSION # GOROOT 设置
 export GOPATH=$WORKSPACE/golang # GOPATH 设置
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH # 将 Go 语言自带的和通过 go install 安装的二进制文件加入到 PATH 路径中
 export GO111MODULE="on" # 开启 Go moudles 特性
-export GOPROXY=https://mirrors.aliyun.com/goproxy,https://goproxy.cn,direct # 安装 Go 模块时，代理服务器设置
-export GOPRIVATE=github.com # 指定不走代理的 Go 包域名
+export GOPROXY=https://goproxy.cn,direct # 安装 Go 模块时，代理服务器设置
+export GOPRIVATE=
 export GOSUMDB=off # 关闭校验 Go 依赖包的哈希值
 EOF
   source $HOME/.bashrc
+
+  # 4. 初始化 Go 工作区
+  mkdir -p $GOPATH && cd $GOPATH
+  go work init
+
   iam::log::info "install go compile tool successfully"
 }
 
@@ -143,21 +156,29 @@ function iam::install::protobuf()
   # 检查 protoc、protoc-gen-go 是否安装
   command -v protoc &>/dev/null && command -v protoc-gen-go &>/dev/null && return 0
 
-  # 1. 安装 protobuf
-  rm -rf /tmp/protobuf
+  rm -rf /tmp/protobuf # clean up
 
+  # 1. 安装 protobuf
   cd /tmp/
-  git clone --depth=1 https://github.com/protocolbuffers/protobuf
+  git clone -b v3.21.1 --depth=1 https://github.com/protocolbuffers/protobuf
   cd protobuf
+  libtoolize --automake --copy --debug --force
   ./autogen.sh
   ./configure
   make
+  sudo make install
   iam::common::sudo "make install"
+  protoc --version | grep -q 'libprotoc 3.21.1' || {
+    iam::log::error "protoc version is not '3.21.1', maynot install protobuf properly"
+    return 1
+  }
+
   iam::log::info "install protoc tool successfully"
 
+
   # 2. 安装 protoc-gen-go
-  echo $GO111MODULE
-  go install github.com/golang/protobuf/protoc-gen-go@latest
+  go install github.com/golang/protobuf/protoc-gen-go@v1.5.2
+
   iam::log::info "install protoc-gen-go plugin successfully"
 }
 
@@ -171,74 +192,65 @@ function iam::install::go()
 
 function iam::install::vim_ide()
 {
-  # 检查 SpaceVim、nvim、gotools 是否安装
-  [[ -d $HOME/.SpaceVim ]] && command -v nvim &>/dev/null && command -v gomodifytags &>/dev/null && return 0
+  rm -rf $HOME/.vim /tmp/gotools-for-vim.tgz # clean up
 
-  # 1. 安装 neovim
-  iam::common::sudo "pip3 install pynvim"
-  iam::common::sudo "yum -y install neovim"
+  # 1. 安装 vim-go
+  mkdir -p ~/.vim/pack/plugins/start
+  git clone --depth=1 https://github.com/fatih/vim-go.git $HOME/.vim/pack/plugins/start/vim-go
+  cp "${IAM_ROOT}/scripts/install/vimrc" $HOME/
 
-  # 2. 配置 $HOME/.bashrc
-  cat << 'EOF' >> $HOME/.bashrc
-# Configure for nvim
-export EDITOR=nvim # 默认的编辑器（git 会用到）
-alias vi="nvim"
-EOF
-	source $HOME/.bashrc
+  # 2. Go 工具安装
+  wget -P /tmp/ https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/gotools-for-vim.tgz && {
+    mkdir -p $GOPATH/bin
+    tar -xvzf /tmp/gotools-for-spacevim.tgz -C $GOPATH/bin
+  }
 
-  # 3. 离线安装 SpaceVim
-  cd /tmp
-  wget https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/marmotVim.tar.gz -O marmotVim.tar.gz
-  tar -xvzf marmotVim.tar.gz
-  cd marmotVim
-  ./marmotVimCtl install
-
-  # 4. Go 工具安装
-  cd /tmp
-  wget https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/tools/gotools-for-spacevim.tgz
-  mkdir -p $GOPATH/bin
-  tar -xvzf gotools-for-spacevim.tgz -C $GOPATH/bin
+  source $HOME/.bashrc
   iam::log::info "install vim ide successfully"
 }
 
-# 如果是通过脚本安装，需要先尝试获取安装脚本指定的Tag，Tag记录在version文件中
+# 如果是通过脚本安装，需要先尝试获取安装脚本指定的 Tag，Tag 记录在 version 文件中
 function iam::install::obtain_branch_flag(){
   if [ -f "${IAM_ROOT}"/version ];then
-    echo "-b `cat "${IAM_ROOT}"/version`"
+    echo `cat "${IAM_ROOT}"/version`
   fi
 }
 
 function iam::install::prepare_iam()
 {
-  # 1. 下载iam项目代码，先强制删除iam目录，确保iam源码都是最新的指定版本
-  mkdir -p $WORKSPACE/golang/src/github.com/marmotedu && cd $WORKSPACE/golang/src/github.com/marmotedu && rm -rf iam
-  git clone $(iam::install::obtain_branch_flag) --depth=1 https://github.com/marmotedu/iam
+  rm -rf $WORKSPACE/golang/src/github.com/marmotedu/iam # clean up
+
+  # 1. 下载 iam 项目代码，先强制删除 iam 目录，确保 iam 源码都是最新的指定版本
+  mkdir -p $WORKSPACE/golang/src/github.com/marmotedu && cd $WORKSPACE/golang/src/github.com/marmotedu
+  git clone -b $(iam::install::obtain_branch_flag) --depth=1 https://github.com/marmotedu/iam
+  go work use ./iam
 
   # NOTICE: 因为切换编译路径，所以这里要重新赋值 IAM_ROOT 和 LOCAL_OUTPUT_ROOT
   IAM_ROOT=$WORKSPACE/golang/src/github.com/marmotedu/iam
   LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
 
   pushd ${IAM_ROOT}
+
   # 2. 配置 $HOME/.bashrc 添加一些便捷入口
   if ! grep -q 'Alias for quick access' $HOME/.bashrc;then
     cat << 'EOF' >> $HOME/.bashrc
 # Alias for quick access
-export GOWORK="$WORKSPACE/golang/src"
-export IAM_ROOT="$GOWORK/github.com/marmotedu/iam"
-alias mm="cd $GOWORK/github.com/marmotedu"
-alias i="cd $GOWORK/github.com/marmotedu/iam"
+export GOSRC="$WORKSPACE/golang/src"
+export IAM_ROOT="$GOSRC/github.com/marmotedu/iam"
+alias mm="cd $GOSRC/github.com/marmotedu"
+alias i="cd $GOSRC/github.com/marmotedu/iam"
 EOF
   fi
 
-  # 3. 初始化MariaDB数据库，创建iam数据库
+  # 3. 初始化 MariaDB 数据库，创建 iam 数据库
 
-  # 3.1 登录数据库并创建iam用户
+  # 3.1 登录数据库并创建 iam 用户
   mysql -h127.0.0.1 -P3306 -u"${MARIADB_ADMIN_USERNAME}" -p"${MARIADB_ADMIN_PASSWORD}" << EOF
 grant all on iam.* TO ${MARIADB_USERNAME}@127.0.0.1 identified by "${MARIADB_PASSWORD}";
 flush privileges;
 EOF
 
-  # 3.2 用iam用户登录mysql，执行iam.sql文件，创建iam数据库
+  # 3.2 用 iam 用户登录 mysql，执行 iam.sql 文件，创建 iam 数据库
   mysql -h127.0.0.1 -P3306 -u${MARIADB_USERNAME} -p"${MARIADB_PASSWORD}" << EOF
 source configs/iam.sql;
 show databases;
@@ -250,17 +262,17 @@ EOF
   iam::common::sudo "mkdir -p ${IAM_CONFIG_DIR}/cert"
   iam::common::sudo "mkdir -p ${IAM_LOG_DIR}"
 
-  # 5. 安装cfssl工具集
+  # 5. 安装 cfssl 工具集
   ! command -v cfssl &>/dev/null || ! command -v cfssl-certinfo &>/dev/null || ! command -v cfssljson &>/dev/null && {
     iam::install::install_cfssl || return 1
   }
 
-  # 6. 配置hosts
+  # 6. 配置 hosts
   if ! egrep -q 'iam.*marmotedu.com' /etc/hosts;then
     echo ${LINUX_PASSWORD} | sudo -S bash -c "cat << 'EOF' >> /etc/hosts
-127.0.0.1 iam.api.marmotedu.com
-127.0.0.1 iam.authz.marmotedu.com
-EOF"
+    127.0.0.1 iam.api.marmotedu.com
+    127.0.0.1 iam.authz.marmotedu.com
+    EOF"
   fi
 
   iam::log::info "prepare for iam installation successfully"
@@ -283,7 +295,7 @@ EOF
   iam::common::sudo "rm -rf ${IAM_CONFIG_DIR}"
   iam::common::sudo "rm -rf ${IAM_LOG_DIR}"
 
-  # 3. 删除配置hosts
+  # 3. 删除配置 hosts
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/iam.api.marmotedu.com/d' /etc/hosts
   echo ${LINUX_PASSWORD} | sudo -S sed -i '/iam.authz.marmotedu.com/d' /etc/hosts
 
@@ -332,17 +344,17 @@ function iam::install::install_iam()
   # 3. 安装 iam-apiserver 服务
   iam::apiserver::install || return 1
 
-  # 4. 安装 iam-authz-server 服务
+  # 4. 安装 iamctl 客户端工具
+  iam::iamctl::install || return 1
+
+  # 5. 安装 iam-authz-server 服务
   iam::authzserver::install || return 1
 
-  # 5. 安装 iam-pump 服务
+  # 6. 安装 iam-pump 服务
   iam::pump::install || return 1
 
-  # 6. 安装 iam-watcher 服务
+  # 7. 安装 iam-watcher 服务
   iam::watcher::install || return 1
-
-  # 7. 安装 iamctl 客户端工具
-  iam::iamctl::install || return 1
 
   # 8. 安装 man page
   iam::man::install || return 1
@@ -390,13 +402,13 @@ function iam::install::install()
 
 # 卸载。卸载只卸载服务，不卸载环境，不会卸载列表如下：
 # - 配置的 $HOME/.bashrc
-# - 安装和配置的Go编译环境和工具：go、protoc、protoc-gen-go
+# - 安装和配置的 Go 编译环境和工具：go、protoc、protoc-gen-go
 # - 安装的依赖包
-# - 安装的工具：cfssl工具
+# - 安装的工具：cfssl 工具
 # - 下载的 iam 源码包及其目录
-# - 安装的neovim和SpaceVim
+# - 安装的 neovim 和 SpaceVim
 #
-# 也即只卸载IAM应用部分，卸载后，Linux仍然是一个友好的Go开发机
+# 也即只卸载 IAM 应用部分，卸载后，Linux 仍然是一个友好的 Go 开发机
 function iam::install::uninstall()
 {
   iam::install::uninstall_iam || return 1

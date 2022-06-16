@@ -21,19 +21,19 @@ function iam::pump::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 构建iam-pump
+  # 1. 构建 iam-pump
   make build BINS=iam-pump
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-pump ${IAM_INSTALL_DIR}/bin"
 
-  # 2.  生成并安装iam-pump的配置文件（iam-pump.yaml）
+  # 2.  生成并安装 iam-pump 的配置文件（iam-pump.yaml）
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-pump.yaml > ${IAM_CONFIG_DIR}/iam-pump.yaml"
 
-  # 3. 创建并安装iam-pump systemd unit文件
+  # 3. 创建并安装 iam-pump systemd unit 文件
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-pump.service > /etc/systemd/system/iam-pump.service"
 
-  # 4. 启动iam-pump服务
+  # 4. 启动 iam-pump 服务
   iam::common::sudo "systemctl daemon-reload"
   iam::common::sudo "systemctl restart iam-pump"
   iam::common::sudo "systemctl enable iam-pump"
@@ -60,13 +60,13 @@ function iam::pump::uninstall()
 # 状态检查
 function iam::pump::status()
 {
-  # 查看apiserver运行状态，如果输出中包含active (running)字样说明apiserver成功启动。
+  # 查看 iam-pump 运行状态，如果输出中包含 active (running) 字样说明 iam-pump 成功启动。
   systemctl status iam-pump|grep -q 'active' || {
     iam::log::error "iam-pump failed to start, maybe not installed properly"
     return 1
   }
 
-  # 监听端口在配置文件中是hardcode
+  # 监听端口在配置文件中是 hardcode
   if echo | telnet 127.0.0.1 7070 2>&1|grep refused &>/dev/null;then
     iam::log::error "cannot access health check port, iam-pump maybe not startup"
     return 1

@@ -21,7 +21,7 @@ function iam::iamctl::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 生成并安装CA证书和私钥
+  # 1. 生成并安装 CA 证书和私钥
   ./scripts/gencerts.sh generate-iam-cert ${LOCAL_OUTPUT_ROOT}/cert
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/cert/ca* ${IAM_CONFIG_DIR}/cert"
 
@@ -33,11 +33,11 @@ function iam::iamctl::install()
   cp ${LOCAL_OUTPUT_ROOT}/cert/admin.pem ${CONFIG_USER_CLIENT_CERTIFICATE}
   cp ${LOCAL_OUTPUT_ROOT}/cert/admin-key.pem ${CONFIG_USER_CLIENT_KEY}
 
-  # 2. 构建iamctl
+  # 2. 构建 iamctl
   make build BINS=iamctl
   cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iamctl $HOME/bin/
 
-  # 3.  生成并安装iamctl的配置文件（iamctl.yaml）
+  # 3.  生成并安装 iamctl 的配置文件（iamctl.yaml）
   mkdir -p $HOME/.iam
   ./scripts/genconfig.sh ${ENV_FILE} configs/iamctl.yaml > $HOME/.iam/iamctl.yaml
   iam::iamctl::status || return 1

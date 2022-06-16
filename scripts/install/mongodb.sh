@@ -20,16 +20,16 @@ EOF
 function iam::mongodb::install()
 {
   # 1. 配置 MongoDB Yum 源
-  echo ${LINUX_PASSWORD} | sudo -S bash -c "cat << 'EOF' > /etc/yum.repos.d/mongodb-org-4.4.repo
-[mongodb-org-4.4]
+  echo ${LINUX_PASSWORD} | sudo -S bash -c "cat << 'EOF' > /etc/yum.repos.d/mongodb-org-5.0.repo
+[mongodb-org-5.0]
 name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/4.4/x86_64/
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/5.0/x86_64/
 gpgcheck=1
 enabled=1
-gpgkey=https://www.mongodb.org/static/pgp/server-4.4.asc
+gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
 EOF"
 
-  # 2. 安装MongoDB和MongoDB客户端
+  # 2. 安装 MongoDB 和 MongoDB 客户端
   iam::common::sudo "yum install -y mongodb-org"
 
 	# 3. 禁用 SELinux
@@ -45,14 +45,14 @@ EOF"
   iam::common::sudo "systemctl start mongod"
 
   # 6. 创建管理员账号，设置管理员密码
-	mongo --quiet "mongodb://${MONGO_HOST}:${MONGO_PORT}" << EOF
+	mongosh --quiet "mongodb://${MONGO_HOST}:${MONGO_PORT}" << EOF
 use admin
 db.createUser({user:"${MONGO_ADMIN_USERNAME}",pwd:"${MONGO_ADMIN_PASSWORD}",roles:["root"]})
 db.auth("${MONGO_ADMIN_USERNAME}", "${MONGO_ADMIN_PASSWORD}")
 EOF
 
-	# 6. 创建 ${MONGO_USERNAME} 用户
-	mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin << EOF
+	# 7. 创建 ${MONGO_USERNAME} 用户
+	mongosh --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin << EOF
 use iam_analytics
 db.createUser({user:"${MONGO_USERNAME}",pwd:"${MONGO_PASSWORD}",roles:["dbOwner"]})
 db.auth("${MONGO_USERNAME}", "${MONGO_PASSWORD}")
@@ -82,25 +82,25 @@ function iam::mongodb::uninstall()
 # 状态检查
 function iam::mongodb::status()
 {
-  # 查看mongodb运行状态，如果输出中包含active (running)字样说明mongodb成功启动。
+  # 查看 mongodb 运行状态，如果输出中包含 active (running) 字样说明 mongodb 成功启动。
   systemctl status mongod |grep -q 'active' || {
     iam::log::error "mongodb failed to start, maybe not installed properly"
     return 1
   }
 
-	echo "show dbs" | mongo --quiet "mongodb://${MONGO_HOST}:${MONGO_PORT}" &>/dev/null || {
+	echo "show dbs" | mongosh --quiet "mongodb://${MONGO_HOST}:${MONGO_PORT}" &>/dev/null || {
     iam::log::error "cannot connect to mongodb, mongo maybe not installed properly"
     return 1
   }
 
 	echo "show dbs" | \
-		mongo --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin &>/dev/null || {
+		mongosh --quiet mongodb://${MONGO_ADMIN_USERNAME}:${MONGO_ADMIN_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=admin &>/dev/null || {
     iam::log::error "can not login with ${MONGO_ADMIN_USERNAME}, mongo maybe not initialized properly"
     return 1
   }
 
 	echo "show dbs" | \
-		mongo --quiet mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=iam_analytics &>/dev/null|| {
+		mongosh --quiet mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/iam_analytics?authSource=iam_analytics &>/dev/null|| {
     iam::log::error "can not login with ${MONGO_USERNAME}, mongo maybe not initialized properly"
     return 1
   }

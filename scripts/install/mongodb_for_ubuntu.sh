@@ -24,7 +24,7 @@ function iam::mongodb::install()
   echo ${LINUX_PASSWORD} | sudo -S wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
   echo ${LINUX_PASSWORD} | sudo -S echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 
-  # 2. 安装MongoDB和MongoDB客户端
+  # 2. 安装 MongoDB 和 MongoDB 客户端
   iam::common::sudo "apt-get update"
   iam::common::sudo "apt -y install mongodb-org"
 
@@ -74,7 +74,7 @@ function iam::mongodb::uninstall()
 # 状态检查
 function iam::mongodb::status()
 {
-  # 查看mongodb运行状态，如果输出中包含active (running)字样说明mongodb成功启动。
+  # 查看 mongodb 运行状态，如果输出中包含 active (running) 字样说明 mongodb 成功启动。
   systemctl status mongod |grep -q 'active' || {
     iam::log::error "mongodb failed to start, maybe not installed properly"
     return 1

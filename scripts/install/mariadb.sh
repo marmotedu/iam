@@ -32,14 +32,14 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=0
 EOF"
 
-  # 2. 安装MariaDB和MariaDB客户端
+  # 2. 安装 MariaDB 和 MariaDB 客户端
   iam::common::sudo "yum -y install MariaDB-server MariaDB-client"
 
   # 3. 启动 MariaDB，并设置开机启动
   iam::common::sudo "systemctl enable mariadb"
   iam::common::sudo "systemctl start mariadb"
 
-  # 4. 设置root初始密码
+  # 4. 设置 root 初始密码
   iam::common::sudo "mysqladmin -u${MARIADB_ADMIN_USERNAME} password ${MARIADB_ADMIN_PASSWORD}"
 
   iam::mariadb::status || return 1
@@ -63,7 +63,7 @@ function iam::mariadb::uninstall()
 # 状态检查
 function iam::mariadb::status()
 {
-  # 查看mariadb运行状态，如果输出中包含active (running)字样说明mariadb成功启动。
+  # 查看 mariadb 运行状态，如果输出中包含 active (running) 字样说明 mariadb 成功启动。
   systemctl status mariadb |grep -q 'active' || {
     iam::log::error "mariadb failed to start, maybe not installed properly"
     return 1

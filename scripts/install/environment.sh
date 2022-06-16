@@ -41,7 +41,7 @@ readonly REDIS_PASSWORD=${REDIS_PASSWORD:-${PASSWORD}} # Redis 密码
 
 # MongoDB 配置
 readonly MONGO_ADMIN_USERNAME=${MONGO_ADMIN_USERNAME:-root} # MongoDB root 用户
-readonly MONGO_ADMIN_PASSWORD=${MONGO_ADMIN_PASSWORD:-${PASSWORD}} # MongoDB root用户密码
+readonly MONGO_ADMIN_PASSWORD=${MONGO_ADMIN_PASSWORD:-${PASSWORD}} # MongoDB root 用户密码
 readonly MONGO_HOST=${MONGO_HOST:-127.0.0.1} # MongoDB 地址
 readonly MONGO_PORT=${MONGO_PORT:-27017} # MongoDB 端口
 readonly MONGO_USERNAME=${MONGO_USERNAME:-iam} # MongoDB 用户名

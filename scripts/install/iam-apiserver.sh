@@ -22,26 +22,26 @@ function iam::apiserver::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 生成CA证书和私钥
+  # 1. 生成 CA 证书和私钥
   ./scripts/gencerts.sh generate-iam-cert ${LOCAL_OUTPUT_ROOT}/cert
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/cert/ca* ${IAM_CONFIG_DIR}/cert"
 
   ./scripts/gencerts.sh generate-iam-cert ${LOCAL_OUTPUT_ROOT}/cert iam-apiserver
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/cert/iam-apiserver*pem ${IAM_CONFIG_DIR}/cert"
 
-  # 2. 构建iam-apiserver
+  # 2. 构建 iam-apiserver
   make build BINS=iam-apiserver
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-apiserver ${IAM_INSTALL_DIR}/bin"
 
-  # 3.  生成并安装iam-apiserver的配置文件（iam-apiserver.yaml）
+  # 3.  生成并安装 iam-apiserver 的配置文件（iam-apiserver.yaml）
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-apiserver.yaml > ${IAM_CONFIG_DIR}/iam-apiserver.yaml"
 
-  # 4. 创建并安装iam-apiserver systemd unit文件
+  # 4. 创建并安装 iam-apiserver systemd unit 文件
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-apiserver.service > /etc/systemd/system/iam-apiserver.service"
 
-  # 5. 启动iam-apiserver服务
+  # 5. 启动 iam-apiserver 服务
   iam::common::sudo "systemctl daemon-reload"
   iam::common::sudo "systemctl restart iam-apiserver"
   iam::common::sudo "systemctl enable iam-apiserver"
@@ -69,7 +69,7 @@ function iam::apiserver::uninstall()
 # 状态检查
 function iam::apiserver::status()
 {
-  # 查看apiserver运行状态，如果输出中包含active (running)字样说明apiserver成功启动。
+  # 查看 apiserver 运行状态，如果输出中包含 active (running) 字样说明 apiserver 成功启动。
   systemctl status iam-apiserver|grep -q 'active' || {
     iam::log::error "iam-apiserver failed to start, maybe not installed properly"
     return 1

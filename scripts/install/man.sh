@@ -21,7 +21,7 @@ function iam::man::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 生成各个组件的man1文件
+  # 1. 生成各个组件的 man1 文件
   ${IAM_ROOT}/scripts/update-generated-docs.sh
   iam::common::sudo "cp docs/man/man1/* /usr/share/man/man1/"
   iam::man::status || return 1

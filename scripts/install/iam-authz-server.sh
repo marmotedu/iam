@@ -22,26 +22,26 @@ function iam::authzserver::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 生成CA证书和私钥
+  # 1. 生成 CA 证书和私钥
   ./scripts/gencerts.sh generate-iam-cert ${LOCAL_OUTPUT_ROOT}/cert
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/cert/ca* ${IAM_CONFIG_DIR}/cert"
 
   ./scripts/gencerts.sh generate-iam-cert ${LOCAL_OUTPUT_ROOT}/cert iam-authz-server
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/cert/iam-authz-server*pem ${IAM_CONFIG_DIR}/cert"
 
-  # 2. 构建iam-authz-server
+  # 2. 构建 iam-authz-server
   make build BINS=iam-authz-server
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-authz-server ${IAM_INSTALL_DIR}/bin"
 
-  # 3.  生成并安装iam-authz-server的配置文件（iam-authz-server.yaml）
+  # 3.  生成并安装 iam-authz-server 的配置文件（iam-authz-server.yaml）
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-authz-server.yaml > ${IAM_CONFIG_DIR}/iam-authz-server.yaml"
 
-  # 4. 创建并安装iam-authz-server systemd unit文件
+  # 4. 创建并安装 iam-authz-server systemd unit 文件
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-authz-server.service > /etc/systemd/system/iam-authz-server.service"
 
-  # 5. 启动iam-authz-server服务
+  # 5. 启动 iam-authz-server 服务
   iam::common::sudo "systemctl daemon-reload"
   iam::common::sudo "systemctl restart iam-authz-server"
   iam::common::sudo "systemctl enable iam-authz-server"
@@ -69,7 +69,7 @@ function iam::authzserver::uninstall()
 # 状态检查
 function iam::authzserver::status()
 {
-  # 查看apiserver运行状态，如果输出中包含active (running)字样说明apiserver成功启动。
+  # 查看 iam-authz-server 运行状态，如果输出中包含 active (running) 字样说明 iam-authz-server 成功启动。
   systemctl status iam-authz-server|grep -q 'active' || {
     iam::log::error "iam-authz-server failed to start, maybe not installed properly"
     return 1

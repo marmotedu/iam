@@ -28,26 +28,26 @@ iam::test::user()
 {
   token="-HAuthorization: Bearer $(iam::test::login)"
 
-  # 1. 如果有colin、mark、john用户先清空
+  # 1. 如果有 colin、mark、john 用户先清空
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/mark; echo
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/john; echo
 
-  # 2. 创建colin、mark、john用户
+  # 2. 创建 colin、mark、john 用户
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/users \
     -d'{"password":"User@2021","metadata":{"name":"colin"},"nickname":"colin","email":"colin@foxmail.com","phone":"1812884xxxx"}'; echo
 
   # 3. 列出所有用户
   ${RCURL} "${token}" "http://${INSECURE_APISERVER}/v1/users?offset=0&limit=10"; echo
 
-  # 4. 获取colin用户的详细信息
+  # 4. 获取 colin 用户的详细信息
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo
 
-  # 5. 修改colin用户
+  # 5. 修改 colin 用户
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/users/colin \
     -d'{"nickname":"colin","email":"colin_modified@foxmail.com","phone":"1812884xxxx"}'; echo
 
-  # 6. 删除colin用户
+  # 6. 删除 colin 用户
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/users/colin; echo
 
   # 7. 批量删除用户
@@ -59,24 +59,24 @@ iam::test::secret()
 {
   token="-HAuthorization: Bearer $(iam::test::login)"
 
-  # 1. 如果有secret0密钥先清空
+  # 1. 如果有 secret0 密钥先清空
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo
 
-  # 2. 创建secret0密钥
+  # 2. 创建 secret0 密钥
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/secrets \
     -d'{"metadata":{"name":"secret0"},"expires":0,"description":"admin secret"}'; echo
 
   # 3. 列出所有密钥
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets; echo
 
-  # 4. 获取secret0密钥的详细信息
+  # 4. 获取 secret0 密钥的详细信息
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo
 
-  # 5. 修改secret0密钥
+  # 5. 修改 secret0 密钥
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0 \
     -d'{"expires":0,"description":"admin secret(modified)"}'; echo
 
-  # 6. 删除secret0密钥
+  # 6. 删除 secret0 密钥
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/secrets/secret0; echo
   iam::log::info "$(echo -e '\033[32mcongratulations, /v1/secret test passed!\033[0m')"
 }
@@ -85,24 +85,24 @@ iam::test::policy()
 {
   token="-HAuthorization: Bearer $(iam::test::login)"
 
-  # 1. 如果有policy0策略先清空
+  # 1. 如果有 policy0 策略先清空
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
 
-  # 2. 创建policy0策略
+  # 2. 创建 policy0 策略
   ${CCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/policies \
     -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 3. 列出所有策略
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies; echo
 
-  # 4. 获取policy0策略的详细信息
+  # 4. 获取 policy0 策略的详细信息
   ${RCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
 
-  # 5. 修改policy0策略
+  # 5. 修改 policy0 策略
   ${UCURL} "${Header}" "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0 \
     -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
-  # 6. 删除policy0策略
+  # 6. 删除 policy0 策略
   ${DCURL} "${token}" http://${INSECURE_APISERVER}/v1/policies/policy0; echo
   iam::log::info "$(echo -e '\033[32mcongratulations, /v1/policy test passed!\033[0m')"
 }
@@ -137,9 +137,10 @@ iam::test::authz()
   # 5. 生成 token
   token=$(iamctl jwt sign ${secretID} ${secretKey})
 
-  # 6. 调用/v1/authz完成资源授权。
-  # 注意这里要sleep 2s 等待iam-authz-server将新建的密钥同步到其内存中
-  sleep 2
+  # 6. 调用 /v1/authz 完成资源授权。
+  # 注意这里要 sleep 3s 等待 iam-authz-server 将新建的密钥同步到其内存中
+  echo "wait 3s to allow iam-authz-server to sync information into its memory ..."
+  sleep 3
   ret=`$CCURL "${Header}" -H"Authorization: Bearer ${token}" http://${INSECURE_AUTHZSERVER}/v1/authz \
     -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}' | grep -Po 'allowed[" :]+\K\w+'`
 
@@ -162,7 +163,41 @@ iam::test::pump()
     iam::log::error "cannot access iam-pump healthz api, iam-pump maybe down"
       return 1
     }
+
+  iam::test::real_pump_test
+
   iam::log::info "$(echo -e '\033[32mcongratulations, iam-pump test passed!\033[0m')"
+}
+
+# 使用真实的数据测试 iam-pump 是否正常工作
+iam::test::real_pump_test()
+{
+  # 1. 创建访问 iam-authz-server 需要用到的密钥对
+  iamctl secret create pumptest &>/dev/null
+
+  # 2. 使用步骤 1 创建的密钥对生成 JWT Token
+  authzAccessToken=`iamctl jwt sign njcho8gJQArsq7zr5v1YpG5NcvL0aeuZ38Ti if70HgRgp021iq5ex2l7pfy5XvgtZM3q` # iamctl jwt sign $secretID $secretKey
+
+  # 3. 创建授权策略
+  iamctl policy create pumptest '{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}' &>/dev/null
+
+  # 注意这里要 sleep 3s 等待 iam-authz-server 将新建的密钥和授权策略同步到其内存中
+  echo "wait 3s to allow iam-authz-server to sync information into its memory ..."
+  sleep 3
+
+  # 4. 访问 /v1/authz 接口进行资源授权
+  $CCURL "${Header}" -H"Authorization: Bearer ${token}" http://${INSECURE_AUTHZSERVER}/v1/authz \
+    -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIPAddress":"192.168.0.5"}}' &>/dev/null
+
+  # 这里要 sleep 5s，等待 iam-pump 将 Redis 中的日志，分析并转存到 MongoDB 中
+  echo "wait 10s to allow iam-pump analyze and dump authorization log into MongoDB ..."
+  sleep 10
+
+  # 5. 查看 MongoDB 中是否有经过解析后的授权日志。
+  echo "db.iam_analytics.find()" | mongosh --quiet "${IAM_PUMP_MONGO_URL}" | grep -q "allow access" || {
+    iam::log::error "cannot find analyzed authorization log in MongoDB"
+      return 1
+    }
 }
 
 iam::test::watcher()

@@ -21,19 +21,19 @@ function iam::watcher::install()
 {
   pushd ${IAM_ROOT}
 
-  # 1. 构建iam-watcher
+  # 1. 构建 iam-watcher
   make build BINS=iam-watcher
   iam::common::sudo "cp ${LOCAL_OUTPUT_ROOT}/platforms/linux/amd64/iam-watcher ${IAM_INSTALL_DIR}/bin"
 
-  # 2.  生成并安装iam-watcher的配置文件（iam-watcher.yaml）
+  # 2.  生成并安装 iam-watcher 的配置文件（iam-watcher.yaml）
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} configs/iam-watcher.yaml > ${IAM_CONFIG_DIR}/iam-watcher.yaml"
 
-  # 3. 创建并安装iam-watcher systemd unit文件
+  # 3. 创建并安装 iam-watcher systemd unit 文件
   echo ${LINUX_PASSWORD} | sudo -S bash -c \
     "./scripts/genconfig.sh ${ENV_FILE} init/iam-watcher.service > /etc/systemd/system/iam-watcher.service"
 
-  # 4. 启动iam-watcher服务
+  # 4. 启动 iam-watcher 服务
   iam::common::sudo "systemctl daemon-reload"
   iam::common::sudo "systemctl restart iam-watcher"
   iam::common::sudo "systemctl enable iam-watcher"
@@ -60,13 +60,13 @@ function iam::watcher::uninstall()
 # 状态检查
 function iam::watcher::status()
 {
-  # 查看apiserver运行状态，如果输出中包含active (running)字样说明apiserver成功启动。
+  # 查看 iam-watcher 运行状态，如果输出中包含 active (running) 字样说明 iam-watcher 成功启动。
   systemctl status iam-watcher|grep -q 'active' || {
     iam::log::error "iam-watcher failed to start, maybe not installed properly"
     return 1
   }
 
-  # 监听端口在配置文件中是hardcode
+  # 监听端口在配置文件中是 hardcode
   if echo | telnet 127.0.0.1 5050 2>&1|grep refused &>/dev/null;then
     iam::log::error "cannot access health check port, iam-watcher maybe not startup"
     return 1
