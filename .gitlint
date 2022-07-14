@@ -1,3 +1,3 @@
---subject-regex=^((Merge branch.*of.*)|((revert: )?(feat|fix|perf|style|refactor|test|ci|docs|chore)(\(.+\))?: [^A-Z].*[^.]$))
---subject-maxlen=72
---body-regex=^([^\r\n]{0,72}(\r?\n|$))*$
+--subject-regex=^((Merge branch.*)|((revert: )?(feat|fix|perf|style|refactor|test|ci|docs|chore)(\(.+\))?: [^A-Z].*[^.]$))
+--subject-maxlen=80
+--body-regex=^([^\r\n]{0,80}(\r?\n|$))*$
