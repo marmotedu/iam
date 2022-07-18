@@ -1,6 +1,6 @@
 module github.com/marmotedu/iam
 
-go 1.17
+go 1.18
 
 require (
 	github.com/AlekSi/pointer v1.1.0
