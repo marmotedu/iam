@@ -8,8 +8,9 @@ import (
 	"fmt"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go/v4"
 	"github.com/gin-gonic/gin"
+	jwt "github.com/golang-jwt/jwt/v4"
+
 	"github.com/marmotedu/component-base/pkg/core"
 	"github.com/marmotedu/errors"
 
@@ -82,7 +83,7 @@ func (cache CacheStrategy) AuthFunc() gin.HandlerFunc {
 			}
 
 			return []byte(secret.Key), nil
-		}, jwt.WithAudience(AuthzAudience))
+		})
 		if err != nil || !parsedT.Valid {
 			core.WriteResponse(c, errors.WithCode(code.ErrSignatureInvalid, err.Error()), nil)
 			c.Abort()
