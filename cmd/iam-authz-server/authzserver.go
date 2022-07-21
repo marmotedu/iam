@@ -7,19 +7,14 @@
 package main
 
 import (
-	"math/rand"
-	"os"
-	"runtime"
-	"time"
-
 	"github.com/marmotedu/iam/internal/authzserver"
+	_ "go.uber.org/automaxprocs"
+	"math/rand"
+	"time"
 )
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
-	if len(os.Getenv("GOMAXPROCS")) == 0 {
-		runtime.GOMAXPROCS(runtime.NumCPU())
-	}
 
 	authzserver.NewApp("iam-authz-server").Run()
 }

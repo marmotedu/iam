@@ -102,7 +102,7 @@ func (s *pumpServer) pump() {
 	}()
 
 	analyticsValues := s.analyticsStore.GetAndDeleteSet(storage.AnalyticsKeyName)
-	if len(analyticsValues) == 0 {
+	if analyticsValues != nil && len(analyticsValues) == 0 {
 		return
 	}
 
