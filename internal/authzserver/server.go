@@ -76,16 +76,6 @@ func (s *authzServer) PrepareRun() preparedAuthzServer {
 
 // Run start to run AuthzServer.
 func (s preparedAuthzServer) Run() error {
-	stopCh := make(chan struct{})
-
-	// start shutdown managers
-	if err := s.gs.Start(); err != nil {
-		log.Fatalf("start shutdown manager failed: %s", err.Error())
-	}
-
-	//nolint: errcheck
-	go s.genericAPIServer.Run()
-
 	// in order to ensure that the reported data is not lost,
 	// please ensure the following graceful shutdown sequence
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
@@ -98,10 +88,12 @@ func (s preparedAuthzServer) Run() error {
 		return nil
 	}))
 
-	// blocking here via channel to prevents the process exit.
-	<-stopCh
+	// start shutdown managers
+	if err := s.gs.Start(); err != nil {
+		log.Fatalf("start shutdown manager failed: %s", err.Error())
+	}
 
-	return nil
+	return s.genericAPIServer.Run()
 }
 
 func buildGenericConfig(cfg *config.Config) (genericConfig *genericapiserver.Config, lastErr error) {

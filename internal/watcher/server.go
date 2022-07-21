@@ -71,6 +71,8 @@ func (s preparedWatcherServer) Run() error {
 			log.Error("context was not done after 3 minutes.")
 		}
 
+		stopCh <- struct{}{}
+
 		return nil
 	}))
 
