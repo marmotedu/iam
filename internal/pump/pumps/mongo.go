@@ -425,7 +425,7 @@ func (m *MongoPump) WriteData(ctx context.Context, data []interface{}) error {
 		log.Fatal("No collection name!")
 	}
 
-	log.Debugf("Writing %d records", len(data))
+	log.Debugf("Writing %d records to collection: %v", len(data), collectionName)
 
 	for m.dbSession == nil {
 		log.Debug("Connecting to analytics store")
@@ -466,7 +466,7 @@ func (m *MongoPump) AccumulateSet(data []interface{}) [][]interface{} {
 		// Add 1 KB for metadata as average
 		sizeBytes := len(thisItem.Policies) + len(thisItem.Deciders) + 1024
 
-		log.Debugf("Size is: %d", sizeBytes)
+		log.Debugf("Size is: %d bytes", sizeBytes)
 
 		if sizeBytes > m.dbConf.MaxDocumentSizeBytes {
 			log.Warn("Document too large, not writing raw request and raw response!")
@@ -487,10 +487,10 @@ func (m *MongoPump) AccumulateSet(data []interface{}) [][]interface{} {
 			accumulatorTotal = sizeBytes
 		}
 
-		log.Debugf("Accumulator is: %d", accumulatorTotal)
+		log.Debugf("Accumulator is: %d bytes", accumulatorTotal)
 		thisResultSet = append(thisResultSet, thisItem)
 
-		log.Debugf("%d of %d", accumulatorTotal, m.dbConf.MaxInsertBatchSizeBytes)
+		log.Debugf("%d of %d bytes", accumulatorTotal, m.dbConf.MaxInsertBatchSizeBytes)
 		// Append the last element if the loop is about to end
 		if i == (len(data) - 1) {
 			log.Debug("Appending last entry")
