@@ -187,6 +187,6 @@ tidy:
 ## help: Show this help info.
 .PHONY: help
 help: Makefile
-	@echo -e "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:"
+	@printf "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:\n"
 	@sed -n 's/^##//p' $< | column -t -s ':' | sed -e 's/^/ /'
 	@echo "$$USAGE_OPTIONS"
