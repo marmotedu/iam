@@ -49,7 +49,7 @@ func Publish() gin.HandlerFunc {
 
 func notify(ctx context.Context, method string, command load.NotificationCommand) {
 	switch method {
-	case "POST", "PUT", "DELETE", "PATH":
+	case http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch:
 		redisStore := &storage.RedisCluster{}
 		message, _ := json.Marshal(load.Notification{Command: command})
 
