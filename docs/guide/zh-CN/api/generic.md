@@ -29,7 +29,7 @@ IAM API 接口公共参数如下：
     3. 接口请求的数据：位于 HTTP 返回的 Body 中，API 请求需要的返回数据，JSON 格式。
 - 失败时，返回的结果中，包含以下内容：
     1. X-Request-Id：位于 HTTP 返回的请求头中，调用的请求 ID，用来唯一标识一次请求。
-    2. HTTP 状态码：HTTP 状态码，不同的错误类型返回的 HTTP 状态码不同，可能的状态码为：200、400、40、403、404、500。
+    2. HTTP 状态码：HTTP 状态码，不同的错误类型返回的 HTTP 状态码不同，可能的状态码为：400、401、403、404、500。
     3. 返回的错误信息：返回格式为：`{"code":100101,"message":"Database error","reference":"https://github.com/marmotedu/iam/tree/master/docs/guide/zh-CN/faq"}`， `code` 表示错误码，`message` 表示该错误的具体信息，`reference` 表示参考文档（可选）。
 
 成功和失败返回结果的 header 中，还有一些其它返回信息，比如：`Cache-Control`、`Content-Type`、`Access-Control-Allow-Origin` 等，这些在非排障场景下，可以不用关注，这里不再一一说明。
@@ -176,7 +176,7 @@ IAM 系统同时返回 2 类错误码：HTTP 状态码和业务错误码。IAM�
 
 **业务错误码说明**
 
-业务错误码请参考：[错误码](./error_code.md)
+业务错误码请参考：[错误码](./error_code_generated.md)
 
 ## 7. 其它说明
 
