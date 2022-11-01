@@ -106,8 +106,8 @@ function iam::release::updload_tarballs() {
   for file in $(ls ${RELEASE_TARS}/*)
   do
     if [ "${COSTOOL}" == "coscli" ];then
-      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
-      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/latest/"
+      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/${file##*/}"
+      coscli cp "${file}" "cos://${BUCKET}/${COS_RELEASE_DIR}/latest/${file##*/}"
     else
       coscmd upload  "${file}" "${COS_RELEASE_DIR}/${IAM_GIT_VERSION}/"
       coscmd upload  "${file}" "${COS_RELEASE_DIR}/latest/"
