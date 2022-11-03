@@ -89,7 +89,7 @@ func newJWTAuth() middleware.AuthStrategy {
 		// TODO: HTTPStatusMessageFunc:
 	})
 
-	return auth.NewJWTStrategy(*ginjwt)
+	return auth.NewJWTStrategy(ginjwt)
 }
 
 func newAutoAuth() middleware.AuthStrategy {

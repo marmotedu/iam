@@ -14,6 +14,7 @@ import (
 	"github.com/golang/mock/gomock"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/stretchr/testify/assert"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 )
@@ -30,7 +31,8 @@ func TestUserController_Update(t *testing.T) {
 		Phone:    "1812884xxxx",
 	}
 
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 	body := bytes.NewBufferString(`{"nickname":"admin2","email":"admin2@foxmail.com","phone":"1812885xxx"}`)
 	c.Request, _ = http.NewRequest("PUT", "/v1/users/admin", body)
 	c.Params = []gin.Param{{Key: "name", Value: "admin"}}
@@ -79,6 +81,7 @@ func TestUserController_Update(t *testing.T) {
 				srv: tt.fields.srv,
 			}
 			u.Update(tt.args.c)
+			assert.Equal(t, http.StatusOK, w.Code)
 		})
 	}
 }

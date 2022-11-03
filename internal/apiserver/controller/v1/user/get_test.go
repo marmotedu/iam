@@ -13,6 +13,7 @@ import (
 	"github.com/golang/mock/gomock"
 	v1 "github.com/marmotedu/api/apiserver/v1"
 	metav1 "github.com/marmotedu/component-base/pkg/meta/v1"
+	"github.com/stretchr/testify/assert"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 )
@@ -28,7 +29,8 @@ func TestUserController_Get(t *testing.T) {
 		Email:    "admin@foxmail.com",
 	}
 
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 	c.Request, _ = http.NewRequest("GET", "/v1/users/colin", nil)
 	c.Params = []gin.Param{{Key: "name", Value: "admin"}}
 
@@ -67,6 +69,7 @@ func TestUserController_Get(t *testing.T) {
 				srv: tt.fields.srv,
 			}
 			u.Get(tt.args.c)
+			assert.Equal(t, http.StatusOK, w.Code)
 		})
 	}
 }

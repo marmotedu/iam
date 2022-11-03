@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 )
@@ -24,7 +25,8 @@ func TestUserController_List(t *testing.T) {
 	mockUserSrv.EXPECT().List(gomock.Any(), gomock.Any()).Return(nil, nil)
 	mockService.EXPECT().Users().Return(mockUserSrv)
 
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 	c.Request, _ = http.NewRequest("GET", "/v1/users", nil)
 	c.Params = []gin.Param{{Key: "name", Value: "colin"}}
 
@@ -55,6 +57,7 @@ func TestUserController_List(t *testing.T) {
 				srv: tt.fields.srv,
 			}
 			u.List(tt.args.c)
+			assert.Equal(t, http.StatusOK, w.Code)
 		})
 	}
 }
