@@ -12,7 +12,7 @@ import (
 	"github.com/marmotedu/iam/internal/apiserver/controller/v1/policy"
 	"github.com/marmotedu/iam/internal/apiserver/controller/v1/secret"
 	"github.com/marmotedu/iam/internal/apiserver/controller/v1/user"
-	"github.com/marmotedu/iam/internal/apiserver/store/mysql"
+	"github.com/marmotedu/iam/internal/apiserver/store"
 	"github.com/marmotedu/iam/internal/pkg/code"
 	"github.com/marmotedu/iam/internal/pkg/middleware"
 	"github.com/marmotedu/iam/internal/pkg/middleware/auth"
@@ -21,15 +21,11 @@ import (
 	_ "github.com/marmotedu/iam/pkg/validator"
 )
 
-func initRouter(g *gin.Engine) {
-	installMiddleware(g)
-	installController(g)
+func (s *apiServer) initRouter(storeIns store.Factory) {
+	installController(s.genericAPIServer.Engine, storeIns)
 }
 
-func installMiddleware(g *gin.Engine) {
-}
-
-func installController(g *gin.Engine) *gin.Engine {
+func installController(g *gin.Engine, storeIns store.Factory) *gin.Engine {
 	// Middlewares.
 	jwtStrategy, _ := newJWTAuth().(auth.JWTStrategy)
 	g.POST("/login", jwtStrategy.LoginHandler)
@@ -43,7 +39,6 @@ func installController(g *gin.Engine) *gin.Engine {
 	})
 
 	// v1 handlers, requiring authentication
-	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
 	v1 := g.Group("/v1")
 	{
 		// user RESTful resource
