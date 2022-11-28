@@ -150,11 +150,6 @@ gen:
 ca:
 	@$(MAKE) gen.ca
 
-## install: Install iam system with all its components.
-.PHONY: install
-install:
-	@$(MAKE) install.install
-
 ## swagger: Generate swagger document.
 .PHONY: swagger
 swagger:
