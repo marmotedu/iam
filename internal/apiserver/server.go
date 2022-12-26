@@ -28,6 +28,7 @@ import (
 type apiServer struct {
 	gs               *shutdown.GracefulShutdown
 	redisOptions     *genericoptions.RedisOptions
+	mysqlOptions     *genericoptions.MySQLOptions
 	gRPCAPIServer    *grpcAPIServer
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
@@ -71,6 +72,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 	server := &apiServer{
 		gs:               gs,
 		redisOptions:     cfg.RedisOptions,
+		mysqlOptions:     cfg.MySQLOptions,
 		genericAPIServer: genericServer,
 		gRPCAPIServer:    extraServer,
 	}
@@ -79,7 +81,9 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 }
 
 func (s *apiServer) PrepareRun() preparedAPIServer {
-	initRouter(s.genericAPIServer.Engine)
+	// todo(ydx): should handle error correctly
+	storeIns, _ := mysql.GetMySQLFactoryOr(s.mysqlOptions)
+	s.initRouter(storeIns)
 
 	s.initRedisStore()
 
