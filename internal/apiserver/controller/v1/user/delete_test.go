@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 )
@@ -24,7 +25,8 @@ func TestUserController_Delete(t *testing.T) {
 	mockUserSrv.EXPECT().Delete(gomock.Any(), gomock.Eq("admin"), gomock.Any()).Return(nil)
 	mockService.EXPECT().Users().Return(mockUserSrv)
 
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 	c.Request, _ = http.NewRequest("DELETE", "/v1/users/admin", nil)
 	c.Params = []gin.Param{{Key: "name", Value: "admin"}}
 
@@ -55,6 +57,7 @@ func TestUserController_Delete(t *testing.T) {
 				srv: tt.fields.srv,
 			}
 			u.Delete(tt.args.c)
+			assert.Equal(t, http.StatusOK, w.Code)
 		})
 	}
 }

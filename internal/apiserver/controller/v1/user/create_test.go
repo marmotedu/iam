@@ -12,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 
 	srvv1 "github.com/marmotedu/iam/internal/apiserver/service/v1"
 )
@@ -24,7 +25,8 @@ func TestUserController_Create(t *testing.T) {
 	mockUserSrv := srvv1.NewMockUserSrv(ctrl)
 	mockUserSrv.EXPECT().Create(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	mockService.EXPECT().Users().Return(mockUserSrv)
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 	body := bytes.NewBufferString(
 		`{"metadata":{"name":"admin"},"nickname":"admin","email":"aaa@qq.com","password":"Admin@2020","phone":"1812884xxx"}`,
 	)
@@ -58,6 +60,7 @@ func TestUserController_Create(t *testing.T) {
 				srv: tt.fields.srv,
 			}
 			u.Create(tt.args.c)
+			assert.Equal(t, http.StatusOK, w.Code)
 		})
 	}
 }

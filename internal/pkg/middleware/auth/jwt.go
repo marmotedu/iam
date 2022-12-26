@@ -16,13 +16,13 @@ const AuthzAudience = "iam.authz.marmotedu.com"
 
 // JWTStrategy defines jwt bearer authentication strategy.
 type JWTStrategy struct {
-	ginjwt.GinJWTMiddleware
+	*ginjwt.GinJWTMiddleware
 }
 
 var _ middleware.AuthStrategy = &JWTStrategy{}
 
 // NewJWTStrategy create jwt bearer strategy with GinJWTMiddleware.
-func NewJWTStrategy(gjwt ginjwt.GinJWTMiddleware) JWTStrategy {
+func NewJWTStrategy(gjwt *ginjwt.GinJWTMiddleware) JWTStrategy {
 	return JWTStrategy{gjwt}
 }
 
