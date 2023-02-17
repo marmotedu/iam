@@ -72,7 +72,7 @@ func (k *KafkaPump) Init(config interface{}) error {
 	}
 
 	var tlsConfig *tls.Config
-	// nolint: nestif
+	//nolint: nestif
 	if k.kafkaConf.UseSSL {
 		if k.kafkaConf.SSLCertFile != "" && k.kafkaConf.SSLKeyFile != "" {
 			var cert tls.Certificate

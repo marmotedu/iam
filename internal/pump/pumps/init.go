@@ -6,7 +6,7 @@ package pumps
 
 var availablePumps map[string]Pump
 
-// nolint: gochecknoinits
+//nolint: gochecknoinits
 func init() {
 	availablePumps = make(map[string]Pump)
 

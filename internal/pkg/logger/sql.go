@@ -33,7 +33,7 @@ const NULL = "NULL"
 var convertableTypes = []reflect.Type{reflect.TypeOf(time.Time{}), reflect.TypeOf(false), reflect.TypeOf([]byte{})}
 
 // ExplainSQL explain a SQL.
-// nolint: gocognit,gocyclo
+//nolint: gocognit,gocyclo
 func ExplainSQL(sql string, numericPlaceholder *regexp.Regexp, escaper string, avars ...interface{}) string {
 	var convertParams func(interface{}, int)
 	vars := make([]string, len(avars))

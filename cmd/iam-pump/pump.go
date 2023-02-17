@@ -7,9 +7,10 @@
 package main
 
 import (
-	_ "go.uber.org/automaxprocs"
 	"math/rand"
 	"time"
+
+	_ "go.uber.org/automaxprocs"
 
 	"github.com/marmotedu/iam/internal/pump"
 )
