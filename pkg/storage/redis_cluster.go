@@ -94,7 +94,7 @@ func singleton(cache bool) redis.UniversalClient {
 	return nil
 }
 
-// nolint: unparam
+//nolint: unparam
 func connectSingleton(cache bool, config *Config) bool {
 	if singleton(cache) == nil {
 		log.Debug("Connecting to redis cluster")

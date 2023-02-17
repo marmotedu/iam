@@ -50,7 +50,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	}
 
 	wg := sync.WaitGroup{}
-	errChan := make(chan error, 1)
+	errChan := make(chan error, len(users.Items))
 	finished := make(chan bool, 1)
 
 	var m sync.Map

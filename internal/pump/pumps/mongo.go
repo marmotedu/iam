@@ -143,13 +143,13 @@ func mongoType(session *mgo.Session) MongoType {
 	return StandardMongo
 }
 
-// nolint: gocognit
+//nolint: gocognit
 func mongoDialInfo(conf BaseMongoConf) (dialInfo *mgo.DialInfo, err error) {
 	if dialInfo, err = mgo.ParseURL(conf.MongoURL); err != nil {
 		return dialInfo, errors.Wrap(err, "failed to parse mongo url")
 	}
 
-	// nolint: nestif
+	//nolint: nestif
 	if conf.MongoUseSSL {
 		dialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
 			tlsConfig := &tls.Config{}
