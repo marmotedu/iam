@@ -176,7 +176,7 @@ func filterData(pump pumps.Pump, keys []interface{}) []interface{} {
 	if !filters.HasFilter() && !pump.GetOmitDetailedRecording() {
 		return keys
 	}
-	filteredKeys := keys[:] // nolint: gocritic
+	filteredKeys := keys[:] //nolint: gocritic
 	newLenght := 0
 
 	for _, key := range filteredKeys {

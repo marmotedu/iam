@@ -7,10 +7,9 @@
 package main
 
 import (
-	"github.com/marmotedu/iam/internal/authzserver"
-	_ "go.uber.org/automaxprocs"
 	"math/rand"
 	"time"
+
 )
 
 func main() {

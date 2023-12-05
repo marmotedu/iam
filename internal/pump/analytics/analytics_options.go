@@ -45,5 +45,4 @@ func (o *AnalyticsOptions) AddFlags(fs *pflag.FlagSet) {
 
 	fs.BoolVar(&o.EnableDetailedRecording, "analytics.enable-detailed-recording", o.EnableDetailedRecording,
 		"Set enable detailed recording")
-
 }
