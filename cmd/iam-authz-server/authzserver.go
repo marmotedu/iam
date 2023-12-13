@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/marmotedu/iam/internal/authzserver"
 )
 
 func main() {
