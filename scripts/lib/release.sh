@@ -101,7 +101,7 @@ function iam::release::package_tarballs() {
   iam::util::wait-for-jobs || { iam::log::error "previous tarball phase failed"; return 1; }
 }
 
-function iam::release::updload_tarballs() {
+function iam::release::upload_tarballs() {
   iam::log::info "upload ${RELEASE_TARS}/* to cos bucket ${BUCKET}."
   for file in $(ls ${RELEASE_TARS}/*)
   do
@@ -155,11 +155,8 @@ function iam::release::package_server_tarballs() {
     platform=${platform_long##${LOCAL_OUTPUT_BINPATH}/} # Strip LOCAL_OUTPUT_BINPATH
     platform_tag=${platform/\//-} # Replace a "/" for a "-"
     iam::log::status "Starting tarball: server $platform_tag"
-    echo "++++ platform: ${platform}"
-    echo "++++ platform_tag: ${platform_tag}"
     (
     local release_stage="${RELEASE_STAGE}/server/${platform_tag}/iam"
-    echo "++++ release_stage: ${release_stage}"
     rm -rf "${release_stage}"
     mkdir -p "${release_stage}/server/bin"
 
@@ -207,14 +204,6 @@ function iam::release::package_client_tarballs() {
 
     local client_bins=("${IAM_CLIENT_BINARIES[@]}")
 
-    echo "++++ client_bins: ${client_bins[@]}"
-    # client_bins: changelog component conversion-msg conversion-mysql formitychecker imctl infra ncpu openim-web up35 versionchecker yamlfmt
-    # Copy client binclient_bins:aries
-    echo "++++ cp source: ${client_bins[@]/bin/#/${LOCAL_OUTPUT_BINTOOLSPATH}/${platform}/}"
-    # ++++ cp source: changelog component conversion-msg conversion-mysql formitychecker imctl infra ncpu openim-web up35 versionchecker yamlfmt
-    echo "++++ cp target: ${release_stage}/client/bin/"
-    # ++++ cp target: /data/workspaces/open-im-server/_output/release-stage/client/darwin-amd64/openim/client/bin/
-
       # This fancy expression will expand to prepend a path
       # (${LOCAL_OUTPUT_BINPATH}/${platform}/) to every item in the
       # client_bins array.
@@ -224,7 +213,6 @@ function iam::release::package_client_tarballs() {
       iam::release::clean_cruft
 
       local package_name="${RELEASE_TARS}/iam-client-${platform_tag}.tar.gz"
-      echo "+++ release_stage: ${release_stage}"
       iam::release::create_tarball "${package_name}" "${release_stage}/.."
     ) &
   done
