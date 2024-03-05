@@ -164,7 +164,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
+curl -XPOST -H'Content-Type: application/json' -d'{
   "oldPassword": "Foo@2020",
   "newPassword": "Foo@2021"
 }' http://marmotedu.io:8080/v1/users/foo/change_password
