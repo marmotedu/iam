@@ -164,7 +164,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Basic $(echo -n 'foo:Foo@2020'|base64)' -d'{
+curl -XPUT -H'Content-Type: application/json' -H'Authorization: Basic $(echo -n 'foo:Foo@2020'|base64)' -d'{
   "oldPassword": "Foo@2020",
   "newPassword": "Foo@2021"
 }' http://marmotedu.io:8080/v1/users/foo/change-password
