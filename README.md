@@ -81,15 +81,9 @@ $ make
 
 You are encouraged to communicate most things via [GitHub issues](https://github.com/marmotedu/iam/issues/new/choose) or pull requests.
 
-## 关于作者
+## 保持联系
 
-- Lingfei Kong <colin404@foxmail.com>
-
-为了方便交流，我建了微信群，可以加我 **微信：nightskong**，拉你入群，方便交流。
-
-## 谁在用
-
-如果你有项目在使用iam系统模板，也欢迎联系作者，加入使用案例。
+<img src="./docs/images/three-code.png" alt="" width="900" />
 
 ## 许可证
 
