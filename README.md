@@ -1,6 +1,6 @@
 # IAM - 身份识别与访问管理系统
 
-**欢迎加入我的新课程 [孔令飞的云原生实战营](https://konglingfei.com)，带你进阶为 Go + 云原生高级开发工程师。**
+- 更多「云原生 AI 实战营」项目见：[云原生 AI 实战营项目介绍](https://konglingfei.com/cloudai/intro/%E4%BA%91%E5%8E%9F%E7%94%9F_AI_%E5%AE%9E%E6%88%98%E8%90%A5%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D.html)
 
 IAM = **I**dentity and **A**ccess **M**anagement
 
