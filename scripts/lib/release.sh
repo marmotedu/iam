@@ -101,7 +101,7 @@ function iam::release::package_tarballs() {
   iam::util::wait-for-jobs || { iam::log::error "previous tarball phase failed"; return 1; }
 }
 
-function iam::release::updload_tarballs() {
+function iam::release::upload_tarballs() {
   iam::log::info "upload ${RELEASE_TARS}/* to cos bucket ${BUCKET}."
   for file in $(ls ${RELEASE_TARS}/*)
   do
@@ -155,7 +155,6 @@ function iam::release::package_server_tarballs() {
     platform=${platform_long##${LOCAL_OUTPUT_BINPATH}/} # Strip LOCAL_OUTPUT_BINPATH
     platform_tag=${platform/\//-} # Replace a "/" for a "-"
     iam::log::status "Starting tarball: server $platform_tag"
-
     (
     local release_stage="${RELEASE_STAGE}/server/${platform_tag}/iam"
     rm -rf "${release_stage}"
@@ -195,6 +194,8 @@ function iam::release::package_client_tarballs() {
     platform=${platform_long##${LOCAL_OUTPUT_BINPATH}/} # Strip LOCAL_OUTPUT_BINPATH
     platform_tag=${platform/\//-} # Replace a "/" for a "-"
     iam::log::status "Starting tarball: client $platform_tag"
+    echo "+++ platform: ${platform}"
+    echo "+++ platform_tag: ${platform_tag}"
 
     (
     local release_stage="${RELEASE_STAGE}/client/${platform_tag}/iam"
@@ -594,4 +595,3 @@ function iam::release::generate_changelog() {
   git commit -a -m "docs(changelog): add CHANGELOG-${IAM_GIT_VERSION#v}.md"
   git push -f origin master # 最后将 CHANGELOG 也 push 上去
 }
-
