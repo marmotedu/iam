@@ -37,16 +37,18 @@ func (d *digest64) Sum64() uint64 {
 
 // Sum64 returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New64()
-//     hasher.Write(data)
-//     return hasher.Sum64()
+//
+//	hasher := New64()
+//	hasher.Write(data)
+//	return hasher.Sum64()
 func Sum64(data []byte) uint64 { return Sum64WithSeed(data, 0) }
 
 // Sum64WithSeed returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New64WithSeed(seed)
-//     hasher.Write(data)
-//     return hasher.Sum64()
+//
+//	hasher := New64WithSeed(seed)
+//	hasher.Write(data)
+//	return hasher.Sum64()
 func Sum64WithSeed(data []byte, seed uint32) uint64 {
 	d := &digest128{h1: uint64(seed), h2: uint64(seed)}
 	d.seed = seed

@@ -1,3 +1,7 @@
+# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
 name: user
 synopsis: Manage users on iam platform
 description: "User management commands.\n  \n Administrator can use all subcommands, non-administrator only allow to use create/get/upate. When call get/update non-administrator only allow to operate their own resources, if permission not allowed, will return an 'Permission denied' error."

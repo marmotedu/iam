@@ -183,16 +183,18 @@ func rotl64(x uint64, r byte) uint64 {
 
 // Sum128 returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New128()
-//     hasher.Write(data)
-//     return hasher.Sum128()
+//
+//	hasher := New128()
+//	hasher.Write(data)
+//	return hasher.Sum128()
 func Sum128(data []byte) (h1 uint64, h2 uint64) { return Sum128WithSeed(data, 0) }
 
 // Sum128WithSeed returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New128WithSeed(seed)
-//     hasher.Write(data)
-//     return hasher.Sum128()
+//
+//	hasher := New128WithSeed(seed)
+//	hasher.Write(data)
+//	return hasher.Sum128()
 func Sum128WithSeed(data []byte, seed uint32) (h1 uint64, h2 uint64) {
 	d := &digest128{h1: uint64(seed), h2: uint64(seed)}
 	d.seed = seed

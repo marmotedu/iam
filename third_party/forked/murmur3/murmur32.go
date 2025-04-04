@@ -100,17 +100,21 @@ func (d *digest32) Sum32() (h1 uint32) {
 
 // Sum32 returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New32()
-//     hasher.Write(data)
-//     return hasher.Sum32()
+//
+//	hasher := New32()
+//	hasher.Write(data)
+//	return hasher.Sum32()
 func Sum32(data []byte) uint32 { return Sum32WithSeed(data, 0) }
 
 // Sum32WithSeed returns the MurmurHash3 sum of data. It is equivalent to the
 // following sequence (without the extra burden and the extra allocation):
-//     hasher := New32WithSeed(seed)
-//     hasher.Write(data)
-//     return hasher.Sum32()
+//
+//	hasher := New32WithSeed(seed)
+//	hasher.Write(data)
+//	return hasher.Sum32()
+//
 // Disable new -d=checkptr behaviour for Go 1.14
+//
 //go:nocheckptr
 func Sum32WithSeed(data []byte, seed uint32) uint32 {
 
