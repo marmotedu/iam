@@ -69,6 +69,10 @@ Find more ladon information at:
 	Enable profiling via web interface host:port/debug/pprof/
 
 .PP
+\fB-h\fP, \fB--help\fP=false
+	help for iam-authz-server
+
+.PP
 \fB--insecure.bind-address\fP="127.0.0.1"
 	The IP address on which to serve the --insecure.bind-port (set to 0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces).
 
@@ -77,12 +81,16 @@ Find more ladon information at:
 	The port on which to serve unsecured, unauthenticated access. It is assumed that firewall rules are set up such that this port is not reachable from outside of the deployed machine and that port 443 on the iam public address is proxied to this port. This is performed by nginx in the default setup. Set to zero to disable.
 
 .PP
-\fB--log-backtrace-at\fP=:0
+\fB--log-backtrace-at\fP=
 	when logging hits line file:N, emit a stack trace
 
 .PP
 \fB--log-dir\fP=""
 	If non-empty, write log files in this directory
+
+.PP
+\fB--log-link\fP=""
+	If non-empty, add symbolic links in this directory to the log files
 
 .PP
 \fB--log.development\fP=false
@@ -119,6 +127,10 @@ Find more ladon information at:
 .PP
 \fB--log.output-paths\fP=[stdout]
 	Output paths of log.
+
+.PP
+\fB--logbuflevel\fP=0
+	Buffer log messages logged at this level or lower (-1 means don't buffer; 0 means buffer INFO only; ...). Has limited applicability on non-prod platforms.
 
 .PP
 \fB--logtostderr\fP=false

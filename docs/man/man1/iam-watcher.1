@@ -33,7 +33,7 @@ Find more iam-pump information at:
 	Read configuration from specified \fB\fCFILE\fR, support JSON, TOML, YAML, HCL, or Java properties formats.
 
 .PP
-\fB--health-check-address\fP="0.0.0.0:6060"
+\fB--health-check-address\fP="0.0.0.0:5050"
 	Specifies liveness health check bind address.
 
 .PP
@@ -41,12 +41,20 @@ Find more iam-pump information at:
 	Specifies liveness health check request path.
 
 .PP
-\fB--log-backtrace-at\fP=:0
+\fB-h\fP, \fB--help\fP=false
+	help for iam-watcher
+
+.PP
+\fB--log-backtrace-at\fP=
 	when logging hits line file:N, emit a stack trace
 
 .PP
 \fB--log-dir\fP=""
 	If non-empty, write log files in this directory
+
+.PP
+\fB--log-link\fP=""
+	If non-empty, add symbolic links in this directory to the log files
 
 .PP
 \fB--log.development\fP=false
@@ -85,6 +93,10 @@ Find more iam-pump information at:
 	Output paths of log.
 
 .PP
+\fB--logbuflevel\fP=0
+	Buffer log messages logged at this level or lower (-1 means don't buffer; 0 means buffer INFO only; ...). Has limited applicability on non-prod platforms.
+
+.PP
 \fB--logtostderr\fP=false
 	log to standard error instead of files
 
@@ -102,7 +114,7 @@ Find more iam-pump information at:
 
 .PP
 \fB--mysql.max-connection-life-time\fP=10s
-	Maximum connection life time allowed to connecto to mysql.
+	Maximum connection life time allowed to connect to mysql.
 
 .PP
 \fB--mysql.max-idle-connections\fP=100

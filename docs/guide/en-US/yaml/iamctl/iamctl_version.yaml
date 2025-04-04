@@ -1,33 +1,29 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file.
-
 name: version
 synopsis: Print the client and server version information
 description: |
     Print the client and server version information for the current context
 options:
     - name: client
-      default_value: "false"
+      defaultValue: "false"
       usage: If true, shows client version only (no server required).
     - name: output
       shorthand: o
       usage: One of 'yaml' or 'json'.
     - name: short
-      default_value: "false"
+      defaultValue: "false"
       usage: If true, print just the version number.
-inherited_options:
+inheritedOptions:
     - name: iamconfig
       usage: Path to the iamconfig file to use for CLI requests
     - name: match-server-version
-      default_value: "false"
+      defaultValue: "false"
       usage: Require server version to match client version
     - name: profile
-      default_value: none
+      defaultValue: none
       usage: |
         Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)
     - name: profile-output
-      default_value: profile.pprof
+      defaultValue: profile.pprof
       usage: Name of the file to write the profile to
     - name: server.address
       shorthand: s
@@ -35,17 +31,17 @@ inherited_options:
     - name: server.certificate-authority
       usage: Path to a cert file for the certificate authority
     - name: server.insecure-skip-tls-verify
-      default_value: "false"
+      defaultValue: "false"
       usage: |
         If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
     - name: server.max-retries
-      default_value: "0"
+      defaultValue: "0"
       usage: Maximum number of retries.
     - name: server.retry-interval
-      default_value: 1s
+      defaultValue: 1s
       usage: The interval time between each attempt.
     - name: server.timeout
-      default_value: 30s
+      defaultValue: 30s
       usage: |
         The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
     - name: server.tls-server-name
@@ -68,5 +64,5 @@ inherited_options:
 example: |4-
       # Print the client and server versions for the current context
       iamctl version
-see_also:
+seeAlso:
     - iamctl

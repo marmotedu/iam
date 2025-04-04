@@ -1,7 +1,3 @@
-# Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file.
-
 name: completion
 synopsis: |
     Output shell completion code for the specified shell (bash or zsh)
@@ -11,18 +7,18 @@ description: |-
      Detailed instructions on how to do this are available here: http://github.com/marmotedu/iam/docs/installation/iamctl.md#enabling-shell-autocompletion
 
      Note for zsh users: [1] zsh completions are only supported in versions of zsh >= 5.2
-inherited_options:
+inheritedOptions:
     - name: iamconfig
       usage: Path to the iamconfig file to use for CLI requests
     - name: match-server-version
-      default_value: "false"
+      defaultValue: "false"
       usage: Require server version to match client version
     - name: profile
-      default_value: none
+      defaultValue: none
       usage: |
         Name of profile to capture. One of (none|cpu|heap|goroutine|threadcreate|block|mutex)
     - name: profile-output
-      default_value: profile.pprof
+      defaultValue: profile.pprof
       usage: Name of the file to write the profile to
     - name: server.address
       shorthand: s
@@ -30,17 +26,17 @@ inherited_options:
     - name: server.certificate-authority
       usage: Path to a cert file for the certificate authority
     - name: server.insecure-skip-tls-verify
-      default_value: "false"
+      defaultValue: "false"
       usage: |
         If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
     - name: server.max-retries
-      default_value: "0"
+      defaultValue: "0"
       usage: Maximum number of retries.
     - name: server.retry-interval
-      default_value: 1s
+      defaultValue: 1s
       usage: The interval time between each attempt.
     - name: server.timeout
-      default_value: 30s
+      defaultValue: 30s
       usage: |
         The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
     - name: server.tls-server-name
@@ -61,5 +57,5 @@ inherited_options:
     - name: user.username
       usage: Username for basic authentication to the API server
 example: "  # Installing bash completion on macOS using homebrew\n  ## If running Bash 3.2 included with macOS\n  brew install bash-completion\n  ## or, if running Bash 4.1+\n  brew install bash-completion@2\n  ## If iamctl is installed via homebrew, this should start working immediately.\n  ## If you've installed via other means, you may need add the completion to your completion directory\n  iamctl completion bash > $(brew --prefix)/etc/bash_completion.d/iamctl\n  \n  \n  # Installing bash completion on Linux\n  ## If bash-completion is not installed on Linux, please install the 'bash-completion' package\n  ## via your distribution's package manager.\n  ## Load the iamctl completion code for bash into the current shell\n  source <(iamctl completion bash)\n  ## Write bash completion code to a file and source if from .bash_profile\n  iamctl completion bash > ~/.iam/completion.bash.inc\n  printf \"\n  # IAM shell completion\n  source '$HOME/.iam/completion.bash.inc'\n  \" >> $HOME/.bash_profile\n  source $HOME/.bash_profile\n  \n  # Load the iamctl completion code for zsh[1] into the current shell\n  source <(iamctl completion zsh)\n  # Set the iamctl completion code for zsh[1] to autoload on startup\n  iamctl completion zsh > \"${fpath[1]}/_iamctl\""
-see_also:
+seeAlso:
     - iamctl

@@ -1,0 +1,21 @@
+{
+  "CN": "iam-authz-server",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "marmotedu",
+      "OU": "iam-authz-server"
+    }
+  ],
+  "hosts": [
+    "127.0.0.1",
+    "localhost",
+    "iam.authz.marmotedu.com"
+  ]
+}

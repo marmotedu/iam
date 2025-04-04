@@ -40,12 +40,20 @@ Find more iam-pump information at:
 	Specifies liveness health check request path.
 
 .PP
-\fB--log-backtrace-at\fP=:0
+\fB-h\fP, \fB--help\fP=false
+	help for iam-pump
+
+.PP
+\fB--log-backtrace-at\fP=
 	when logging hits line file:N, emit a stack trace
 
 .PP
 \fB--log-dir\fP=""
 	If non-empty, write log files in this directory
+
+.PP
+\fB--log-link\fP=""
+	If non-empty, add symbolic links in this directory to the log files
 
 .PP
 \fB--log.development\fP=false
@@ -82,6 +90,10 @@ Find more iam-pump information at:
 .PP
 \fB--log.output-paths\fP=[stdout]
 	Output paths of log.
+
+.PP
+\fB--logbuflevel\fP=0
+	Buffer log messages logged at this level or lower (-1 means don't buffer; 0 means buffer INFO only; ...). Has limited applicability on non-prod platforms.
 
 .PP
 \fB--logtostderr\fP=false
